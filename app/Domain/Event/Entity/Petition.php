@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Domain\Event\Entity;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Service extends Model
+class Petition extends Model
 {
     use HasFactory;
-    protected $table = 'service';
+    protected $table = 'petition';
     protected $guarded = ['id'];
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Domain\Event\Entity;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Forum extends Model
+class Service extends Model
 {
     use HasFactory;
-    protected $table = 'forum';
+    protected $table = 'service';
     protected $guarded = ['id'];
 }
