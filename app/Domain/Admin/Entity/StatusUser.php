@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Domain\Admin\Entity;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DetailAllocation extends Model
+class StatusUser extends Model
 {
     use HasFactory;
-    protected $table = 'detail_allocation';
-    protected $guarded = 'id';
+    protected $table = 'status_user';
+    protected $fillable = ['id', 'description'];
     public $timestamps = false;
 }
