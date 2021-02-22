@@ -1,0 +1,16 @@
+.navbar-nav a{
+  align-self:center;
+}
+
+footer {
+  background-color: whitesmoke;
+}
+.donate-count{
+  position:absolute; bottom: 0; right: 0;
+  margin: 0 0.5rem 0.5rem 0;
+  padding:0.4rem;
+  border-radius: 10px;
+  background-color:#187BCD;
+  font-weight: bold;
+  color: whitesmoke;
+}

@@ -4,9 +4,10 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <!-- Local Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
     <title>@yield('title')</title>
   </head>
@@ -29,9 +30,8 @@
             </div>
         </div>
     </nav>
-
-    @yield('container')
-    <footer>
+    @yield('content')
+    <footer class="mt-5 pt-5">
       <div class="container">
         <div class="row">
             <div class="col-12 col-sm-5">
@@ -40,28 +40,28 @@
 
             <div class="col-12 col-sm-3">
                 <ul>
-                    <li class="pb-2 font-weight-bold" style="list-style:none;">Tentang Campaign.Org</li>
-                    <li class="pb-2" style="list-style:none;"><a class="footerlinks">About Us</a></li>
-                    <li class="pb-2" style="list-style:none;"><a class="footerlinks">Contact Us</a></li>
+                    <li class="pb-2 font-weight-bold" style="list-style:none;color:#03254C;">Tentang Campaign.Org</li>
+                    <li class="pb-2" style="list-style:none;"><a href="#" style="color:#03254C;" class="text-decoration-none">About Us</a></li>
+                    <li class="pb-2" style="list-style:none;"><a href="#" style="color:#03254C;" class="text-decoration-none">Contact Us</a></li>
                 </ul>
             </div>
             <div class="col-12 col-sm-2">
               <ul>
-                  <li class="pb-2 font-weight-bold" style="list-style:none;">Bantuan</li>
-                  <li class="pb-2" style="list-style:none;"><a class="footerlinks">Privasi</a></li>
-                  <li class="pb-2" style="list-style:none;"><a class="footerlinks">Kebijakan</a></li>
+                  <li class="pb-2 font-weight-bold" style="list-style:none;color:#03254C;">Bantuan</li>
+                  <li class="pb-2" style="list-style:none;"><a href="#" style="color:#03254C;" class="text-decoration-none">Privasi</a></li>
+                  <li class="pb-2" style="list-style:none;"><a href="#" style="color:#03254C;" class="text-decoration-none">Kebijakan</a></li>
               </ul>
           </div>
           <div class="col-12 col-sm-2">
             <ul>
-                <li class="pb-2 font-weight-bold" style="list-style:none;">Ikuti Kami</li>
-                <li class="pb-2" style="list-style:none;"><a class="footerlinks">Facebook</a></li>
-                <li class="pb-2" style="list-style:none;"><a class="footerlinks">Twitter</a></li>
+                <li class="pb-2 font-weight-bold" style="list-style:none;color:#03254C;">Ikuti Kami</li>
+                <li class="pb-2" style="list-style:none;"><a href="#" style="color:#03254C;" class="text-decoration-none">Facebook</a></li>
+                <li class="pb-2" style="list-style:none;"><a href="#" style="color:#03254C;" class="text-decoration-none">Twitter</a></li>
             </ul>
           </div>
         </div>
-        <div class="row justify-content-center mt-5">
-          Copyright 2021 YuBisaYu
+        <div class="row justify-content-center mt-5 font-weight-bold">
+          <p style="color: #03254C;">Copyright 2021 YuBisaYu</p>
         </div>
     </div>
   </footer>
