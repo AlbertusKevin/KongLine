@@ -20,11 +20,12 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link active" href="{{ url('/') }}">Donasi</a>
-              <a class="nav-link" href="{{ url('/') }}">Mulai Petisi</a>
-              <a class="nav-link" href="{{ url('/') }}">Petisi Saya</a>
-              <a class="nav-link" href="{{ url('/') }}">Bantuan</a>
-                <a class="nav-link" href="{{ url('/') }}"><img src="img/profile.png"></a>
+                <a class="nav-link active" href="{{ url('/') }}">Donasi</a>
+                <a class="nav-link" href="{{ url('/') }}">Mulai Petisi</a>
+                <a class="nav-link" href="{{ url('/') }}">Petisi Saya</a>
+                <a class="nav-link" href="{{ url('/') }}">Bantuan</a>
+                <a href="#" class="nav-link badge badge-light ml-4" data-toggle="modal" data-target="#exampleModal">Masuk</a>
+                <a href="#" class="nav-link badge badge-primary ml-2 text-white" data-toggle="modal" data-target="#exampleModal">Daftar</a>
             </div>
             </div>
             </div>
