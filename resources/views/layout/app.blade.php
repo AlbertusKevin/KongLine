@@ -20,9 +20,10 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-link active" href="{{ url('/') }}">Home</a>
-                <a class="nav-link" href="{{ url('/about') }}">About</a>
-                <a class="nav-link" href="{{ url('/mahasiswa') }}">Mahasiswa</a>
-                <a class="nav-link" href="{{ url('/students') }}">Students</a>
+                <a class="nav-link" href="{{ url('/') }}">About</a>
+                <a class="nav-link" href="{{ url('/') }}">Mahasiswa</a>
+                <a class="nav-link" href="{{ url('/') }}">Students</a>
+                <a class="nav-link" href="{{ url('/') }}"><img src="img/profile.png"></a>
             </div>
             </div>
             </div>
@@ -30,6 +31,40 @@
     </nav>
 
     @yield('container')
+    <footer>
+      <div class="container">
+        <div class="row">
+            <div class="col-12 col-sm-5">
+                <img src="img/footer.png" width=170>
+            </div>
+
+            <div class="col-12 col-sm-3">
+                <ul>
+                    <li class="pb-2 font-weight-bold" style="list-style:none;">Tentang Campaign.Org</li>
+                    <li class="pb-2" style="list-style:none;"><a class="footerlinks">About Us</a></li>
+                    <li class="pb-2" style="list-style:none;"><a class="footerlinks">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="col-12 col-sm-2">
+              <ul>
+                  <li class="pb-2 font-weight-bold" style="list-style:none;">Bantuan</li>
+                  <li class="pb-2" style="list-style:none;"><a class="footerlinks">Privasi</a></li>
+                  <li class="pb-2" style="list-style:none;"><a class="footerlinks">Kebijakan</a></li>
+              </ul>
+          </div>
+          <div class="col-12 col-sm-2">
+            <ul>
+                <li class="pb-2 font-weight-bold" style="list-style:none;">Ikuti Kami</li>
+                <li class="pb-2" style="list-style:none;"><a class="footerlinks">Facebook</a></li>
+                <li class="pb-2" style="list-style:none;"><a class="footerlinks">Twitter</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="row justify-content-center mt-5">
+          Copyright 2021 YuBisaYu
+        </div>
+    </div>
+  </footer>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
