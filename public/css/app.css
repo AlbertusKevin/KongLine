@@ -14,3 +14,11 @@ footer {
   font-weight: bold;
   color: whitesmoke;
 }
+.link-button{
+  padding: 0.5rem;
+  border: 1px solid #147C85;
+  box-sizing: border-box;
+  border-radius: 10px;
+  align-self: center;
+  color: #147C85;
+}
