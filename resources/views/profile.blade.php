@@ -38,19 +38,53 @@
 
         <form>
             <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                <label for="name">Nama Lengkap</label>
+                <input type="text" class="form-control" id="name" name="name">
             </div>
             <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1">
+                <label for="about">Tentang Saya</label>
+                <textarea class="form-control" id="about" rows="3" name="about"></textarea>
             </div>
-            <div class="form-group form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            <div class="form-group">
+                <label for="kota">Kota</label>
+                <input type="text" class="form-control" id="kota" name="kota">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="form-group">
+                <label for="negara">Negara</label>
+                <select id="negara" name="negara" class="form-control">
+                    <option value="Indonesia">Indonesia</option>
+                    <option value="Singapura">Singapura</option>
+                    <option value="Malaysia">Malaysia</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="link">Tautan Singkat Profile</label>
+                <input type="text" class="form-control" id="link" name="link">
+            </div>
+
+            <div class="form-group">
+                <label for="alamat">Alamat</label>
+                <input type="text" class="form-control" id="alamat" name="alamat">
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <label for="postcode">Kode Pos</label>
+                    <input type="text" class="form-control" id="postcode"  name="postcode">
+                </div>
+                <div class="col">
+                    <label for="phone">Nomor Telephone</label>  
+                    <input type="text" class="form-control" id="phone" name="phone">
+                </div>
+            </div>
+            <div class="form-row mt-2">
+                <label for="profile_picture">Profile Picture:</label>
+                <input type="file" class="form-control" name="profile_picture" id="profile_picture">
+            </div>
+            <div class="form-row mt-2">
+                <label for="zoom_picture">Cover Picture:</label>
+                <input type="file" class="form-control" name="zoom_picture" id="zoom_picture">
+            </div>
         </form>
     </div>
 @endsection
