@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+// ini router coba coba asik
 Route::get('/', function () {
     return view('home');
 });
@@ -23,4 +23,8 @@ Route::get('/petition', function () {
 
 Route::get('/petition/detail', function () {
     return view('petitionDetail');
+});
+
+Route::get('/profile', function () {
+    return view('profile');
 });
