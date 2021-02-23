@@ -1,0 +1,42 @@
+.navbar-nav a{
+  align-self:center;
+}
+
+footer {
+  background-color: whitesmoke;
+}
+
+.donate-count{
+  position:absolute; bottom: 0; right: 0;
+  margin: 0 0.5rem 0.5rem 0;
+  padding:0.4rem;
+  border-radius: 10px;
+  background-color:#187BCD;
+  font-weight: bold;
+  color: whitesmoke;
+}
+
+.link-button{
+  padding: 0.5rem;
+  border: 1px solid #147C85;
+  box-sizing: border-box;
+  border-radius: 10px;
+  align-self: center;
+  color: #147C85;
+}
+
+.jumbotron {
+  background-image: url('/img/coverProfile.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: 0, -250px;
+  border-radius: 0%;
+  color: black;
+  overflow: hidden;
+  position: relative;
+}
+
+.profile-picture {
+  width: 100px;
+}
