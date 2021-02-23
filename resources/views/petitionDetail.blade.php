@@ -26,9 +26,14 @@
                     <div class="col-sm-4"><img src="/img/detailProfile.png" alt="petition profile" class="ml-4"></div>
                     <div class="col-sm-8"><b>Ruben Calzoni</b><input class="form-control form-control-sm form-rounded mt-2" type="text" placeholder="Tulis Komentarmu"></div>
                 </div>
-                <div class="row">
-                    
+                <div class="row ml-5 mt-5">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Saya menyetujui kebijakan privasi</label>
                 </div>
+                <div class="row mt-4 ml-4">
+                    <button type="button" class="btn btn-primary">Tanda Tangani Petisi Ini</button>
+                </div>
+
             </div>
           </div>
     </div>

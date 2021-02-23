@@ -24,7 +24,7 @@
               <a class="nav-link" href="{{ url('/') }}">Mulai Petisi</a>
               <a class="nav-link" href="{{ url('/') }}">Petisi Saya</a>
               <a class="nav-link" href="{{ url('/') }}">Bantuan</a>
-                <a class="nav-link" href="{{ url('/') }}"><img src="img/profile.png"></a>
+                <a class="nav-link" href="{{ url('/') }}"><img src="/img/profile.png"></a>
             </div>
             </div>
             </div>
