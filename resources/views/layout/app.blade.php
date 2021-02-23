@@ -14,7 +14,7 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#"><img src="img/logo.png" width="75"></a>
+            <a class="navbar-brand" href="#"><img src="/img/logo.png" width="75"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -35,7 +35,7 @@
       <div class="container">
         <div class="row">
             <div class="col-12 col-sm-5">
-                <img src="img/footer.png" width=170>
+                <img src="/img/footer.png" width=170>
             </div>
 
             <div class="col-12 col-sm-3">

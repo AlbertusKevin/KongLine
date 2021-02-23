@@ -21,6 +21,6 @@ Route::get('/petition', function () {
     return view('petition');
 });
 
-Route::get('/register', function () {
-    return view('register');
+Route::get('/petition/detail', function () {
+    return view('petitionDetail');
 });
