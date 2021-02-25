@@ -28,3 +28,7 @@ Route::get('/petition/detail', function () {
 Route::get('/profile', function () {
     return view('profile');
 });
+
+Route::get('/donation', function(){
+    return view('donation');
+});
