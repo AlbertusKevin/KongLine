@@ -13,23 +13,21 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="#"><img src="img/logo.png" width="75"></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link active" href="{{ url('/') }}">Donasi</a>
-                <a class="nav-link" href="{{ url('/') }}">Mulai Petisi</a>
-                <a class="nav-link" href="{{ url('/') }}">Petisi Saya</a>
-                <a class="nav-link" href="{{ url('/') }}">Bantuan</a>
-                <a href="#" class="nav-link badge badge-light ml-4" data-toggle="modal" data-target="#exampleModal">Masuk</a>
-                <a href="#" class="nav-link badge badge-primary ml-2 text-white" data-toggle="modal" data-target="#exampleModal">Daftar</a>
-            </div>
-            </div>
-            </div>
-        </div>
+      <a class="navbar-brand" href="#"><img src="img/logo.png" width="75"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+          <a class="nav-link active" href="{{ url('/') }}">Donasi</a>
+          <a class="nav-link" href="{{ url('/') }}">Mulai Petisi</a>
+          <a class="nav-link" href="{{ url('/') }}">Petisi Saya</a>
+          <a class="nav-link" href="{{ url('/') }}">Bantuan</a>
+          <a href="#" class="nav-link badge badge-light ml-4" data-toggle="modal" data-target="#exampleModal">Masuk</a>
+          <a href="#" class="nav-link badge badge-primary ml-2 text-white" data-toggle="modal" data-target="#exampleModal">Daftar</a>
+      </div>
+      </div>
+      </div>
     </nav>
     @yield('content')
     <footer class="mt-5 pt-5">

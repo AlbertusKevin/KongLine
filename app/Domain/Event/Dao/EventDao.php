@@ -2,28 +2,39 @@
 
 namespace App\Domain\Event\Dao;
 
-use App\Event\Entity\Category;
-use App\Event\Entity\DetailAllocation;
-use App\Event\Entity\Donation;
-use App\Event\Entity\EventStatus;
-use App\Event\Entity\Forum;
-use App\Event\Entity\ForumLike;
-use App\Event\Entity\ParticipateDonation;
-use App\Event\Entity\ParticipatePetition;
-use App\Event\Entity\Petition;
-use App\Event\Entity\Service;
-use App\Event\Entity\Transaction;
-use App\Event\Entity\UpdateNews;
+use App\Domain\Event\Entity\Category;
+use App\Domain\Event\Entity\DetailAllocation;
+use App\Domain\Event\Entity\Donation;
+use App\Domain\Event\Entity\EventStatus;
+use App\Domain\Event\Entity\Forum;
+use App\Domain\Event\Entity\ForumLike;
+use App\Domain\Event\Entity\ParticipateDonation;
+use App\Domain\Event\Entity\ParticipatePetition;
+use App\Domain\Event\Entity\Petition;
+use App\Domain\Event\Entity\Service;
+use App\Domain\Event\Entity\Transaction;
+use App\Domain\Event\Entity\UpdateNews;
+use App\Domain\Event\Entity\User;
 
 class EventDao
 {
-    public function namefunction1()
+    public function showProfile($id)
     {
-
+        return User::where('id', $id)->first();
     }
 
-    public function namefunction2()
+    public function updateProfile($request, $id, $pathProfile, $pathBackground)
     {
-        
+        User::where('id', $id)->update([
+            'name' => $request->name,
+            'aboutMe' => $request->aboutMe,
+            'city' => $request->city,
+            'linkProfile' => $request->linkProfile,
+            'address' => $request->address,
+            'zipCode' => $request->zipCode,
+            'phoneNumber' => $request->phoneNumber,
+            'photoProfile' => $pathProfile,
+            'backgroundPicture' => $pathBackground
+        ]);
     }
 }
