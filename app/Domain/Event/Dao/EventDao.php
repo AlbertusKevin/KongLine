@@ -49,4 +49,18 @@ class EventDao
     {
         return Petition::where('status', 1)->get();
     }
+
+    public function showPetition($id)
+    {
+        return Petition::where('status', 1)->where('id', $id)->first();
+    }
+
+    public function checkParticipated($idEvent, $idParticipant, $typeEvent)
+    {
+        if ($typeEvent == 'petition') {
+            return ParticipatePetition::where('idParticipant', $idParticipant)->where('idPetition', $idEvent)->first();
+        } else {
+            return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
+        }
+    }
 }

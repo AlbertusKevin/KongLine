@@ -43,3 +43,9 @@ footer {
 .img-petition {
   width: 250px;
 }
+
+.close-event{
+  background-color: #E15858;
+  color: white;
+  width: 350px;
+}

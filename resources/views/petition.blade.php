@@ -9,7 +9,13 @@
         <div class="text-center mt-5">
             <button type="button" class="btn btn-primary rounded-pill">Berlangsung</button>
             <button type="button" class="btn btn-light rounded-pill ml-3">Telah Menang</button>
-            <button type="button" class="btn btn-light rounded-pill ml-3">Ikut Serta</button>
+            @if ($user->role == 'participant' || $user->role == 'campaigner')
+                <button type="button" class="btn btn-light rounded-pill ml-3">Ikut Serta</button>
+            @endif
+            @if ($user->role == 'campaigner')
+                <button type="button" class="btn btn-light rounded-pill ml-3">Petisi Saya</button>
+            @endif
+
         </div>
         <form class="form-inline my-2 my-lg-0 justify-content-center">
             <input class="form-control mr-sm-2 w-50 mt-5" type="search" placeholder="Search" aria-label="Search">
@@ -20,7 +26,7 @@
                 <div class="row no-gutters">
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h5 class="card-title">{{ $list->title }}</h5>
+                            <h5 class="card-title"><a href="/petisi/{{ $list->id }}">{{ $list->title }}</a></h5>
                             <p class="card-text">{{ $list->purpose }}</p>
                             <p class="card-text"><small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg"
                                         width="16" height="16" fill="currentColor" class="bi bi-flag-fill mr-2"

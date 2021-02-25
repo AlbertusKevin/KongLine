@@ -51,4 +51,24 @@ class EventService
     {
         return $this->dao->indexPetition();
     }
+
+    public function showPetition($id)
+    {
+        return $this->dao->showPetition($id);
+    }
+
+    public function checkParticipated($idEvent, $idParticipant, $typeEvent)
+    {
+        $isInList = $this->dao->checkParticipated($idEvent, $idParticipant, $typeEvent);
+        return empty($isInList);
+    }
+
+
+    //? ===================================================================
+    //! ~~~~~~~~~~~~~~~~~~~~~~~~~ Dummy Service ~~~~~~~~~~~~~~~~~~~~~~~~
+    //? ===================================================================
+    public function showProfile($id)
+    {
+        return $this->dao->showProfile($id);
+    }
 }
