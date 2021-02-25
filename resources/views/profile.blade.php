@@ -1,9 +1,9 @@
 @extends('layout.app')
 
 @section('content')
-    <div class="jumbotron text-center">
-        <img src="/img/profilePicture.png" alt="cover" class="profile-picture">
-        <h3 class="display-4">Ruben Calzoni</h3>
+    <div class="jumbotron text-center" style="background-image: url('/{{ $participant->backgroundPicture }}');">
+        <img src="/{{ $participant->photoProfile }}" alt="profile" class="profile-picture">
+        <h3 class="display-4">{{ $participant->name }}</h3>
         <p class="lead">Pengguna sejak 5 Feb 2021</p>
         <p class="mt-5">Terima kasih telah menjadi anggota aktif dari komunitas kami. </p>
     </div>
@@ -36,18 +36,20 @@
             <p class="ml-3">Atur akses akun dan kelola data yang kami gunakan untuk mempersonalisasi pengalamanmu.</p>
         </div>
 
-        <form>
+        <form action="/profile/{{ $participant->id }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
             <div class="form-group">
                 <label for="name">Nama Lengkap</label>
-                <input type="text" class="form-control" id="name" name="name">
+                <input type="text" class="form-control" id="name" name="name" value = "{{ $participant->name }}">
             </div>
             <div class="form-group">
                 <label for="about">Tentang Saya</label>
-                <textarea class="form-control" id="about" rows="3" name="about"></textarea>
+                <textarea class="form-control" id="about" rows="3" name="aboutMe" value = "{{ $participant->aboutMe }}"></textarea>
             </div>
             <div class="form-group">
                 <label for="kota">Kota</label>
-                <input type="text" class="form-control" id="kota" name="kota">
+                <input type="text" class="form-control" id="kota" name="city" value = "{{ $participant->city }}">
             </div>
             <div class="form-group">
                 <label for="negara">Negara</label>
@@ -59,22 +61,22 @@
             </div>
             <div class="form-group">
                 <label for="link">Tautan Singkat Profile</label>
-                <input type="text" class="form-control" id="link" name="link">
+                <input type="text" class="form-control" id="link" name="linkProfile" value = "{{ $participant->linkProfile }}">
             </div>
 
             <div class="form-group">
                 <label for="alamat">Alamat</label>
-                <input type="text" class="form-control" id="alamat" name="alamat">
+                <input type="text" class="form-control" id="alamat" name="address" value = "{{ $participant->address }}">
             </div>
 
             <div class="form-row">
                 <div class="col">
                     <label for="postcode">Kode Pos</label>
-                    <input type="text" class="form-control" id="postcode"  name="postcode">
+                    <input type="text" class="form-control" id="postcode"  name="zipCode" value = "{{ $participant->zipCode }}">
                 </div>
                 <div class="col">
                     <label for="phone">Nomor Telephone</label>  
-                    <input type="text" class="form-control" id="phone" name="phone">
+                    <input type="text" class="form-control" id="phone" name="phoneNumber" value = "{{ $participant->phoneNumber }}">
                 </div>
             </div>
             <div class="form-row mt-2">
@@ -85,6 +87,9 @@
                 <label for="zoom_picture">Cover Picture:</label>
                 <input type="file" class="form-control" name="zoom_picture" id="zoom_picture">
             </div>
+
+            <button type="submit" class="btn btn-primary mt-5">Simpan</button>
+            <button type="submit" class="btn btn-danger mt-5">Hapus Akun</button>
         </form>
     </div>
 @endsection
