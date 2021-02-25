@@ -18,6 +18,10 @@ use App\Domain\Event\Entity\User;
 
 class EventDao
 {
+    //? ===================================================================
+    //! ~~~~~~~~~~~~~~~~~~~~~~~~~ Profile Dao ~~~~~~~~~~~~~~~~~~~~~~~~
+    //? ===================================================================
+
     public function showProfile($id)
     {
         return User::where('id', $id)->first();
@@ -36,5 +40,13 @@ class EventDao
             'photoProfile' => $pathProfile,
             'backgroundPicture' => $pathBackground
         ]);
+    }
+
+    //? ===================================================================
+    //! ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Petition Dao ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //? ===================================================================
+    public function indexPetition()
+    {
+        return Petition::where('status', 1)->get();
     }
 }

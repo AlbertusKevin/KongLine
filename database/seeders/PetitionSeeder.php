@@ -21,7 +21,7 @@ class PetitionSeeder extends Seeder
                 'category' => 1,
                 'deadline' => Carbon::create('2021', '04', '01'),
                 'idCampaigner' => 2,
-                'photo' => 'petition/tolak.jpg',
+                'photo' => 'images/petition/tolak.jpg',
                 'purpose' => 'Confirmation invvestor',
                 'status' => 1,
                 'title' => 'Tolak Biaya Materai Untuk Saham',

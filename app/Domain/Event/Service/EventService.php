@@ -13,18 +13,6 @@ class EventService
         $this->dao = new EventDao();
     }
 
-    public function editProfile($id)
-    {
-        return $this->dao->showProfile($id);
-    }
-
-    public function updateProfile($request, $id)
-    {
-        $pathProfile = $this->upload_image($request->file('profile_picture'), 'photo');
-        $pathBackground = $this->upload_image($request->file('zoom_picture'), 'background');
-        $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
-    }
-
     private function upload_image($img, $folder)
     {
         $pictName = $img->getClientOriginalName();
@@ -37,5 +25,30 @@ class EventService
         $img->move($targetUploadDesc, $pictName);
 
         return $targetUploadDesc . "\\" . $pictName;   //membuat file path yang akan digunakan sebagai src html
+    }
+
+    //? ===================================================================
+    //! Profile Service
+    //? ===================================================================
+
+    public function editProfile($id)
+    {
+        return $this->dao->showProfile($id);
+    }
+
+    public function updateProfile($request, $id)
+    {
+        $pathProfile = $this->upload_image($request->file('profile_picture'), 'photo');
+        $pathBackground = $this->upload_image($request->file('zoom_picture'), 'background');
+        $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
+    }
+
+    //? ===================================================================
+    //! ~~~~~~~~~~~~~~~~~~~~~~~~~ Petition Service ~~~~~~~~~~~~~~~~~~~~~~~~
+    //? ===================================================================
+
+    public function indexPetition()
+    {
+        return $this->dao->indexPetition();
     }
 }
