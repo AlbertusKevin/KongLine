@@ -1,3 +1,4 @@
+
 .navbar-nav a{
   align-self:center;
 }
@@ -38,4 +39,65 @@ footer {
 
 .profile-picture {
   width: 100px;
+}
+
+.w-35 {
+    width: 35%;
+}
+
+#authForm {
+    width: 100%;
+    height: auto;
+    padding: 12px 20px ;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #777777;
+    border-radius: 10px;
+}
+
+#authFormFName, #authFormLName{
+    float: left;
+    width: 49%;
+    height: auto;
+    padding: 12px 20px ;
+    margin: 8px 0;
+    border: 1px solid #777777;
+    border-radius: 10px;
+}
+
+#authFormLName{
+    float: right;
+}
+
+.text-gray {
+    color: #777777;
+}
+
+.text-blue {
+    color: #2A9EF5;
+}
+
+
+.btn-blue {
+    background-color: #2A9EF5;
+    width: 100%;
+    height: auto;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 30px;
+    transition-duration: 0.4s;
+}
+
+.btn-blue:hover {
+    background-color: whitesmoke;
+    color: #2A9EF5;
+}
+
+.round {
+    border-radius: 10px;
 }

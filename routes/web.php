@@ -16,6 +16,7 @@ use App\Http\Controllers\ProfileController;
 // ini router coba coba asik
 Route::get('/', function () {
     return view('home');
+    // return view('auth.register');
 });
 
 Route::get('/petition', function () {
@@ -26,5 +27,17 @@ Route::get('/petition/detail', function () {
     return view('petitionDetail');
 });
 
+Route::get('/profile', function () {
+    return view('profile');
+});
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Auth
+Route::get('/login', [App\Http\Controllers\AuthController::class, 'getLogin'])->name('login')->middleware('guest');
+Route::post('/postLogin', [App\Http\Controllers\AuthController::class, 'postLogin'])->name('postLogin');
+Route::get('/register', [App\Http\Controllers\AuthController::class, 'getRegister'])->name('register')->middleware('guest');
+Route::post('/postRegister', [App\Http\Controllers\AuthController::class, 'postRegister'])->name('postRegister');
+Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 Route::get('/profile/{id}', [ProfileController::class, 'edit']);
 Route::put('/profile/{id}', [ProfileController::class, 'update']);
