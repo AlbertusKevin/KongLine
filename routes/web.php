@@ -33,7 +33,8 @@ Route::get('/profile', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // Auth
-Route::get('/login', [App\Http\Controllers\AuthController::class, 'getLogin'])->name('login');
+Route::get('/login', [App\Http\Controllers\AuthController::class, 'getLogin'])->name('login')->middleware('guest');
 Route::post('/postLogin', [App\Http\Controllers\AuthController::class, 'postLogin'])->name('postLogin');
-Route::get('/register', [App\Http\Controllers\AuthController::class, 'getRegister'])->name('register');
+Route::get('/register', [App\Http\Controllers\AuthController::class, 'getRegister'])->name('register')->middleware('guest');
 Route::post('/postRegister',[App\Http\Controllers\AuthController::class,'postRegister'])->name('postRegister');
+Route::get('/logout', [App\Http\Controllers\AuthController::class,'logout'])->name('logout');
