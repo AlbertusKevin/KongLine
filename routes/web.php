@@ -39,5 +39,9 @@ Route::post('/postLogin', [App\Http\Controllers\AuthController::class, 'postLogi
 Route::get('/register', [App\Http\Controllers\AuthController::class, 'getRegister'])->name('register')->middleware('guest');
 Route::post('/postRegister', [App\Http\Controllers\AuthController::class, 'postRegister'])->name('postRegister');
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+Route::get('/donation', function () {
+    return view('donation');
+});
+
 Route::get('/profile/{id}', [ProfileController::class, 'edit']);
 Route::put('/profile/{id}', [ProfileController::class, 'update']);

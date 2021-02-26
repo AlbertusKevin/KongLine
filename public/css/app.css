@@ -101,3 +101,54 @@ footer {
 .round {
     border-radius: 10px;
 }
+.card-top {
+  margin-top: -50px;
+}
+
+.card-top-row-2 {
+  margin-top: 30px;
+}
+
+.button-search{
+  background-color: transparent;
+  height: auto;
+}
+
+.transparent{
+  background-color: transparent;
+  height: auto;
+}
+.placeholder{
+  opacity: 1;
+}
+
+.jumbotron-donation{
+  background-image: url('/img/donationHome.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0, -250px;
+  height: 400px;
+  width: auto;
+  border-radius: 0%;
+  color: black;
+  overflow: hidden;
+  position: relative;
+}
+
+.time-left{
+  position:absolute; top: 0; left: 0;
+  margin: 0.7rem 0 0 0.7rem;
+  padding:0.4rem;
+  border-radius: 10px;
+  background-color:#187BCD;
+  font-weight: bold;
+  color: whitesmoke;
+}
+
+.title-donation{
+  color: #045163;
+}
+
+.pagination-donation{
+  background-color: #187BCD !important;
+}
