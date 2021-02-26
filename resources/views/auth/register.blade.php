@@ -15,7 +15,7 @@
                         <input type="email" id="authForm" name="email" class="form-control mb-2" placeholder="E-mail" autofocus required>
 						<input type="password" id="authForm" name="password" class="form-control mb-3" placeholder="Password" autofocus required>
                         <button class="btn-blue font-weight-bold mb-3" type="submit"> DAFTAR </button>
-                        <p class="text-center" >Sudah memiliki akun?  <a href="" class="text-blue">Masuk</a></p>
+                        <p class="text-center" >Sudah memiliki akun?  <a href="/login" class="text-blue">Masuk</a></p>
                     </form>
                 </div>
             </div>

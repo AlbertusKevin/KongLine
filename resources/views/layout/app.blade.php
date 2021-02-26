@@ -19,6 +19,7 @@
     <title>@yield('title')</title>
   </head>
   <body>
+    @include('sweetalert::alert')
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#"><img src="/img/logo.png" width="75"></a>

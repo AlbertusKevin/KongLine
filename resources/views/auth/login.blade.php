@@ -4,18 +4,17 @@
 
 <div class="container-fluid contain d-flex align-items-center justify-content-center h-100">
     <div class="outer">
-        @include('sweetalert::alert')
         <div class="row justify-content-center h-100 align-items-center">
             <div class="col-md-20 w-35">
                 <div class="shadow p-5 bg-white round">
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('postLogin') }}">
                         {{ csrf_field() }}
                         <h4 class="text-center font-weight-bold mb-4"> Masuk ke Akun </h4>
 						<input type="email" id="authForm" name="email" class="form-control mb-2" placeholder="E-mail" autofocus required>
 						<input type="password" id="authForm" name="password" class="form-control mb-2" placeholder="Password" autofocus required>
                         <p class="text-right text-gray">Lupa password?</p>
                         <button class="btn-blue font-weight-bold mb-2" type="submit">MASUK</button>
-                        <p class="text-center" >Belum punya akun? <a href="" class="text-blue">Daftar Sekarang!</a></p>
+                        <p class="text-center" >Belum punya akun? <a href="/register" class="text-blue">Daftar Sekarang!</a></p>
                     </form>
                 </div>
             </div>

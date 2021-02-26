@@ -34,5 +34,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // Auth
 Route::get('/login', [App\Http\Controllers\AuthController::class, 'getLogin'])->name('login');
+Route::post('/postLogin', [App\Http\Controllers\AuthController::class, 'postLogin'])->name('postLogin');
 Route::get('/register', [App\Http\Controllers\AuthController::class, 'getRegister'])->name('register');
 Route::post('/postRegister',[App\Http\Controllers\AuthController::class,'postRegister'])->name('postRegister');
