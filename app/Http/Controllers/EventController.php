@@ -26,6 +26,11 @@ class EventController extends Controller
         return $this->eventService->listPetitionType($request);
     }
 
+    public function searchPetition(Request $request)
+    {
+        return $this->eventService->searchPetition($request);
+    }
+
     public function showPetition(Request $request, $idEvent)
     {
         $petition = $this->eventService->showPetition($idEvent);

@@ -40,12 +40,17 @@ footer {
   width: 100px;
 }
 
-.img-petition {
-  width: 250px;
-}
-
 .close-event{
   background-color: #E15858;
   color: white;
   width: 350px;
+}
+
+.petition-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-height: 1.7;
+  -webkit-line-clamp: 5; /* number of lines to show */
+  -webkit-box-orient: vertical;
 }

@@ -37,7 +37,9 @@ Route::put('/profile/{id}', [ProfileController::class, 'update']);
 //? =========================
 //! Router Petition
 //? =========================
+//* --- pemanggilan ajax ---
 Route::get('/petisi/type', [EventController::class, 'listPetitionType']);
+Route::get('/petisi/search', [EventController::class, 'searchPetition']);
 
 Route::get('/petisi', [EventController::class, 'indexPetition']);
 Route::get('/petisi/{id}', [EventController::class, 'showPetition']);
