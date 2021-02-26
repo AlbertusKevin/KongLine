@@ -18,7 +18,7 @@ class CreatePetitionsTable extends Migration
             $table->string('title')->unique();
             $table->foreignId('idCampaigner');
             $table->string('photo');
-            $table->string('purpose');
+            $table->longText('purpose');
             $table->string('targetPerson');
             $table->integer('signedTarget');
             $table->integer('signedCollected');

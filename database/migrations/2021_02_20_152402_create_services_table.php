@@ -17,7 +17,7 @@ class CreateServicesTable extends Migration
             $table->id();
             $table->foreignId('idAdmin');
             $table->foreignId('idParticipant');
-            $table->string('content');
+            $table->longText('content');
             $table->timestamps();
         });
 

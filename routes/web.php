@@ -3,8 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,11 +18,12 @@ use Illuminate\Support\Facades\Request;
 //! Router percobaan
 //? =========================
 Route::get('/', function () {
-    session(['id_user' => 4]);
+    // 1 guest, 2 admin, 3 participant, 4 campaigner
+    session(['id_user' => 3]);
     return view('home');
 });
 
-Route::get('/logout', function (Request $request) {
+Route::get('/logout', function () {
     session()->flush();
     return redirect('/');
 });
@@ -38,5 +37,7 @@ Route::put('/profile/{id}', [ProfileController::class, 'update']);
 //? =========================
 //! Router Petition
 //? =========================
+Route::get('/petisi/type', [EventController::class, 'listPetitionType']);
+
 Route::get('/petisi', [EventController::class, 'indexPetition']);
 Route::get('/petisi/{id}', [EventController::class, 'showPetition']);

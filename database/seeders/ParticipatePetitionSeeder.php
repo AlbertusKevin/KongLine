@@ -17,7 +17,7 @@ class ParticipatePetitionSeeder extends Seeder
         DB::table('participate_petition')->insert(
             [
                 'idPetition' => 1,
-                'idParticipant' => 2,
+                'idParticipant' => 3,
                 'comment' => 'Help me from Cancer'
             ]
         );

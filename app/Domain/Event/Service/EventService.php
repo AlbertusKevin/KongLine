@@ -52,6 +52,26 @@ class EventService
         return $this->dao->indexPetition();
     }
 
+    public function listPetitionType($request)
+    {
+        $userId = $this->showProfile($request->session()->get('id_user'));
+        $userId = $userId->id;
+
+        if ($request->typePetition == "berlangsung") {
+            return $this->dao->listPetitionType(1);
+        }
+
+        if ($request->typePetition == "menang") {
+            return $this->dao->listPetitionType(2);
+        }
+
+        if ($request->typePetition == "partisipasi") {
+            return $this->dao->listPetitionParticipated($userId);
+        }
+
+        return $this->dao->listPetitionByMe($userId);
+    }
+
     public function showPetition($id)
     {
         return $this->dao->showPetition($id);

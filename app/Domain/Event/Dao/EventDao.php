@@ -45,6 +45,23 @@ class EventDao
     //? ===================================================================
     //! ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Petition Dao ~~~~~~~~~~~~~~~~~~~~~~~~~~
     //? ===================================================================
+    public function listPetitionType($status)
+    {
+        return Petition::where('status', $status)->get();
+    }
+
+    public function listPetitionParticipated($idParticipant)
+    {
+        return ParticipatePetition::where('idParticipant', $idParticipant)
+            ->join('petition', 'participate_petition.idPetition', '=', 'petition.id')
+            ->get();
+    }
+
+    public function listPetitionByMe($idCampaigner)
+    {
+        return Petition::where('idCampaigner', $idCampaigner)->get();
+    }
+
     public function indexPetition()
     {
         return Petition::where('status', 1)->get();

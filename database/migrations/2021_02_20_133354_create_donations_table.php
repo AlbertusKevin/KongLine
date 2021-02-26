@@ -19,7 +19,7 @@ class CreateDonationsTable extends Migration
             $table->date('deadline');
             $table->foreignId('idCampaigner');
             $table->string('photo');
-            $table->string('purpose');
+            $table->longText('purpose');
             $table->tinyInteger('status')->unsigned();
             $table->string('title')->unique();
             $table->string('assistedSubject');

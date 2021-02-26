@@ -14,22 +14,22 @@ class EventController extends Controller
         $this->eventService = new EventService();
     }
 
-    public function showProfile($request)
-    {
-        return $this->eventService->showProfile($request->session()->get('id_user'));
-    }
-
     public function indexPetition(Request $request)
     {
-        $user = $this->showProfile($request);
+        $user = $this->eventService->showProfile($request->session()->get('id_user'));
         $petitionList = $this->eventService->indexPetition();
         return view('petition', compact('petitionList', 'user'));
+    }
+
+    public function listPetitionType(Request $request)
+    {
+        return $this->eventService->listPetitionType($request);
     }
 
     public function showPetition(Request $request, $idEvent)
     {
         $petition = $this->eventService->showPetition($idEvent);
-        $user = $this->showProfile($request);
+        $user = $this->eventService->showProfile($request->session()->get('id_user'));
         $isParticipated = $this->eventService->checkParticipated($idEvent, $request->session()->get('id_user'), 'petition');
 
         return view('petitionDetail', compact('petition', 'user', 'isParticipated'));

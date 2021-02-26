@@ -17,7 +17,7 @@ class CreateCommentForumsTable extends Migration
             $table->id();
             $table->foreignId('idForum');
             $table->foreignId('idParticipant');
-            $table->string('content');
+            $table->longText('content');
             $table->timestamps();
         });
 
