@@ -19,7 +19,7 @@ use App\Http\Controllers\EventController;
 //? =========================
 Route::get('/', function () {
     // 1 guest, 2 admin, 3 participant, 4 campaigner
-    session(['id_user' => 3]);
+    session(['id_user' => 4]);
     return view('home');
 });
 
