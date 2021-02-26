@@ -26,5 +26,14 @@ Route::get('/petition/detail', function () {
     return view('petitionDetail');
 });
 
+Route::get('/profile', function () {
+    return view('profile');
+});
+
+Route::get('/donation', function(){
+    return view('donation');
+});
+
 Route::get('/profile/{id}', [ProfileController::class, 'edit']);
 Route::put('/profile/{id}', [ProfileController::class, 'update']);
+
