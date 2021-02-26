@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +33,7 @@ Route::get('/profile', function () {
 Route::get('/donation', function(){
     return view('donation');
 });
+
+Route::get('/profile/{id}', [ProfileController::class, 'edit']);
+Route::put('/profile/{id}', [ProfileController::class, 'update']);
+
