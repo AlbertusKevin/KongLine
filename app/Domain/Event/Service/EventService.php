@@ -230,42 +230,115 @@ class EventService
     public function sortPetition($request)
     {
         $category = $this->categorySelect($request);
+        $userId = $this->showProfile($request->session()->get('id_user'))->id;
+
+        //jika tidak sort dan tidak pilih category
+        if ($request->sortBy == "None" && $request->category == 0) {
+            return $this->listPetitionType($request);
+        }
 
         if ($request->typePetition == 'berlangsung') {
             // Jika sort dipilih
             if ($request->sortBy == "Jumlah Tanda Tangan") {
                 //jika category juga dipilih
                 if ($category != 0) {
-                    return $this->dao->sortPetitionSignedCollected($category);
+                    return $this->dao->sortPetitionCategory($category, 1, 'signedCollected');
                 }
                 // jika hanya sort
-                return $this->dao->justSortPetitionSignedCollected();
+                return $this->dao->sortPetition(1, 'signedCollected');
             }
 
             // Jika sort dipilih
             if ($request->sortBy == "Event Terbaru") {
                 //jika category juga dipilih
                 if ($category != 0) {
-                    return $this->dao->newestPetition($category);
+                    return $this->dao->sortPetitionCategory($category, 1, 'created_at');
                 }
                 // jika hanya sort
-                return $this->dao->justNewestPetition();
+                return $this->dao->sortPetition(1, 'created_at');
             }
 
             // Jika hanya pilih berdasarkan category
             if ($request->sortBy == "None") {
-                return $this->dao->petitionByCategory($category);
+                return $this->dao->petitionByCategory($category, 1);
             }
         }
         if ($request->typePetition == 'menang') {
+            // Jika sort dipilih
+            if ($request->sortBy == "Jumlah Tanda Tangan") {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategory($category, 2, 'signedCollected');
+                }
+                // jika hanya sort
+                return $this->dao->sortPetition(2, 'signedCollected');
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == "Event Terbaru") {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategory($category, 2, 'created_at');
+                }
+                // jika hanya sort
+                return $this->dao->sortPetition(2, 'created_at');
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == "None") {
+                return $this->dao->petitionByCategory($category, 2);
+            }
         }
         if ($request->typePetition == 'partisipasi') {
+            // Jika sort dipilih
+            if ($request->sortBy == "Jumlah Tanda Tangan") {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategoryParticipated($category, $userId, 'signedCollected');
+                }
+                // jika hanya sort
+                return $this->dao->sortPetitionParticipated($userId, 'signedCollected');
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == "Event Terbaru") {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategoryParticipated($category, $userId, 'created_at');
+                }
+                // jika hanya sort
+                return $this->dao->sortPetitionParticipated($userId, 'created_at');
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == "None") {
+                return $this->dao->participatedPetitionByCategory($category, $userId);
+            }
         }
         if ($request->typePetition == 'petisi_saya') {
+            // Jika sort dipilih
+            if ($request->sortBy == "Jumlah Tanda Tangan") {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategoryByMe($category, $userId, 'signedCollected');
+                }
+                // jika hanya sort
+                return $this->dao->sortMyPetition($userId, 'signedCollected');
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == "Event Terbaru") {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategoryByMe($category, $userId, 'created_at');
+                }
+                // jika hanya sort
+                return $this->dao->sortMyPetition($userId, 'created_at');
+            }
         }
 
-        //jika tidak sort dan pilih category
-        return $this->listPetitionType($request);
+        // Jika hanya pilih berdasarkan category
+        return $this->dao->myPetitionByCategory($category, $userId);
     }
 
     public function showPetition($id)
