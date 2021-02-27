@@ -17,7 +17,6 @@ class DonationSeeder extends Seeder
     {
         DB::table('donation')->insert(
             [
-                'id' => 1,
                 'category' => 1,
                 'deadline' => new Carbon('first day of March 2021'),
                 'idCampaigner' => 2,
@@ -27,9 +26,9 @@ class DonationSeeder extends Seeder
                 'title' => 'Help Cancer',
                 'assistedSubject' => 'Cancer',
                 'donationCollected' => 7000000,
-                'donationTarget' => 10000000
+                'donationTarget' => 10000000,
+                'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
-        
     }
 }

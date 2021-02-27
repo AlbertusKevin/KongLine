@@ -45,6 +45,7 @@ class EventDao
     //? ===================================================================
     //! ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Petition Dao ~~~~~~~~~~~~~~~~~~~~~~~~~~
     //? ===================================================================
+    //! Petition Search
     public function searchPetition($status, $keyword)
     {
         return Petition::where('status', $status)->where('title', 'LIKE', '%' . $keyword . '%')->get();
@@ -55,6 +56,31 @@ class EventDao
         return Petition::where('idCampaigner', $idCampaigner)->where('title', 'LIKE', '%' . $keyword . '%')->get();
     }
 
+    public function searchPetitionByMeCategorySort($idCampaigner, $keyword, $category, $table)
+    {
+        return Petition::where('idCampaigner', $idCampaigner)
+            ->where('category', $category)
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->orderByDesc($table)
+            ->get();
+    }
+
+    public function searchPetitionByMeCategory($idCampaigner, $keyword, $category)
+    {
+        return Petition::where('idCampaigner', $idCampaigner)
+            ->where('category', $category)
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->get();
+    }
+
+    public function searchPetitionByMeSort($idCampaigner, $keyword, $table)
+    {
+        return Petition::where('idCampaigner', $idCampaigner)
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->orderByDesc($table)
+            ->get();
+    }
+
     public function searchPetitionParticipated($idParticipant, $keyword)
     {
         return ParticipatePetition::where('idParticipant', $idParticipant)
@@ -63,6 +89,98 @@ class EventDao
             ->get();
     }
 
+    public function searchPetitionParticipatedCategorySort($idParticipant, $keyword, $category, $table)
+    {
+        return ParticipatePetition::where('idParticipant', $idParticipant)
+            ->join('petition', 'participate_petition.idPetition', '=', 'petition.id')
+            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
+            ->where('petition.category', $category)
+            ->orderByDesc('petition.' . $table)
+            ->get();
+    }
+
+    public function searchPetitionParticipatedSortBy($idParticipant, $keyword, $table)
+    {
+        return ParticipatePetition::where('idParticipant', $idParticipant)
+            ->join('petition', 'participate_petition.idPetition', '=', 'petition.id')
+            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
+            ->orderByDesc('petition.' . $table)
+            ->get();
+    }
+
+    public function searchPetitionParticipatedCategory($idParticipant, $keyword, $category)
+    {
+        return ParticipatePetition::where('idParticipant', $idParticipant)
+            ->join('petition', 'participate_petition.idPetition', '=', 'petition.id')
+            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
+            ->where('petition.category', $category)
+            ->get();
+    }
+
+    public function searchPetitionCategorySort($status, $keyword, $category, $table)
+    {
+        return Petition::where('status', $status)
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->where('category', $category)
+            ->orderByDesc($table)
+            ->get();
+    }
+
+    public function searchPetitionCategory($status, $keyword, $category)
+    {
+        return Petition::where('status', $status)
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->where('category', $category)
+            ->get();;
+    }
+
+    public function searchPetitionSortBy($status, $keyword, $table)
+    {
+        return Petition::where('status', $status)
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->orderByDesc($table)
+            ->get();;
+    }
+
+    //! Petition Sort and Category
+    public function sortPetitionSignedCollected($category)
+    {
+        return Petition::where('status', 1)
+            ->where('category', $category)
+            ->orderByDesc('signedCollected')
+            ->get();
+    }
+
+    public function justSortPetitionSignedCollected()
+    {
+        return Petition::where('status', 1)
+            ->orderByDesc('signedCollected')
+            ->get();
+    }
+
+    public function newestPetition($category)
+    {
+        return Petition::where('status', 1)
+            ->where('category', $category)
+            ->orderByDesc('created_at')
+            ->get();
+    }
+
+    public function justNewestPetition()
+    {
+        return Petition::where('status', 1)
+            ->orderByDesc('created_at')
+            ->get();
+    }
+
+    public function petitionByCategory($category)
+    {
+        return Petition::where('status', 1)
+            ->where('category', $category)
+            ->get();
+    }
+
+    //! List Petition By Type
     public function listPetitionType($status)
     {
         return Petition::where('status', $status)->get();
@@ -80,6 +198,7 @@ class EventDao
         return Petition::where('idCampaigner', $idCampaigner)->get();
     }
 
+    //! List Petition (Regular)
     public function indexPetition()
     {
         return Petition::where('status', 1)->get();

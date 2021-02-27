@@ -5,7 +5,7 @@
     <div class="container">
         <h2 class="mt-3 petition-page-title">Daftar Petisi</h2>
         <hr>
-        <p class="petition-page-subtitle">Lihat Petisi yang Sedang Berlangsung</p>
+        <p class="petition-page-subtitle">Lihat Petisi yang Sedang Berlangsung di Website</p>
         <div class="text-center mt-5">
             <button href="/petisi" type="button" class="btn btn-primary petition-type rounded-pill">Berlangsung</button>
             <button href="/petisi" type="button" class="btn btn-light petition-type rounded-pill ml-3">Telah Menang</button>
@@ -16,13 +16,48 @@
             @if ($user->role == 'campaigner')
                 <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Petisi Saya</button>
             @endif
-
         </div>
-        <form class="form-inline my-2 my-lg-0 justify-content-center">
+        <div class="form-inline my-2 my-lg-0 justify-content-center">
             <input class="form-control mr-sm-2 w-50 mt-5" id="search-petition" type="search" placeholder="Search"
                 aria-label="Search">
-            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle mt-5">Sort By</button>
-        </form>
+            <input type="hidden" id="sort-by" value="None">
+            <input type="hidden" id="category-choosen" value="None">
+            <div class="dropdown mt-5 mr-2">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="sort-by" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Sort By
+                </button>
+                <div class="dropdown-menu" aria-labelledby="sort-by">
+                    <a class="dropdown-item sort-petition font-weight-bold">None</a>
+                    <a class="dropdown-item sort-petition">Jumlah Tanda Tangan</a>
+                    <a class="dropdown-item sort-petition">Event Terbaru</a>
+                </div>
+            </div>
+            <div class="dropdown mt-5">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="category" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Category
+                </button>
+                <div class="dropdown-menu" aria-labelledby="category">
+                    <a class="dropdown-item category-petition font-weight-bold">None</a>
+                    <a class="dropdown-item category-petition">Pendidikan</a>
+                    <a class="dropdown-item category-petition">Bencana Alam</a>
+                    <a class="dropdown-item category-petition">Difabel</a>
+                    <a class="dropdown-item category-petition">Infrastruktur Umum</a>
+                    <a class="dropdown-item category-petition">Teknologi</a>
+                    <a class="dropdown-item category-petition">Karya Kreatif & Modal Usaha</a>
+                    <a class="dropdown-item category-petition">Kegiatan Sosial</a>
+                    <a class="dropdown-item category-petition">Kemanusiaan</a>
+                    <a class="dropdown-item category-petition">Lingkungan</a>
+                    <a class="dropdown-item category-petition">Hewan</a>
+                    <a class="dropdown-item category-petition">Panti Asuhan</a>
+                    <a class="dropdown-item category-petition">Rumah Ibadah</a>
+                    <a class="dropdown-item category-petition">Ekonomi</a>
+                    <a class="dropdown-item category-petition">Politik</a>
+                    <a class="dropdown-item category-petition">Keadilan</a>
+                </div>
+            </div>
+        </div>
         <div id="petition-list">
             @if (count($petitionList) == 0)
                 <div class="card mb-3 ml-auto mr-auto mt-5" style="max-width: 650px;">

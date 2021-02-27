@@ -19,7 +19,7 @@ use App\Http\Controllers\EventController;
 //? =========================
 Route::get('/', function () {
     // 1 guest, 2 admin, 3 participant, 4 campaigner
-    session(['id_user' => 4]);
+    session(['id_user' => 3]);
     return view('home');
 });
 
@@ -40,6 +40,7 @@ Route::put('/profile/{id}', [ProfileController::class, 'update']);
 //* --- pemanggilan ajax ---
 Route::get('/petisi/type', [EventController::class, 'listPetitionType']);
 Route::get('/petisi/search', [EventController::class, 'searchPetition']);
+Route::get('/petisi/sort', [EventController::class, 'sortPetition']);
 
 Route::get('/petisi', [EventController::class, 'indexPetition']);
 Route::get('/petisi/{id}', [EventController::class, 'showPetition']);

@@ -17,7 +17,6 @@ class PetitionSeeder extends Seeder
     {
         DB::table('petition')->insert(
             [
-                'id' => 1,
                 'category' => 1,
                 'deadline' => Carbon::create('2021', '04', '01'),
                 'idCampaigner' => 4,
@@ -29,12 +28,12 @@ class PetitionSeeder extends Seeder
                 'title' => 'Tolak Biaya Materai Untuk Saham',
                 'targetPerson' => 'investor',
                 'signedCollected' => 10,
-                'signedTarget' => 100
+                'signedTarget' => 100,
+                'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
         DB::table('petition')->insert(
             [
-                'id' => 2,
                 'category' => 1,
                 'deadline' => Carbon::create('2021', '04', '01'),
                 'idCampaigner' => 4,
@@ -46,7 +45,8 @@ class PetitionSeeder extends Seeder
                 'title' => 'petisi ke 2',
                 'targetPerson' => 'investor',
                 'signedCollected' => 10000,
-                'signedTarget' => 1000000
+                'signedTarget' => 1000000,
+                'created_at' => Carbon::create('2021', '03', '23'),
             ]
         );
     }

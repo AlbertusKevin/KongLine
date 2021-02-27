@@ -52,6 +52,54 @@ const changePetitionList = (petition) => {
         `;
 };
 
+const listPetitionEmpty = () => {
+    return /*html*/ `
+    <div class="card mb-3 ml-auto mr-auto mt-5" style="max-width: 650px;">
+        <div class="row no-gutters">
+            <div class="col-md-12 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Belum ada petisi pada daftar ini</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+};
+
+const listPetitionTypeEmpty = (keyword) => {
+    return /*html*/ `
+    <div class="card mb-3 ml-auto mr-auto mt-5" style="max-width: 650px;">
+        <div class="row no-gutters">
+            <div class="col-md-12 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Tidak terdapat petisi dengan judul ~ ${keyword} ~ pada daftar ini</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+};
+
+const sortListPetition = (sortBy, category, typePetition) => {
+    $.ajax({
+        url: "/petisi/sort",
+        data: { sortBy, category, typePetition },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                data.forEach((petition) => {
+                    html += changePetitionList(petition);
+                });
+                $("#petition-list").html(html);
+            } else {
+                html += listPetitionEmpty();
+                $("#petition-list").html(html);
+            }
+        },
+    });
+};
+
 // fungsi trigger
 $("#check-privacy-policy").on("click", function () {
     if (this.checked) {
@@ -108,19 +156,7 @@ $(".petition-type").on("click", function () {
                 });
                 $("#petition-list").html(html);
             } else {
-                html +=
-                    /*html*/
-                    `
-                <div class="card mb-3 ml-auto mr-auto mt-5" style="max-width: 650px;">
-                    <div class="row no-gutters">
-                        <div class="col-md-12 text-center">
-                            <div class="card-body">
-                                <h5 class="card-title">Belum ada petisi pada daftar ini</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                `;
+                html += listPetitionEmpty();
                 $("#petition-list").html(html);
             }
         },
@@ -130,12 +166,14 @@ $(".petition-type").on("click", function () {
 $("#search-petition").on("keyup", function () {
     let keyword = $(this).val();
     let typePetition = $(".btn-primary").html();
+    let category = $("#category-choosen").val();
+    let sortBy = $("#sort-by").val();
 
     typePetition = checkTypePetition(typePetition);
 
     $.ajax({
         url: "/petisi/search",
-        data: { keyword, typePetition },
+        data: { keyword, typePetition, category, sortBy },
         dataType: "json",
         success: (data) => {
             let html = "";
@@ -145,21 +183,35 @@ $("#search-petition").on("keyup", function () {
                 });
                 $("#petition-list").html(html);
             } else {
-                html +=
-                    /*html*/
-                    `
-                <div class="card mb-3 ml-auto mr-auto mt-5" style="max-width: 650px;">
-                    <div class="row no-gutters">
-                        <div class="col-md-12 text-center">
-                            <div class="card-body">
-                                <h5 class="card-title">Tidak terdapat petisi dengan judul ~ ${keyword} ~ pada daftar ini</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                `;
+                html += listPetitionTypeEmpty(keyword);
                 $("#petition-list").html(html);
             }
         },
     });
+});
+
+$(".sort-petition").on("click", function (e) {
+    e.preventDefault();
+    let sortBy = $(this).html();
+    $("#sort-by").val(sortBy);
+
+    $(".sort-petition").removeClass("font-weight-bold");
+    $(this).addClass("font-weight-bold");
+
+    let category = $("#category-choosen").val();
+    let typePetition = checkTypePetition($(".btn-primary").html());
+    sortListPetition(sortBy, category, typePetition);
+});
+
+$(".category-petition").on("click", function (e) {
+    e.preventDefault();
+    let category = $(this).html();
+    $("#category-choosen").val(category);
+
+    $(".category-petition").removeClass("font-weight-bold");
+    $(this).addClass("font-weight-bold");
+
+    let sortBy = $("#sort-by").val();
+    let typePetition = checkTypePetition($(".btn-primary").html());
+    sortListPetition(sortBy, category, typePetition);
 });

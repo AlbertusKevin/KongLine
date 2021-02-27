@@ -25,7 +25,7 @@ class CreateDonationsTable extends Migration
             $table->string('assistedSubject');
             $table->bigInteger('donationCollected');
             $table->bigInteger('donationTarget');
-            $table->timestamps();
+            $table->date('created_at');
         });
 
         Schema::table('donation', function (Blueprint $table) {
