@@ -16,9 +16,9 @@ class CreateForumsTable extends Migration
         Schema::create('forum', function (Blueprint $table) {
             $table->id();
             $table->foreignId('idParticipant');
-            $table->string('content');
+            $table->longText('content');
             $table->string('title');
-            $table->timestamps();
+            $table->date('created_at');
         });
 
         Schema::table('forum', function (Blueprint $table) {

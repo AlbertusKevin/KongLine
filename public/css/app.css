@@ -41,6 +41,31 @@ footer {
   width: 100px;
 }
 
+.close-event{
+  background-color: #E15858;
+  color: white;
+  width: 350px;
+}
+
+.petition-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-height: 1.7;
+  -webkit-line-clamp: 5; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.image-detail-petition {
+  width: 100%;
+}
+
+.petition-detail-description {
+  text-align: justify;
+  text-indent: 50px;
+  line-height: 1.5;
+}
+
 .w-35 {
     width: 35%;
 }

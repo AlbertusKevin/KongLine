@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class CommentForumSeeder extends Seeder
 {
@@ -19,7 +20,8 @@ class CommentForumSeeder extends Seeder
                 'id' => 1,
                 'idForum' => 1,
                 'idParticipant' => 2,
-                'content' => 'So fun'
+                'content' => 'So fun',
+                'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
         DB::table('comment_forum')->insert(
@@ -27,7 +29,8 @@ class CommentForumSeeder extends Seeder
                 'id' => 2,
                 'idForum' => 2,
                 'idParticipant' => 2,
-                'content' => 'Best'
+                'content' => 'Best',
+                'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
     }

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ForumSeeder extends Seeder
 {
@@ -19,7 +20,8 @@ class ForumSeeder extends Seeder
                 'id' => 1,
                 'idParticipant' => 2,
                 'content' => 'Help the Cancer',
-                'title' => 'Cancer'
+                'title' => 'Cancer',
+                'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
         DB::table('forum')->insert(
@@ -27,7 +29,8 @@ class ForumSeeder extends Seeder
                 'id' => 2,
                 'idParticipant' => 2,
                 'content' => 'Help the Tumor',
-                'title' => 'Tumor'
+                'title' => 'Tumor',
+                'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
         DB::table('forum')->insert(
@@ -35,7 +38,8 @@ class ForumSeeder extends Seeder
                 'id' => 3,
                 'idParticipant' => 2,
                 'content' => 'Help from earthquake',
-                'title' => 'earthquake'
+                'title' => 'earthquake',
+                'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
         DB::table('forum')->insert(
@@ -43,7 +47,8 @@ class ForumSeeder extends Seeder
                 'id' => 4,
                 'idParticipant' => 2,
                 'content' => 'Help from tsunami',
-                'title' => 'Tsunami'
+                'title' => 'Tsunami',
+                'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
     }

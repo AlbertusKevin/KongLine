@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ParticipateDonationSeeder extends Seeder
 {
@@ -18,7 +19,8 @@ class ParticipateDonationSeeder extends Seeder
             [
                 'idDonation' => 1,
                 'idParticipant' => 2,
-                'comment' => 'Help me from Cancer'
+                'comment' => 'Help me from Cancer',
+                'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
     }
