@@ -16,8 +16,8 @@ class CreateParticipateDonationsTable extends Migration
         Schema::create('participate_donation', function (Blueprint $table) {
             $table->foreignId('idDonation');
             $table->foreignId('idParticipant');
-            $table->string('comment');
-            $table->timestamps();
+            $table->string('comment')->nullable();
+            $table->date('created_at');
         });
 
         Schema::table('participate_donation', function (Blueprint $table) {

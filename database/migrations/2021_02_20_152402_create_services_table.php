@@ -18,7 +18,7 @@ class CreateServicesTable extends Migration
             $table->foreignId('idAdmin');
             $table->foreignId('idParticipant');
             $table->longText('content');
-            $table->timestamps();
+            $table->date('created_at');
         });
 
         Schema::table('service', function (Blueprint $table) {

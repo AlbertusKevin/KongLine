@@ -44,3 +44,5 @@ Route::get('/petisi/sort', [EventController::class, 'sortPetition']);
 
 Route::get('/petisi', [EventController::class, 'indexPetition']);
 Route::get('/petisi/{id}', [EventController::class, 'showPetition']);
+
+Route::post('/petisi/{id}', [EventController::class, 'signPetition']);

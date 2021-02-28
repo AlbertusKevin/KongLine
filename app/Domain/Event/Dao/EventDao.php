@@ -15,6 +15,7 @@ use App\Domain\Event\Entity\Service;
 use App\Domain\Event\Entity\Transaction;
 use App\Domain\Event\Entity\UpdateNews;
 use App\Domain\Event\Entity\User;
+use Carbon\Carbon;
 
 class EventDao
 {
@@ -243,6 +244,16 @@ class EventDao
     public function showPetition($id)
     {
         return Petition::where('status', 1)->where('id', $id)->first();
+    }
+
+    public function signPetition($request, $idEvent, $user)
+    {
+        return ParticipatePetition::create([
+            'idPetition' => $idEvent,
+            'idParticipant' => $user->id,
+            'comment' => $request->petitionComment,
+            'created_at' => Carbon::now()->format('Y-m-d')
+        ]);
     }
 
     public function checkParticipated($idEvent, $idParticipant, $typeEvent)

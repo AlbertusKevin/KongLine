@@ -16,7 +16,7 @@ class CreateForumLikesTable extends Migration
         Schema::create('forum_like', function (Blueprint $table) {
             $table->foreignId('idForum');
             $table->foreignId('idParticipant');
-            $table->timestamps();
+            $table->date('created_at');
         });
 
         Schema::table('forum_like', function (Blueprint $table) {

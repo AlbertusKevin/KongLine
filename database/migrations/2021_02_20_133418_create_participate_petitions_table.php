@@ -16,15 +16,15 @@ class CreateParticipatePetitionsTable extends Migration
         Schema::create('participate_petition', function (Blueprint $table) {
             $table->foreignId('idPetition');
             $table->foreignId('idParticipant');
-            $table->string('comment');
-            $table->timestamps();
+            $table->string('comment')->nullable();
+            $table->date('created_at');
         });
 
         Schema::table('participate_petition', function (Blueprint $table) {
             $table->primary(['idPetition', 'idParticipant']);
             $table->foreign('idPetition')
                 ->references('id')
-                ->on('donation')
+                ->on('petition')
                 ->onDelete('cascade');
             $table->foreign('idParticipant')
                 ->references('id')

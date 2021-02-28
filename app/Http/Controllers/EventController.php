@@ -44,4 +44,11 @@ class EventController extends Controller
 
         return view('petitionDetail', compact('petition', 'user', 'isParticipated'));
     }
+
+    public function signPetition(Request $request, $idEvent)
+    {
+        $user = $this->eventService->showProfile($request->session()->get('id_user'));
+        $this->eventService->signPetition($request, $idEvent, $user);
+        return redirect("/petisi/" . $idEvent)->with('success', 'Berhasil Menandatangai petisi ini');
+    }
 }

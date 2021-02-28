@@ -346,6 +346,11 @@ class EventService
         return $this->dao->showPetition($id);
     }
 
+    public function signPetition($request, $idEvent, $user)
+    {
+        return $this->dao->signPetition($request, $idEvent, $user);
+    }
+
     public function checkParticipated($idEvent, $idParticipant, $typeEvent)
     {
         $isInList = $this->dao->checkParticipated($idEvent, $idParticipant, $typeEvent);

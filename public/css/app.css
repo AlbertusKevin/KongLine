@@ -54,3 +54,17 @@ footer {
   -webkit-line-clamp: 5; /* number of lines to show */
   -webkit-box-orient: vertical;
 }
+
+.image-detail-petition {
+  width: 100%;
+}
+
+.petition-detail-description {
+  text-align: justify;
+  text-indent: 50px;
+  line-height: 1.5;
+}
+
+.message-notification {
+  transition: 2s;
+}

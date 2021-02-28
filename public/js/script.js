@@ -101,6 +101,37 @@ const sortListPetition = (sortBy, category, typePetition) => {
 };
 
 // fungsi trigger
+//untuk active link sesuai page yang diklik
+$(".nav-link").ready(function () {
+    let url = window.location.href.split("/")[3];
+    console.log();
+    if (url == "petisi") {
+        $(".nav-link").each(function () {
+            if ($(this).html() == "Petisi") {
+                $(this).addClass("active");
+            }
+        });
+    } else if (url == "donasi") {
+        $(".nav-link").each(function () {
+            if ($(this).html() == "Donasi") {
+                $(this).addClass("active");
+            }
+        });
+    } else if (url == "forum") {
+        $(".nav-link").each(function () {
+            if ($(this).html() == "Forum") {
+                $(this).addClass("active");
+            }
+        });
+    }
+});
+
+$(".message-notification").ready(function () {
+    setTimeout(() => {
+        $(".message-notification").remove();
+    }, 2000);
+});
+
 $("#check-privacy-policy").on("click", function () {
     if (this.checked) {
         console.log("true");

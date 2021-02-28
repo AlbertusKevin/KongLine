@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="container">
+        @include('messages')
         <h2 class="mt-3" style="color: #1167B1">{{ $petition->title }}</h2>
         <div class="text-center mt-5">
             <button type="button" class="btn btn-primary rounded-pill">Detail Petisi</button>
@@ -11,8 +12,8 @@
         <div class="row">
             <div class="col-md-8 mt-3">
                 <hr>
-                <img src="/{{ $petition->photo }}" alt="detail petisi">
-                <p class="mt-3">{{ $petition->purpose }}</p>
+                <img src="/{{ $petition->photo }}" class="image-detail-petition" alt="detail petisi">
+                <p class="mt-3 petition-detail-description">{{ $petition->purpose }}</p>
             </div>
             <div class="col-md-4">
                 @if ($user->role == 'guest')
@@ -25,7 +26,7 @@
                     </div>
                     <div class="row mt-4">
                         <div class="col-md-12 text-center">
-                            <a href="#" type="button" class="btn btn-primary">Daftar</a>
+                            <a href="/login" type="button" class="btn btn-primary">Daftar</a>
                         </div>
                     </div>
                 @elseif($user->role == 'admin')
@@ -51,16 +52,19 @@
                             </div>
                         </div>
                     @else
-                        <form action="/petisi/{{ $petition->id }}">
+                        <form action="/petisi/{{ $petition->id }}" method="POST">
+                            @csrf
                             <h4 class="mt-5 ml-4">{{ $petition->signedCollected }} dari {{ $petition->signedTarget }}
                             </h4>
                             <p class="ml-4">Orang telah menendatangani Petisi ini !</p>
                             <div class="row row-cols-2">
-                                <div class="col-sm-4"><img src="/img/detailProfile.png" alt="petition profile" class="ml-4">
+                                <div class="col-sm-4"><img src="{{ $user->photoProfile }}" alt="petition profile"
+                                        class="ml-4">
                                 </div>
-                                <div class="col-sm-8"><b>Ruben Calzoni</b><input
-                                        class="form-control form-control-sm form-rounded mt-2" type="text"
-                                        placeholder="Tulis Komentarmu"></div>
+                                <div class="col-sm-8"><b>{{ $user->name }}</b>
+                                    <input class="form-control form-control-sm form-rounded mt-2" type="text"
+                                        placeholder="Tulis Komentarmu" name="petitionComment">
+                                </div>
                             </div>
                             <div class="row ml-5 mt-5">
                                 <input type="checkbox" class="form-check-input" id="check-privacy-policy">
@@ -68,9 +72,9 @@
                                     privasi</label>
                             </div>
                             <div class="row mt-4 ml-4">
-                                <button type="submit" class="btn btn-primary" id="sign-petition-button" disabled>Tanda
-                                    Tangani
-                                    Petisi Ini</button>
+                                <button type="submit" class="btn btn-primary" id="sign-petition-button" disabled>
+                                    Tanda Tangani Petisi Ini
+                                </button>
                             </div>
                         </form>
                     @endif
