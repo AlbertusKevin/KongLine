@@ -10,30 +10,46 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+
+    <style>
+        body {
+            font-family: 'Poppins';
+        }
+
+    </style>
 
     <title>@yield('title')</title>
 </head>
 
 <body>
+    @include('sweetalert::alert')
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/"><img src="/img/logo.png" width="75"></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" href="{{ url('/') }}">Donasi</a>
-                <a class="nav-link" href="{{ url('/petisi') }}">Petisi</a>
-                <a class="nav-link" href="{{ url('/') }}">Forum</a>
-                <a class="nav-link" href="{{ url('/') }}"><img src="/img/profile.png"></a>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img src="/img/logo.png" width="75"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="{{ url('/') }}">Donasi</a>
+                    <a class="nav-link" href="{{ url('/petisi') }}">Petisi</a>
+                    <a class="nav-link" href="{{ url('/') }}">Forum</a>
+                    @if (Auth::check())
+                        <a class="nav-link" href="{{ url('/') }}"><img src="/img/profile.png"></a>
+                    @else
+                        <a type="button" class="btn btn-outline-info ml-1 mr-2" href="login"> Login </a>
+                        <a type="button" class="btn btn-info mr-2" href="register"> Daftar </a>
+                    @endif
+                </div>
             </div>
         </div>
         </div>
     </nav>
     @yield('content')
     <footer class="mt-5 pt-5">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-12 col-sm-5">
                     <img src="/img/footer.png" width=170>

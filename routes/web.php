@@ -21,6 +21,7 @@ Route::get('/', function () {
     // 1 guest, 2 admin, 3 participant, 4 campaigner
     session(['id_user' => 3]);
     return view('home');
+    // return view('auth.register');
 });
 
 Route::get('/logout', function () {
@@ -28,11 +29,29 @@ Route::get('/logout', function () {
     return redirect('/');
 });
 
+Route::get('/donation', function () {
+    return view('donation');
+});
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 //? =========================
 //! Router Profile
 //? =========================
+Route::get('/profile', function () {
+    return view('profile');
+});
 Route::get('/profile/{id}', [ProfileController::class, 'edit']);
 Route::put('/profile/{id}', [ProfileController::class, 'update']);
+
+//? =========================
+//! Router Auth
+//? =========================
+Route::get('/login', [App\Http\Controllers\AuthController::class, 'getLogin'])->name('login')->middleware('guest');
+Route::post('/postLogin', [App\Http\Controllers\AuthController::class, 'postLogin'])->name('postLogin');
+Route::get('/register', [App\Http\Controllers\AuthController::class, 'getRegister'])->name('register')->middleware('guest');
+Route::post('/postRegister', [App\Http\Controllers\AuthController::class, 'postRegister'])->name('postRegister');
+Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
 //? =========================
 //! Router Petition
