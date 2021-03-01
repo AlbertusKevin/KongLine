@@ -24,17 +24,17 @@ footer {
   align-self: center;
   color: #147C85;
 }
-
-.jumbotron {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: 0, -250px;
-  border-radius: 0%;
-  color: black;
-  overflow: hidden;
-  position: relative;
-}
+/*  */
+/* .jumbotron { */
+  /* background-repeat: no-repeat; */
+  /* background-size: cover; */
+  /* background-attachment: fixed; */
+  /* background-position: 0, -250px; */
+  /* border-radius: 0%; */
+  /* color: black; */
+  /* overflow: hidden; */
+  /* position: relative; */
+/* } */
 
 .profile-picture {
   width: 100px;
