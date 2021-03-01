@@ -9,13 +9,14 @@
         <div class="text-center mt-5">
             <button href="/petisi" type="button" class="btn btn-primary petition-type rounded-pill">Berlangsung</button>
             <button href="/petisi" type="button" class="btn btn-light petition-type rounded-pill ml-3">Telah Menang</button>
-
-            @if (Auth::user()->role == 'participant' || Auth::user()->role == 'campaigner')
-                <button href="/petisi" type="button" class="btn btn-light petition-type rounded-pill ml-3">Ikut
-                    Serta</button>
-            @endif
-            @if (Auth::user()->role == 'campaigner')
-                <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Petisi Saya</button>
+            @if (Auth::check())
+                @if (Auth::user()->role == 'participant' || Auth::user()->role == 'campaigner')
+                    <button href="/petisi" type="button" class="btn btn-light petition-type rounded-pill ml-3">Ikut
+                        Serta</button>
+                @endif
+                @if (Auth::user()->role == 'campaigner')
+                    <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Petisi Saya</button>
+                @endif
             @endif
         </div>
         <div class="form-inline my-2 my-lg-0 justify-content-center">
@@ -41,21 +42,9 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="category">
                     <a class="dropdown-item category-petition font-weight-bold">None</a>
-                    <a class="dropdown-item category-petition">Pendidikan</a>
-                    <a class="dropdown-item category-petition">Bencana Alam</a>
-                    <a class="dropdown-item category-petition">Difabel</a>
-                    <a class="dropdown-item category-petition">Infrastruktur Umum</a>
-                    <a class="dropdown-item category-petition">Teknologi</a>
-                    <a class="dropdown-item category-petition">Karya Kreatif & Modal Usaha</a>
-                    <a class="dropdown-item category-petition">Kegiatan Sosial</a>
-                    <a class="dropdown-item category-petition">Kemanusiaan</a>
-                    <a class="dropdown-item category-petition">Lingkungan</a>
-                    <a class="dropdown-item category-petition">Hewan</a>
-                    <a class="dropdown-item category-petition">Panti Asuhan</a>
-                    <a class="dropdown-item category-petition">Rumah Ibadah</a>
-                    <a class="dropdown-item category-petition">Ekonomi</a>
-                    <a class="dropdown-item category-petition">Politik</a>
-                    <a class="dropdown-item category-petition">Keadilan</a>
+                    @foreach ($listCategory as $category)
+                        <a class="dropdown-item category-petition">{{ $category->description }}</a>
+                    @endforeach
                 </div>
             </div>
         </div>
