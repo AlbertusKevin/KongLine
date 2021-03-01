@@ -1,9 +1,26 @@
+<h1>Petunjuk Penggunaan dan Demonstrasi:</h1>
+<p>Untuk Clone Pertama Kali:</p>
+    <ul>
+        <li>buat database (phpmyadmin, mariadb) dengan nama &lt;nama&gt;</li>
+        <li>Jalankan: composer install</li>
+        <li>Copy file env.example, rename file copy dengan .env, sesuaikan: DB_DATABASE= &lt;nama &gt; (line 13)</li>
+        <li>php artisan key:generate</li>
+        <li>php artisan migrate:fresh --seed (untuk migrasi ulang database dan juga memanggil seeder)</li>
+    </ul>
+
+<p>Sweet Alert (https://realrashid.github.io/sweet-alert/):</p>
+    <ul>
+        <li>jalankan di root projek: composer require realrashid/sweet-alert</li>
+        <li>tambahkan baris: <strong>RealRashid\SweetAlert\SweetAlertServiceProvider::class</strong>, di file <b>config/app.php</b> bagian <b>'providers' => [</b></li>
+        <li>tambahkan baris: <strong>'Alert' => RealRashid\SweetAlert\Facades\Alert::class,</strong> di file <b>config/app bagian 'aliases' => [</b></li>
+    </ul>
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https:/s/packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 

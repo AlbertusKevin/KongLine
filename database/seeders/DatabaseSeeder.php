@@ -21,11 +21,11 @@ class DatabaseSeeder extends Seeder
             CommentForumSeeder::class,
             EventStatusSeeder::class,
             DonationSeeder::class,
+            PetitionSeeder::class,
             DetailAllocationSeeder::class,
             ForumLikeSeeder::class,
             ParticipateDonationSeeder::class,
             ParticipatePetitionSeeder::class,
-            PetitionSeeder::class,
             TransactionSeeder::class
         ]);
     }
