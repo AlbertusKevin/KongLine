@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Domain\Event\Service\EventService;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class EventController extends Controller
 {
@@ -50,6 +51,7 @@ class EventController extends Controller
     {
         $user = Auth::user();
         $this->eventService->signPetition($request, $idEvent, $user);
-        return redirect("/petisi/" . $idEvent)->with('success', 'Berhasil Menandatangai petisi ini');
+        Alert::success('Berhasil Menandatangai petisi ini.', 'Terimakasih ikut berpartisipasi!');
+        return redirect("/petisi/" . $idEvent);
     }
 }
