@@ -1,3 +1,4 @@
+
 .navbar-nav a{
   align-self:center;
 }
@@ -38,4 +39,141 @@ footer {
 
 .profile-picture {
   width: 100px;
+}
+
+.close-event{
+  background-color: #E15858;
+  color: white;
+  width: 350px;
+}
+
+.petition-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-height: 1.7;
+  -webkit-line-clamp: 5; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.image-detail-petition {
+  width: 100%;
+}
+
+.petition-detail-description {
+  text-align: justify;
+  text-indent: 50px;
+  line-height: 1.5;
+}
+
+.w-35 {
+    width: 35%;
+}
+
+#authForm {
+    width: 100%;
+    height: auto;
+    padding: 12px 20px ;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #777777;
+    border-radius: 10px;
+}
+
+#authFormFName, #authFormLName{
+    float: left;
+    width: 49%;
+    height: auto;
+    padding: 12px 20px ;
+    margin: 8px 0;
+    border: 1px solid #777777;
+    border-radius: 10px;
+}
+
+#authFormLName{
+    float: right;
+}
+
+.text-gray {
+    color: #777777;
+}
+
+.text-blue {
+    color: #2A9EF5;
+}
+
+
+.btn-blue {
+    background-color: #2A9EF5;
+    width: 100%;
+    height: auto;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 30px;
+    transition-duration: 0.4s;
+}
+
+.btn-blue:hover {
+    background-color: whitesmoke;
+    color: #2A9EF5;
+}
+
+.round {
+    border-radius: 10px;
+}
+.card-top {
+  margin-top: -50px;
+}
+
+.card-top-row-2 {
+  margin-top: 30px;
+}
+
+.button-search{
+  background-color: transparent;
+  height: auto;
+}
+
+.transparent{
+  background-color: transparent;
+  height: auto;
+}
+.placeholder{
+  opacity: 1;
+}
+
+.jumbotron-donation{
+  background-image: url('/img/donationHome.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0, -250px;
+  height: 400px;
+  width: auto;
+  border-radius: 0%;
+  color: black;
+  overflow: hidden;
+  position: relative;
+}
+
+.time-left{
+  position:absolute; top: 0; left: 0;
+  margin: 0.7rem 0 0 0.7rem;
+  padding:0.4rem;
+  border-radius: 10px;
+  background-color:#187BCD;
+  font-weight: bold;
+  color: whitesmoke;
+}
+
+.title-donation{
+  color: #045163;
+}
+
+.pagination-donation{
+  background-color: #187BCD !important;
 }

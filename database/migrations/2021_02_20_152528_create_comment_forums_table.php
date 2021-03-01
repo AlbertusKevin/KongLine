@@ -17,8 +17,8 @@ class CreateCommentForumsTable extends Migration
             $table->id();
             $table->foreignId('idForum');
             $table->foreignId('idParticipant');
-            $table->string('content');
-            $table->timestamps();
+            $table->longText('content');
+            $table->date('created_at');
         });
 
         Schema::table('comment_forum', function (Blueprint $table) {

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class TransactionSeeder extends Seeder
 {
@@ -22,7 +23,8 @@ class TransactionSeeder extends Seeder
                 'bank' => 'BCA',
                 'nominal' => 10000,
                 'repaymentPicture' => 'images/buktitrf.jpg',
-                'status' => 'konfirmasi'
+                'status' => 'konfirmasi',
+                'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
     }

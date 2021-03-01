@@ -15,17 +15,17 @@ class CreatePetitionsTable extends Migration
     {
         Schema::create('petition', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('category')->unsigned();
-            $table->date('deadline');
+            $table->string('title')->unique();
             $table->foreignId('idCampaigner');
             $table->string('photo');
-            $table->string('purpose');
-            $table->tinyInteger('status')->unsigned();
-            $table->string('title')->unique();
+            $table->longText('purpose');
             $table->string('targetPerson');
-            $table->integer('signedCollected');
             $table->integer('signedTarget');
-            $table->timestamps();
+            $table->integer('signedCollected');
+            $table->tinyInteger('category')->unsigned();
+            $table->tinyInteger('status')->unsigned();
+            $table->date('deadline');
+            $table->date('created_at');
         });
 
         Schema::table('petition', function (Blueprint $table) {

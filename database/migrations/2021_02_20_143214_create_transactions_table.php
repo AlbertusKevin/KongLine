@@ -21,7 +21,7 @@ class CreateTransactionsTable extends Migration
             $table->integer('nominal');
             $table->string('repaymentPicture');
             $table->string('status');
-            $table->timestamps();
+            $table->date('created_at');
         });
 
         Schema::table('transaction', function (Blueprint $table) {
