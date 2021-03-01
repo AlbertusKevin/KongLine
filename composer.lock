@@ -2344,6 +2344,12 @@
                 "sweet-alert2",
                 "toast"
             ],
+            "support": {
+                "docs": "https://realrashid.github.io/sweet-alert/",
+                "email": "realrashid05@gmail.com",
+                "issues": "https://github.com/realrashid/sweet-alert/issues",
+                "source": "https://github.com/realrashid/sweet-alert"
+            },
             "funding": [
                 {
                     "url": "https://ko-fi.com/realrashid",
@@ -7106,5 +7112,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }
