@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,11 @@ Route::get('/donation', function(){
     return view('donation');
 });
 
+Route::get('/admin/listUser', function(){
+    return view('listUser');
+});
+
 Route::get('/profile/{id}', [ProfileController::class, 'edit']);
 Route::put('/profile/{id}', [ProfileController::class, 'update']);
 
+Route::get('/admin/listUser', [AdminController::class, 'getAll']);
