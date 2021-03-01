@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="jumbotron text-center" style="background-image: url('/{{ $participant->backgroundPicture }}');">
-        <img src="/{{ $participant->photoProfile }}" alt="profile" class="profile-picture">
+        <img src="/{{ $participant->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
         <h3 class="display-4">{{ $participant->name }}</h3>
         <p class="lead">Pengguna sejak 5 Feb 2021</p>
         <a href="{{ $participant->linkProfile }}" target="_blank" class="lead">{{ $participant->linkProfile }}</a>
