@@ -46,6 +46,7 @@
             </div>
         </div>
         </div>
+        <a href="/inbox"><button>Service</button></a>
     </nav>
     @yield('content')
     <footer class="mt-5 pt-5">
