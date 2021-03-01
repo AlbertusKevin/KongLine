@@ -9,11 +9,12 @@
         <div class="text-center mt-5">
             <button href="/petisi" type="button" class="btn btn-primary petition-type rounded-pill">Berlangsung</button>
             <button href="/petisi" type="button" class="btn btn-light petition-type rounded-pill ml-3">Telah Menang</button>
-            @if ($user->role == 'participant' || $user->role == 'campaigner')
+
+            @if (Auth::user()->role == 'participant' || Auth::user()->role == 'campaigner')
                 <button href="/petisi" type="button" class="btn btn-light petition-type rounded-pill ml-3">Ikut
                     Serta</button>
             @endif
-            @if ($user->role == 'campaigner')
+            @if (Auth::user()->role == 'campaigner')
                 <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Petisi Saya</button>
             @endif
         </div>

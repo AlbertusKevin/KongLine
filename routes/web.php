@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
+use Illuminate\Routing\Router;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,16 +18,15 @@ use App\Http\Controllers\EventController;
 //? =========================
 //! Router percobaan
 //? =========================
-Route::get('/', function () {
-    // 1 guest, 2 admin, 3 participant, 4 campaigner
-    session(['id_user' => 3]);
-    return view('home');
-    // return view('auth.register');
-});
+// Route::get('/', function () {
+//     // 1 guest, 2 admin, 3 participant, 4 campaigner
+//     session(['id_user' => 3]);
+//     return view('home');
+//     // return view('auth.register');
+// });
 
-Route::get('/logout', function () {
-    session()->flush();
-    return redirect('/');
+Route::get('/', function () {
+    return redirect('/home');
 });
 
 Route::get('/donation', function () {
@@ -38,9 +38,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //? =========================
 //! Router Profile
 //? =========================
-Route::get('/profile', function () {
-    return view('profile');
-});
 Route::get('/profile/{id}', [ProfileController::class, 'edit']);
 Route::put('/profile/{id}', [ProfileController::class, 'update']);
 
@@ -48,9 +45,9 @@ Route::put('/profile/{id}', [ProfileController::class, 'update']);
 //! Router Auth
 //? =========================
 Route::get('/login', [App\Http\Controllers\AuthController::class, 'getLogin'])->name('login')->middleware('guest');
-Route::post('/postLogin', [App\Http\Controllers\AuthController::class, 'postLogin'])->name('postLogin');
+Route::post('/login', [App\Http\Controllers\AuthController::class, 'postLogin'])->name('postLogin');
 Route::get('/register', [App\Http\Controllers\AuthController::class, 'getRegister'])->name('register')->middleware('guest');
-Route::post('/postRegister', [App\Http\Controllers\AuthController::class, 'postRegister'])->name('postRegister');
+Route::post('/register', [App\Http\Controllers\AuthController::class, 'postRegister'])->name('postRegister');
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
 //? =========================

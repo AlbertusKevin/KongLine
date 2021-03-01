@@ -16,7 +16,7 @@
                 <p class="mt-3 petition-detail-description">{{ $petition->purpose }}</p>
             </div>
             <div class="col-md-4">
-                @if ($user->role == 'guest')
+                @if (!Auth::check())
                     <h4 class="mt-5 ml-4">{{ $petition->signedCollected }} dari {{ $petition->signedTarget }} </h4>
                     <p class="ml-4">Orang telah menendatangani Petisi ini !</p>
                     <div class="row row-cols-2">
@@ -29,7 +29,7 @@
                             <a href="/login" type="button" class="btn btn-primary">Daftar</a>
                         </div>
                     </div>
-                @elseif($user->role == 'admin')
+                @elseif(Auth::user()->role == 'admin')
                     <form action="">
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">
@@ -44,7 +44,8 @@
                     <p class="font-weight-bold">Orang telah menendatangani Petisi ini !</p>
                 @else
                     @if (!$isParticipated)
-                        <h4 class="mt-5 ml-4">{{ $petition->signedCollected }} dari {{ $petition->signedTarget }} </h4>
+                        <h4 class="mt-5 ml-4">{{ number_format($petition->signedCollected) }} dari
+                            {{ number_format($petition->signedTarget) }} </h4>
                         <p class="ml-4">Orang telah menendatangani Petisi ini !</p>
                         <div class="row row-cols-2">
                             <div class="col-md-10 offset-md-1 text-center">
@@ -58,10 +59,10 @@
                             </h4>
                             <p class="ml-4">Orang telah menendatangani Petisi ini !</p>
                             <div class="row row-cols-2">
-                                <div class="col-sm-4"><img src="{{ $user->photoProfile }}" alt="petition profile"
-                                        class="ml-4">
+                                <div class="col-sm-4"><img src="/{{ Auth::user()->photoProfile }}" alt="petition profile"
+                                        class="ml-4 img-thumbnail">
                                 </div>
-                                <div class="col-sm-8"><b>{{ $user->name }}</b>
+                                <div class="col-sm-8"><b>{{ Auth::user()->name }}</b>
                                     <input class="form-control form-control-sm form-rounded mt-2" type="text"
                                         placeholder="Tulis Komentarmu" name="petitionComment">
                                 </div>

@@ -111,7 +111,7 @@ $(".nav-link").ready(function () {
                 $(this).addClass("active");
             }
         });
-    } else if (url == "donasi") {
+    } else if (url == "donation") {
         $(".nav-link").each(function () {
             if ($(this).html() == "Donasi") {
                 $(this).addClass("active");
@@ -126,12 +126,7 @@ $(".nav-link").ready(function () {
     }
 });
 
-$(".message-notification").ready(function () {
-    setTimeout(() => {
-        $(".message-notification").remove();
-    }, 2000);
-});
-
+//done
 $("#check-privacy-policy").on("click", function () {
     if (this.checked) {
         console.log("true");
@@ -175,11 +170,14 @@ $(".petition-type").on("click", function () {
         );
     }
 
+    console.log(typePetition);
+
     $.ajax({
         url: "/petisi/type",
         data: { typePetition },
         dataType: "json",
         success: (data) => {
+            console.log(data);
             let html = "";
             if (data.length != 0) {
                 data.forEach((petition) => {

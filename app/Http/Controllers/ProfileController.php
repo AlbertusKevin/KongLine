@@ -22,7 +22,7 @@ class ProfileController extends Controller
 
     public function update(Request $request, $id)
     {
-        $participant = $this->event_service->updateProfile($request, $id);
+        $this->event_service->updateProfile($request, $id);
         return redirect('profile/' . $id);
     }
 }

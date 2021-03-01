@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Domain\Event\Service\EventService;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -16,7 +17,7 @@ class EventController extends Controller
 
     public function indexPetition(Request $request)
     {
-        $user = $this->eventService->showProfile($request->session()->get('id_user'));
+        $user = Auth::user();
         $petitionList = $this->eventService->indexPetition();
         return view('petition', compact('petitionList', 'user'));
     }
@@ -39,15 +40,15 @@ class EventController extends Controller
     public function showPetition(Request $request, $idEvent)
     {
         $petition = $this->eventService->showPetition($idEvent);
-        $user = $this->eventService->showProfile($request->session()->get('id_user'));
-        $isParticipated = $this->eventService->checkParticipated($idEvent, $request->session()->get('id_user'), 'petition');
+        $user = Auth::user();
+        $isParticipated = $this->eventService->checkParticipated($idEvent, $user->id, 'petition');
 
         return view('petitionDetail', compact('petition', 'user', 'isParticipated'));
     }
 
     public function signPetition(Request $request, $idEvent)
     {
-        $user = $this->eventService->showProfile($request->session()->get('id_user'));
+        $user = Auth::user();
         $this->eventService->signPetition($request, $idEvent, $user);
         return redirect("/petisi/" . $idEvent)->with('success', 'Berhasil Menandatangai petisi ini');
     }

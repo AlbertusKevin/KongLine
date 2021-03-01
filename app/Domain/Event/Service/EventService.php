@@ -3,6 +3,7 @@
 namespace App\Domain\Event\Service;
 
 use App\Domain\Event\Dao\EventDao;
+use Illuminate\Support\Facades\Auth;
 
 class EventService
 {
@@ -38,9 +39,9 @@ class EventService
 
     public function updateProfile($request, $id)
     {
-        $pathProfile = $this->upload_image($request->file('profile_picture'), 'photo');
-        $pathBackground = $this->upload_image($request->file('zoom_picture'), 'background');
-        $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
+        // $pathProfile = $this->upload_image($request->file('profile_picture'), 'photo');
+        // $pathBackground = $this->upload_image($request->file('zoom_picture'), 'background');
+        $this->dao->updateProfile($request, $id);
     }
 
     //? ===================================================================
@@ -54,8 +55,7 @@ class EventService
 
     public function listPetitionType($request)
     {
-        $userId = $this->showProfile($request->session()->get('id_user'));
-        $userId = $userId->id;
+        $userId = Auth::user()->id;
 
         if ($request->typePetition == "berlangsung") {
             return $this->dao->listPetitionType(1);
@@ -74,7 +74,7 @@ class EventService
 
     public function searchPetition($request)
     {
-        $userId = $this->showProfile($request->session()->get('id_user'));
+        $userId = Auth::user();
         $userId = $userId->id;
         $category = $this->categorySelect($request);
         $sortBy = $request->sortBy;
@@ -230,7 +230,7 @@ class EventService
     public function sortPetition($request)
     {
         $category = $this->categorySelect($request);
-        $userId = $this->showProfile($request->session()->get('id_user'))->id;
+        $userId = Auth::id();
 
         //jika tidak sort dan tidak pilih category
         if ($request->sortBy == "None" && $request->category == 0) {
@@ -355,14 +355,5 @@ class EventService
     {
         $isInList = $this->dao->checkParticipated($idEvent, $idParticipant, $typeEvent);
         return empty($isInList);
-    }
-
-
-    //? ===================================================================
-    //! ~~~~~~~~~~~~~~~~~~~~~~~~~ Dummy Service ~~~~~~~~~~~~~~~~~~~~~~~~
-    //? ===================================================================
-    public function showProfile($id)
-    {
-        return $this->dao->showProfile($id);
     }
 }

@@ -33,11 +33,11 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link" href="{{ url('/') }}">Donasi</a>
+                    <a class="nav-link" href="{{ url('/donation') }}">Donasi</a>
                     <a class="nav-link" href="{{ url('/petisi') }}">Petisi</a>
                     <a class="nav-link" href="{{ url('/') }}">Forum</a>
                     @if (Auth::check())
-                        <a class="nav-link" href="{{ url('/') }}"><img src="/img/profile.png"></a>
+                        <a class="nav-link" href="{{ url('/profile/' . Auth::id()) }}"><img src="/img/profile.png"></a>
                     @else
                         <a type="button" class="btn btn-outline-info ml-1 mr-2" href="login"> Login </a>
                         <a type="button" class="btn btn-info mr-2" href="register"> Daftar </a>
