@@ -41,10 +41,16 @@ class Message extends Component
             $admin = User::where('role', 'admin')->first();
             $this->user_id = $admin->id;
         } else {
-            $this->user_id = $this->clicked_user->id;
+            if($this->clicked_user == null){
+                $admin = User::where('role', 'admin')->first();
+                $this->user_id = $admin->id;
+            }else{
+                $this->user_id = $this->clicked_user->id;
+            }
         }
         $new_message->receiver = $this->user_id;
         $new_message->save();
+
     }
 
     public function getUser($user_id) {
