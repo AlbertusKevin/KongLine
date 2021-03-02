@@ -26,7 +26,7 @@
                     </div>
                     <div class="row mt-4">
                         <div class="col-md-12 text-center">
-                            <a href="/login" type="button" class="btn btn-primary">Daftar</a>
+                            <a href="/register" type="button" class="btn btn-primary">Daftar</a>
                         </div>
                     </div>
                 @elseif(Auth::user()->role == 'admin')

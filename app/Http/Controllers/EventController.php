@@ -19,8 +19,9 @@ class EventController extends Controller
     public function indexPetition(Request $request)
     {
         $user = Auth::user();
+        $listCategory = $this->eventService->listCategory();
         $petitionList = $this->eventService->indexPetition();
-        return view('petition', compact('petitionList', 'user'));
+        return view('petition', compact('petitionList', 'user', 'listCategory'));
     }
 
     public function listPetitionType(Request $request)
@@ -42,7 +43,11 @@ class EventController extends Controller
     {
         $petition = $this->eventService->showPetition($idEvent);
         $user = Auth::user();
-        $isParticipated = $this->eventService->checkParticipated($idEvent, $user->id, 'petition');
+        if (Auth::check()) {
+            $isParticipated = $this->eventService->checkParticipated($idEvent, $user->id, 'petition');
+        } else {
+            $isParticipated = false;
+        }
 
         return view('petitionDetail', compact('petition', 'user', 'isParticipated'));
     }
