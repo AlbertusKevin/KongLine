@@ -23,6 +23,7 @@ class EventService
         $pictName = uniqid() . '.' . end($pictName); //7dsf83hd.jpg
         //upload file ke folder yang disediakan
         $targetUploadDesc = "images/profile/" . $folder . "/";
+
         $img->move($targetUploadDesc, $pictName);
 
         return $targetUploadDesc . "/" . $pictName;   //membuat file path yang akan digunakan sebagai src html
@@ -39,9 +40,9 @@ class EventService
 
     public function updateProfile($request, $id)
     {
-        // $pathProfile = $this->upload_image($request->file('profile_picture'), 'photo');
-        // $pathBackground = $this->upload_image($request->file('zoom_picture'), 'background');
-        $this->dao->updateProfile($request, $id);
+        $pathProfile = $this->upload_image($request->file('profile_picture'), 'photo');
+        $pathBackground = $this->upload_image($request->file('zoom_picture'), 'background');
+        $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
     //? ===================================================================
@@ -190,40 +191,13 @@ class EventService
 
     public function categorySelect($request)
     {
-        if ($request->category == "Pendidikan") {
-            return 1;
-        } else if ($request->category == "Bencana Alam") {
-            return 2;
-        } else if ($request->category == "Difabel") {
-            return 3;
-        } else if ($request->category == "Infrastruktur Umum") {
-            return 4;
-        } else if ($request->category == "Teknologi") {
-            return 5;
-        } else if ($request->category == "Budaya") {
-            return 6;
-        } else if ($request->category == "Karya Kreatif & Modal") {
-            return 7;
-        } else if ($request->category == "Kegiatan Sosial") {
-            return 8;
-        } else if ($request->category == "Kemanusiaan") {
-            return 9;
-        } else if ($request->category == "Lingkungan") {
-            return 10;
-        } else if ($request->category == "Hewan") {
-            return 11;
-        } else if ($request->category == "Panti Asuhan") {
-            return 12;
-        } else if ($request->category == "Rumah Ibadah") {
-            return 13;
-        } else if ($request->category == "Ekonomi") {
-            return 14;
-        } else if ($request->category == "Politik") {
-            return 15;
-        } else if ($request->category == "Keadilan") {
-            return 16;
-        }
+        $listCategory = $this->dao->listCategory();
 
+        foreach ($listCategory as $cat) {
+            if ($request->category == $cat->description) {
+                return $cat->id;
+            }
+        }
         return 0;
     }
 
@@ -242,6 +216,7 @@ class EventService
             if ($request->sortBy == "Jumlah Tanda Tangan") {
                 //jika category juga dipilih
                 if ($category != 0) {
+                    dd($this->dao->sortPetitionCategory($category, 1, 'signedCollected'));
                     return $this->dao->sortPetitionCategory($category, 1, 'signedCollected');
                 }
                 // jika hanya sort
@@ -346,9 +321,16 @@ class EventService
         return $this->dao->showPetition($id);
     }
 
+    public function listCategory()
+    {
+        return $this->dao->listCategory();
+    }
+
     public function signPetition($request, $idEvent, $user)
     {
-        return $this->dao->signPetition($request, $idEvent, $user);
+        $this->dao->signPetition($request, $idEvent, $user);
+        $count = $this->dao->calculatedSign($idEvent);
+        $this->dao->updateCalculatedSign($idEvent, $count);
     }
 
     public function checkParticipated($idEvent, $idParticipant, $typeEvent)

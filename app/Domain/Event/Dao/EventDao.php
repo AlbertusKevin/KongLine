@@ -28,7 +28,7 @@ class EventDao
         return User::where('id', $id)->first();
     }
 
-    public function updateProfile($request, $id)
+    public function updateProfile($request, $id, $pathProfile, $pathBackground)
     {
         User::where('id', $id)->update([
             'name' => $request->name,
@@ -37,7 +37,9 @@ class EventDao
             'linkProfile' => $request->linkProfile,
             'address' => $request->address,
             'zipCode' => $request->zipCode,
-            'phoneNumber' => $request->phoneNumber
+            'phoneNumber' => $request->phoneNumber,
+            'photoProfile' => $pathProfile,
+            'backgroundPicture' => $pathBackground
         ]);
     }
 
@@ -244,6 +246,11 @@ class EventDao
         return Petition::where('status', 1)->where('id', $id)->first();
     }
 
+    public function listCategory()
+    {
+        return Category::all();
+    }
+
     public function signPetition($request, $idEvent, $user)
     {
         return ParticipatePetition::create([
@@ -251,6 +258,18 @@ class EventDao
             'idParticipant' => $user->id,
             'comment' => $request->petitionComment,
             'created_at' => Carbon::now()->format('Y-m-d')
+        ]);
+    }
+
+    public function calculatedSign($idEvent)
+    {
+        return ParticipatePetition::where('idPetition', $idEvent)->count();
+    }
+
+    public function updateCalculatedSign($idEvent, $count)
+    {
+        return Petition::where('id', $idEvent)->update([
+            'signedCollected' => $count
         ]);
     }
 
