@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Routing\Router;
 use App\Http\Controllers\AdminController;
 
@@ -67,6 +68,13 @@ Route::get('/petisi', [EventController::class, 'indexPetition']);
 Route::get('/petisi/{id}', [EventController::class, 'showPetition']);
 
 Route::post('/petisi/{id}', [EventController::class, 'signPetition']);
+
+
+// Route::group(['middleware' => 'auth'], function () {
+    // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
+    Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
+// });
 
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
 

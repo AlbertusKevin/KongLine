@@ -132,6 +132,29 @@
       {{-- @endforeach --}}
     </div>
     
+    <button class="open-button" onclick="openChat()">Chat</button>
+
+<div class="card" id="myChat" style="width: 18rem;">
+    <h5 class="card-header">Admin</h5>
+    <div class="card-body">
+        <p class="card-text">Test</p>
+    </div>
+    <div class="card-footer">
+      <textarea placeholder="Tuliskan pesan" name="msg"></textarea>
+      <button type="submit" class="btn">Send</button>
+    </div>
+</div>
+
+<script>
+  function openChat() {
+    document.getElementById("myChat").style.display = "block";
+  }
+
+  function closeChat() {
+    document.getElementById("myChat").style.display = "none";
+  }
+  </script>
+
   </section>
   
 @endsection
