@@ -39,9 +39,9 @@ class EventService
 
     public function updateProfile($request, $id)
     {
-        // $pathProfile = $this->upload_image($request->file('profile_picture'), 'photo');
-        // $pathBackground = $this->upload_image($request->file('zoom_picture'), 'background');
-        $this->dao->updateProfile($request, $id);
+        $pathProfile = $this->upload_image($request->file('profile_picture'), 'photo');
+        $pathBackground = $this->upload_image($request->file('zoom_picture'), 'background');
+        $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
     //? ===================================================================
