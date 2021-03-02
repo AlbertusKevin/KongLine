@@ -89,6 +89,7 @@ const sortListPetition = (sortBy, category, typePetition) => {
             let html = "";
             if (data.length != 0) {
                 data.forEach((petition) => {
+                    // console.log(petition);
                     html += changePetitionList(petition);
                 });
                 $("#petition-list").html(html);
