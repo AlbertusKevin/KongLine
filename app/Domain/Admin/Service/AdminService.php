@@ -10,12 +10,12 @@ class AdminService
 
     public function __construct()
     {
-        $thsi->dao = new AdminDao();
+        $this->dao = new AdminDao();
     }
 
-    public function namefunction1()
+    public function getAllUser()
     {
-
+        return $this->dao->getAllUser();
     }
 
     public function namefunction2()

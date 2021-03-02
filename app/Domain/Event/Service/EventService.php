@@ -22,10 +22,11 @@ class EventService
         //buat nama baru yang unique
         $pictName = uniqid() . '.' . end($pictName); //7dsf83hd.jpg
         //upload file ke folder yang disediakan
-        $targetUploadDesc = "images\\profile\\" . $folder . "\\";
+        $targetUploadDesc = "images/profile/" . $folder . "/";
+
         $img->move($targetUploadDesc, $pictName);
 
-        return $targetUploadDesc . "\\" . $pictName;   //membuat file path yang akan digunakan sebagai src html
+        return $targetUploadDesc . "/" . $pictName;   //membuat file path yang akan digunakan sebagai src html
     }
 
     //? ===================================================================
@@ -39,9 +40,9 @@ class EventService
 
     public function updateProfile($request, $id)
     {
-        // $pathProfile = $this->upload_image($request->file('profile_picture'), 'photo');
-        // $pathBackground = $this->upload_image($request->file('zoom_picture'), 'background');
-        $this->dao->updateProfile($request, $id);
+        $pathProfile = $this->upload_image($request->file('profile_picture'), 'photo');
+        $pathBackground = $this->upload_image($request->file('zoom_picture'), 'background');
+        $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
     //? ===================================================================

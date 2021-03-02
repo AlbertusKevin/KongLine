@@ -28,7 +28,7 @@ class EventDao
         return User::where('id', $id)->first();
     }
 
-    public function updateProfile($request, $id)
+    public function updateProfile($request, $id, $pathProfile, $pathBackground)
     {
         User::where('id', $id)->update([
             'name' => $request->name,
@@ -37,7 +37,9 @@ class EventDao
             'linkProfile' => $request->linkProfile,
             'address' => $request->address,
             'zipCode' => $request->zipCode,
-            'phoneNumber' => $request->phoneNumber
+            'phoneNumber' => $request->phoneNumber,
+            'photoProfile' => $pathProfile,
+            'backgroundPicture' => $pathBackground
         ]);
     }
 
