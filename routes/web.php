@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use Illuminate\Routing\Router;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,10 @@ Route::get('/', function () {
 
 Route::get('/donation', function () {
     return view('donation');
+});
+
+Route::get('/admin/listUser', function(){
+    return view('listUser');
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -62,3 +67,6 @@ Route::get('/petisi', [EventController::class, 'indexPetition']);
 Route::get('/petisi/{id}', [EventController::class, 'showPetition']);
 
 Route::post('/petisi/{id}', [EventController::class, 'signPetition']);
+
+Route::get('/admin/listUser', [AdminController::class, 'getAll']);
+
