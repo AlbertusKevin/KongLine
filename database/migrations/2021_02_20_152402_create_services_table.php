@@ -15,19 +15,20 @@ class CreateServicesTable extends Migration
     {
         Schema::create('service', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('idAdmin');
-            $table->foreignId('idParticipant');
-            $table->longText('content');
+            $table->foreignId('user_id');
+            $table->foreignId('receiver');
+            $table->longText('message');
+            $table->boolean('is_seen')->default(0);
             $table->date('created_at');
         });
 
         Schema::table('service', function (Blueprint $table) {
-            $table->foreign('idAdmin')
+            $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
 
-            $table->foreign('idParticipant')
+            $table->foreign('receiver')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
