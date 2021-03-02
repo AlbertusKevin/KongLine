@@ -3,10 +3,10 @@
         @if(auth()->user()->role == 'admin')
             <div class="col-md-4">
                 <div class="card Head">
-                    <div class="card-header HeadAdmin">
+                    <div class="card-header HeadAdmin" >
                         Admin {{ auth()->user()->name }}
                     </div>
-                    <div class="card-body chatbox p-0">
+                    <div class="card-body chatbox p-0" style="overflow:auto">
                         <ul class="list-group list-group-flush">
                             @foreach($users as $user)
                                 @php
@@ -32,7 +32,7 @@
                 <div class="card-header">
                     {{ $sender->name }}
                 </div>
-                <div class="card-body message-box" wire:poll.10ms="mount">
+                <div class="card-body message-box" wire:poll.10ms="mount" style="overflow:auto">
                     @if(filled($messages))
                         @foreach($messages as $message)
                             <div class="single-message @if($message->user_id !== auth()->id()) received @else sent @endif">
