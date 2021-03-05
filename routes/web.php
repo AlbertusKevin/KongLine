@@ -6,6 +6,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Routing\Router;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DummyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +36,7 @@ Route::get('/donation', function () {
     return view('donation');
 });
 
-Route::get('/admin/listUser', function(){
+Route::get('/admin/listUser', function () {
     return view('listUser');
 });
 
@@ -71,10 +72,13 @@ Route::post('/petisi/{id}', [EventController::class, 'signPetition']);
 
 
 // Route::group(['middleware' => 'auth'], function () {
-    // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
-    Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
+Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
 // });
 
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
 
+
+// Controller untuk uji coba
+Route::get('/uji_coba', [DummyController::class, 'cobaModifikasiEntity']);

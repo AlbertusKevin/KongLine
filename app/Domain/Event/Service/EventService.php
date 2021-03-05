@@ -3,7 +3,10 @@
 namespace App\Domain\Event\Service;
 
 use App\Domain\Event\Dao\EventDao;
+use App\Domain\Event\Entity\Category;
 use Illuminate\Support\Facades\Auth;
+use App\Domain\Event\Entity\ParticipatePetition;
+use Carbon\Carbon;
 
 class EventService
 {
@@ -207,16 +210,17 @@ class EventService
         $userId = Auth::id();
 
         //jika tidak sort dan tidak pilih category
-        if ($request->sortBy == "None" && $request->category == 0) {
+        if ($request->sortBy == "None" && $category == 0) {
             return $this->listPetitionType($request);
         }
 
         if ($request->typePetition == 'berlangsung') {
+            // Category = none, sort = ttd
             // Jika sort dipilih
             if ($request->sortBy == "Jumlah Tanda Tangan") {
                 //jika category juga dipilih
                 if ($category != 0) {
-                    dd($this->dao->sortPetitionCategory($category, 1, 'signedCollected'));
+                    // dd($this->dao->sortPetitionCategory($category, 1, 'signedCollected'));
                     return $this->dao->sortPetitionCategory($category, 1, 'signedCollected');
                 }
                 // jika hanya sort
@@ -328,7 +332,13 @@ class EventService
 
     public function signPetition($request, $idEvent, $user)
     {
-        $this->dao->signPetition($request, $idEvent, $user);
+        $petition = new ParticipatePetition();
+        $petition->idPetition = $idEvent;
+        $petition->idParticipant = $user->id;
+        $petition->comment = $request->petitionComment;
+        $petition->created_at = Carbon::now()->format('Y-m-d');
+
+        $this->dao->signPetition($petition, $idEvent, $user);
         $count = $this->dao->calculatedSign($idEvent);
         $this->dao->updateCalculatedSign($idEvent, $count);
     }

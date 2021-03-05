@@ -159,7 +159,7 @@ class EventDao
     public function sortPetition($status, $table)
     {
         return Petition::where('status', $status)
-            ->orderByDesc('signedCollected', $table)
+            ->orderByDesc($table)
             ->get();
     }
 
@@ -251,12 +251,12 @@ class EventDao
         return Category::all();
     }
 
-    public function signPetition($request, $idEvent, $user)
+    public function signPetition($petition)
     {
         return ParticipatePetition::create([
-            'idPetition' => $idEvent,
-            'idParticipant' => $user->id,
-            'comment' => $request->petitionComment,
+            'idPetition' => $petition->idPetition,
+            'idParticipant' => $petition->idParticipant,
+            'comment' => $petition->comment,
             'created_at' => Carbon::now()->format('Y-m-d')
         ]);
     }
