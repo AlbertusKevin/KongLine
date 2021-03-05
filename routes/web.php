@@ -4,9 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ServiceController;
-use Illuminate\Routing\Router;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DummyController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,29 +19,20 @@ use App\Http\Controllers\DummyController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-//? =========================
-//! Router percobaan
-//? =========================
-// Route::get('/', function () {
-//     // 1 guest, 2 admin, 3 participant, 4 campaigner
-//     session(['id_user' => 3]);
-//     return view('home');
-//     // return view('auth.register');
-// });
-
-Route::get('/', function () {
-    return redirect('/home');
-});
+//! ========================== Controller untuk uji coba ==========================
+Route::get('/uji_coba', [DummyController::class, 'cobaModifikasiEntity']);
 
 Route::get('/donation', function () {
     return view('donation');
 });
 
-Route::get('/admin/listUser', function () {
-    return view('listUser');
+//? =========================
+//! App Start
+//? =========================
+Route::get('/', function () {
+    return redirect('/home');
 });
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //? =========================
 //! Router Profile
@@ -51,11 +43,11 @@ Route::put('/profile/{id}', [ProfileController::class, 'update']);
 //? =========================
 //! Router Auth
 //? =========================
-Route::get('/login', [App\Http\Controllers\AuthController::class, 'getLogin'])->name('login')->middleware('guest');
-Route::post('/login', [App\Http\Controllers\AuthController::class, 'postLogin'])->name('postLogin');
-Route::get('/register', [App\Http\Controllers\AuthController::class, 'getRegister'])->name('register')->middleware('guest');
-Route::post('/register', [App\Http\Controllers\AuthController::class, 'postRegister'])->name('postRegister');
-Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+Route::get('/login', [AuthController::class, 'getLogin'])->name('login')->middleware('guest');
+Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
+Route::get('/register', [AuthController::class, 'getRegister'])->name('register')->middleware('guest');
+Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //? =========================
 //! Router Petition
@@ -70,15 +62,13 @@ Route::get('/petisi/{id}', [EventController::class, 'showPetition']);
 
 Route::post('/petisi/{id}', [EventController::class, 'signPetition']);
 
-
-// Route::group(['middleware' => 'auth'], function () {
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//? =========================
+//! Router Communication
+//? =========================
 Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
 Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
-// });
 
+//? =========================
+//! Router Admin
+//? =========================
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
-
-
-// Controller untuk uji coba
-Route::get('/uji_coba', [DummyController::class, 'cobaModifikasiEntity']);
