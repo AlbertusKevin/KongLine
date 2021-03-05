@@ -2,6 +2,7 @@
 
 namespace App\Domain\Event\Entity;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -9,13 +10,6 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-    protected $table = "users";
-    protected $id,
-        $name,
-        $email,
-        $password,
-        $dob;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -44,4 +38,9 @@ class User extends Authenticatable
     // protected $casts = [
     //     'email_verified_at' => 'datetime',
     // ];
+
+    public function message()
+    {
+        return $this->hasMany("\App\Domain\Communication\Entity\Service");
+    }
 }
