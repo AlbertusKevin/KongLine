@@ -34,16 +34,15 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link" href="{{ url('/donation') }}">Donasi</a>
-                    <a class="nav-link" href="{{ url('/petisi') }}">Petisi</a>
+                    <a class="nav-link" href="{{ url('/petition') }}">Petisi</a>
                     <a class="nav-link" href="{{ url('/') }}">Forum</a>
+                    <a class="nav-link" href="{{ url('/inbox') }}">Service</a>
                     @if (Auth::check())
-
-
                         <div class="dropdown m-2 mr-2">
-                            <div class="" data-toggle="dropdown">
+                            <div data-toggle="dropdown">
                                 <img src="/img/profile.png">
                             </div>
-                            <div class="dropdown-menu mr-5">
+                            <div class="dropdown-menu">
                                 <a class="nav-link" href="{{ url('/profile/' . Auth::id()) }}">Edit Profile</a>
                                 <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
                             </div>
@@ -56,7 +55,7 @@
             </div>
         </div>
         </div>
-        <a href="/inbox"><button>Service</button></a>
+
     </nav>
     @yield('content')
     <footer class="mt-5 pt-5">

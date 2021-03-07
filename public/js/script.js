@@ -18,7 +18,7 @@ const changePetitionList = (petition) => {
         <div class="row no-gutters">
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title"><a href="/petisi/${petition.id}">${
+                    <h5 class="card-title"><a href="/petition/${petition.id}">${
         petition.title
     }</a></h5>
                     <p class="card-text petition-description">${
@@ -82,7 +82,7 @@ const listPetitionTypeEmpty = (keyword) => {
 
 const sortListPetition = (sortBy, category, typePetition) => {
     $.ajax({
-        url: "/petisi/sort",
+        url: "/petition/sort",
         data: { sortBy, category, typePetition },
         dataType: "json",
         success: (data) => {
@@ -174,7 +174,7 @@ $(".petition-type").on("click", function () {
     console.log(typePetition);
 
     $.ajax({
-        url: "/petisi/type",
+        url: "/petition/type",
         data: { typePetition },
         dataType: "json",
         success: (data) => {
@@ -202,7 +202,7 @@ $("#search-petition").on("keyup", function () {
     typePetition = checkTypePetition(typePetition);
 
     $.ajax({
-        url: "/petisi/search",
+        url: "/petition/search",
         data: { keyword, typePetition, category, sortBy },
         dataType: "json",
         success: (data) => {

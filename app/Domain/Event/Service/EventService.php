@@ -3,7 +3,7 @@
 namespace App\Domain\Event\Service;
 
 use App\Domain\Event\Dao\EventDao;
-use App\Domain\Event\Entity\Category;
+use App\Domain\Event\Entity\User;
 use Illuminate\Support\Facades\Auth;
 use App\Domain\Event\Entity\ParticipatePetition;
 use Carbon\Carbon;
@@ -15,6 +15,15 @@ class EventService
     public function __construct()
     {
         $this->dao = new EventDao();
+    }
+
+    public function showProfile()
+    {
+        if (Auth::check()) {
+            return Auth::user();
+        }
+
+        return $this->dao->showProfile(1);
     }
 
     private function upload_image($img, $folder)
@@ -59,7 +68,7 @@ class EventService
 
     public function listPetitionType($request)
     {
-        $userId = Auth::user()->id;
+        $user = $this->showProfile();
 
         if ($request->typePetition == "berlangsung") {
             return $this->dao->listPetitionType(1);
@@ -70,16 +79,15 @@ class EventService
         }
 
         if ($request->typePetition == "partisipasi") {
-            return $this->dao->listPetitionParticipated($userId);
+            return $this->dao->listPetitionParticipated($user->id);
         }
 
-        return $this->dao->listPetitionByMe($userId);
+        return $this->dao->listPetitionByMe($user->id);
     }
 
     public function searchPetition($request)
     {
-        $userId = Auth::user();
-        $userId = $userId->id;
+        $userId = $this->showProfile()->id;
         $category = $this->categorySelect($request);
         $sortBy = $request->sortBy;
 
@@ -207,7 +215,7 @@ class EventService
     public function sortPetition($request)
     {
         $category = $this->categorySelect($request);
-        $userId = Auth::id();
+        $userId = $this->showProfile()->id;
 
         //jika tidak sort dan tidak pilih category
         if ($request->sortBy == "None" && $category == 0) {
@@ -323,6 +331,11 @@ class EventService
     public function showPetition($id)
     {
         return $this->dao->showPetition($id);
+    }
+
+    public function commentsPetition($id)
+    {
+        return $this->dao->commentsPetition($id);
     }
 
     public function listCategory()

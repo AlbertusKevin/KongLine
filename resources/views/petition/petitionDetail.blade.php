@@ -1,13 +1,17 @@
 @extends('layout.app')
-
+@section('title')
+    Petition Detail
+@endsection
 @section('content')
     <div class="container">
-        @include('messages')
         <h2 class="mt-3" style="color: #1167B1">{{ $petition->title }}</h2>
         <div class="text-center mt-5">
-            <button type="button" class="btn btn-primary rounded-pill">Detail Petisi</button>
-            <button type="button" class="btn btn-light rounded-pill ml-3">Komentar</button>
-            <button type="button" class="btn btn-light rounded-pill ml-3">Perkembangan</button>
+            <a href="/petition/{{ $petition->id }}" type="button" class="btn btn-primary rounded-pill">Detail
+                Petisi</a>
+            <a href="/petition/comments/{{ $petition->id }}" type="button"
+                class="btn btn-light rounded-pill ml-3">Komentar</a>
+            <a href="/petition/progress/{{ $petition->id }}" type="button"
+                class="btn btn-light rounded-pill ml-3">Perkembangan</a>
         </div>
         <div class="row">
             <div class="col-md-8 mt-3">
@@ -53,7 +57,7 @@
                             </div>
                         </div>
                     @else
-                        <form action="/petisi/{{ $petition->id }}" method="POST">
+                        <form action="/petition/{{ $petition->id }}" method="POST">
                             @csrf
                             <h4 class="mt-5 ml-4">{{ $petition->signedCollected }} dari {{ $petition->signedTarget }}
                             </h4>

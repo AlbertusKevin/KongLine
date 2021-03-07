@@ -246,6 +246,13 @@ class EventDao
         return Petition::where('status', 1)->where('id', $id)->first();
     }
 
+    public function commentsPetition($id)
+    {
+        return ParticipatePetition::where('idPetition', $id)
+            ->join('users', 'participate_petition.idParticipant', '=', 'users.id')
+            ->get();
+    }
+
     public function listCategory()
     {
         return Category::all();

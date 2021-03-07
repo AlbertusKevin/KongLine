@@ -10,27 +10,29 @@ use \App\Domain\Communication\Entity\Service;
 class ServiceController extends Controller
 {
 
-    public function index() {
+    public function index()
+    {
         $users = User::orderBy('id', 'DESC')->get();
 
         if (auth()->user()->role == 'admin') {
             $messages = Service::where('user_id', auth()->id())->orWhere('receiver', auth()->id())->orderBy('id', 'DESC')->get();
         }
 
-        return view('Service/home', [
+        return view('service/home', [
             'users' => $users,
             'messages' => $messages ?? null
         ]);
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         if (auth()->user()->role != 'admin') {
             abort(404);
         }
 
         $sender = User::findOrFail($id);
 
-        $users = User::with(['message' => function($query) {
+        $users = User::with(['message' => function ($query) {
             return $query->orderBy('created_at', 'DESC');
         }])->orderBy('id', 'DESC')->get();
 
@@ -40,11 +42,10 @@ class ServiceController extends Controller
             $messages = Service::where('user_id', $sender)->orWhere('receiver', $sender)->orderBy('id', 'DESC')->get();
         }
 
-        return view('Service/show', [
+        return view('service/show', [
             'users' => $users,
             'messages' => $messages,
             'sender' => $sender,
         ]);
     }
-
 }

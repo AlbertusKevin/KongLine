@@ -18,10 +18,10 @@ class EventController extends Controller
 
     public function indexPetition(Request $request)
     {
-        $user = Auth::user();
+        $user = $this->eventService->showProfile();
         $listCategory = $this->eventService->listCategory();
         $petitionList = $this->eventService->indexPetition();
-        return view('petition', compact('petitionList', 'user', 'listCategory'));
+        return view('petition.petition', compact('petitionList', 'user', 'listCategory'));
     }
 
     public function listPetitionType(Request $request)
@@ -49,7 +49,15 @@ class EventController extends Controller
             $isParticipated = false;
         }
 
-        return view('petitionDetail', compact('petition', 'user', 'isParticipated'));
+        return view('petition.petitionDetail', compact('petition', 'user', 'isParticipated'));
+    }
+
+    public function commentPetition($idEvent)
+    {
+        $petition = $this->eventService->showPetition($idEvent);
+        $comments = $this->eventService->commentsPetition($idEvent);
+
+        return view('petition.petitionComment', compact('petition', 'comments'));
     }
 
     public function signPetition(Request $request, $idEvent)
@@ -57,6 +65,6 @@ class EventController extends Controller
         $user = Auth::user();
         $this->eventService->signPetition($request, $idEvent, $user);
         Alert::success('Berhasil Menandatangai petisi ini.', 'Terimakasih ikut berpartisipasi!');
-        return redirect("/petisi/" . $idEvent);
+        return redirect("/petition/" . $idEvent);
     }
 }

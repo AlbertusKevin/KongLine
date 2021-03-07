@@ -1,17 +1,20 @@
 @extends('layout.app')
+@section('title')
+    Petition List
+@endsection
 
 @section('content')
-
     <div class="container">
         <h2 class="mt-3 petition-page-title">Daftar Petisi</h2>
         <hr>
         <p class="petition-page-subtitle">Lihat Petisi yang Sedang Berlangsung di Website</p>
         <div class="text-center mt-5">
-            <button href="/petisi" type="button" class="btn btn-primary petition-type rounded-pill">Berlangsung</button>
-            <button href="/petisi" type="button" class="btn btn-light petition-type rounded-pill ml-3">Telah Menang</button>
+            <button href="/petition" type="button" class="btn btn-primary petition-type rounded-pill">Berlangsung</button>
+            <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">Telah
+                Menang</button>
             @if (Auth::check())
                 @if (Auth::user()->role == 'participant' || Auth::user()->role == 'campaigner')
-                    <button href="/petisi" type="button" class="btn btn-light petition-type rounded-pill ml-3">Ikut
+                    <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">Ikut
                         Serta</button>
                 @endif
                 @if (Auth::user()->role == 'campaigner')
@@ -65,7 +68,7 @@
                     <div class="row no-gutters">
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title"><a href="/petisi/{{ $list->id }}">{{ $list->title }}</a></h5>
+                                <h5 class="card-title"><a href="/petition/{{ $list->id }}">{{ $list->title }}</a></h5>
                                 <p class="card-text petition-description">{{ $list->purpose }}</p>
                                 <p class="card-text"><small class="text-muted">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

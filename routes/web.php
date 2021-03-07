@@ -53,14 +53,15 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 //! Router Petition
 //? =========================
 //* --- pemanggilan ajax ---
-Route::get('/petisi/type', [EventController::class, 'listPetitionType']);
-Route::get('/petisi/search', [EventController::class, 'searchPetition']);
-Route::get('/petisi/sort', [EventController::class, 'sortPetition']);
+Route::get('/petition/type', [EventController::class, 'listPetitionType']);
+Route::get('/petition/search', [EventController::class, 'searchPetition']);
+Route::get('/petition/sort', [EventController::class, 'sortPetition']);
 
-Route::get('/petisi', [EventController::class, 'indexPetition']);
-Route::get('/petisi/{id}', [EventController::class, 'showPetition']);
+Route::get('/petition', [EventController::class, 'indexPetition']);
+Route::get('/petition/{id}', [EventController::class, 'showPetition']);
+Route::get('/petition/comments/{id}', [EventController::class, 'commentPetition']);
 
-Route::post('/petisi/{id}', [EventController::class, 'signPetition']);
+Route::post('/petition/{id}', [EventController::class, 'signPetition']);
 
 //? =========================
 //! Router Communication
