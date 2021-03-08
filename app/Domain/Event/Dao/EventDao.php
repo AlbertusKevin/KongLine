@@ -253,6 +253,11 @@ class EventDao
             ->get();
     }
 
+    public function newsPetition($id)
+    {
+        return UpdateNews::where('idPetition', $id)->get();
+    }
+
     public function listCategory()
     {
         return Category::all();

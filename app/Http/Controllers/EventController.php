@@ -60,6 +60,14 @@ class EventController extends Controller
         return view('petition.petitionComment', compact('petition', 'comments'));
     }
 
+    public function progressPetition($idEvent)
+    {
+        $petition = $this->eventService->showPetition($idEvent);
+        $news = $this->eventService->newsPetition($idEvent);
+
+        return view('petition.petitionProgress', compact('petition', 'news'));
+    }
+
     public function signPetition(Request $request, $idEvent)
     {
         $user = Auth::user();

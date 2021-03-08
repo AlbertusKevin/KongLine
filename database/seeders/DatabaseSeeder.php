@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Domain\Event\Entity\UpdateNews;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,7 +27,8 @@ class DatabaseSeeder extends Seeder
             ForumLikeSeeder::class,
             ParticipateDonationSeeder::class,
             ParticipatePetitionSeeder::class,
-            TransactionSeeder::class
+            TransactionSeeder::class,
+            UpdateNewsSeeder::class,
         ]);
     }
 }

@@ -38,7 +38,7 @@
                         <div class=" row no-gutters">
                             <div class="col-md-4 text-center">
                                 <img src="/{{ $comment->photoProfile }}" class="img-thumbnail"
-                                    alt="{{ $comment->photoProfile }}">
+                                    alt="Participant's Image Profile">
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">

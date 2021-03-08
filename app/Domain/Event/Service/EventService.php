@@ -338,6 +338,11 @@ class EventService
         return $this->dao->commentsPetition($id);
     }
 
+    public function newsPetition($id)
+    {
+        return $this->dao->newsPetition($id);
+    }
+
     public function listCategory()
     {
         return $this->dao->listCategory();

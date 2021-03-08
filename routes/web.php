@@ -60,6 +60,7 @@ Route::get('/petition/sort', [EventController::class, 'sortPetition']);
 Route::get('/petition', [EventController::class, 'indexPetition']);
 Route::get('/petition/{id}', [EventController::class, 'showPetition']);
 Route::get('/petition/comments/{id}', [EventController::class, 'commentPetition']);
+Route::get('/petition/progress/{id}', [EventController::class, 'progressPetition']);
 
 Route::post('/petition/{id}', [EventController::class, 'signPetition']);
 
