@@ -16,6 +16,8 @@ class AdminController extends Controller
     public function getAll()
     {
         $users = $this->admin_service->getAllUser();
-        return view('/listUser', compact('users'));
+        $eventCount = $this->admin_service->countEventParticipate();
+        $changeDateFormat = $this->admin_service->changeDateFormat();
+        return view('/listUser', compact('users','eventCount','changeDateFormat'));
     }
 }
