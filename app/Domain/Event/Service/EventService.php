@@ -45,6 +45,11 @@ class EventService
         $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
+    public function deleteAccount($request, $id) 
+    {
+        return $this->dao->deleteAccount($request, $id);
+    }
+
     //? ===================================================================
     //! ~~~~~~~~~~~~~~~~~~~~~~~~~ Petition Service ~~~~~~~~~~~~~~~~~~~~~~~~
     //? ===================================================================

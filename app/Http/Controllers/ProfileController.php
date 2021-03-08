@@ -25,4 +25,10 @@ class ProfileController extends Controller
         $participant = $this->event_service->updateProfile($request, $id);
         return redirect('profile/' . $id);
     }
+
+    public function delete(Request $request, $id)
+    {
+        $participant = $this->event_service->deleteAccount($request, $id);
+        return redirect('home/');
+    }
 }

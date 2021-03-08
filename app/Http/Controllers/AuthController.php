@@ -71,12 +71,18 @@ class AuthController extends Controller
         $temp = Auth::attempt([
             'email' =>  $request->email,
             'password' => $request->password,
+            'status' => $request->status
         ]);
 
-        if ($temp == true) {
-            return redirect('/home');
+        if ($request->status == 1) {
+            if ($temp == true) {
+                return redirect('/home');
+            } else {
+                Alert::error('Email atau password salah', 'Silahkan coba lagi');
+                return redirect('/login');
+            }
         } else {
-            Alert::error('Email atau password salah', 'Silahkan coba lagi');
+            Alert::error('Akun tidak ditemukan', 'Silahkan coba lagi');
             return redirect('/login');
         }
     }

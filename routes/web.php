@@ -35,7 +35,7 @@ Route::get('/donation', function () {
     return view('donation');
 });
 
-Route::get('/admin/listUser', function(){
+Route::get('/admin/listUser', function () {
     return view('listUser');
 });
 
@@ -46,6 +46,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //? =========================
 Route::get('/profile/{id}', [ProfileController::class, 'edit']);
 Route::put('/profile/{id}', [ProfileController::class, 'update']);
+Route::put('/profile/{id}', [ProfileController::class, 'delete']);
 
 //? =========================
 //! Router Auth
@@ -71,10 +72,9 @@ Route::post('/petisi/{id}', [EventController::class, 'signPetition']);
 
 
 // Route::group(['middleware' => 'auth'], function () {
-    // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
-    Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
+Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
 // });
 
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
-
