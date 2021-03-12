@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Local Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
@@ -48,8 +49,8 @@
                             </div>
                         </div>
                     @else
-                        <a type="button" class="btn btn-outline-info ml-1 mr-2" href="login"> Login </a>
-                        <a type="button" class="btn btn-info mr-2" href="register"> Daftar </a>
+                        <a type="button" class="btn btn-outline-info ml-1 mr-2" href="{{ url('/login') }}"> Login </a>
+                        <a type="button" class="btn btn-info mr-2" href="{{ url('/register') }}"> Daftar </a>
                     @endif
                 </div>
             </div>

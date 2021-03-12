@@ -1,4 +1,3 @@
-
 .navbar-nav a{
   align-self:center;
 }
@@ -44,7 +43,7 @@ footer {
 /*
 =================================== Style untuk petisi ===================================
 */
-.close-event{
+button.close-event{
   background-color: #E15858;
   color: white;
   width: 350px;
@@ -67,6 +66,31 @@ footer {
   text-align: justify;
   text-indent: 50px;
   line-height: 1.5;
+}
+
+/* Petition Style */
+a.btn-create-petition {
+  background: #147C85;
+  color: white;
+}
+
+button.btn-new-petition{
+  background: #C4C4C4;
+  color: white;
+  width: 290px;
+  height: 50px;
+  border-radius: 20px;
+}
+
+.vertical-line {
+  /* position: absolute; */
+  width: 80%;
+  height: 0px;
+  /* left: 0;
+  top: 250px; */
+  
+  border: 1px solid #C4C4C4;
+  transform: rotate(90deg);
 }
 /* =================================== End Style untuk petisi =================================== */
 .w-35 {

@@ -5,6 +5,7 @@
 @section('content')
     <div class="container">
         <h2 class="mt-3" style="color: #1167B1">{{ $petition->title }}</h2>
+        <small><a href="/petition" style="color: blue">-> kembali ke daftar petisi</a></small>
         <div class="text-center mt-5">
             <a href="/petition/{{ $petition->id }}" type="button" class="btn btn-primary rounded-pill">Detail
                 Petisi</a>

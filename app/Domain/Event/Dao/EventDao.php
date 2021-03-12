@@ -258,6 +258,18 @@ class EventDao
         return UpdateNews::where('idPetition', $id)->get();
     }
 
+    public function storeProgressPetition($updateNews)
+    {
+        UpdateNews::create([
+            'idPetition' => $updateNews->getIdPetition(),
+            'image' => $updateNews->getImage(),
+            'title' => $updateNews->getTitle(),
+            'content' => $updateNews->getContent(),
+            'link' => $updateNews->getLink(),
+            'created_at' => $updateNews->getCreatedAt()
+        ]);
+    }
+
     public function listCategory()
     {
         return Category::all();
