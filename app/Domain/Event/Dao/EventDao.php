@@ -270,6 +270,23 @@ class EventDao
         ]);
     }
 
+    public function storePetition($petition)
+    {
+        Petition::create([
+            'idCampaigner' => $petition->getIdCampaigner(),
+            'title' => $petition->getTitle(),
+            'photo' => $petition->getPhoto(),
+            'category' => $petition->getCategory(),
+            'purpose' => $petition->getPurpose(),
+            'deadline' => $petition->getDeadline(),
+            'status' => $petition->getStatus(),
+            'created_at' => $petition->getCreatedAt(),
+            'signedCollected' => $petition->getSignedCollected(),
+            'signedTarget' => $petition->getSignedTarget(),
+            'targetPerson' => $petition->getTargetPerson()
+        ]);
+    }
+
     public function listCategory()
     {
         return Category::all();

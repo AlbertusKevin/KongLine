@@ -30,8 +30,13 @@
                         <input type="file" class="form-control" id="photo" name="photo" aria-describedby="photo">
                     </div>
                     <div class="form-group mb-5">
-                        <label for="signedTarget">Target Tandatangan Petisi</label>
-                        <input type="email" class="form-control" id="signedTarget" name="signedTarget"
+                        <label for="targetPerson">Target Petisi</label>
+                        <input type="text" class="form-control" id="targetPerson" name="targetPerson"
+                            aria-describedby="targetPerson">
+                    </div>
+                    <div class="form-group mb-5">
+                        <label for="signedTarget">Target Jumlah Tandatangan</label>
+                        <input type="text" class="form-control" id="signedTarget" name="signedTarget"
                             aria-describedby="signedTarget">
                     </div>
                     <div class="form-group mb-5">

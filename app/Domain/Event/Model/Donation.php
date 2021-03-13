@@ -2,17 +2,17 @@
 
 namespace App\Domain\Event\Model;
 
-class Petition extends Event
+class Donation extends Event
 {
-    //attribute
-    private $signedCollected, $signedTarget, $targetPerson;
+    // Attribute
+    private $assistedSubject, $donationCollected, $donationTarget;
 
-    public function __construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at, $signedTarget, $signedCollected, $targetPerson)
+    public function __construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at, $donationCollected, $donationTarget, $assistedSubject)
     {
         parent::__construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at);
-        $this->signedTarget = $signedTarget;
-        $this->signedCollected = $signedCollected;
-        $this->targetPerson = $targetPerson;
+        $this->assistedSubject = $assistedSubject;
+        $this->donationCollected = $donationCollected;
+        $this->donationTarget = $donationTarget;
     }
 
     public function setPhoto($img)
@@ -60,18 +60,18 @@ class Petition extends Event
         return parent::getCreatedAt();
     }
 
-    public function getSignedCollected()
+    public function getAssistedSubject()
     {
-        return $this->signedCollected;
+        return $this->assistedSubject;
     }
 
-    public function getSignedTarget()
+    public function getDonationCollected()
     {
-        return $this->signedTarget;
+        return $this->donationCollected;
     }
 
-    public function getTargetPerson()
+    public function getDonationTarget()
     {
-        return $this->targetPerson;
+        return $this->donationTarget;
     }
 }

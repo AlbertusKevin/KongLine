@@ -3,7 +3,6 @@
 namespace App\Domain\Event\Service;
 
 use App\Domain\Event\Dao\EventDao;
-use App\Domain\Event\Entity\User;
 use Illuminate\Support\Facades\Auth;
 use App\Domain\Event\Entity\ParticipatePetition;
 use Carbon\Carbon;
@@ -366,6 +365,17 @@ class EventService
         $pathImage = $this->uploadImage($updateNews->getImage(), "petition/update_news");
         $updateNews->setImage($pathImage);
         $this->dao->storeProgressPetition($updateNews);
+    }
+
+    public function storePetition($petition)
+    {
+        $pathImage = $this->uploadImage(
+            $petition->getPhoto(),
+            "petition"
+        );
+
+        $petition->setPhoto($pathImage);
+        $this->dao->storePetition($petition);
     }
 
     public function checkParticipated($idEvent, $idParticipant, $typeEvent)

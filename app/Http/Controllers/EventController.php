@@ -36,10 +36,31 @@ class EventController extends Controller
 
     public function storePetition(Request $request)
     {
-        $user = $this->eventService->showProfile();
-        $petition = new Model\Petition(2);
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'category' => 'required',
+            'photo' => 'required|image',
+            'signedTarget' => 'required|numeric',
+            'deadline' => 'date|required',
+            'purpose' => 'required|min:300',
+            'targetPerson' => 'required'
+        ]);
 
-        dd($petition);
+        if ($validator->fails()) {
+            $messageError = [];
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+            Alert::error('Gagal Mendaftarkan Petisi', [$messageError]);
+            return redirect('/petition/create');
+        };
+
+        $user = $this->eventService->showProfile();
+        $petition = new Model\Petition($user->id, $request->title, $request->file('photo'), $request->category, $request->purpose, $request->deadline, 0, Carbon::now()->format('Y-m-d'), $request->signedTarget, 0, $request->targetPerson);
+        $this->eventService->storePetition($petition);
+
+        Alert::success('Berhasil', 'Petisi Anda telah didaftarkan. Tunggu konfirmasi dari admin.');
+        return redirect('/petition');
     }
 
     public function listPetitionType(Request $request)
@@ -60,6 +81,7 @@ class EventController extends Controller
     public function showPetition(Request $request, $idEvent)
     {
         $petition = $this->eventService->showPetition($idEvent);
+        dd($petition);
         $user = $this->eventService->showProfile();
         if ($user->role != "guest") {
             $isParticipated = $this->eventService->checkParticipated($idEvent, $user->id, 'petition');

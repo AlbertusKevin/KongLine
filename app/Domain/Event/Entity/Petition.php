@@ -9,12 +9,8 @@ class Petition extends Event
     // konfigurasi ORM
     use HasFactory;
     protected $table = 'petition';
+    protected $guarded = ['id'];
     public $timestamps = false;
-
-    //attribute
-    private $signedCollected;
-    private $signedTarget;
-    private $targetPerson;
 
     // Relasi
     public function participatepetition()
