@@ -16,6 +16,10 @@ class EventService
         $this->dao = new EventDao();
     }
 
+    //* =========================================================================================
+    //* ------------------------------------- Service Umum --------------------------------------
+    //* =========================================================================================
+    //! Mengambil user tertentu yang sedang mengakses aplikasi (NullObject Pattern)
     public function showProfile()
     {
         if (Auth::check()) {
@@ -25,6 +29,7 @@ class EventService
         return $this->dao->showProfile(1);
     }
 
+    //! Mengupload gambar dan mengembalikan path dari gambar yang diupload
     private function uploadImage($img, $folder)
     {
         $pictName = $img->getClientOriginalName();
@@ -40,15 +45,34 @@ class EventService
         return $targetUploadDesc . "" . $pictName;   //membuat file path yang akan digunakan sebagai src html
     }
 
-    //? ===================================================================
-    //! Profile Service
-    //? ===================================================================
+    //! Mengembalikan kategori event petisi atau donasi yang dipilih
+    public function categorySelect($request)
+    {
+        $listCategory = $this->dao->listCategory();
 
+        foreach ($listCategory as $cat) {
+            if ($request->category == $cat->description) {
+                return $cat->id;
+            }
+        }
+        return 0;
+    }
+
+    //! Mengambil data seluruh kategori event petisi atau donasi yang ada
+    public function listCategory()
+    {
+        return $this->dao->listCategory();
+    }
+    //* =========================================================================================
+    //* ----------------------------------- Service Profile -------------------------------------
+    //* =========================================================================================
+    //! Menampilkan halaman detail + form untuk update profile user tertentu
     public function editProfile($id)
     {
         return $this->dao->showProfile($id);
     }
 
+    //! Memproses update profile
     public function updateProfile($request, $id)
     {
         $pathProfile = $this->uploadImage($request->file('profile/profile_picture'), 'photo');
@@ -56,15 +80,16 @@ class EventService
         $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
-    //? ===================================================================
-    //! ~~~~~~~~~~~~~~~~~~~~~~~~~ Petition Service ~~~~~~~~~~~~~~~~~~~~~~~~
-    //? ===================================================================
-
+    //* =========================================================================================
+    //* ------------------------------------ Service Petisi -------------------------------------
+    //* =========================================================================================
+    //! Menampilkan seluruh petisi yang sedang berlangsung 
     public function indexPetition()
     {
         return $this->dao->indexPetition();
     }
 
+    //! {{-- lewat ajax --}} Menampilkan daftar petisi berdasarkan tipe (berlangsung, telah menang, dll)
     public function listPetitionType($request)
     {
         $user = $this->showProfile();
@@ -84,6 +109,7 @@ class EventService
         return $this->dao->listPetitionByMe($user->id);
     }
 
+    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
     public function searchPetition($request)
     {
         $userId = $this->showProfile()->id;
@@ -199,18 +225,7 @@ class EventService
         }
     }
 
-    public function categorySelect($request)
-    {
-        $listCategory = $this->dao->listCategory();
-
-        foreach ($listCategory as $cat) {
-            if ($request->category == $cat->description) {
-                return $cat->id;
-            }
-        }
-        return 0;
-    }
-
+    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
     public function sortPetition($request)
     {
         $category = $this->categorySelect($request);
@@ -327,26 +342,33 @@ class EventService
         return $this->dao->myPetitionByCategory($category, $userId);
     }
 
+    //! Menampilkan detail petisi sesuai ID Petisi
     public function showPetition($id)
     {
         return $this->dao->showPetition($id);
     }
 
+    //! Menampilkan seluruh komentar pada petisi tertentu sesuai ID Petisi
     public function commentsPetition($id)
     {
         return $this->dao->commentsPetition($id);
     }
 
+    //! Menampilkan seluruh berita perkembangan petisi tertentu sesuai ID Petisi
     public function newsPetition($id)
     {
         return $this->dao->newsPetition($id);
     }
 
-    public function listCategory()
+    //! Menyimpan perkembangan berita terbaru yang diinput oleh pengguna pada petisi tertentu
+    public function storeProgressPetition($updateNews)
     {
-        return $this->dao->listCategory();
+        $pathImage = $this->uploadImage($updateNews->getImage(), "petition/update_news");
+        $updateNews->setImage($pathImage);
+        $this->dao->storeProgressPetition($updateNews);
     }
 
+    //! Memproses tandatangan peserta pada petisi tertentu
     public function signPetition($request, $idEvent, $user)
     {
         $petition = new ParticipatePetition();
@@ -360,13 +382,7 @@ class EventService
         $this->dao->updateCalculatedSign($idEvent, $count);
     }
 
-    public function storeProgressPetition($updateNews)
-    {
-        $pathImage = $this->uploadImage($updateNews->getImage(), "petition/update_news");
-        $updateNews->setImage($pathImage);
-        $this->dao->storeProgressPetition($updateNews);
-    }
-
+    //! Menyimpan data petisi ke database
     public function storePetition($petition)
     {
         $pathImage = $this->uploadImage(
@@ -378,9 +394,14 @@ class EventService
         $this->dao->storePetition($petition);
     }
 
+    //! Memeriksa apakah participant sudah pernah berpartisipasi pada event petisi tertentu
     public function checkParticipated($idEvent, $idParticipant, $typeEvent)
     {
         $isInList = $this->dao->checkParticipated($idEvent, $idParticipant, $typeEvent);
         return empty($isInList);
     }
+
+    //* =========================================================================================
+    //* ------------------------------------ Service Donasi -------------------------------------
+    //* =========================================================================================
 }

@@ -9,8 +9,7 @@
             @if ($user->role == 'campaigner')
                 <div class="col-md-3 mt-3 pl-3">
                     <h4 class="mb-4">Mau buat petisimu sendiri?</h4>
-                    <a href="/petition/create" type="button" class="btn btn-create-petition">Buat
-                        Perkembangan</a>
+                    <a href="/petition/create" type="button" class="btn btn-create-petition text-center">Ajukan Petisi</a>
                 </div>
                 <div class="col-md-9">
                 @else
