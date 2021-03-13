@@ -9,10 +9,11 @@ class Service extends Model
 {
     use HasFactory;
     protected $table = 'service';
-
+    public $timestamps = false;
     protected $fillable = ['message', 'user_id'];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('\App\Domain\Event\Entity\User');
     }
 }

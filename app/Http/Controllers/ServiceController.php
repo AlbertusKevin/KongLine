@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use \App\Domain\Event\Entity\User;
 use \App\Domain\Communication\Entity\Service;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceController extends Controller
 {
@@ -14,7 +15,7 @@ class ServiceController extends Controller
     {
         $users = User::orderBy('id', 'DESC')->get();
 
-        if (auth()->user()->role == 'admin') {
+        if (Auth::user()->role == 'admin') {
             $messages = Service::where('user_id', auth()->id())->orWhere('receiver', auth()->id())->orderBy('id', 'DESC')->get();
         }
 
@@ -26,7 +27,7 @@ class ServiceController extends Controller
 
     public function show($id)
     {
-        if (auth()->user()->role != 'admin') {
+        if (Auth::user()->role != 'admin') {
             abort(404);
         }
 
@@ -36,8 +37,8 @@ class ServiceController extends Controller
             return $query->orderBy('created_at', 'DESC');
         }])->orderBy('id', 'DESC')->get();
 
-        if (auth()->user()->role != 'admin') {
-            $messages = Service::where('user_id', auth()->id())->orWhere('receiver', auth()->id())->orderBy('id', 'DESC')->get();
+        if (Auth::user()->role != 'admin') {
+            $messages = Service::where('user_id', Auth::id())->orWhere('receiver', Auth::id())->orderBy('id', 'DESC')->get();
         } else {
             $messages = Service::where('user_id', $sender)->orWhere('receiver', $sender)->orderBy('id', 'DESC')->get();
         }

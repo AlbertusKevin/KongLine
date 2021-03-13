@@ -1,12 +1,12 @@
 // fungsi umum
 const checkTypePetition = (type) => {
-    if (type == "Berlangsung") {
+    if (type.includes("Berlangsung")) {
         return "berlangsung";
     }
-    if (type == "Telah Menang") {
+    if (type.includes("Menang")) {
         return "menang";
     }
-    if (type == "Petisi Saya") {
+    if (type.includes("Petisi")) {
         return "petisi_saya";
     }
     return "partisipasi";
@@ -105,8 +105,8 @@ const sortListPetition = (sortBy, category, typePetition) => {
 //untuk active link sesuai page yang diklik
 $(".nav-link").ready(function () {
     let url = window.location.href.split("/")[3];
-    console.log();
-    if (url == "petisi") {
+
+    if (url == "petition") {
         $(".nav-link").each(function () {
             if ($(this).html() == "Petisi") {
                 $(this).addClass("active");
@@ -148,6 +148,7 @@ $(".petition-type").on("click", function () {
 
     let typePetition = $(this).html();
     typePetition = checkTypePetition(typePetition);
+    // console.log(typePetition);
 
     if (typePetition == "berlangsung") {
         $(".petition-page-title").html("Daftar Petisi");

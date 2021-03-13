@@ -15,7 +15,7 @@
                 class="btn btn-primary rounded-pill ml-3">Perkembangan</a>
         </div>
         <div class="row">
-            @if ($user->id == $petition->idCampaigner)
+            @if ($user->id == $petition->idCampaigner && $petition->status == 0)
                 <div class="col-md-8 mb-5 ml-auto mr-auto mt-5" style="max-width: 800px;">
                 @else
                     <div class="mb-5 ml-auto mr-auto mt-5" style="max-width: 800px;">
@@ -26,7 +26,7 @@
                 <p>Ikuti perkembangan terbaru mengenai petisi ini</p>
             </div>
             @if (count($news) == 0)
-                @if ($user->id == $petition->idCampaigner)
+                @if ($user->id == $petition->idCampaigner && $petition->status != 0)
                     <div class="card">
                         <div class="row no-gutters">
                             <div class="col-md-8 text-center">
@@ -56,7 +56,8 @@
                                 <h5 class="card-title font-weight-bold">{{ $news->title }}</h5>
                                 <p class="card-text petition-description">{{ $news->content }}</p>
                                 @if ($news->link != null)
-                                    <small class="text-muted">{{ $news->link }}</small>
+                                    <small class="text-muted"><a href="{{ $news->link }}"
+                                            target="_blank">{{ $news->link }}</a></small>
                                 @endif
                             </div>
                         </div>
@@ -67,7 +68,7 @@
                 </div>
             @endforeach
         </div>
-        @if ($user->id == $petition->idCampaigner)
+        @if ($user->id == $petition->idCampaigner && $petition->status != 0)
             <div class="col-md-3 text-center" style="margin-top: 100px">
                 <h6 class="font-weight-bold">Sudah ada Perkembangan?</h6>
                 <p class="ml-2">Tetap perbarui informasi dari perjuangan petisi ini</p>

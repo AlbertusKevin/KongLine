@@ -80,16 +80,38 @@ class EventController extends Controller
 
     public function showPetition(Request $request, $idEvent)
     {
-        $petition = $this->eventService->showPetition($idEvent);
-        dd($petition);
         $user = $this->eventService->showProfile();
+        $petition = $this->eventService->showPetition($idEvent);
+
         if ($user->role != "guest") {
             $isParticipated = $this->eventService->checkParticipated($idEvent, $user->id, 'petition');
         } else {
             $isParticipated = false;
         }
 
-        return view('petition.petitionDetail', compact('petition', 'user', 'isParticipated'));
+        if ($petition->status == 0) {
+            $message = [
+                'header' => 'Menunggu Konfirmasi',
+                'content' => 'Event ini sudah didaftarkan. Tunggu konfirmasi dari pihak admin.'
+            ];
+        } else if ($petition->status == 2) {
+            $message = [
+                'header' => 'Telah Selesai',
+                'content' => 'Event ini sudah selesai. Tidak menerima tandatangan lagi.'
+            ];
+        } else if ($petition->status == 3) {
+            $message = [
+                'header' => 'Sudah Ditutup',
+                'content' => 'Event ini telah ditutup oleh penyelenggara / admin.'
+            ];
+        } else {
+            $message = [
+                'header' => 'Dibatalkan',
+                'content' => 'Event ini dibatalkan oleh penyelenggara.'
+            ];
+        }
+
+        return view('petition.petitionDetail', compact('petition', 'user', 'isParticipated', 'message'));
     }
 
     public function commentPetition($idEvent)

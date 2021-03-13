@@ -243,7 +243,7 @@ class EventDao
 
     public function showPetition($id)
     {
-        return Petition::where('status', 1)->where('id', $id)->first();
+        return Petition::where('id', $id)->first();
     }
 
     public function commentsPetition($id)
