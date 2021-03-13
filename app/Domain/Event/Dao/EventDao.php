@@ -159,7 +159,7 @@ class EventDao
     public function sortPetition($status, $table)
     {
         return Petition::where('status', $status)
-            ->orderByDesc('signedCollected', $table)
+            ->orderByDesc($table)
             ->get();
     }
 
@@ -243,7 +243,48 @@ class EventDao
 
     public function showPetition($id)
     {
-        return Petition::where('status', 1)->where('id', $id)->first();
+        return Petition::where('id', $id)->first();
+    }
+
+    public function commentsPetition($id)
+    {
+        return ParticipatePetition::where('idPetition', $id)
+            ->join('users', 'participate_petition.idParticipant', '=', 'users.id')
+            ->get();
+    }
+
+    public function newsPetition($id)
+    {
+        return UpdateNews::where('idPetition', $id)->get();
+    }
+
+    public function storeProgressPetition($updateNews)
+    {
+        UpdateNews::create([
+            'idPetition' => $updateNews->getIdPetition(),
+            'image' => $updateNews->getImage(),
+            'title' => $updateNews->getTitle(),
+            'content' => $updateNews->getContent(),
+            'link' => $updateNews->getLink(),
+            'created_at' => $updateNews->getCreatedAt()
+        ]);
+    }
+
+    public function storePetition($petition)
+    {
+        Petition::create([
+            'idCampaigner' => $petition->getIdCampaigner(),
+            'title' => $petition->getTitle(),
+            'photo' => $petition->getPhoto(),
+            'category' => $petition->getCategory(),
+            'purpose' => $petition->getPurpose(),
+            'deadline' => $petition->getDeadline(),
+            'status' => $petition->getStatus(),
+            'created_at' => $petition->getCreatedAt(),
+            'signedCollected' => $petition->getSignedCollected(),
+            'signedTarget' => $petition->getSignedTarget(),
+            'targetPerson' => $petition->getTargetPerson()
+        ]);
     }
 
     public function listCategory()
@@ -251,12 +292,12 @@ class EventDao
         return Category::all();
     }
 
-    public function signPetition($request, $idEvent, $user)
+    public function signPetition($petition)
     {
         return ParticipatePetition::create([
-            'idPetition' => $idEvent,
-            'idParticipant' => $user->id,
-            'comment' => $request->petitionComment,
+            'idPetition' => $petition->idPetition,
+            'idParticipant' => $petition->idParticipant,
+            'comment' => $petition->comment,
             'created_at' => Carbon::now()->format('Y-m-d')
         ]);
     }

@@ -53,7 +53,7 @@ class CategorySeeder extends Seeder
         DB::table('category')->insert(
             [
                 'id' => 7,
-                'description' => 'Karya Kreatif & Modal Usaha'
+                'description' => 'Karya Kreatif dan Modal Usaha'
             ]
         );
         DB::table('category')->insert(

@@ -23,7 +23,7 @@ class TransactionSeeder extends Seeder
                 'bank' => 'BCA',
                 'nominal' => 10000,
                 'repaymentPicture' => 'images/buktitrf.jpg',
-                'status' => 'konfirmasi',
+                'status' => 1,
                 'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );

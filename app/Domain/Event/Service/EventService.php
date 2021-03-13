@@ -4,6 +4,8 @@ namespace App\Domain\Event\Service;
 
 use App\Domain\Event\Dao\EventDao;
 use Illuminate\Support\Facades\Auth;
+use App\Domain\Event\Entity\ParticipatePetition;
+use Carbon\Carbon;
 
 class EventService
 {
@@ -14,7 +16,16 @@ class EventService
         $this->dao = new EventDao();
     }
 
-    private function upload_image($img, $folder)
+    public function showProfile()
+    {
+        if (Auth::check()) {
+            return Auth::user();
+        }
+
+        return $this->dao->showProfile(1);
+    }
+
+    private function uploadImage($img, $folder)
     {
         $pictName = $img->getClientOriginalName();
         //ambil ekstensi file
@@ -22,11 +33,11 @@ class EventService
         //buat nama baru yang unique
         $pictName = uniqid() . '.' . end($pictName); //7dsf83hd.jpg
         //upload file ke folder yang disediakan
-        $targetUploadDesc = "images/profile/" . $folder . "/";
+        $targetUploadDesc = "images/" . $folder . "/";
 
         $img->move($targetUploadDesc, $pictName);
 
-        return $targetUploadDesc . "/" . $pictName;   //membuat file path yang akan digunakan sebagai src html
+        return $targetUploadDesc . "" . $pictName;   //membuat file path yang akan digunakan sebagai src html
     }
 
     //? ===================================================================
@@ -40,8 +51,8 @@ class EventService
 
     public function updateProfile($request, $id)
     {
-        $pathProfile = $this->upload_image($request->file('profile_picture'), 'photo');
-        $pathBackground = $this->upload_image($request->file('zoom_picture'), 'background');
+        $pathProfile = $this->uploadImage($request->file('profile/profile_picture'), 'photo');
+        $pathBackground = $this->uploadImage($request->file('profile/zoom_picture'), 'background');
         $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
@@ -56,7 +67,7 @@ class EventService
 
     public function listPetitionType($request)
     {
-        $userId = Auth::user()->id;
+        $user = $this->showProfile();
 
         if ($request->typePetition == "berlangsung") {
             return $this->dao->listPetitionType(1);
@@ -67,16 +78,15 @@ class EventService
         }
 
         if ($request->typePetition == "partisipasi") {
-            return $this->dao->listPetitionParticipated($userId);
+            return $this->dao->listPetitionParticipated($user->id);
         }
 
-        return $this->dao->listPetitionByMe($userId);
+        return $this->dao->listPetitionByMe($user->id);
     }
 
     public function searchPetition($request)
     {
-        $userId = Auth::user();
-        $userId = $userId->id;
+        $userId = $this->showProfile()->id;
         $category = $this->categorySelect($request);
         $sortBy = $request->sortBy;
 
@@ -204,19 +214,20 @@ class EventService
     public function sortPetition($request)
     {
         $category = $this->categorySelect($request);
-        $userId = Auth::id();
+        $userId = $this->showProfile()->id;
 
         //jika tidak sort dan tidak pilih category
-        if ($request->sortBy == "None" && $request->category == 0) {
+        if ($request->sortBy == "None" && $category == 0) {
             return $this->listPetitionType($request);
         }
 
         if ($request->typePetition == 'berlangsung') {
+            // Category = none, sort = ttd
             // Jika sort dipilih
             if ($request->sortBy == "Jumlah Tanda Tangan") {
                 //jika category juga dipilih
                 if ($category != 0) {
-                    dd($this->dao->sortPetitionCategory($category, 1, 'signedCollected'));
+                    // dd($this->dao->sortPetitionCategory($category, 1, 'signedCollected'));
                     return $this->dao->sortPetitionCategory($category, 1, 'signedCollected');
                 }
                 // jika hanya sort
@@ -321,6 +332,16 @@ class EventService
         return $this->dao->showPetition($id);
     }
 
+    public function commentsPetition($id)
+    {
+        return $this->dao->commentsPetition($id);
+    }
+
+    public function newsPetition($id)
+    {
+        return $this->dao->newsPetition($id);
+    }
+
     public function listCategory()
     {
         return $this->dao->listCategory();
@@ -328,9 +349,33 @@ class EventService
 
     public function signPetition($request, $idEvent, $user)
     {
-        $this->dao->signPetition($request, $idEvent, $user);
+        $petition = new ParticipatePetition();
+        $petition->idPetition = $idEvent;
+        $petition->idParticipant = $user->id;
+        $petition->comment = $request->petitionComment;
+        $petition->created_at = Carbon::now()->format('Y-m-d');
+
+        $this->dao->signPetition($petition, $idEvent, $user);
         $count = $this->dao->calculatedSign($idEvent);
         $this->dao->updateCalculatedSign($idEvent, $count);
+    }
+
+    public function storeProgressPetition($updateNews)
+    {
+        $pathImage = $this->uploadImage($updateNews->getImage(), "petition/update_news");
+        $updateNews->setImage($pathImage);
+        $this->dao->storeProgressPetition($updateNews);
+    }
+
+    public function storePetition($petition)
+    {
+        $pathImage = $this->uploadImage(
+            $petition->getPhoto(),
+            "petition"
+        );
+
+        $petition->setPhoto($pathImage);
+        $this->dao->storePetition($petition);
     }
 
     public function checkParticipated($idEvent, $idParticipant, $typeEvent)
