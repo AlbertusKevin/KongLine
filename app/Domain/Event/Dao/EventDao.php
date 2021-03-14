@@ -372,4 +372,110 @@ class EventDao
             'signedCollected' => $count
         ]);
     }
+
+    //* =========================================================================================
+    //* ------------------------------------ DAO Donation ---------------------------------------
+    //* =========================================================================================
+    //! Mengambil seluruh donasi dengan status aktif / sedang berlangsung
+    public function getListDonation()
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', 1)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mencari Donasi sesuai dengan 
+    //! status event aktif dan keyword tertentu
+    public function searchDonationByKeyword($status, $keyword)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mencari donasi sesuai dengan
+    //! keyword dan kategori tertentu
+    public function searchDonationCategory($status, $keyword, $category)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->where('category', $category)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mencari Donasi sesuai dengan
+    //! keyword, sorting ascending, dan kategori tertentu
+    public function searchDonationCategorySortAsc($status, $keyword, $category, $table)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->where('category', $category)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->orderBy($table)
+            ->get();
+    }
+
+    //! Mencari Donasi sesuai dengan
+    //! keyword, sorting sisa target donasi, dan kategori tertentu
+    // public function searchDonationCategorySortTargetLeft($status, $keyword, $category, $table)
+    // {
+    //     return Donation::selectRaw('donation.*, users.name as name')
+    //         ->where('donation.status', $status)
+    //         ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+    //         ->where('category', $category)
+    //         ->join('users', 'donation.idCampaigner', 'users.id')
+    //         ->orderByAsc($table)
+    //         ->get();
+    // }
+
+    //! Mencari donasi sesuai dengan
+    //! keyword dan sorting asc tertentu
+    public function searchDonationSortBy($status, $keyword, $table)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->orderBy($table)
+            ->get();
+    }
+
+    //! Mengurutkan donasi sesuai dengan
+    //! sorting desc dan kategori tertentu
+    public function sortDonationCategory($category, $status, $table)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->where('category', $category)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->orderBy($table)
+            ->get();
+    }
+
+    //! Mengurutkan petisi dengan status tertentu 
+    //! secara descending sesuai dengan ketentuan yang dipilih
+    public function sortDonation($status, $table)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->orderBy($table)
+            ->get();
+    }
+
+    //! Menampilkan petisi dengan status tertentu sesuai kategori tertentu
+    public function donationByCategory($category, $status)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->where('category', $category)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
 }

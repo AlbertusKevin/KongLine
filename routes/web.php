@@ -66,8 +66,10 @@ Route::post('/petition/{id}', [EventController::class, 'signPetition']);
 //? =========================
 //! Router Donation
 //? =========================
-Route::get('/donation', [EventController::class, 'listDonation']);
+Route::get('/donation/search', [EventController::class, 'searchDonation']);
+Route::get('/donation/sort', [EventController::class, 'sortDonation']);
 
+Route::get('/donation', [EventController::class, 'listDonation']);
 //? =========================
 //! Route Communication
 //? =========================

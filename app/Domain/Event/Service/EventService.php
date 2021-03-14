@@ -172,7 +172,6 @@ class EventService
             }
         }
 
-        //todo: Integrasi search dengan sort-category dan type
         if ($request->typePetition == "partisipasi") {
             if ($category == 0 && $sortBy == "None") {
                 return $this->dao->searchPetitionParticipated($userId, $request->keyword);
@@ -404,4 +403,89 @@ class EventService
     //* =========================================================================================
     //* ------------------------------------ Service Donasi -------------------------------------
     //* =========================================================================================
+    public function getListDonation()
+    {
+        return $this->dao->getListDonation();
+    }
+
+    //! {{-- lewat ajax --}} Mencari donasi sesuai urutan dan kategori yang dipilih
+    public function searchDonation($request)
+    {
+        $userId = $this->showProfile()->id;
+        $category = $this->categorySelect($request);
+        $sortBy = $request->sortBy;
+
+        // search biasa tanpa kategori dan sorting tertentu
+        if ($category == 0 && $sortBy == "None") {
+            return $this->dao->searchDonationByKeyword(1, $request->keyword);
+        }
+
+        // search jika berdasarkan sort dan category
+        if ($category != 0 && $sortBy != "None") {
+            if ($sortBy == "Tenggat Waktu") {
+                return $this->dao->searchDonationCategorySortAsc(1, $request->keyword, $category, 'deadline');
+            }
+            if ($sortBy == "Sedikit Terkumpul") {
+                return $this->dao->searchDonationCategorySortAsc(1, $request->keyword, $category, 'donationCollected');
+            }
+            //todo: sorting berdasarkan sisa target donasi yang paling sedikit
+            // if ($sortBy == "Sisa Target") {
+            //     return $this->dao->searchPetitionCategorySortTargetLeft(1, $request->keyword, $category, 'created_at');
+            // }
+            //todo: end of todo
+        }
+
+        // Search jika hanya berdasarkan category
+        if ($category != 0) {
+            return $this->dao->searchDonationCategory(1, $request->keyword, $category);
+        }
+
+        // Jika hanya berdasarkan sort
+        if ($sortBy != "None") {
+            if ($sortBy == "Tenggat Waktu") {
+                return $this->dao->searchDonationSortBy(1, $request->keyword, $category, 'deadline');
+            }
+            if ($sortBy == "Sedikit Terkumpul") {
+                return $this->dao->searchDonationSortBy(1, $request->keyword, $category, 'donationCollected');
+            }
+        }
+    }
+
+    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
+    public function sortDonation($request)
+    {
+        $category = $this->categorySelect($request);
+        $userId = $this->showProfile()->id;
+
+        //jika tidak sort dan tidak pilih category
+        if ($request->sortBy == "None" && $category == 0) {
+            return $this->getListDonation();
+        }
+
+        // Jika sort dipilih
+        if ($request->sortBy == "Sedikit Terkumpul") {
+            //jika category juga dipilih
+            if ($category != 0) {
+                // dd($this->dao->sortPetitionCategory($category, 1, 'signedCollected'));
+                return $this->dao->sortDonationCategory($category, 1, 'donationCollected');
+            }
+            // jika hanya sort
+            return $this->dao->sortDonation(1, 'donationCollected');
+        }
+
+        // Jika sort dipilih
+        if ($request->sortBy == "Tenggat Waktu") {
+            //jika category juga dipilih
+            if ($category != 0) {
+                return $this->dao->sortDonationCategory($category, 1, 'deadline');
+            }
+            // jika hanya sort
+            return $this->dao->sortDonation(1, 'deadline');
+        }
+
+        // Jika hanya pilih berdasarkan category
+        if ($request->sortBy == "None") {
+            return $this->dao->donationByCategory($category, 1);
+        }
+    }
 }

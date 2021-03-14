@@ -183,6 +183,20 @@ class EventController extends Controller
     //* =========================================================================================
     public function listDonation()
     {
-        return view('donation');
+        $donations = $this->eventService->getListDonation();
+        $categories = $this->eventService->listCategory();
+
+        return view('donation', compact('donations', 'categories'));
+    }
+    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
+    public function searchDonation(Request $request)
+    {
+        return $this->eventService->searchDonation($request);
+    }
+
+    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
+    public function sortDonation(Request $request)
+    {
+        return $this->eventService->sortDonation($request);
     }
 }

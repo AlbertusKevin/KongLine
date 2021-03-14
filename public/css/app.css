@@ -153,6 +153,16 @@ button.btn-new-petition{
     border-radius: 10px;
 }
 
+.img-donation {
+  height: 350px;
+  max-height: 350px;
+}
+
+.dropdown-menu {
+  max-height: 200px;
+  overflow: auto;
+}
+
 .card-top {
   margin-top: -50px;
 }

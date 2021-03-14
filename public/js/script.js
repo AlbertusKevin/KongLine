@@ -66,15 +66,48 @@ const listPetitionEmpty = () => {
     `;
 };
 
-const listPetitionTypeEmpty = (keyword) => {
+const changeDonationList = (donation) => {
     return /*html*/ `
-    <div class="card mb-3 ml-auto mr-auto mt-5" style="max-width: 650px;">
-        <div class="row no-gutters">
-            <div class="col-md-12 text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Tidak terdapat petisi dengan judul ~ ${keyword} ~ pada daftar ini</h5>
-                </div>
+    <div class="card col-md-4 p-2 mb-3" style="padding: 0; ">
+        <div style="position:relative;">
+            <img src=${donation.photo} class="img-donation card-img-top"
+                alt=" ${donation.title} donation's picture">
+            <p class="donate-count">${donation.totalDonatur} Donatur</p>
+            <p class="time-left">
+            ${Math.ceil(
+                (new Date(donation.deadline) - new Date().getTime()) /
+                    (60 * 60 * 24 * 1000)
+            )}
+                hari lagi
+            </p>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title title-donation">${donation.title}</h5>
+            <p class="card-text ">${donation.name}</p>
+            <div class="row d-flex justify-content-between">
+                <p class="font-weight-bold text-left pl-3">
+                    Rp. ${donation.donationCollected.toLocaleString("en")},00
+                </p>
+                <p class="font-weight-bold text-right">Rp.
+                    Rp. ${(
+                        donation.donationTarget - donation.donationCollected
+                    ).toLocaleString("en")},00
+                </p>
             </div>
+            <div class="row  d-flex justify-content-between">
+                <p class="font-weight-light text-left pl-3 mb-0">Terkumpul</p>
+                <p class="font-weight-light text-right pl-1 mb-0">Menuju Target</p>
+            </div>
+        </div>
+    </div>
+    `;
+};
+
+const listDonationEmpty = (keyword) => {
+    return /*html*/ `
+    <div class="card col-md-12 p-2 mb-3">
+        <div class="card-body">
+            <h5 class="card-title title-donation">Event donasi dengan judul ${keyword} tidak ditemukan</h5>
         </div>
     </div>
     `;
@@ -96,6 +129,27 @@ const sortListPetition = (sortBy, category, typePetition) => {
             } else {
                 html += listPetitionEmpty();
                 $("#petition-list").html(html);
+            }
+        },
+    });
+};
+
+const sortListDonation = (sortBy, category) => {
+    $.ajax({
+        url: "/donation/sort",
+        data: { sortBy, category },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                data.forEach((petition) => {
+                    // console.log(petition);
+                    html += changeDonationList(petition);
+                });
+                $("#donation-list").html(html);
+            } else {
+                html += listDonationEmpty();
+                $("#donation-list").html(html);
             }
         },
     });
@@ -127,7 +181,6 @@ $(".nav-link").ready(function () {
     }
 });
 
-//done
 $("#check-privacy-policy").on("click", function () {
     if (this.checked) {
         console.log("true");
@@ -245,4 +298,52 @@ $(".category-petition").on("click", function (e) {
     let sortBy = $("#sort-by").val();
     let typePetition = checkTypePetition($(".btn-primary").html());
     sortListPetition(sortBy, category, typePetition);
+});
+
+$("#search-donation").on("keyup", function () {
+    let keyword = $(this).val();
+    let category = $("#category-donation-selected").val();
+    let sortBy = $("#sort-donation-selected").val();
+
+    $.ajax({
+        url: "/donation/search",
+        data: { keyword, category, sortBy },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                data.forEach((donation) => {
+                    html += changeDonationList(donation);
+                });
+                $("#donation-list").html(html);
+            } else {
+                html += listDonationEmpty(keyword);
+                $("#donation-list").html(html);
+            }
+        },
+    });
+});
+
+$(".sort-select-donation").on("click", function (e) {
+    e.preventDefault();
+    let sortBy = $(this).html();
+    $("#sort-donation-selected").val(sortBy);
+
+    $(".sort-select-donation").removeClass("active");
+    $(this).addClass("active");
+
+    let category = $("#category-donation-selected").val();
+    sortListDonation(sortBy, category);
+});
+
+$(".category-select-donation").on("click", function (e) {
+    e.preventDefault();
+    let category = $(this).html();
+    $("#category-donation-selected").val(category);
+
+    $(".category-select-donation").removeClass("active");
+    $(this).addClass("active");
+
+    let sortBy = $("#sort-donation-selected").val();
+    sortListDonation(sortBy, category);
 });
