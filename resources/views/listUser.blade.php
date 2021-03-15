@@ -1,4 +1,4 @@
-@extends('layout.navbarOnly')
+@extends('layout.adminNavbar')
 
 @section('content')
 <div class="container">

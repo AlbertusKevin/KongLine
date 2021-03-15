@@ -73,6 +73,8 @@ class AuthController extends Controller
             'password' => $request->password,
         ]);
 
+        // dd($request->email . " " . $request->password);
+
         if ($temp == true) {
             return redirect('/home');
         } else {

@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
                 'password' => '',
                 'status' => 1,
                 'role' => 'guest',
-                'photoProfile' => 'images/profile/photo/default.svg'
+                'photoProfile' => 'images/profile/photo/default.png'
             ]
         );
         DB::table('users')->insert(
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('admin'),
                 'status' => 1,
                 'role' => 'admin',
-                'photoProfile' => 'images/profile/photo/default.svg'
+                'photoProfile' => 'images/profile/photo/default.png'
             ]
         );
         DB::table('users')->insert(
@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('participant'),
                 'status' => 1,
                 'role' => 'participant',
-                'photoProfile' => 'images/profile/photo/default.svg'
+                'photoProfile' => 'images/profile/photo/default.png'
             ]
         );
         DB::table('users')->insert(
@@ -55,7 +55,7 @@ class UserSeeder extends Seeder
                 'ktpPicture' => 'images/ktp/ktp011.jpg',
                 'nik' => '111222333444555',
                 'accountNumber' => '1234567890',
-                'photoProfile' => 'images/profile/photo/default.svg'
+                'photoProfile' => 'images/profile/photo/default.png'
             ]
         );
     }

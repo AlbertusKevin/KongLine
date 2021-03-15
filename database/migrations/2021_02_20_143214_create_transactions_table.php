@@ -20,7 +20,7 @@ class CreateTransactionsTable extends Migration
             $table->string('bank');
             $table->integer('nominal');
             $table->string('repaymentPicture');
-            $table->string('status');
+            $table->tinyInteger('status')->unsigned();
             $table->date('created_at');
         });
 
