@@ -478,4 +478,45 @@ class EventDao
             ->join('users', 'donation.idCampaigner', 'users.id')
             ->get();
     }
+
+    //! Mengurutkan donasi yang pernah diikuti participant sesuai kategori tertentu
+    public function sortDonationCategoryParticipated($category, $idParticipant)
+    {
+        return ParticipateDonation::selectRaw('donation.*, users.name as name, participate_donation.*')
+            ->where('participate_donation.idParticipant', $idParticipant)
+            ->where('donation.category', $category)
+            ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mengurutkan donasi yang pernah diikuti participant
+    public function sortDonationParticipated($idParticipant)
+    {
+        return ParticipateDonation::selectRaw('donation.*, users.name as name, participate_donation.*')
+            ->where('participate_donation.idParticipant', $idParticipant)
+            ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mengurutkan donasi yang pernah dibuat campaigner sesuai kategori tertentu
+    public function sortDonationCategoryByCampaigner($category, $idCampaigner)
+    {
+        return ParticipateDonation::selectRaw('donation.*, users.name as name')
+            ->where('donation.category', $category)
+            ->where('donation.idCampaigner', $category)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mengurutkan donasi yang pernah dibuat oleh campaigner
+    public function sortDonationByCampaigner($idCampaigner)
+    {
+        return ParticipateDonation::selectRaw('donation.*, users.name as name')
+            ->where('donation.idCampaigner', $idCampaigner)
+            ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
 }

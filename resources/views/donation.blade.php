@@ -22,6 +22,12 @@
                         <a class="dropdown-item sort-select-donation">Tenggat Waktu</a>
                         {{-- <a class="dropdown-item sort-select-donation">Sisa Target</a> --}}
                         <a class="dropdown-item sort-select-donation">Sedikit Terkumpul</a>
+                        @if ($user->role == 'campaigner')
+                            <a class="dropdown-item sort-select-donation">Donasi Saya</a>
+                        @endif
+                        @if ($user->role == 'campaigner' || $user->role == 'participant')
+                            <a class="dropdown-item sort-select-donation">Ikut Serta</a>
+                        @endif
                     </div>
                 </div>
                 <div class="dropdown transparent text-white">

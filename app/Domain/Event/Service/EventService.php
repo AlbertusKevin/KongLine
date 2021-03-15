@@ -473,7 +473,6 @@ class EventService
             return $this->dao->sortDonation(1, 'donationCollected');
         }
 
-        // Jika sort dipilih
         if ($request->sortBy == "Tenggat Waktu") {
             //jika category juga dipilih
             if ($category != 0) {
@@ -481,6 +480,24 @@ class EventService
             }
             // jika hanya sort
             return $this->dao->sortDonation(1, 'deadline');
+        }
+
+        if ($request->sortBy == "Donasi Saya") {
+            //jika category juga dipilih
+            if ($category != 0) {
+                return $this->dao->sortDonationCategoryByCampaigner($category, $userId);
+            }
+            // jika hanya sort
+            return $this->dao->sortDonationByCampaigner($userId);
+        }
+
+        if ($request->sortBy == "Ikut Serta") {
+            //jika category juga dipilih
+            if ($category != 0) {
+                return $this->dao->sortDonationCategoryParticipated($category, $userId);
+            }
+            // jika hanya sort
+            return $this->dao->sortDonationParticipated($userId);
         }
 
         // Jika hanya pilih berdasarkan category

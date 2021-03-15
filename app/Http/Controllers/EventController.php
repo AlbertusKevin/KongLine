@@ -185,8 +185,9 @@ class EventController extends Controller
     {
         $donations = $this->eventService->getListDonation();
         $categories = $this->eventService->listCategory();
+        $user = $this->eventService->showProfile();
 
-        return view('donation', compact('donations', 'categories'));
+        return view('donation', compact('donations', 'categories', 'user'));
     }
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
     public function searchDonation(Request $request)
