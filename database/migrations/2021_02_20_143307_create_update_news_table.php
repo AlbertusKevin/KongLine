@@ -16,9 +16,10 @@ class CreateUpdateNewsTable extends Migration
         Schema::create('update_news', function (Blueprint $table) {
             $table->id();
             $table->foreignId('idPetition');
+            $table->string('image');
+            $table->string('title');
             $table->longText('content');
             $table->string('link');
-            $table->string('title');
             $table->date('created_at');
         });
 
