@@ -60,10 +60,10 @@ class EventDao
         ]);
     }
 
-    public function deleteAccount($request, $id)
+    public function deleteAccount($id)
     {
         User::where('id', $id)->update([
-            'status' => $request->status = 0
+            'status' => 0
         ]);
     }
 

@@ -23,12 +23,12 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         $this->event_service->updateProfile($request, $id);
-        return redirect('profile/' . $id);
+        return redirect('profile' . $id);
     }
 
-    public function delete(Request $request, $id)
+    public function delete($id)
     {
-        $participant = $this->event_service->deleteAccount($request, $id);
-        return redirect('home/');
+        $this->event_service->deleteAccount($id);
+        return redirect('logout');
     }
 }

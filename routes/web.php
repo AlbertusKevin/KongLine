@@ -22,24 +22,31 @@ use App\Http\Controllers\HomeController;
 //! ========================== Controller untuk uji coba ==========================
 Route::get('/uji_coba', [DummyController::class, 'cobaModifikasiEntity']);
 
+Route::get('/donation', function () {
+    return view('donation');
+});
+
+
+
 //? =========================
 //! App Start
 //? =========================
 Route::get('/', function () {
     return redirect('/home');
 });
-
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //? =========================
-//! Route Profile
+//! Router Profile
 //? =========================
 Route::get('/profile/{id}', [ProfileController::class, 'edit']);
 Route::put('/profile/{id}', [ProfileController::class, 'update']);
-Route::put('/profile/{id}', [ProfileController::class, 'delete']);
+
+Route::get('/delete/{id}', [ProfileController::class, 'delete']);
+
 
 //? =========================
-//! Route Auth
+//! Router Auth
 //? =========================
 Route::get('/login', [AuthController::class, 'getLogin'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
@@ -48,7 +55,7 @@ Route::post('/register', [AuthController::class, 'postRegister'])->name('postReg
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //? =========================
-//! Route Petition
+//! Router Petition
 //? =========================
 //* --- pemanggilan ajax ---
 Route::get('/petition/type', [EventController::class, 'listPetitionType']);
@@ -66,17 +73,12 @@ Route::post('/petition/progress/{id}', [EventController::class, 'storeProgressPe
 Route::post('/petition/{id}', [EventController::class, 'signPetition']);
 
 //? =========================
-//! Router Donation
-//? =========================
-Route::get('/donation', [EventController::class, 'listDonation']);
-
-//? =========================
-//! Route Communication
+//! Router Communication
 //? =========================
 Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
 Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
 
 //? =========================
-//! Route Admin
+//! Router Admin
 //? =========================
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
