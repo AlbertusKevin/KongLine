@@ -74,6 +74,7 @@ class AuthController extends Controller
             'status' => $request->status
         ]);
 
+
         if ($request->status == 1) {
             if ($temp == true) {
                 return redirect('/home');

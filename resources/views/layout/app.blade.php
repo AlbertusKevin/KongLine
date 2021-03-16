@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Local Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
@@ -34,29 +35,28 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link" href="{{ url('/donation') }}">Donasi</a>
-                    <a class="nav-link" href="{{ url('/petisi') }}">Petisi</a>
+                    <a class="nav-link" href="{{ url('/petition') }}">Petisi</a>
                     <a class="nav-link" href="{{ url('/') }}">Forum</a>
+                    <a class="nav-link" href="{{ url('/inbox') }}">Service</a>
                     @if (Auth::check())
-
-
                         <div class="dropdown m-2 mr-2">
-                            <div class="" data-toggle="dropdown">
+                            <div data-toggle="dropdown">
                                 <img src="/img/profile.png">
                             </div>
-                            <div class="dropdown-menu mr-5">
+                            <div class="dropdown-menu">
                                 <a class="nav-link" href="{{ url('/profile/' . Auth::id()) }}">Edit Profile</a>
                                 <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
                             </div>
                         </div>
                     @else
-                        <a type="button" class="btn btn-outline-info ml-1 mr-2" href="login"> Login </a>
-                        <a type="button" class="btn btn-info mr-2" href="register"> Daftar </a>
+                        <a type="button" class="btn btn-outline-info ml-1 mr-2" href="{{ url('/login') }}"> Login </a>
+                        <a type="button" class="btn btn-info mr-2" href="{{ url('/register') }}"> Daftar </a>
                     @endif
                 </div>
             </div>
         </div>
         </div>
-        <a href="/inbox"><button>Service</button></a>
+
     </nav>
     @yield('content')
     <footer class="mt-5 pt-5">

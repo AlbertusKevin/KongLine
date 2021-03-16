@@ -4,8 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ServiceController;
-use Illuminate\Routing\Router;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DummyController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,64 +19,64 @@ use App\Http\Controllers\AdminController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-//? =========================
-//! Router percobaan
-//? =========================
-// Route::get('/', function () {
-//     // 1 guest, 2 admin, 3 participant, 4 campaigner
-//     session(['id_user' => 3]);
-//     return view('home');
-//     // return view('auth.register');
-// });
+//! ========================== Controller untuk uji coba ==========================
+Route::get('/uji_coba', [DummyController::class, 'cobaModifikasiEntity']);
 
+//? =========================
+//! App Start
+//? =========================
 Route::get('/', function () {
     return redirect('/home');
 });
 
-Route::get('/donation', function () {
-    return view('donation');
-});
-
-Route::get('/admin/listUser', function () {
-    return view('listUser');
-});
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //? =========================
-//! Router Profile
+//! Route Profile
 //? =========================
 Route::get('/profile/{id}', [ProfileController::class, 'edit']);
 Route::put('/profile/{id}', [ProfileController::class, 'update']);
 Route::put('/profile/{id}', [ProfileController::class, 'delete']);
 
 //? =========================
-//! Router Auth
+//! Route Auth
 //? =========================
-Route::get('/login', [App\Http\Controllers\AuthController::class, 'getLogin'])->name('login')->middleware('guest');
-Route::post('/login', [App\Http\Controllers\AuthController::class, 'postLogin'])->name('postLogin');
-Route::get('/register', [App\Http\Controllers\AuthController::class, 'getRegister'])->name('register')->middleware('guest');
-Route::post('/register', [App\Http\Controllers\AuthController::class, 'postRegister'])->name('postRegister');
-Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+Route::get('/login', [AuthController::class, 'getLogin'])->name('login')->middleware('guest');
+Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
+Route::get('/register', [AuthController::class, 'getRegister'])->name('register')->middleware('guest');
+Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //? =========================
-//! Router Petition
+//! Route Petition
 //? =========================
 //* --- pemanggilan ajax ---
-Route::get('/petisi/type', [EventController::class, 'listPetitionType']);
-Route::get('/petisi/search', [EventController::class, 'searchPetition']);
-Route::get('/petisi/sort', [EventController::class, 'sortPetition']);
+Route::get('/petition/type', [EventController::class, 'listPetitionType']);
+Route::get('/petition/search', [EventController::class, 'searchPetition']);
+Route::get('/petition/sort', [EventController::class, 'sortPetition']);
 
-Route::get('/petisi', [EventController::class, 'indexPetition']);
-Route::get('/petisi/{id}', [EventController::class, 'showPetition']);
+Route::get('/petition', [EventController::class, 'indexPetition']);
+Route::get('/petition/create', [EventController::class, 'createPetition']);
+Route::post('/petition/create', [EventController::class, 'storePetition']);
+Route::get('/petition/{id}', [EventController::class, 'showPetition']);
+Route::get('/petition/comments/{id}', [EventController::class, 'commentPetition']);
+Route::get('/petition/progress/{id}', [EventController::class, 'progressPetition']);
+Route::post('/petition/progress/{id}', [EventController::class, 'storeProgressPetition']);
 
-Route::post('/petisi/{id}', [EventController::class, 'signPetition']);
+Route::post('/petition/{id}', [EventController::class, 'signPetition']);
 
+//? =========================
+//! Router Donation
+//? =========================
+Route::get('/donation', [EventController::class, 'listDonation']);
 
-// Route::group(['middleware' => 'auth'], function () {
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//? =========================
+//! Route Communication
+//? =========================
 Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
 Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
-// });
 
+//? =========================
+//! Route Admin
+//? =========================
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);

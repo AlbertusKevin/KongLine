@@ -2416,12 +2416,6 @@
                 "sweet-alert2",
                 "toast"
             ],
-            "support": {
-                "docs": "https://realrashid.github.io/sweet-alert/",
-                "email": "realrashid05@gmail.com",
-                "issues": "https://github.com/realrashid/sweet-alert/issues",
-                "source": "https://github.com/realrashid/sweet-alert"
-            },
             "funding": [
                 {
                     "url": "https://ko-fi.com/realrashid",

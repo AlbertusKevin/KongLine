@@ -39,3 +39,9 @@
 .online-icon {
     font-size: 11px !important;
 }
+
+/* Petition Style */
+.btn-create-petition {
+    background: #147C85;
+    color: white;
+}
