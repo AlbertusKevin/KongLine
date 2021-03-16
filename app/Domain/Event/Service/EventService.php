@@ -80,6 +80,11 @@ class EventService
         $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
+    public function deleteAccount($id) 
+    {
+        return $this->dao->deleteAccount($id);
+    }
+
     //* =========================================================================================
     //* ------------------------------------ Service Petisi -------------------------------------
     //* =========================================================================================

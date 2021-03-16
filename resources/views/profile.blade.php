@@ -98,7 +98,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary mt-5">Simpan</button>
-            <button type="submit" class="btn btn-danger mt-5">Hapus Akun</button>
+            <a type="button" href="/delete/{{  $participant->id }}" class="btn btn-danger mt-5">Hapus Akun</a>
         </form>
     </div>
 @endsection
