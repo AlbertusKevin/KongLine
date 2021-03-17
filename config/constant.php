@@ -1,7 +1,4 @@
 <?php
-
-namespace App\Config\Constant;
-
 // Status Event
 define("NOT_CONFIRMED", 0);
 define("ACTIVE", 1);
@@ -11,6 +8,7 @@ define("CANCELED", 4);
 
 // Status User
 define("DELETED", 0);
+//ACTIVE, 1 -> gunakan yang ada pada status event
 define("BLOCKED", 2);
 define("WAITING", 3);
 
@@ -24,7 +22,7 @@ define("CAMPAIGNER", "campaigner");
 define("PETITION", "petition");
 define("DONATION", "donation");
 
-//event type
+//petition type
 define("BERLANGSUNG", "berlangsung");
 define("MENANG", "menang");
 define("PARTISIPASI", "partisipasi");

@@ -432,14 +432,37 @@ class EventService
     //* =========================================================================================
     //* ------------------------------------ Service Donasi -------------------------------------
     //* =========================================================================================
+    public function checkValidDate($donation)
+    {
+        $time = Carbon::now()->format("Y-m-d");
+
+        // dd("Deadline: " . strtotime($donation->deadline) . " | Today: " . strtotime($time) . " | Selisih: " . (strtotime($donation->deadline) - strtotime($time)));
+        if (strtotime($donation->deadline) - strtotime($time) <= 0) {
+            $this->dao->updateStatusEvent($donation->id, FINISHED);
+        } else {
+            return $donation;
+        }
+
+        return;
+    }
+
     public function getListDonation()
     {
-        return $this->dao->getListDonation();
+        $listDonation = $this->dao->getListDonation();
+        $list = [];
+
+        foreach ($listDonation as $donation) {
+            $list[] = $this->checkValidDate($donation);
+        }
+
+        return $list;
     }
 
     //! {{-- lewat ajax --}} Mencari donasi sesuai urutan dan kategori yang dipilih
     public function searchDonation($request)
     {
+        $this->getListDonation();
+
         $userId = $this->showProfile()->id;
         $category = $this->categorySelect($request);
         $sortBy = $request->sortBy;
@@ -457,6 +480,15 @@ class EventService
             if ($sortBy == SMALL_COLLECTED) {
                 return $this->dao->searchDonationCategorySortAsc(ACTIVE, $request->keyword, $category, COLLECTED_COLUMN);
             }
+
+            if ($sortBy == MY_DONATION) {
+                return $this->dao->searchDonationCategoryByMe($request->keyword, $category, $userId);
+            }
+
+            if ($request->sortBy == PARTICIPATED_DONATION) {
+                return $this->dao->searchDonationCategoryParticipated($request->keyword, $category, $userId);
+            }
+
             //todo: sorting berdasarkan sisa target donasi yang paling sedikit
             // if ($sortBy == "Sisa Target") {
             //     return $this->dao->searchPetitionCategorySortTargetLeft(ACTIVE, $request->keyword, $category, CREATED);
@@ -472,10 +504,19 @@ class EventService
         // Jika hanya berdasarkan sort
         if ($sortBy != NONE) {
             if ($sortBy == DEADLINE) {
-                return $this->dao->searchDonationSortBy(ACTIVE, $request->keyword, $category, DEADLINE_COLUMN);
+                return $this->dao->searchDonationSortBy(ACTIVE, $request->keyword, DEADLINE_COLUMN);
             }
+
             if ($sortBy == SMALL_COLLECTED) {
-                return $this->dao->searchDonationSortBy(ACTIVE, $request->keyword, $category, COLLECTED_COLUMN);
+                return $this->dao->searchDonationSortBy(ACTIVE, $request->keyword, COLLECTED_COLUMN);
+            }
+
+            if ($sortBy == MY_DONATION) {
+                return $this->dao->searchDonationByMe($request->keyword, $userId);
+            }
+
+            if ($request->sortBy == PARTICIPATED_DONATION) {
+                return $this->dao->searchDonationParticipated($request->keyword, $userId);
             }
         }
     }
@@ -483,6 +524,8 @@ class EventService
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
     public function sortDonation($request)
     {
+        $this->getListDonation();
+
         $category = $this->categorySelect($request);
         $userId = $this->showProfile()->id;
 

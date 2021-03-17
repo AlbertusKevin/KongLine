@@ -294,7 +294,7 @@ class EventDao
     //! Menampilkan seluruh daftar petisi yang sedang aktif
     public function indexPetition()
     {
-        return Petition::where('status', 1)->get();
+        return Petition::where('status', ACTIVE)->get();
     }
 
     //! Menampilkan detail petisi tertentu berdasarkan ID
@@ -380,7 +380,7 @@ class EventDao
     public function getListDonation()
     {
         return Donation::selectRaw('donation.*, users.name as name')
-            ->where('donation.status', 1)
+            ->where('donation.status', ACTIVE)
             ->join('users', 'donation.idCampaigner', 'users.id')
             ->get();
     }
@@ -446,13 +446,61 @@ class EventDao
             ->get();
     }
 
+    //! Mencari donasi sesuai dengan
+    //! keyword, kategori tertentu, dan donasi yang pernah dibuat campaigner
+    public function searchDonationCategoryByMe($keyword, $category, $idCampaigner)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.category', $category)
+            ->where('donation.idCampaigner', $idCampaigner)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mencari donasi sesuai dengan
+    //! keyword, kategori tertentu, dan donasi yang pernah diikuti participant
+    public function searchDonationCategoryParticipated($keyword, $category, $idParticipant)
+    {
+        return ParticipateDonation::selectRaw('donation.*, users.name as name, participate_donation.*')
+            ->where('participate_donation.idParticipant', $idParticipant)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->where('donation.category', $category)
+            ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mencari donasi sesuai dengan
+    //! keyword, kategori tertentu, dan donasi yang pernah dibuat campaigner
+    public function searchDonationByMe($keyword, $idCampaigner)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.idCampaigner', $idCampaigner)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mencari donasi sesuai dengan
+    //! keyword, kategori tertentu, dan donasi yang pernah diikuti participant
+    public function searchDonationParticipated($keyword, $idParticipant)
+    {
+        return ParticipateDonation::selectRaw('donation.*, users.name as name, participate_donation.*')
+            ->where('participate_donation.idParticipant', $idParticipant)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
     //! Mengurutkan donasi sesuai dengan
-    //! sorting desc dan kategori tertentu
+    //! sorting ascending dan kategori tertentu
     public function sortDonationCategory($category, $status, $table)
     {
         return Donation::selectRaw('donation.*, users.name as name')
             ->where('donation.status', $status)
-            ->where('category', $category)
+            ->where('donation.category', $category)
             ->join('users', 'donation.idCampaigner', 'users.id')
             ->orderBy($table)
             ->get();
@@ -503,9 +551,9 @@ class EventDao
     //! Mengurutkan donasi yang pernah dibuat campaigner sesuai kategori tertentu
     public function sortDonationCategoryByCampaigner($category, $idCampaigner)
     {
-        return ParticipateDonation::selectRaw('donation.*, users.name as name')
+        return Donation::selectRaw('donation.*, users.name as name')
             ->where('donation.category', $category)
-            ->where('donation.idCampaigner', $category)
+            ->where('donation.idCampaigner', $idCampaigner)
             ->join('users', 'donation.idCampaigner', 'users.id')
             ->get();
     }
@@ -518,5 +566,12 @@ class EventDao
             ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
             ->join('users', 'donation.idCampaigner', 'users.id')
             ->get();
+    }
+
+    public function updateStatusEvent($id, $status)
+    {
+        Donation::where('id', $id)->update([
+            'status' => $status
+        ]);
     }
 }
