@@ -54,34 +54,8 @@ class EventController extends Controller
     {
         $user = $this->eventService->showProfile();
         $petition = $this->eventService->showPetition($idEvent);
-
-        if ($user->role != "guest") {
-            $isParticipated = $this->eventService->checkParticipated($idEvent, $user->id, 'petition');
-        } else {
-            $isParticipated = false;
-        }
-
-        if ($petition->status == 0) {
-            $message = [
-                'header' => 'Menunggu Konfirmasi',
-                'content' => 'Event ini sudah didaftarkan. Tunggu konfirmasi dari pihak admin.'
-            ];
-        } else if ($petition->status == 2) {
-            $message = [
-                'header' => 'Telah Selesai',
-                'content' => 'Event ini sudah selesai. Tidak menerima tandatangan lagi.'
-            ];
-        } else if ($petition->status == 3) {
-            $message = [
-                'header' => 'Sudah Ditutup',
-                'content' => 'Event ini telah ditutup oleh penyelenggara / admin.'
-            ];
-        } else {
-            $message = [
-                'header' => 'Dibatalkan',
-                'content' => 'Event ini dibatalkan oleh penyelenggara.'
-            ];
-        }
+        $isParticipated = $this->eventService->checkParticipated($idEvent, $user, PETITION);
+        $message = $this->eventService->messageOfEvent($petition->status);
 
         return view('petition.petitionDetail', compact('petition', 'user', 'isParticipated', 'message'));
     }
@@ -134,7 +108,7 @@ class EventController extends Controller
     //! Memproses tandatangan peserta pada petisi tertentu
     public function signPetition(Request $request, $idEvent)
     {
-        $user = Auth::user();
+        $user = $this->eventService->showProfile();
         $this->eventService->signPetition($request, $idEvent, $user);
         Alert::success('Berhasil Menandatangai petisi ini.', 'Terimakasih ikut berpartisipasi!');
         return redirect("/petition/" . $idEvent);
