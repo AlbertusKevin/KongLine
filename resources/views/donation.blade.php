@@ -61,7 +61,8 @@
                         </p>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title title-donation">{{ $donation->title }}</h5>
+                        <h5 class="card-title title-donation"><a
+                                href="/donation/{{ $donation->id }}">{{ $donation->title }}</a></h5>
                         <p class="card-text ">{{ $donation->name }}</p>
                         <div class="row d-flex justify-content-between">
                             <p class="font-weight-bold text-left pl-3">Rp.

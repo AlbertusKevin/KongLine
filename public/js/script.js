@@ -66,6 +66,20 @@ const listPetitionEmpty = () => {
     `;
 };
 
+const listPetitionTypeEmpty = (keyword) => {
+    return /*html*/ `
+    <div class="card mb-3 ml-auto mr-auto mt-5" style="max-width: 650px;">
+        <div class="row no-gutters">
+            <div class="col-md-12 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Tidak terdapat petisi dengan judul ~ ${keyword} ~ pada daftar ini</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+};
+
 const changeDonationList = (donation) => {
     return /*html*/ `
     <div class="card col-md-4 p-2 mb-3" style="padding: 0; ">
@@ -181,14 +195,58 @@ $(".nav-link").ready(function () {
     }
 });
 
+$("#check-terms-agreement").on("click", function () {
+    if (this.checked) {
+        $(".verify-profile").attr("disabled", false);
+    } else {
+        $(".verify-profile").attr("disabled", true);
+    }
+});
+
 $("#check-privacy-policy").on("click", function () {
     if (this.checked) {
-        console.log("true");
         $("#sign-petition-button").attr("disabled", false);
     } else {
-        console.log("false");
         $("#sign-petition-button").attr("disabled", true);
     }
+});
+
+$(".verification-create-petition").on("click", function () {
+    const email = $("#email").val();
+    const phone = $("#phone").val();
+    const _token = $(this).parent().prev().prev().prev().val();
+
+    $.ajax({
+        url: "/petition/create/verification",
+        method: "post",
+        data: { email, phone, _token },
+        dataType: "json",
+        success: (checked) => {
+            $(".close-dismiss").trigger("click");
+            if (checked == "Validation Error") {
+                swal(
+                    "Verifikasi gagal",
+                    "Periksa kembali input Anda.",
+                    "error"
+                );
+            } else if (checked) {
+                swal("Berhasil", "Verifikasi Berhasil!", "success");
+                console.log($(".new-petition"));
+                $(".new-petition").removeAttr("disabled");
+            } else {
+                swal(
+                    "Verifikasi Gagal",
+                    `Data dengan email ${email} dan ${phone} tidak ditemukan`,
+                    "error"
+                );
+            }
+        },
+    });
+});
+
+$(".donation-detail").on("click", function () {
+    $(".donation-detail").removeClass("active");
+    $(this).addClass("active");
 });
 
 $(".petition-type").on("click", function () {
@@ -224,8 +282,6 @@ $(".petition-type").on("click", function () {
             "Lihat Petisi yang Telah Saya Tandatangani di Website Ini"
         );
     }
-
-    console.log(typePetition);
 
     $.ajax({
         url: "/petition/type",

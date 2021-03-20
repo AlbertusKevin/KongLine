@@ -34,6 +34,11 @@ class EventDao
             return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
         }
     }
+    //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
+    public function verifyProfile($email, $phone)
+    {
+        return User::where('email', $email)->where('phoneNumber', $phone)->first();
+    }
 
     //* =========================================================================================
     //* ------------------------------------- DAO Profile ---------------------------------------
@@ -383,6 +388,15 @@ class EventDao
             ->where('donation.status', ACTIVE)
             ->join('users', 'donation.idCampaigner', 'users.id')
             ->get();
+    }
+
+    //! Mengambil seluruh donasi dengan status aktif / sedang berlangsung
+    public function getADonation($id)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.id', $id)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->first();
     }
 
     //! Mencari Donasi sesuai dengan 

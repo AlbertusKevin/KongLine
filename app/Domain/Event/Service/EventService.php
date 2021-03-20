@@ -429,6 +429,18 @@ class EventService
         return false;
     }
 
+    //! Mengecek verifikasi data diri yang diberikan sebelum membuat event
+    public function verifyProfile($email, $phone)
+    {
+        $campaigner = $this->dao->verifyProfile($email, $phone);
+
+        if (empty($campaigner)) {
+            return false;
+        }
+
+        return true;
+    }
+
     //* =========================================================================================
     //* ------------------------------------ Service Donasi -------------------------------------
     //* =========================================================================================
@@ -456,6 +468,16 @@ class EventService
         }
 
         return $list;
+    }
+
+    public function getADonation($id)
+    {
+        return $this->dao->getADonation($id);
+    }
+
+    public function countProgressDonation($donation)
+    {
+        return ($donation->donationCollected / $donation->donationTarget) * 100;
     }
 
     //! {{-- lewat ajax --}} Mencari donasi sesuai urutan dan kategori yang dipilih

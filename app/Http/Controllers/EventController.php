@@ -122,6 +122,21 @@ class EventController extends Controller
         return view('petition.petitionCreate', compact('user', 'listCategory'));
     }
 
+    //! Mengecek verifikasi data diri yang diberikan sebelum membuat event
+    public function verifyProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'phone' => 'numeric|nullable'
+        ]);
+
+        if ($validator->fails()) {
+            return json_encode("Validation Error");
+        };
+
+        return json_encode($this->eventService->verifyProfile($request->email, $request->phone));
+    }
+
     //! Menyimpan data petisi ke database
     public function storePetition(Request $request)
     {
@@ -163,6 +178,16 @@ class EventController extends Controller
 
         return view('donation', compact('donations', 'categories', 'user'));
     }
+
+    public function getADonation($id)
+    {
+        $donation = $this->eventService->getADonation($id);
+        $user = $this->eventService->showProfile();
+        $progress = $this->eventService->countProgressDonation($donation);
+        // dd($donation);
+        return view('donationDetail', compact('donation', 'user', 'progress'));
+    }
+
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
     public function searchDonation(Request $request)
     {
