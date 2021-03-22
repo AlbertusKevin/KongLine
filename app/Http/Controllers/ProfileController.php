@@ -16,8 +16,8 @@ class ProfileController extends Controller
 
     public function edit($id)
     {
-        $participant = $this->event_service->editProfile($id);
-        return view('profile', compact('participant'));
+        $user = $this->event_service->editProfile($id);
+        return view('profile', compact('user'));
     }
 
     public function update(Request $request, $id)

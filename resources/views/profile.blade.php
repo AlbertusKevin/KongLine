@@ -1,11 +1,11 @@
 @extends('layout.app')
 
 @section('content')
-    <div class="jumbotron text-center" style="background-image: url('/{{ $participant->backgroundPicture }}');">
-        <img src="/{{ $participant->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
-        <h3 class="display-4">{{ $participant->name }}</h3>
+    <div class="jumbotron text-center" style="background-image: url('/{{ $user->backgroundPicture }}');">
+        <img src="/{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
+        <h3 class="display-4">{{ $user->name }}</h3>
         <p class="lead">Pengguna sejak 5 Feb 2021</p>
-        <a href="{{ $participant->linkProfile }}" target="_blank" class="lead">{{ $participant->linkProfile }}</a>
+        <a href="{{ $user->linkProfile }}" target="_blank" class="lead">{{ $user->linkProfile }}</a>
         <p class="mt-5">Terima kasih telah menjadi anggota aktif dari komunitas kami. </p>
     </div>
 
@@ -22,14 +22,22 @@
         <div class="row">
             <div class="card w-100">
                 <div class="card-body">
-                    <p class="card-text">Ubah Sandi</p>
+                    <a href="#" type="button" class="card-text">Ubah Sandi</a>
                 </div>
             </div>
-            <div class="card w-100 mt-2">
-                <div class="card-body">
-                    <p class="card-text">Upgrade to Campaigner</p>
+            @if ($user->role == 'participant')
+                <div class="card w-100 mt-2">
+                    <div class="card-body">
+                        <a href="#" type="button" class="card-text">Upgrade to Campaigner</a>
+                    </div>
                 </div>
-            </div>
+            @else
+                <div class="card w-100 mt-2">
+                    <div class="card-body">
+                        <a href="#" type="button" class="card-text">Data Campaigner</a>
+                    </div>
+                </div>
+            @endif
         </div>
         <div class="row mt-5">
             <div class="col-md-0 ml-3"><img src="/img/edit.png" alt="profile 2"></div>
@@ -41,21 +49,21 @@
             <p class="ml-3">Atur akses akun dan kelola data yang kami gunakan untuk mempersonalisasi pengalamanmu.</p>
         </div>
 
-        <form action="/profile/{{ $participant->id }}" method="POST" enctype="multipart/form-data">
+        <form action="/profile/{{ $user->id }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="form-group">
                 <label for="name">Nama Lengkap</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ $participant->name }}">
+                <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
             </div>
             <div class="form-group">
                 <label for="about">Tentang Saya</label>
                 <textarea class="form-control" id="about" rows="3" name="aboutMe"
-                    value="{{ $participant->aboutMe }}"></textarea>
+                    value="{{ $user->aboutMe }}"></textarea>
             </div>
             <div class="form-group">
                 <label for="kota">Kota</label>
-                <input type="text" class="form-control" id="kota" name="city" value="{{ $participant->city }}">
+                <input type="text" class="form-control" id="kota" name="city" value="{{ $user->city }}">
             </div>
             <div class="form-group">
                 <label for="negara">Negara</label>
@@ -68,24 +76,24 @@
             <div class="form-group">
                 <label for="link">Tautan Singkat Profile</label>
                 <input type="text" class="form-control" id="link" name="linkProfile"
-                    value="{{ $participant->linkProfile }}">
+                    value="{{ $user->linkProfile }}">
             </div>
 
             <div class="form-group">
                 <label for="alamat">Alamat</label>
-                <input type="text" class="form-control" id="alamat" name="address" value="{{ $participant->address }}">
+                <input type="text" class="form-control" id="alamat" name="address" value="{{ $user->address }}">
             </div>
 
             <div class="form-row">
                 <div class="col">
                     <label for="postcode">Kode Pos</label>
                     <input type="text" class="form-control" id="postcode" name="zipCode"
-                        value="{{ $participant->zipCode }}">
+                        value="{{ $user->zipCode }}">
                 </div>
                 <div class="col">
                     <label for="phone">Nomor Telephone</label>
                     <input type="text" class="form-control" id="phone" name="phoneNumber"
-                        value="{{ $participant->phoneNumber }}">
+                        value="{{ $user->phoneNumber }}">
                 </div>
             </div>
             <div class="form-row mt-2">
@@ -98,7 +106,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary mt-5">Simpan</button>
-            <a type="button" href="/delete/{{  $participant->id }}" class="btn btn-danger mt-5">Hapus Akun</a>
+            <a type="button" href="/delete/{{  $user->id }}" class="btn btn-danger mt-5">Hapus Akun</a>
         </form>
     </div>
 @endsection
