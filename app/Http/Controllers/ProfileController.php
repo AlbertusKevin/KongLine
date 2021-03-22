@@ -31,4 +31,16 @@ class ProfileController extends Controller
         $this->event_service->deleteAccount($id);
         return redirect('logout');
     }
+
+    public function editCampaigner($id)
+    {
+        $user = $this->event_service->editProfile($id);
+        return view('updateCampaigner', compact('user'));
+    }
+
+    public function updateCampaigner(Request $request, $id)
+    {
+        $this->event_service->requestUserToCampaigner($request, $id);
+        return redirect('profile' . $id);
+    }
 }

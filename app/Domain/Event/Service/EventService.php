@@ -85,6 +85,14 @@ class EventService
         return $this->dao->deleteAccount($id);
     }
 
+    public function requestUserToCampaigner($request, $id)
+    {
+        if (strlen($request->nik) == 16) {
+            $pathKTP = $this->uploadImage($request->file('profile/KTP_picture'), 'KTP');
+            $this->dao->updateToCampaigner($request, $id, $pathKTP);
+        }
+    }
+
     //* =========================================================================================
     //* ------------------------------------ Service Petisi -------------------------------------
     //* =========================================================================================

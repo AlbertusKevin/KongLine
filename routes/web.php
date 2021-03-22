@@ -44,9 +44,8 @@ Route::put('/profile/{id}', [ProfileController::class, 'update']);
 
 Route::get('/delete/{id}', [ProfileController::class, 'delete']);
 
-Route::get('/profileUpdate', function () {
-    return view('updateCampaigner');
-});
+Route::get('/update/campaigner/{id}', [ProfileController::class, 'editCampaigner']);
+Route::put('/update/campaigner/{id}', [ProfileController::class, 'updateCampaigner']);
 
 //? =========================
 //! Router Auth

@@ -67,6 +67,15 @@ class EventDao
         ]);
     }
 
+    public function updateToCampaigner($request, $id, $pathKTP)
+    {
+        User::where('id', $id)->update([
+            'nik' => $request->nik,
+            'accountNumber' => $request->accountNumber,
+            'ktpPicture' => $pathKTP,
+        ]);
+    }
+
     //* =========================================================================================
     //* -------------------------------------- DAO Petisi ---------------------------------------
     //* =========================================================================================
