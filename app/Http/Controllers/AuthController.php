@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Carbon;
 
 class AuthController extends Controller
 {
@@ -79,20 +83,70 @@ class AuthController extends Controller
                 // dd("yooo");
                 return redirect('/home');
             }
-            
+
             Alert::error('Akun tidak ditemukan', 'Silahkan coba lagi');
             return view('auth.login');
             // dd(Auth::user()->status == 1 || Auth::user()->status == 3);
         }
-        
+
         Alert::error('Email atau password salah', 'Silahkan coba lagi');
         return redirect('/login');
-        
+
     }
-    
+
     public function logout()
     {
         Auth::logout();
         return redirect('/login');
+    }
+
+    public function getForgot()
+    {
+        return view('auth.forgot');
+    }
+
+    public function postForgot(Request $request){
+        $request->validate([
+            'email' => 'required|email|exists:users',
+        ]);
+
+        $token = Str::random(64);
+
+        DB::table('password_resets')->insert(
+            ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]
+        );
+
+        Mail::send('auth.verify', ['token' => $token, 'email' => $request->email ], function($message) use($request){
+            $message->to($request->email);
+            $message->subject('Reset Password');
+        });
+
+        Alert::toast('Silahkan cek email Anda');
+        return back();
+    }
+
+    public function getReset($email, $token){
+        return view('auth.reset', ['token' => $token , 'email' => $email]);
+    }
+
+    public function postReset(Request $request){
+
+
+
+        $updatePassword = DB::table('password_resets')
+                            ->where(['email' => $request->email, 'token' => $request->token])
+                            ->first();
+
+        if(!$updatePassword){
+            Alert::toast('Token salah');
+            return back();
+        }
+
+        $user = User::where('email', $request->email)
+            ->update(['password' => Hash::make($request->password)]);
+
+        DB::table('password_resets')->where(['email'=> $request->email])->delete();
+
+        return redirect('/login')->with('message', 'Your password has been changed!');
     }
 }

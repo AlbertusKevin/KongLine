@@ -4,6 +4,7 @@
         <li>buat database (phpmyadmin, mariadb) dengan nama &lt;nama&gt;</li>
         <li>Jalankan: composer install</li>
         <li>Copy file env.example, rename file copy dengan .env, sesuaikan: DB_DATABASE= &lt;nama &gt; (line 13)</li>
+        <li> untuk mengaktifkan verifikasi email , ubah .env (baca line 32) </li>
         <li>php artisan key:generate</li>
         <li>php artisan migrate:fresh --seed (untuk migrasi ulang database dan juga memanggil seeder)</li>
     </ul>
@@ -26,6 +27,21 @@
 <a href="https:/s/packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
+
+
+## Untuk Verifikasi Email:
+ubah .env
+
+APP_NAME=YukBisaYuk
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME=teknikinformatikaithb18@gmail.com
+MAIL_PASSWORD=8084ithb
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS=teknikinformatikaithb18@gmail.com
+MAIL_FROM_NAME="${APP_NAME}"
+
 
 ## About Laravel
 
