@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row mt-5">
-        <div class="col-md-0 ml-3"><img src="/img/campaignerProfile.png" alt="profile campaigner"></div>
+        <div class="col-md-0 ml-3"><img src="/img/campaignerProfile.png" alt="profile 2"></div>
         <div class="col-md ml-3">
             <h3>Data Campaigner</h3>
         </div>
@@ -32,7 +32,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary mt-5">Simpan</button>
-        {{--  <a type="button" class="btn btn-light mt-5">Batal</a>  --}}
+        <a type="button" class="btn btn-light mt-5">Batal</a>
     </form>
 </div>
 @endsection

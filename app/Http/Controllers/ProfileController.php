@@ -35,7 +35,7 @@ class ProfileController extends Controller
     public function editCampaigner($id)
     {
         $user = $this->event_service->editProfile($id);
-        return view('updateCampaigner', compact('user'));
+        return view('updatCampaigner', compact('user'));
     }
 
     public function updateCampaigner(Request $request, $id)

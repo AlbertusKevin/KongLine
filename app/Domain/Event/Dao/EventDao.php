@@ -67,11 +67,11 @@ class EventDao
         ]);
     }
 
-    public function updateToCampaigner($request, $id, $pathKTP)
+    public function updateToCampaigner($request, $id, $pathCampaigner)
     {
         User::where('id', $id)->update([
-            'nik' => $request->nik,
-            'accountNumber' => $request->accountNumber,
+            'name' => $request->name,
+            'aboutMe' => $request->aboutMe,
             'ktpPicture' => $pathKTP,
         ]);
     }
