@@ -29,4 +29,16 @@ class AdminDao
     {
         return User::where('role', $role)->get();
     }
+
+    public function listUserByAll()
+    {
+        return User::where('role', '!=', 'admin')
+                            ->orWhereNull('role')
+                            ->get();
+    }
+
+    public function listUserByPengajuan()
+    {
+        return User::where('status', '==', 3)->get();
+    }
 }

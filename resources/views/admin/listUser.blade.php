@@ -31,7 +31,6 @@
         <button href="/listUser" type="button" class="btn btn-light role-type rounded-pill ml-3">Campaigner</button>
         <button href="/listUser" type="button" class="btn btn-light role-type rounded-pill ml-3">Pengajuan</button>
     </div>
-    
     <table class="table table-borderless">
         <thead style="background-color:#E2E2E2">
           <tr class="text-left font-weight-normal">
@@ -42,43 +41,41 @@
             <th scope="col">Status</th>
           </tr>
         </thead>
-        <tbody>
-            <div id="user-list-role">
-                @if (count($users) == 0)
+        <tbody id="user-list-role">
+            @if (count($users) == 0)
+                <tr>
+                    <td colspan="5" class="text-center">There is no Data</td>
+                </tr>
+            @endif
+            @for ($i = 0; $i < sizeof($users); $i++)
+                @if ($users[$i]->role != 'admin')
                     <tr>
-                        <td colspan="5" class="text-center">There is no Data</td>
+                        <td class="text-center">
+                            {{ $changeDateFormat[$i]}}
+                        </td>
+                        <td>
+                            {{ $users[$i]->name}}
+                        </td>
+                        <td>
+                            {{ $users[$i]->email}}
+                        </td>
+                        @if ($eventCount[$i][0] == $users[$i] -> id)
+                            <td>
+                                {{ $eventCount[$i][1]}}
+                            </td>
+                        @endif
+                        <td class="text-left">
+                            @if ($users[$i]->role == 'guest')
+                                <span class="badge badge-dark p-2">{{ $users[$i]->role}}</span>
+                            @elseif ($users[$i]->role == 'participant')
+                                <span class="badge badge-primary p-2">{{ $users[$i]->role}}</span>
+                            @elseif ($users[$i]->role == 'campaigner')
+                                <span class="badge badge-success p-2">{{ $users[$i]->role}}</span>
+                            @endif
+                        </td>
                     </tr>
                 @endif
-                @for ($i = 0; $i < sizeof($users); $i++)
-                    @if ($users[$i]->role != 'admin')
-                        <tr>
-                            <td class="text-center">
-                                {{ $changeDateFormat[$i]}}
-                            </td>
-                            <td>
-                                {{ $users[$i]->name}}
-                            </td>
-                            <td>
-                                {{ $users[$i]->email}}
-                            </td>
-                            @if ($eventCount[$i][0] == $users[$i] -> id)
-                                <td>
-                                    {{ $eventCount[$i][1]}}
-                                </td>
-                            @endif
-                            <td class="text-left">
-                                @if ($users[$i]->role == 'guest')
-                                    <span class="badge badge-dark p-2">{{ $users[$i]->role}}</span>
-                                @elseif ($users[$i]->role == 'participant')
-                                    <span class="badge badge-primary p-2">{{ $users[$i]->role}}</span>
-                                @elseif ($users[$i]->role == 'campaigner')
-                                    <span class="badge badge-success p-2">{{ $users[$i]->role}}</span>
-                                @endif
-                            </td>
-                        </tr>
-                    @endif
-                @endfor
-            </div>
+            @endfor
         </tbody>
       </table>
       

@@ -35,6 +35,8 @@ class AdminService
             array_push($eventCount, $totalCount);
         }
         return $eventCount;
+            
+        
     }
 
     //Mengubah Format tanggal, ex:2019-10-02 ---> 2019/10/02
@@ -60,7 +62,7 @@ class AdminService
             return $this->dao->listUserByRole($roleType);
         }elseif($roleType == 'pengajuan'){
             return $this->dao->listUserByPengajuan();
-        }else{
+        }elseif($roleType == 'semua'){
             return $this->dao->listUserByAll();
         }
     }

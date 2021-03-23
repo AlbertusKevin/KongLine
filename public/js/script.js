@@ -1,3 +1,4 @@
+
 // fungsi umum
 const checkTypePetition = (type) => {
     if (type.includes("Berlangsung")) {
@@ -249,36 +250,87 @@ $(".category-petition").on("click", function (e) {
 
 // ADMIN
 
-const viewUserByRole = (user) => {
-    if (user.role != "admin") {
-        console.log("role : " + user.role);
-        return /*html*/ `
+const viewUserParticipantRole = (user, countParticipated) => {
+    console.log("role : " + user.role);
+    // console.log("tanggal : " + user.created_at);
+    return /*html*/ `
         <tr>
             <td class="text-center">
-                {$changeDateFormat[$i]}
+                ${changeDateFormat(user.created_at)}
             </td>
             <td>
-                {{ $users[$i]->name}}
+                ${user.name}
             </td>
             <td>
-                {{ $users[$i]->email}}
+                ${user.email}
             </td>
             <td>
-                {{ $eventCount[$i]}}
+                ${countParticipated[1]}
             </td>
             <td class="text-left">
-                @if ($users[$i]->role == 'guest')
-                    <span class="badge badge-dark p-2">{{ $users[$i]->role}}</span>
-                @elseif ($users[$i]->role == 'participant')
-                    <span class="badge badge-primary p-2">{{ $users[$i]->role}}</span>
-                @elseif ($users[$i]->role == 'campaigner')
-                    <span class="badge badge-success p-2">{{ $users[$i]->role}}</span>
-                @endif
+                    <span class="badge badge-primary p-2">${user.role}</span>
             </td>
         </tr>
     `;
-    }
 };
+
+const viewUserCampaignerRole = (user, countParticipated) => {
+    console.log("role : " + user.role);
+    // console.log("tanggal : " + user.created_at);
+    return /*html*/ `
+        <tr>
+            <td class="text-center">
+                ${changeDateFormat(user.created_at)}
+            </td>
+            <td>
+                ${user.name}
+            </td>
+            <td>
+                ${user.email}
+            </td>
+            <td>
+                ${countParticipated[1]}
+            </td>
+            <td class="text-left">
+                    <span class="badge badge-success p-2">${user.role}</span>
+            </td>
+        </tr>
+    `;
+};
+
+const viewUserGuestRole = (user, countParticipated) => {
+    console.log("role : " + user.role);
+    // console.log("tanggal : " + user.created_at);
+    return /*html*/ `
+        <tr>
+            <td class="text-center">
+                ${changeDateFormat(user.created_at)}
+            </td>
+            <td>
+                ${user.name}
+            </td>
+            <td>
+                ${user.email}
+            </td>
+            <td>
+                ${countParticipated[1]}
+            </td>
+            <td class="text-left">
+                    <span class="badge badge-dark p-2">${user.role}</span>
+            </td>
+        </tr>
+    `;
+};
+
+const viewUserByRoleIsEmpty = (roleType) => {
+    return /* html */ `
+        <tr>
+            <td colspan = "5" class="text-center">
+                Maaf, tidak ada data user ${roleType}
+            </td>
+        </tr>
+    `;
+}
 
 const roleTypeUser = (type) => {
     if (type.includes("Participant")) {
@@ -311,29 +363,57 @@ $(".role-type").on("click", function () {
         dataType: "json",
         success: (data) => {
             console.log(data);
-            // let html = "";
-            // if (data.length != 0) {
-            //     data.forEach((user) => {
-                    
-            //         html += viewUserByRole(user);
-            //     });
-            //     $("#user-list-role").html(html);
-            // } else {
-            //     html += viewUserByRoleIsEmpty();
-            //     $("#user-list-role").html(html);
-            // }
+            let html = "";
+            if (data[1].length != 0) {
+                const user = data[0];
+                const countParticipated = data[1];
+
+                for (let i = 0; i < user.length; i++){
+                    if(user[i].role == "participant"){
+                        html += viewUserParticipantRole(user[i],countParticipated[i]);
+                    }else if (user[i].role == "campaigner"){
+                        html += viewUserCampaignerRole(user[i], countParticipated[i]);
+                    }else if (user[i].role == "guest"){
+                        html += viewUserGuestRole(user[i], countParticipated[i]);
+                    }else{
+
+                    }
+                }
+
+                $("#user-list-role").html(html);
+            } else {
+                html += viewUserByRoleIsEmpty(roleType);
+                $("#user-list-role").html(html);
+            }
         },
     });
     
 });
 
+const countEventParticipate = (userId) => {
+    console.log(userId);
+
+    $.ajax({
+        url: "/admin/listUser/countEvent",
+        data: { userId },
+        dataType: "json",
+        success: (data) => {
+            console.log(data);
+            return data;
+        },
+    });
+}
+
 //Mengubah Format tanggal, ex:2019-10-02 ---> 2019/10/02
 const changeDateFormat = (date) => {
-    var date = date;
-    var format = date.split(" ");
-    // console.log(format);
-    format = format.replace("-","/");
 
+    if(date != null){
+        var result = date.slice(0, 10);
+        var format = result.replace(/-/g,"/");
+    }else{
+        var format = " ";
+    }
+    
     return format;
 }
 

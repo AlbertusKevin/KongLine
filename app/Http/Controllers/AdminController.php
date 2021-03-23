@@ -27,12 +27,20 @@ class AdminController extends Controller
     {
         // return $this->admin_service->listUserByRole($request);
 
-        dd("Hello ");
+        // dd("Hello ");
         $users = $this->admin_service->listUserByRole($request);
         $eventCount = $this->admin_service->countEventParticipate($users);
-        $combine = array();
-        array_push($combine, $users, $eventCount);
-        var_dump($combine);
-        return $combine;
+        $combine = [];
+        $combine[] = $users;
+        $combine[] = $eventCount;
+        // array_push($combine, $users, $eventCount);
+        // var_dump($combine);
+        return json_encode($combine);
+    }
+
+    public function countEventParticipate(Request $request)
+    {
+        $eventCount = $this->admin_service->countEventParticipate($request);
+        return $eventCount;
     }
 }
