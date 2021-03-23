@@ -13,24 +13,31 @@ class AdminService
         $this->dao = new AdminDao();
     }
 
+    //Mengambil semua user yang ada di DB
     public function getAllUser()
     {
         return $this->dao->getAllUser();
     }
 
-    public function countEventParticipate()
+    // Menghitung jumlah partisipasi setiap user
+    public function countEventParticipate($users)
     {
-        $users = $this->dao->getAllUser();
         $eventCount = array();
         foreach ($users as $user) {
+            $totalCount = array();
+
             $countPetition = $this->dao->getCountParticipatePetition($user->id);   
             $countDonation = $this->dao->getCountParticipateDonation($user->id);
+
             $total = $countDonation + $countPetition;
-            array_push($eventCount, $total);
+            array_push($totalCount, $user->id, $total);
+
+            array_push($eventCount, $totalCount);
         }
         return $eventCount;
     }
 
+    //Mengubah Format tanggal, ex:2019-10-02 ---> 2019/10/02
     public function changeDateFormat()
     {
         $users = $this->dao->getAllUser();
@@ -43,5 +50,18 @@ class AdminService
             
         }
         return $tanggal;
+    }
+    
+    public function listUserByRole($request)
+    {
+        $roleType = $request->roleType;
+
+        if($roleType == 'participant' or $roleType == 'campaigner'){
+            return $this->dao->listUserByRole($roleType);
+        }elseif($roleType == 'pengajuan'){
+            return $this->dao->listUserByPengajuan();
+        }else{
+            return $this->dao->listUserByAll();
+        }
     }
 }

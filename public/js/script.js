@@ -246,3 +246,95 @@ $(".category-petition").on("click", function (e) {
     let typePetition = checkTypePetition($(".btn-primary").html());
     sortListPetition(sortBy, category, typePetition);
 });
+
+// ADMIN
+
+const viewUserByRole = (user) => {
+    if (user.role != "admin") {
+        console.log("role : " + user.role);
+        return /*html*/ `
+        <tr>
+            <td class="text-center">
+                {$changeDateFormat[$i]}
+            </td>
+            <td>
+                {{ $users[$i]->name}}
+            </td>
+            <td>
+                {{ $users[$i]->email}}
+            </td>
+            <td>
+                {{ $eventCount[$i]}}
+            </td>
+            <td class="text-left">
+                @if ($users[$i]->role == 'guest')
+                    <span class="badge badge-dark p-2">{{ $users[$i]->role}}</span>
+                @elseif ($users[$i]->role == 'participant')
+                    <span class="badge badge-primary p-2">{{ $users[$i]->role}}</span>
+                @elseif ($users[$i]->role == 'campaigner')
+                    <span class="badge badge-success p-2">{{ $users[$i]->role}}</span>
+                @endif
+            </td>
+        </tr>
+    `;
+    }
+};
+
+const roleTypeUser = (type) => {
+    if (type.includes("Participant")) {
+        return "participant";
+    }
+    if (type.includes("Campaigner")) {
+        return "campaigner";
+    }
+    if (type.includes("Pengajuan")) {
+        return "pengajuan";
+    }
+    return "semua";
+};
+
+$(".role-type").on("click", function () {
+    // cari yang ada class btn-primary
+    $(".role-type").removeClass("btn-primary");
+    $(".role-type").addClass("btn-light");
+
+    $(this).addClass("btn-primary");
+    $(this).removeClass("btn-light");
+
+    let roleType = $(this).html();
+    roleType = roleTypeUser(roleType);
+    console.log(roleType);
+
+    $.ajax({
+        url: "/admin/listUser/role",
+        data: { roleType },
+        dataType: "json",
+        success: (data) => {
+            console.log(data);
+            // let html = "";
+            // if (data.length != 0) {
+            //     data.forEach((user) => {
+                    
+            //         html += viewUserByRole(user);
+            //     });
+            //     $("#user-list-role").html(html);
+            // } else {
+            //     html += viewUserByRoleIsEmpty();
+            //     $("#user-list-role").html(html);
+            // }
+        },
+    });
+    
+});
+
+//Mengubah Format tanggal, ex:2019-10-02 ---> 2019/10/02
+const changeDateFormat = (date) => {
+    var date = date;
+    var format = date.split(" ");
+    // console.log(format);
+    format = format.replace("-","/");
+
+    return format;
+}
+
+// Menghitung jumlah partisipasi setiap user

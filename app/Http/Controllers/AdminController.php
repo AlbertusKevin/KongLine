@@ -13,11 +13,26 @@ class AdminController extends Controller
     {
         $this->admin_service = new AdminService();
     }
+
     public function getAll()
     {
         $users = $this->admin_service->getAllUser();
-        $eventCount = $this->admin_service->countEventParticipate();
+        $eventCount = $this->admin_service->countEventParticipate($users);
         $changeDateFormat = $this->admin_service->changeDateFormat();
-        return view('/listUser', compact('users','eventCount','changeDateFormat'));
+        return view('/admin/listUser', compact('users', 'eventCount', 'changeDateFormat'));
+        
+    }
+
+    public function listUserByRole(Request $request)
+    {
+        // return $this->admin_service->listUserByRole($request);
+
+        dd("Hello ");
+        $users = $this->admin_service->listUserByRole($request);
+        $eventCount = $this->admin_service->countEventParticipate($users);
+        $combine = array();
+        array_push($combine, $users, $eventCount);
+        var_dump($combine);
+        return $combine;
     }
 }

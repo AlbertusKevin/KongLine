@@ -24,8 +24,9 @@ class AdminDao
     {
         return ParticipateDonation::where('idParticipant', $id)->count();
     }
-    public function namefunction2()
+
+    public function listUserByRole($role)
     {
-        //
+        return User::where('role', $role)->get();
     }
 }

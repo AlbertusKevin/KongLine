@@ -78,5 +78,4 @@ Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show'
 //! Route Admin
 //? =========================
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);//Nampilin List User
-
-//Made by Hizkia
+Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);

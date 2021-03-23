@@ -32,26 +32,20 @@
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+            <div class="collapse navbar-collapse justify-content-end mr-5 pr-5" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
+                    <a class="nav-link" href="{{ url('/listUser') }}">User</a>
                     <a class="nav-link" href="{{ url('/donation') }}">Donasi</a>
                     <a class="nav-link" href="{{ url('/petition') }}">Petisi</a>
-                    <a class="nav-link" href="{{ url('/') }}">Forum</a>
-                    <a class="nav-link" href="{{ url('/inbox') }}">Service</a>
-                    @if (Auth::check())
-                        <div class="dropdown m-2 mr-2">
-                            <div data-toggle="dropdown">
-                                <img src="/img/profile.png">
-                            </div>
-                            <div class="dropdown-menu">
-                                <a class="nav-link" href="{{ url('/profile/' . Auth::id()) }}">Edit Profile</a>
-                                <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
-                            </div>
+                    <div class="dropdown m-2 mr-2">
+                        <div data-toggle="dropdown">
+                            <img src="/img/profile.png">
                         </div>
-                    @else
-                        <a type="button" class="btn btn-outline-info ml-1 mr-2" href="{{ url('/login') }}"> Login </a>
-                        <a type="button" class="btn btn-info mr-2" href="{{ url('/register') }}"> Daftar </a>
-                    @endif
+                        <div class="dropdown-menu">
+                            <a class="nav-link" href="{{ url('/profile/' . Auth::id()) }}">Edit Profile</a>
+                            <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
