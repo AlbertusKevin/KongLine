@@ -16,6 +16,7 @@ use App\Domain\Event\Entity\Transaction;
 use App\Domain\Event\Entity\UpdateNews;
 use App\Domain\Event\Entity\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class EventDao
 {
@@ -70,7 +71,7 @@ class EventDao
     //* =========================================================================================
     //* -------------------------------------- DAO Petisi ---------------------------------------
     //* =========================================================================================
-    //! Mencari petisi sesuai dengan 
+    //! Mencari petisi sesuai dengan
     //! status (berdasarkan tipe petisi) dan keyword tertentu
 
     public function searchPetition($status, $keyword)
@@ -89,7 +90,7 @@ class EventDao
             ->get();
     }
 
-    //! Mencari petisi yang dibuat oleh campaigner sesuai dengan 
+    //! Mencari petisi yang dibuat oleh campaigner sesuai dengan
     //! keyword, sorting desc, dan kategori tertentu
     public function searchPetitionByMeCategorySort($idCampaigner, $keyword, $category, $table)
     {
@@ -205,7 +206,7 @@ class EventDao
             ->get();
     }
 
-    //! Mengurutkan petisi dengan status tertentu 
+    //! Mengurutkan petisi dengan status tertentu
     //! secara descending sesuai dengan ketentuan yang dipilih
     public function sortPetition($status, $table)
     {
@@ -222,7 +223,7 @@ class EventDao
             ->get();
     }
 
-    //! Mengurutkan petisi yang dibuat oleh campaigner dan sesuai kategori tertentu 
+    //! Mengurutkan petisi yang dibuat oleh campaigner dan sesuai kategori tertentu
     //! secara descending sesuai dengan ketentuan yang dipilih
     public function sortPetitionCategoryByMe($category, $idCampaigner, $table)
     {
@@ -249,7 +250,7 @@ class EventDao
             ->get();
     }
 
-    //! Mengurutkan petisi yang pernah diikuti participant sesuai kategori tertentu 
+    //! Mengurutkan petisi yang pernah diikuti participant sesuai kategori tertentu
     //! secara descending sesuai dengan ketentuan yang dipilih
     public function sortPetitionCategoryParticipated($category, $idParticipant, $table)
     {
@@ -378,6 +379,18 @@ class EventDao
     {
         return Petition::where('id', $idEvent)->update([
             'signedCollected' => $count
+        ]);
+    }
+
+     //* =========================================================================================
+    //* --------------------------------------- DAO Auth ----------------------------------------
+    //* =========================================================================================
+
+    public function login($request)
+    {
+        return $temp = Auth::attempt([
+            'email' =>  $request->email,
+            'password' => $request->password
         ]);
     }
 }

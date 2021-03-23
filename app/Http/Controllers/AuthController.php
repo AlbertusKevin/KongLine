@@ -12,9 +12,17 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
+use App\Domain\Event\Service\EventService;
 
 class AuthController extends Controller
 {
+    private $eventService;
+
+    public function __construct()
+    {
+        $this->eventService = new EventService();
+    }
+
     public function postRegister(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -72,12 +80,10 @@ class AuthController extends Controller
                 ->withErrors($validator);
         };
 
-        $temp = Auth::attempt([
-            'email' =>  $request->email,
-            'password' => $request->password
-        ]);
+        $svc = new EventService();
+        $result = $svc->authLogin($request);
 
-        if ($temp) {
+        if ($result) {
             // dd(Auth::user()->status);
             if(Auth::user()->status == 1 || Auth::user()->status == 3){
                 // dd("yooo");

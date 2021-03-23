@@ -80,7 +80,7 @@ class EventService
         $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
-    public function deleteAccount($id) 
+    public function deleteAccount($id)
     {
         return $this->dao->deleteAccount($id);
     }
@@ -88,7 +88,7 @@ class EventService
     //* =========================================================================================
     //* ------------------------------------ Service Petisi -------------------------------------
     //* =========================================================================================
-    //! Menampilkan seluruh petisi yang sedang berlangsung 
+    //! Menampilkan seluruh petisi yang sedang berlangsung
     public function indexPetition()
     {
         return $this->dao->indexPetition();
@@ -409,4 +409,16 @@ class EventService
     //* =========================================================================================
     //* ------------------------------------ Service Donasi -------------------------------------
     //* =========================================================================================
+
+
+    //* =========================================================================================
+    //* ------------------------------------- Service Auth --------------------------------------
+    //* =========================================================================================
+
+    public function authLogin($request)
+    {
+        $result = $this->dao->login($request);
+        return $result;
+    }
+
 }
