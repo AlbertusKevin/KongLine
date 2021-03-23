@@ -5,6 +5,9 @@
         <img src="/{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
         <h3 class="display-4">{{ $user->name }}</h3>
         <p class="lead">Pengguna sejak 5 Feb 2021</p>
+        @if($user->role == 'campaigner') 
+            <h1><span class="badge rounded-pill bg-primary text-white">Campaigner</span></h1>
+        @endif
         <a href="{{ $user->linkProfile }}" target="_blank" class="lead">{{ $user->linkProfile }}</a>
         <p class="mt-5">Terima kasih telah menjadi anggota aktif dari komunitas kami. </p>
     </div>
@@ -22,19 +25,19 @@
         <div class="row">
             <div class="card w-100">
                 <div class="card-body">
-                    <a href="#" type="button" class="card-text">Ubah Sandi</a>
+                    <a href="/change/{{ $user->id }}" type="button" class="card-text">Ubah Sandi</a>
                 </div>
             </div>
-            @if ($user->role == 'participant')
+            @if ($user->role == 'participant' && $user->status != 3)
                 <div class="card w-100 mt-2">
                     <div class="card-body">
-                        <a href="#" type="button" class="card-text">Upgrade to Campaigner</a>
+                        <a href="/profile/campaigner/{{$user->id}}" type="button" class="card-text">Upgrade to Campaigner</a>
                     </div>
                 </div>
-            @else
+            @elseif ($user->role == 'campaigner' || $user->status == 3)
                 <div class="card w-100 mt-2">
                     <div class="card-body">
-                        <a href="#" type="button" class="card-text">Data Campaigner</a>
+                        <a href="/campaigner/{{$user->id}}" type="button" class="card-text">Data Campaigner</a>
                     </div>
                 </div>
             @endif

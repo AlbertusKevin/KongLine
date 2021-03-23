@@ -44,8 +44,14 @@ Route::put('/profile/{id}', [ProfileController::class, 'update']);
 
 Route::get('/delete/{id}', [ProfileController::class, 'delete']);
 
-Route::get('/update/campaigner/{id}', [ProfileController::class, 'editCampaigner']);
-Route::put('/update/campaigner/{id}', [ProfileController::class, 'updateCampaigner']);
+Route::get('/profile/campaigner/{id}', [ProfileController::class, 'editCampaigner']);
+Route::put('/profile/campaigner/{id}', [ProfileController::class, 'updateCampaigner']);
+
+Route::get('/campaigner/{id}', [ProfileController::class, 'dataCampaigner']);
+
+Route::get('/change/{id}', [ProfileController::class, 'viewChangePassword']);
+Route::put('/change/{id}', [ProfileController::class, 'changePassword']);
+
 
 //? =========================
 //! Router Auth

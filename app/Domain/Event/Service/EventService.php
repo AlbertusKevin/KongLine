@@ -75,8 +75,8 @@ class EventService
     //! Memproses update profile
     public function updateProfile($request, $id)
     {
-        $pathProfile = $this->uploadImage($request->file('profile/profile_picture'), 'photo');
-        $pathBackground = $this->uploadImage($request->file('profile/zoom_picture'), 'background');
+        $pathProfile = $this->uploadImage($request->file('profile_picture'), 'profile/photo');
+        $pathBackground = $this->uploadImage($request->file('zoom_picture'), 'profile/background');
         $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
@@ -87,10 +87,24 @@ class EventService
 
     public function requestUserToCampaigner($request, $id)
     {
-        if (strlen($request->nik) == 16) {
-            $pathKTP = $this->uploadImage($request->file('profile/KTP_picture'), 'KTP');
-            $this->dao->updateToCampaigner($request, $id, $pathKTP);
+        if(!empty($request->file('KTP_picture'))){
+            $pathKTP = $this->uploadImage($request->file('KTP_picture'), 'profile/KTP');
         }
+        $this->dao->updateToCampaigner($request, $id, $pathKTP);
+    }
+
+    public function changePassword($request){
+        $user = $this->showProfile();
+        
+        if (Hash::check($request->old_password, $user->password)) {
+            if ($request->new_password == $request->verifikasi) {
+                $password = Hash::make($request->new_password);
+                $this->dao->changePassword($user,$password);
+            }
+            return 'failed_verification';
+        }
+
+        return 'failed_password';
     }
 
     //* =========================================================================================

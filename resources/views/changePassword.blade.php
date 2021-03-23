@@ -33,7 +33,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary mt-5">Simpan</button>
-        {{--  <a type="button" class="btn btn-light mt-5">Batal</a>  --}}
+        <a type="button" class="btn btn-light mt-5">Batal</a>
     </form>
 </div>
 @endsection

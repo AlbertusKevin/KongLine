@@ -13,7 +13,7 @@
         <p class="ml-3">Atur dan input data diri lebih lanjut untuk menjadi <i>campaigner</i></p>
     </div>
 
-    <form action="/update/campaigner/{{ $user->id }}" method="POST" enctype="multipart/form-data">
+    <form action="/profile/campaigner/{{ $user->id }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="form-group">
@@ -23,16 +23,16 @@
 
         <div class="form-group mt-2">
             <label for="nik">NIK</label>
-            <input type="text" class="form-control" id="nik" name="nik" value="{{ $user->nik }}">
+            <input type="text" class="form-control" id="nik" name="nik">
         </div>
 
         <div class="form-group">
             <label for="rekening">Nomor Rekening</label>
-            <input type="text" class="form-control"  id="rekening" name="rekening" value="{{ $user->accountNumber }}">
+            <input type="text" class="form-control"  id="rekening" name="rekening">
         </div>
 
         <button type="submit" class="btn btn-primary mt-5">Simpan</button>
-        <a type="button" class="btn btn-light mt-5">Batal</a>
+        <a type="button" href="{{ url('/profile/'.$user->id)  }}" class="btn btn-light mt-5">Batal</a>
     </form>
 </div>
 @endsection

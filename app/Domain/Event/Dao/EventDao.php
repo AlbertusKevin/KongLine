@@ -67,12 +67,20 @@ class EventDao
         ]);
     }
 
-    public function updateToCampaigner($request, $id, $pathCampaigner)
+    public function updateToCampaigner($request, $id, $pathKTP)
     {
         User::where('id', $id)->update([
-            'name' => $request->name,
-            'aboutMe' => $request->aboutMe,
+            'accountNumber' => $request->rekening,
+            'nik' => $request->nik,
             'ktpPicture' => $pathKTP,
+            'status' => 3
+        ]);
+    }
+
+    public function changePassword($user,$password)
+    {
+        User::where('id', $user->id)->update([
+            'password' => $password
         ]);
     }
 
