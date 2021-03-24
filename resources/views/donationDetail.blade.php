@@ -68,12 +68,14 @@
                             <li class="nav-item">
                                 <a class="nav-link donation-detail show-budgeting">Alokasi Dana</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link donation-detail show-donatur">Donatur</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link donation-detail show-comment">Dukungan</a>
-                            </li>
+                            @if (count($participatedDonation) != 0)
+                                <li class="nav-item">
+                                    <a class="nav-link donation-detail show-donatur">Donatur</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link donation-detail show-comment">Dukungan</a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                     <div class="card-body information-donation">
@@ -84,9 +86,21 @@
                 </div>
             </div>
             <div class="col-md-4 text-right">
-                <h5 class="font-weight-bold">Butuh Bantuan Donasi?</h5>
-                <small>Yuk buat donasimu sekarang juga!</small>
-                <a type="button" class="btn btn-primary mt-2">Ajukan Donasi</a>
+                @if ($user->role == 'guest')
+                    <h5 class="font-weight-bold">Ayo daftarkan dirimu sekarang!</h5>
+                    <small>Mulailah membawa perubahan dengan menolong
+                        sesama.</small>
+                    <a type="button" class="btn btn-primary mt-2">Daftar</a>
+                @elseif($user->role == 'campaigner')
+                    <h5 class="font-weight-bold">Butuh Bantuan Donasi?</h5>
+                    <small>Yuk buat donasimu sekarang juga!</small>
+                    <a type="button" class="btn btn-primary mt-2">Ajukan Donasi</a>
+                @elseif($user->role == 'participant')
+                    <h5 class="font-weight-bold">Upgrade akun mu menjadi <i>campaigner</i>!</h5>
+                    <small>Mulailah membawa perubahan dengan menolong
+                        sesama.</small>
+                    <a type="button" class="btn btn-primary mt-2">Daftar Campaigner</a>
+                @endif
             </div>
         </div>
     </div>
@@ -129,14 +143,14 @@
                 @if ($donatur->comment != null)
                     <div class="card mb-4">
                         <div class=" row no-gutters">
-                            <div class="col-md-4 text-center">
+                            <div class="col-md-2 offset-md-2 text-center p-3">
                                 <img src="/{{ $donatur->photoProfile }}" class="img-thumbnail rounded-circle"
                                     alt="Participant's Image Profile">
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
                                     <h5 class="card-title font-weight-bold">{{ $donatur->name }}</h5>
-                                    <p class="card-text petition-description">{{ $donatur->comment }}</p>
+                                    <p class="petition-description">{{ $donatur->comment }}</p>
                                 </div>
                             </div>
                         </div>
