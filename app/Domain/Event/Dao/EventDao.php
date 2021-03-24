@@ -17,6 +17,9 @@ use App\Domain\Event\Entity\UpdateNews;
 use App\Domain\Event\Entity\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
 class EventDao
 {
@@ -392,5 +395,40 @@ class EventDao
             'email' =>  $request->email,
             'password' => $request->password
         ]);
+    }
+
+    public function register($data)
+    {
+        return $data->save();
+    }
+
+    public function reset($token, $request)
+    {
+        return DB::table('password_resets')->insert(
+            ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]
+        );
+    }
+
+    public function mail($token, $request ,$view ,$subject)
+    {
+        Mail::send($view, ['token' => $token, 'email' => $request->email], function($message) use($request, $subject){
+            $message->to($request->email);
+            $message->subject($subject);
+        });
+    }
+
+    public function getPasswordReset($request){
+        return DB::table('password_resets')
+            ->where(['email' => $request->email, 'token' => $request->token])
+            ->first();
+    }
+
+    public function updateUser($request){
+        $user = User::where('email', $request->email)
+            ->update(['password' => Hash::make($request->password)]);
+    }
+
+    public function deleteToken($request){
+        DB::table('password_resets')->where(['email'=> $request->email])->delete();
     }
 }

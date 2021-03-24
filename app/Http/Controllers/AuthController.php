@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\Event\Entity\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
+
+
 use Illuminate\Support\Carbon;
 use App\Domain\Event\Service\EventService;
 
@@ -32,29 +29,24 @@ class AuthController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        if ($validator->fails()) {
+        // if ($validator->fails()) {
+        //     return redirect('/register')
+        //         ->withInput()
+        //         ->withErrors($validator);
+        // }
+
+        $svc = new EventService();
+        $result = $svc->authRegis($request);
+
+        if($result){
+            Alert::success('Register Success', 'Please Login.');
+            return redirect('login');
+        }{
+            Alert::error('Register Gagal', 'Mohon cek kembali data Anda');
             return redirect('/register')
-                ->withInput()
-                ->withErrors($validator);
+                ->withInput();
         }
-        $role = "participant";
-        $status = 1;
-        $photo = "images/profile/photo/default.svg";
 
-        $data = new User();
-        $data->name = $request->firstname . ' ' . $request->lastname;
-        $data->email = $request->email;
-        $data->status = $status;
-        $data->role = $role;
-        $data->photoProfile = $photo;
-
-        if ($request->password) {
-            $data->password = Hash::make($request->password);
-        }
-        $data->save();
-
-        Alert::success('Register Success', 'Please Login.');
-        return redirect('login');
     }
 
     public function getLogin()
@@ -116,19 +108,16 @@ class AuthController extends Controller
             'email' => 'required|email|exists:users',
         ]);
 
-        $token = Str::random(64);
+        $view = 'auth.verify';
+        $subject = 'Reset Password';
 
-        DB::table('password_resets')->insert(
-            ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]
-        );
-
-        Mail::send('auth.verify', ['token' => $token, 'email' => $request->email ], function($message) use($request){
-            $message->to($request->email);
-            $message->subject('Reset Password');
-        });
+        $svc = new EventService();
+        $result = $svc->authForgot($request, $view, $subject);
 
         Alert::toast('Silahkan cek email Anda');
         return back();
+
+
     }
 
     public function getReset($email, $token){
@@ -137,22 +126,15 @@ class AuthController extends Controller
 
     public function postReset(Request $request){
 
+        $svc = new EventService();
+        $result = $svc->authReset($request);
 
-
-        $updatePassword = DB::table('password_resets')
-                            ->where(['email' => $request->email, 'token' => $request->token])
-                            ->first();
-
-        if(!$updatePassword){
-            Alert::toast('Token salah');
+        if($result){
+            return redirect('/login')->with('message', 'Your password has been changed!');
+        }else{
+            Alert::toast('Gagal ganti password, silahkan coba lagi');
             return back();
         }
 
-        $user = User::where('email', $request->email)
-            ->update(['password' => Hash::make($request->password)]);
-
-        DB::table('password_resets')->where(['email'=> $request->email])->delete();
-
-        return redirect('/login')->with('message', 'Your password has been changed!');
     }
 }
