@@ -25,7 +25,6 @@ class CreateDonationsTable extends Migration
             $table->string('assistedSubject');
             $table->bigInteger('donationCollected');
             $table->bigInteger('donationTarget');
-            $table->integer('totalDonatur');
             $table->bigInteger('donationTarget');
             $table->date('created_at');
         });

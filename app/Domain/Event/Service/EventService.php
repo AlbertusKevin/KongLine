@@ -45,6 +45,11 @@ class EventService
         return $targetUploadDesc . "" . $pictName;   //membuat file path yang akan digunakan sebagai src html
     }
 
+    public function getACategory($id)
+    {
+        return $this->dao->getACategory($id);
+    }
+
     //! Mengembalikan kategori event petisi atau donasi yang dipilih
     public function categorySelect($request)
     {
@@ -473,6 +478,16 @@ class EventService
     public function getADonation($id)
     {
         return $this->dao->getADonation($id);
+    }
+
+    public function getParticipatedDonation($id)
+    {
+        return $this->dao->getParticipatedDonation($id);
+    }
+
+    public function getABudgetingDonation($id)
+    {
+        return $this->dao->getABudgetingDonation($id);
     }
 
     public function countProgressDonation($donation)

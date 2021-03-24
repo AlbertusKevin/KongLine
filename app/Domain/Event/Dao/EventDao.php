@@ -25,6 +25,11 @@ class EventDao
         return Category::all();
     }
 
+    public function getACategory($id)
+    {
+        return Category::where('id', $id)->first();
+    }
+
     //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
     public function checkParticipated($idEvent, $idParticipant, $typeEvent)
     {
@@ -397,6 +402,20 @@ class EventDao
             ->where('donation.id', $id)
             ->join('users', 'donation.idCampaigner', 'users.id')
             ->first();
+    }
+
+    public function getParticipatedDonation($idEvent)
+    {
+        return ParticipateDonation::where('participate_donation.idDonation', $idEvent)
+            ->join('users', 'participate_donation.idParticipant', 'users.id')
+            ->join('transaction', 'participate_donation.idDonation', 'transaction.idDonation')
+            ->where('transaction.status', 1)
+            ->get();
+    }
+
+    public function getABudgetingDonation($idEvent)
+    {
+        return DetailAllocation::where('idDonation', $idEvent)->get();
     }
 
     //! Mencari Donasi sesuai dengan 

@@ -184,8 +184,11 @@ class EventController extends Controller
         $donation = $this->eventService->getADonation($id);
         $user = $this->eventService->showProfile();
         $progress = $this->eventService->countProgressDonation($donation);
+        $category = $this->eventService->getACategory($donation->category);
+        $participatedDonation = $this->eventService->getParticipatedDonation($id);
+        $alocationBudget = $this->eventService->getABudgetingDonation($id);
         // dd($donation);
-        return view('donationDetail', compact('donation', 'user', 'progress'));
+        return view('donationDetail', compact('donation', 'user', 'progress', 'category', 'participatedDonation', 'alocationBudget'));
     }
 
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik

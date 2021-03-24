@@ -403,3 +403,22 @@ $(".category-select-donation").on("click", function (e) {
     let sortBy = $("#sort-donation-selected").val();
     sortListDonation(sortBy, category);
 });
+
+$(".show-budgeting").on("click", function () {
+    const html = $("#budgeting").html();
+    $(".card-text").html(html);
+});
+
+$(".show-description").on("click", function () {
+    const html = $("#description").html();
+    $(".card-text").html(html);
+});
+
+$(".show-donatur").on("click", function () {
+    const html = $("#donatur").html();
+    $(".card-text").html(html);
+});
+$(".show-comment").on("click", function () {
+    const html = $("#comment").html();
+    $(".card-text").html(html);
+});

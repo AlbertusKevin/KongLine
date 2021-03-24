@@ -47,6 +47,37 @@ footer {
   color: #045163;
 }
 
+.detail-donation-photo {
+  min-height: 250px;
+  max-height: 250px;
+}
+
+.donate-button{
+  height: 50px;
+  width: 130px;
+  background: #EF3939;
+}
+
+
+.information-donation {
+  height: 350px;
+  max-height: 350px;
+  overflow: auto;
+}
+
+.banish {
+  position: absolute;
+  overflow: hidden;
+  opacity: 0;
+  bottom:0;
+  left:0;
+  z-index: -100;
+}
+
+img.donatur-photo {
+  width: 50px;
+  border-radius: 50%;
+}
 /*
 =================================== Style untuk petisi ===================================
 */
