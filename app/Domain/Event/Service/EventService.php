@@ -5,6 +5,7 @@ namespace App\Domain\Event\Service;
 use App\Domain\Event\Dao\EventDao;
 use Illuminate\Support\Facades\Auth;
 use App\Domain\Event\Entity\ParticipatePetition;
+use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
 class EventService
@@ -94,6 +95,7 @@ class EventService
     }
 
     public function changePassword($request){
+        
         $user = $this->showProfile();
         
         if (Hash::check($request->old_password, $user->password)) {

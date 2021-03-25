@@ -29,7 +29,7 @@
             @if($user->role == 'campaigner')
                 <input type="text" class="form-control" id="nik" name="nik" value="{{ $user->nik }}" disabled>
             @else
-            <input type="text" class="form-control" id="nik" name="nik" value="{{ $user->nik }}">
+                <input type="text" class="form-control" id="nik" name="nik" value="{{ $user->nik }}">
             @endif
         </div>
 
@@ -39,7 +39,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary mt-5">Perbarui</button>
-        <a type="button" href="{{ url('/profile/'.$user->id)  }}" class="btn btn-light mt-5">Batal</a>
+        <a type="button" href="{{ url('/profile/'.$user->id) }}" class="btn btn-light mt-5">Batal</a>
     </form>
 </div>
 @endsection

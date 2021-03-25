@@ -27,7 +27,7 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         $this->event_service->updateProfile($request, $id);
-        return redirect('profile' . $id);
+        return redirect('profile/' . $id);
     }
 
     public function delete($id)
@@ -87,7 +87,7 @@ class ProfileController extends Controller
         $validator = Validator::make($request->all(), [
             'old_password' => 'required',
             'new_password' => 'required|min:8',
-            'verifikasi' => 'required'
+            'verification' => 'required'
         ]);
 
         if ($validator->fails()) {
