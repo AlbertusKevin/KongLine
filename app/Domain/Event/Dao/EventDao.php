@@ -70,11 +70,19 @@ class EventDao
         ]);
     }
 
+    public function deleteAccount($id)
+    {
+        User::where('id', $id)->update([
+            'status' => 0
+        ]);
+    }
+
     //* =========================================================================================
     //* -------------------------------------- DAO Petisi ---------------------------------------
     //* =========================================================================================
     //! Mencari petisi sesuai dengan 
     //! status (berdasarkan tipe petisi) dan keyword tertentu
+
     public function searchPetition($status, $keyword)
     {
         return Petition::where('status', $status)

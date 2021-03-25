@@ -22,6 +22,12 @@ use App\Http\Controllers\HomeController;
 //! ========================== Controller untuk uji coba ==========================
 Route::get('/uji_coba', [DummyController::class, 'cobaModifikasiEntity']);
 
+Route::get('/donation', function () {
+    return view('donation');
+});
+
+
+
 //? =========================
 //! App Start
 //? =========================
@@ -31,13 +37,16 @@ Route::get('/', function () {
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //? =========================
-//! Route Profile
+//! Router Profile
 //? =========================
 Route::get('/profile/{id}', [ProfileController::class, 'edit']);
 Route::put('/profile/{id}', [ProfileController::class, 'update']);
 
+Route::get('/delete/{id}', [ProfileController::class, 'delete']);
+
+
 //? =========================
-//! Route Auth
+//! Router Auth
 //? =========================
 Route::get('/login', [AuthController::class, 'getLogin'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
@@ -46,7 +55,7 @@ Route::post('/register', [AuthController::class, 'postRegister'])->name('postReg
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //? =========================
-//! Route Petition
+//! Router Petition
 //? =========================
 //* --- pemanggilan ajax ---
 Route::get('/petition/type', [EventController::class, 'listPetitionType']);
@@ -74,6 +83,7 @@ Route::get('/donation', [EventController::class, 'listDonation']);
 Route::get('/donation/create', [EventController::class, 'createView']);
 Route::get('/donation/{id}', [EventController::class, 'getADonation']);
 Route::get('/donation/donate/{id}', [EventController::class, 'formDonate']);
+
 //? =========================
 //! Route Communication
 //? =========================
@@ -81,6 +91,6 @@ Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
 Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
 
 //? =========================
-//! Route Admin
+//! Router Admin
 //? =========================
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
