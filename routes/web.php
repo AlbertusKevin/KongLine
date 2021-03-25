@@ -71,7 +71,9 @@ Route::get('/donation/search', [EventController::class, 'searchDonation']);
 Route::get('/donation/sort', [EventController::class, 'sortDonation']);
 
 Route::get('/donation', [EventController::class, 'listDonation']);
+Route::get('/donation/create', [EventController::class, 'createView']);
 Route::get('/donation/{id}', [EventController::class, 'getADonation']);
+Route::get('/donation/donate/{id}', [EventController::class, 'formDonate']);
 //? =========================
 //! Route Communication
 //? =========================

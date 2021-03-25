@@ -79,7 +79,7 @@ class EventService
         } else if ($status == FINISHED) {
             return [
                 'header' => 'Telah Selesai',
-                'content' => 'Event ini sudah selesai. Tidak menerima tandatangan lagi.'
+                'content' => 'Event ini sudah selesai. Tidak menerima tanggapan lagi.'
             ];
         } else if ($status == CLOSED) {
             return [
@@ -427,7 +427,7 @@ class EventService
         if ($user->role != GUEST || $user->role != ADMIN) {
             $isInList = $this->dao->checkParticipated($idEvent, $user->id, $typeEvent);
             // Cek apakah list hasil query kosong atau tidak. 
-            // Jika kosong, artinya user belum pernah berpartisipasi di event itu
+            // Jika true, artinya user belum pernah berpartisipasi di event itu
             return empty($isInList);
         }
 
@@ -488,6 +488,17 @@ class EventService
     public function getABudgetingDonation($id)
     {
         return $this->dao->getABudgetingDonation($id);
+    }
+
+    public function checkUserTransactionStatus($participatedDonation, $id)
+    {
+        foreach ($participatedDonation as $participate) {
+            if ($participate->status == 1 && $participate->idParticipant == $id) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function countProgressDonation($donation)

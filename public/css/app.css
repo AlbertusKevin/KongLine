@@ -58,6 +58,13 @@ footer {
   background: #EF3939;
 }
 
+.donation-detail{
+  cursor: pointer;
+}
+
+.alert-donated{
+  width: 75%;
+}
 
 .information-donation {
   height: 350px;

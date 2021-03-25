@@ -183,13 +183,38 @@ class EventController extends Controller
     {
         $donation = $this->eventService->getADonation($id);
         $user = $this->eventService->showProfile();
-        $progress = $this->eventService->countProgressDonation($donation);
-        $category = $this->eventService->getACategory($donation->category);
-        $participatedDonation = $this->eventService->getParticipatedDonation($id);
-        $alocationBudget = $this->eventService->getABudgetingDonation($id);
-        $isParticipated = $this->eventService->checkParticipated($id, $user, DONATION);
-        // dd($donation);
-        return view('donationDetail', compact('donation', 'user', 'progress', 'category', 'participatedDonation', 'alocationBudget', 'isParticipated'));
+        $progress = $this->eventService->countProgressDonation($donation); // untuk progress bar
+        $category = $this->eventService->getACategory($donation->category); // untuk menampilkan deskripsi kategori
+        $participatedDonation = $this->eventService->getParticipatedDonation($id); // untuk tab donatur
+        $alocationBudget = $this->eventService->getABudgetingDonation($id); // untuk tab alokasi dana
+        $isParticipated = $this->eventService->checkParticipated($id, $user, DONATION); // untuk pengecekan apakah pernah donasi atau tidak
+        $message = $this->eventService->messageOfEvent($donation->status);
+        $userTransactionStatus = $this->eventService->checkUserTransactionStatus($participatedDonation, $user->id);
+
+        return view(
+            'donationDetail',
+            compact(
+                'donation',
+                'user',
+                'progress',
+                'category',
+                'participatedDonation',
+                'alocationBudget',
+                'isParticipated',
+                'message',
+                'userTransactionStatus'
+            )
+        );
+    }
+
+    public function formDonate()
+    {
+        dd("Hello World");
+    }
+
+    public function createView()
+    {
+        dd("Hello World");
     }
 
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik

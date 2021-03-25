@@ -406,10 +406,11 @@ class EventDao
 
     public function getParticipatedDonation($idEvent)
     {
-        return ParticipateDonation::where('participate_donation.idDonation', $idEvent)
+        return ParticipateDonation::selectRaw('participate_donation.*,transaction.*, users.name as name, users.photoProfile as photoProfile')
+            ->where('participate_donation.idDonation', $idEvent)
             ->join('users', 'participate_donation.idParticipant', 'users.id')
             ->join('transaction', 'participate_donation.idDonation', 'transaction.idDonation')
-            ->where('transaction.status', 1)
+            // ->where('transaction.status', 1)
             ->get();
     }
 
