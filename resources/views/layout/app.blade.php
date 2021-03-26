@@ -44,7 +44,7 @@
                                 <img src="/img/profile.png">
                             </div>
                             <div class="dropdown-menu">
-                                <a class="nav-link" href="{{ url('/profile/' . Auth::id()) }}">Edit Profile</a>
+                                <a class="nav-link" href="{{ url('/profile') }}">Edit Profile</a>
                                 <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
                             </div>
                         </div>

@@ -5,7 +5,7 @@
         <img src="/{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
         <h3 class="display-4">{{ $user->name }}</h3>
         <p class="lead">Pengguna sejak 5 Feb 2021</p>
-        @if($user->role == 'campaigner') 
+        @if ($user->role == 'campaigner')
             <h1><span class="badge rounded-pill bg-primary text-white">Campaigner</span></h1>
         @endif
         <a href="{{ $user->linkProfile }}" target="_blank" class="lead">{{ $user->linkProfile }}</a>
@@ -25,19 +25,19 @@
         <div class="row">
             <div class="card w-100">
                 <div class="card-body">
-                    <a href="/change/{{ $user->id }}" type="button" class="card-text">Ubah Sandi</a>
+                    <a href="/change" type="button" class="card-text">Ubah Sandi</a>
                 </div>
             </div>
             @if ($user->role == 'participant' && $user->status != 3)
                 <div class="card w-100 mt-2">
                     <div class="card-body">
-                        <a href="/profile/campaigner/{{$user->id}}" type="button" class="card-text">Upgrade to Campaigner</a>
+                        <a href="/profile/campaigner" type="button" class="card-text">Upgrade to Campaigner</a>
                     </div>
                 </div>
             @elseif ($user->role == 'campaigner' || $user->status == 3)
                 <div class="card w-100 mt-2">
                     <div class="card-body">
-                        <a href="/campaigner/{{$user->id}}" type="button" class="card-text">Data Campaigner</a>
+                        <a href="/campaigner" type="button" class="card-text">Data Campaigner</a>
                     </div>
                 </div>
             @endif
@@ -52,7 +52,7 @@
             <p class="ml-3">Atur akses akun dan kelola data yang kami gunakan untuk mempersonalisasi pengalamanmu.</p>
         </div>
 
-        <form action="/profile/{{ $user->id }}" method="POST" enctype="multipart/form-data">
+        <form action="/profile" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="form-group">
@@ -61,8 +61,7 @@
             </div>
             <div class="form-group">
                 <label for="about">Tentang Saya</label>
-                <textarea class="form-control" id="about" rows="3" name="aboutMe"
-                    value="{{ $user->aboutMe }}"></textarea>
+                <textarea class="form-control" id="about" rows="3" name="aboutMe" value="{{ $user->aboutMe }}"></textarea>
             </div>
             <div class="form-group">
                 <label for="kota">Kota</label>
@@ -78,8 +77,7 @@
             </div>
             <div class="form-group">
                 <label for="link">Tautan Singkat Profile</label>
-                <input type="text" class="form-control" id="link" name="linkProfile"
-                    value="{{ $user->linkProfile }}">
+                <input type="text" class="form-control" id="link" name="linkProfile" value="{{ $user->linkProfile }}">
             </div>
 
             <div class="form-group">
@@ -90,8 +88,7 @@
             <div class="form-row">
                 <div class="col">
                     <label for="postcode">Kode Pos</label>
-                    <input type="text" class="form-control" id="postcode" name="zipCode"
-                        value="{{ $user->zipCode }}">
+                    <input type="text" class="form-control" id="postcode" name="zipCode" value="{{ $user->zipCode }}">
                 </div>
                 <div class="col">
                     <label for="phone">Nomor Telephone</label>
@@ -109,7 +106,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary mt-5">Simpan</button>
-            <a type="button" href="/delete/{{  $user->id }}" class="btn btn-danger mt-5">Hapus Akun</a>
+            <a type="button" href="/delete" class="btn btn-danger mt-5">Hapus Akun</a>
         </form>
     </div>
 @endsection

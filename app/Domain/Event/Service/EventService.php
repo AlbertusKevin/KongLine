@@ -70,7 +70,7 @@ class EventService
     //! Menampilkan halaman detail + form untuk update profile user tertentu
     public function editProfile($id)
     {
-        return $this->dao->showProfile($id);
+        return $this->showProfile();
     }
 
     //! Memproses update profile
@@ -81,27 +81,31 @@ class EventService
         $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
-    public function deleteAccount($id) 
+    public function deleteAccount($id)
     {
         return $this->dao->deleteAccount($id);
     }
 
-    public function requestUserToCampaigner($request, $id)
+    public function updateCampaigner($request, $user)
     {
-        if(!empty($request->file('KTP_picture'))){
-            $pathKTP = $this->uploadImage($request->file('KTP_picture'), 'profile/KTP');
+        if ($user->role == 'campaigner') {
+            return $this->dao->updateAccountNumber($request, $user->id);
         }
-        $this->dao->updateToCampaigner($request, $id, $pathKTP);
+
+        $pathKTP = $this->uploadImage($request->file('KTP_picture'), 'profile/KTP');
+        return $this->dao->updateToCampaigner($request, $user->id, $pathKTP);
     }
 
-    public function changePassword($request){
-        
+    public function changePassword($request)
+    {
+
         $user = $this->showProfile();
-        
+
         if (Hash::check($request->old_password, $user->password)) {
-            if ($request->new_password == $request->verifikasi) {
+            if ($request->new_password == $request->verification) {
                 $password = Hash::make($request->new_password);
-                $this->dao->changePassword($user,$password);
+                $this->dao->changePassword($user, $password);
+                return 'true';
             }
             return 'failed_verification';
         }

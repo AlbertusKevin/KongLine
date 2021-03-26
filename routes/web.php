@@ -39,18 +39,18 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 //? =========================
 //! Router Profile
 //? =========================
-Route::get('/profile/{id}', [ProfileController::class, 'edit']);
-Route::put('/profile/{id}', [ProfileController::class, 'update']);
+Route::get('/profile', [ProfileController::class, 'edit']);
+Route::put('/profile', [ProfileController::class, 'update']);
 
-Route::get('/delete/{id}', [ProfileController::class, 'delete']);
+Route::get('/delete', [ProfileController::class, 'delete']);
 
-Route::get('/profile/campaigner/{id}', [ProfileController::class, 'editCampaigner']);
-Route::put('/profile/campaigner/{id}', [ProfileController::class, 'updateCampaigner']);
+Route::get('/profile/campaigner', [ProfileController::class, 'editCampaigner']);
+Route::put('/profile/campaigner', [ProfileController::class, 'updateCampaigner']);
 
-Route::get('/campaigner/{id}', [ProfileController::class, 'dataCampaigner']);
+Route::get('/campaigner', [ProfileController::class, 'dataCampaigner']);
 
-Route::get('/change/{id}', [ProfileController::class, 'viewChangePassword']);
-Route::put('/change/{id}', [ProfileController::class, 'changePassword']);
+Route::get('/change', [ProfileController::class, 'viewChangePassword']);
+Route::put('/change', [ProfileController::class, 'changePassword']);
 
 
 //? =========================

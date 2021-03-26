@@ -18,71 +18,78 @@ class ProfileController extends Controller
         $this->event_service = new EventService();
     }
 
-    public function edit($id)
+    public function edit()
     {
-        $user = $this->event_service->editProfile($id);
+        $user = $this->event_service->showProfile();
         return view('profile', compact('user'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $this->event_service->updateProfile($request, $id);
-        return redirect('profile/' . $id);
+        $user = $this->event_service->showProfile();
+        $this->event_service->updateProfile($request, $user->id);
+        return redirect('profile');
     }
 
-    public function delete($id)
+    public function delete()
     {
-        $this->event_service->deleteAccount($id);
+        $user = $this->event_service->showProfile();
+        $this->event_service->deleteAccount($user->id);
         return redirect('logout');
     }
 
-    public function editCampaigner($id)
+    public function editCampaigner()
     {
-        $user = $this->event_service->editProfile($id);
+        $user = $this->event_service->showProfile();
+        if ($user->role == 'campaigner') {
+            return redirect('/campaigner');
+        }
         return view('updateCampaigner', compact('user'));
     }
 
-    public function updateCampaigner(Request $request, $id)
+    public function updateCampaigner(Request $request)
     {
-        $user = $this->event_service->showProfile($id);
-        if($user->role == 'campaigner'){
+        $user = $this->event_service->showProfile();
+
+        if ($user->role == 'campaigner') {
             $validator = Validator::make($request->all(), [
-                'nik' => 'required|min:16',
                 'rekening' => 'required',
             ]);
-        }else{
+        } else {
             $validator = Validator::make($request->all(), [
                 'nik' => 'required|min:16',
                 'rekening' => 'required',
                 'KTP_picture' => 'required|image'
             ]);
         }
-        
+
         if ($validator->fails()) {
             $messageError = [];
             foreach ($validator->errors()->all() as $message) {
                 $messageError = $message;
             }
+
             Alert::error('Validasi Error', [$messageError]);
-            return redirect('/profile/campaigner' . $id);
+            return redirect('/profile/campaigner');
         };
 
-        $this->event_service->requestUserToCampaigner($request, $id);
-        return redirect('/profile/' . $id);
+        $this->event_service->updateCampaigner($request, $user);
+        Alert::success('Berhasil', "Nomor rekening Anda sudah diupdate.");
+        return redirect('/profile/campaigner');
     }
 
-    public function dataCampaigner($id)
+    public function dataCampaigner()
     {
-        $user = $this->event_service->showProfile($id);
+        $user = $this->event_service->showProfile();
         return view('detailCampaigner', compact('user'));
     }
 
-    public function viewChangePassword($id)
+    public function viewChangePassword()
     {
         return view('changePassword');
     }
 
-    public function changePassword(Request $request, $id)
+    public function changePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'old_password' => 'required',
@@ -96,19 +103,19 @@ class ProfileController extends Controller
                 $messageError = $message;
             }
             Alert::error('Validasi Error', [$messageError]);
-            return redirect('/change/' . $id);
+            return redirect('/change');
         };
 
         $change = $this->event_service->changePassword($request);
 
-        if($change == 'failed_verification'){
+        if ($change == 'failed_verification') {
             Alert::error('Validasi Error', "Password baru dengan password verifikasi tidak sesuai.");
-            return redirect('/change/' . $id);
+            return redirect('/change');
         }
 
-        if($change == 'failed_password'){
+        if ($change == 'failed_password') {
             Alert::error('Password Tidak Cocok', 'Sandi saat ini tidak sesuai dengan pasword lama');
-            return redirect('/change/' . $id);
+            return redirect('/change');
         }
 
         Alert::success('Berhasil', "Password telah diganti. Silahkan login ulang.");

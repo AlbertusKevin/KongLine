@@ -77,7 +77,14 @@ class EventDao
         ]);
     }
 
-    public function changePassword($user,$password)
+    public function updateAccountNumber($request, $id)
+    {
+        User::where('id', $id)->update([
+            'accountNumber' => $request->rekening
+        ]);
+    }
+
+    public function changePassword($user, $password)
     {
         User::where('id', $user->id)->update([
             'password' => $password
