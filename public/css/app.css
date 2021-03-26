@@ -48,14 +48,29 @@ footer {
 }
 
 .detail-donation-photo {
-  min-height: 250px;
+  height: 250px;
   max-height: 250px;
+  width: auto;
+}
+
+.detail-donate-photo {
+  height: 150px;
+  max-height: 150px;
+  width: auto;
 }
 
 .donate-button{
   height: 50px;
   width: 130px;
   background: #EF3939;
+}
+
+.btn-donate.btn-danger{
+  width: 100%;
+  height: 150%;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 10px;
 }
 
 .donation-detail{

@@ -21,6 +21,7 @@ class CreateTransactionsTable extends Migration
             $table->integer('nominal');
             $table->string('repaymentPicture');
             $table->tinyInteger('status')->unsigned();
+            $table->boolean('annonymous_donate');
             $table->date('created_at');
         });
 

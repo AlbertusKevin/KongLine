@@ -83,6 +83,7 @@ Route::get('/donation', [EventController::class, 'listDonation']);
 Route::get('/donation/create', [EventController::class, 'createView']);
 Route::get('/donation/{id}', [EventController::class, 'getADonation']);
 Route::get('/donation/donate/{id}', [EventController::class, 'formDonate']);
+Route::post('/donation/donate/{id}', [EventController::class, 'postDonate']);
 
 //? =========================
 //! Route Communication

@@ -156,7 +156,7 @@ class EventController extends Controller
             foreach ($validator->errors()->all() as $message) {
                 $messageError = $message;
             }
-            
+
             Alert::error('Gagal Mendaftarkan Petisi', [$messageError]);
             return redirect('/petition/create');
         };
@@ -209,9 +209,17 @@ class EventController extends Controller
         );
     }
 
-    public function formDonate()
+    public function formDonate($id)
     {
-        dd("Hello World");
+        $user = $this->eventService->showProfile();
+        $donation = $this->eventService->getADonation($id);
+        return view('donateForm', compact('user', 'donation'));
+    }
+
+    public function postDonate(Request $request, $id)
+    {
+        dd($request->annonymousDonatur);
+        dd($request->annonymousComment);
     }
 
     public function createView()
