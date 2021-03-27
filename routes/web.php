@@ -81,4 +81,4 @@ Route::get('/admin/listUser', [AdminController::class, 'getAll']);//Nampilin Lis
 Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
 
 Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
-Route::get('/admin', [AdminController::class, 'home']);
+Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middleware('admin');

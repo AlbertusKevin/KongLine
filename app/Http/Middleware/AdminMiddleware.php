@@ -17,8 +17,8 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->role == 'Admin') {
-            return dd("admin");
+        if (auth()->user()->role == 'admin') {
+            return $next($request);
         }
 
         Alert::error('Error','Anda tidak memiliki akses');

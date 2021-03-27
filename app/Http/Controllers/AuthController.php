@@ -76,6 +76,9 @@ class AuthController extends Controller
         // dd($request->email . " " . $request->password);
 
         if ($temp == true) {
+            if(auth()->user()->role == 'admin'){
+                return redirect('/admin');
+            }
             return redirect('/home');
         } else {
             Alert::error('Email atau password salah', 'Silahkan coba lagi');
