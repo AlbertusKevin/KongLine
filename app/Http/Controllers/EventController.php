@@ -249,7 +249,11 @@ class EventController extends Controller
 
     public function formConfirm($id)
     {
-        return view('donateConfirm');
+        $donation = $this->eventService->getADonation($id);
+        $user = $this->eventService->showProfile();
+        $transaction = $this->eventService->getAUserTransaction($user->id);
+
+        return view('donateConfirm', compact('donation', 'user', 'transaction'));
     }
 
     public function postConfirm(Request $request, $id)

@@ -451,6 +451,11 @@ class EventDao
         ]);
     }
 
+    public function getAUserTransaction($id)
+    {
+        return Transaction::where('idParticipant', $id)->first();
+    }
+
     //! Mencari Donasi sesuai dengan 
     //! status event aktif dan keyword tertentu
     public function searchDonationByKeyword($status, $keyword)

@@ -515,6 +515,11 @@ class EventService
         $this->dao->postTransaction($transaction);
     }
 
+    public function getAUserTransaction($id)
+    {
+        return $this->dao->getAUserTransaction($id);
+    }
+
     public function checkUserTransactionStatus($participatedDonation, $id)
     {
         foreach ($participatedDonation as $participate) {

@@ -20,6 +20,7 @@ class ParticipateDonationSeeder extends Seeder
                 'idDonation' => 1,
                 'idParticipant' => 2,
                 'comment' => 'Help me from Cancer',
+                'annonymous_comment' => 0,
                 'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );

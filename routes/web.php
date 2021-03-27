@@ -94,7 +94,7 @@ Route::post('/donation/donate/{id}', [EventController::class, 'postDonate']);
 
 //* --- konfirmasi pembayaran donasi ---
 Route::get('/donation/confirm_donate/{id}', [EventController::class, 'formConfirm']);
-Route::post('/donation/confirm_donate/{id}', [EventController::class, 'postConfirm']);
+Route::put('/donation/confirm_donate/{id}', [EventController::class, 'postConfirm']);
 //? =========================
 //! Route Communication
 //? =========================

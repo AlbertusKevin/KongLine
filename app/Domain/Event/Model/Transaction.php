@@ -5,7 +5,7 @@ namespace App\Domain\Event\Model;
 class Transaction
 {
     //attribute
-    private $idDonation, $idParticipant, $accountNumber, $bank, $nominal, $repaymentPicture, $annonymousDonate, $status, $created_at;
+    private $idDonation, $idParticipant, $accountNumber, $nominal, $repaymentPicture, $annonymousDonate, $status, $created_at;
 
     public function __construct($idDonation, $idParticipant, $accountNumber, $nominal, $annonymousDonate, $status, $created_at)
     {
@@ -31,11 +31,6 @@ class Transaction
     public function getAccountNumber()
     {
         return $this->accountNumber;
-    }
-
-    public function getBank()
-    {
-        return $this->bank;
     }
 
     public function getNominal()

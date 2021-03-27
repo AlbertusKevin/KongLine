@@ -86,6 +86,21 @@ footer {
   max-height: 350px;
   overflow: auto;
 }
+.confirm-donate {
+  width: 850px;
+  height: 250px;
+  position: relative;
+
+  background: #F8F8F8;
+  border: 1px solid #EF3939;
+  box-sizing: border-box;
+  border-radius: 20px;
+}
+
+.btn-confirm-donate {
+  position: absolute;
+  width: 100%;
+}
 
 .banish {
   position: absolute;
