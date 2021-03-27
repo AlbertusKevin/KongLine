@@ -17,9 +17,9 @@ class CreateTransactionsTable extends Migration
             $table->foreignId('idDonation');
             $table->foreignId('idParticipant');
             $table->string('accountNumber');
-            $table->string('bank');
+            $table->string('bank')->nullable();
             $table->integer('nominal');
-            $table->string('repaymentPicture');
+            $table->string('repaymentPicture')->nullable();
             $table->tinyInteger('status')->unsigned();
             $table->boolean('annonymous_donate');
             $table->date('created_at');

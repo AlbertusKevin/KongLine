@@ -218,8 +218,43 @@ class EventController extends Controller
 
     public function postDonate(Request $request, $id)
     {
-        dd($request->annonymousDonatur);
-        dd($request->annonymousComment);
+        $validator = Validator::make($request->all(), [
+            'nominal' => 'required|numeric|min:10000',
+            'comment' => 'nullable|min:20',
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            Alert::error('Gagal Berdonasi', [$messageError]);
+            return redirect('/donation/donate/' . $id)->withInput();
+        };
+
+        $user = $this->eventService->showProfile();
+        $annonymousComment = $this->eventService->checkAnnonym($request->annonymousComment);
+        $annonymousDonate = $this->eventService->checkAnnonym($request->annonymousDonatur);
+
+        $participateDonation = new Model\ParticipateDonation($id, $user->id, $request->comment, Carbon::now()->format('Y-m-d'), $annonymousComment);
+        $transaction = new Model\Transaction($id, $user->id, $user->accountNumber, $request->nominal, $annonymousDonate, 0, Carbon::now()->format("Y-m-d"));
+        $this->eventService->postDonate($participateDonation);
+        $this->eventService->postTransaction($transaction);
+
+        Alert::success('Berhasil', 'Donasi Anda telah ditambahkan. Lanjutkan ke konfirmasi pembayaran.');
+        return redirect('/donation/confirm_donate/' . $id);
+    }
+
+    public function formConfirm($id)
+    {
+        return view('donateConfirm');
+    }
+
+    public function postConfirm(Request $request, $id)
+    {
+        dd("post confirm");
     }
 
     public function createView()

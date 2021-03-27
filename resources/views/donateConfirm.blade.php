@@ -1,6 +1,6 @@
 @extends('layout.app')
 @section('title')
-    Form Donate
+    Form \
 @endsection
 @section('content')
     <div class="container mt-5">
@@ -53,7 +53,7 @@
                 </div>
             </div>
         </div>
-        <form action="/donation/donate/{{ $donation->id }}" method="post">
+        {{-- <form action="/donation/donate/{{ $donation->id }}" method="post">
             @csrf
             <div class="row w-75 ml-auto mr-auto mt-4">
                 <div class="col-md-12">
@@ -100,6 +100,6 @@
                     <button class="btn btn-danger btn-donate" type="submit">Konfirmasi Pembayaran</button>
                 </div>
             </div>
-        </form>
+        </form> --}}
     </div>
 @endsection

@@ -110,7 +110,7 @@ class EventService
         $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
-    public function deleteAccount($id) 
+    public function deleteAccount($id)
     {
         return $this->dao->deleteAccount($id);
     }
@@ -439,6 +439,16 @@ class EventService
         return false;
     }
 
+    //! Memeriksa donasi dalam mode anonim atau tidak
+    public function checkAnnonym($checked)
+    {
+        if ($checked == 'on') {
+            return 1;
+        }
+
+        return 0;
+    }
+
     //! Mengecek verifikasi data diri yang diberikan sebelum membuat event
     public function verifyProfile($email, $phone)
     {
@@ -493,6 +503,16 @@ class EventService
     public function getABudgetingDonation($id)
     {
         return $this->dao->getABudgetingDonation($id);
+    }
+
+    public function postDonate($participateDonation)
+    {
+        $this->dao->postDonate($participateDonation);
+    }
+
+    public function postTransaction($transaction)
+    {
+        $this->dao->postTransaction($transaction);
     }
 
     public function checkUserTransactionStatus($participatedDonation, $id)
