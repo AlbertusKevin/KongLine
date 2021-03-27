@@ -77,6 +77,30 @@ class EventDao
         ]);
     }
 
+    public function updateToCampaigner($request, $id, $pathKTP)
+    {
+        User::where('id', $id)->update([
+            'accountNumber' => $request->rekening,
+            'nik' => $request->nik,
+            'ktpPicture' => $pathKTP,
+            'status' => 3
+        ]);
+    }
+
+    public function updateAccountNumber($request, $id)
+    {
+        User::where('id', $id)->update([
+            'accountNumber' => $request->rekening
+        ]);
+    }
+
+    public function changePassword($user, $password)
+    {
+        User::where('id', $user->id)->update([
+            'password' => $password
+        ]);
+    }
+
     //* =========================================================================================
     //* -------------------------------------- DAO Petisi ---------------------------------------
     //* =========================================================================================

@@ -5,6 +5,7 @@ namespace App\Domain\Event\Service;
 use App\Domain\Event\Dao\EventDao;
 use Illuminate\Support\Facades\Auth;
 use App\Domain\Event\Entity\ParticipatePetition;
+use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
 class EventService
@@ -99,20 +100,47 @@ class EventService
     //! Menampilkan halaman detail + form untuk update profile user tertentu
     public function editProfile($id)
     {
-        return $this->dao->showProfile($id);
+        return $this->showProfile();
     }
 
     //! Memproses update profile
     public function updateProfile($request, $id)
     {
-        $pathProfile = $this->uploadImage($request->file('profile/profile_picture'), 'photo');
-        $pathBackground = $this->uploadImage($request->file('profile/zoom_picture'), 'background');
+        $pathProfile = $this->uploadImage($request->file('profile_picture'), 'profile/photo');
+        $pathBackground = $this->uploadImage($request->file('zoom_picture'), 'profile/background');
         $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
-    public function deleteAccount($id) 
+    public function deleteAccount($id)
     {
         return $this->dao->deleteAccount($id);
+    }
+
+    public function updateCampaigner($request, $user)
+    {
+        if ($user->role == 'campaigner') {
+            return $this->dao->updateAccountNumber($request, $user->id);
+        }
+
+        $pathKTP = $this->uploadImage($request->file('KTP_picture'), 'profile/KTP');
+        return $this->dao->updateToCampaigner($request, $user->id, $pathKTP);
+    }
+
+    public function changePassword($request)
+    {
+
+        $user = $this->showProfile();
+
+        if (Hash::check($request->old_password, $user->password)) {
+            if ($request->new_password == $request->verification) {
+                $password = Hash::make($request->new_password);
+                $this->dao->changePassword($user, $password);
+                return 'true';
+            }
+            return 'failed_verification';
+        }
+
+        return 'failed_password';
     }
 
     //* =========================================================================================

@@ -39,17 +39,16 @@
                     <a class="nav-link" href="{{ url('/petition') }}">Petisi</a>
                     <a class="nav-link" href="{{ url('/') }}">Forum</a>
                     <a class="nav-link" href="{{ url('/inbox') }}">Service</a>
-                </div>
-                @if (Auth::check())
-                    <div class="dropdown m-2 text-center">
-                        <div data-toggle="dropdown">
-                            <img src="/img/profile.png">
+                    @if (Auth::check())
+                        <div class="dropdown m-2 mr-2">
+                            <div data-toggle="dropdown">
+                                <img src="/img/profile.png">
+                            </div>
+                            <div class="dropdown-menu">
+                                <a class="nav-link" href="{{ url('/profile') }}">Edit Profile</a>
+                                <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
+                            </div>
                         </div>
-                        <div class="dropdown-menu">
-                            <a class="nav-link" href="{{ url('/profile/' . Auth::id()) }}">Edit Profile</a>
-                            <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
-                        </div>
-                    </div>
                 @else
                     <div class="text-center">
                         <a type="button" class="btn btn-outline-info ml-1 mr-2" href="{{ url('/login') }}"> Login </a>

@@ -156,7 +156,7 @@ class EventController extends Controller
             foreach ($validator->errors()->all() as $message) {
                 $messageError = $message;
             }
-            
+
             Alert::error('Gagal Mendaftarkan Petisi', [$messageError]);
             return redirect('/petition/create');
         };
