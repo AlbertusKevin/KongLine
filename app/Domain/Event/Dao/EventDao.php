@@ -25,6 +25,11 @@ class EventDao
         return Category::all();
     }
 
+    public function getACategory($id)
+    {
+        return Category::where('id', $id)->first();
+    }
+
     //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
     public function checkParticipated($idEvent, $idParticipant, $typeEvent)
     {
@@ -33,6 +38,11 @@ class EventDao
         } else {
             return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
         }
+    }
+    //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
+    public function verifyProfile($email, $phone)
+    {
+        return User::where('email', $email)->where('phoneNumber', $phone)->first();
     }
 
     //* =========================================================================================
@@ -326,7 +336,7 @@ class EventDao
     //! Menampilkan seluruh daftar petisi yang sedang aktif
     public function indexPetition()
     {
-        return Petition::where('status', 1)->get();
+        return Petition::where('status', ACTIVE)->get();
     }
 
     //! Menampilkan detail petisi tertentu berdasarkan ID
@@ -402,6 +412,232 @@ class EventDao
     {
         return Petition::where('id', $idEvent)->update([
             'signedCollected' => $count
+        ]);
+    }
+
+    //* =========================================================================================
+    //* ------------------------------------ DAO Donation ---------------------------------------
+    //* =========================================================================================
+    //! Mengambil seluruh donasi dengan status aktif / sedang berlangsung
+    public function getListDonation()
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', ACTIVE)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mengambil seluruh donasi dengan status aktif / sedang berlangsung
+    public function getADonation($id)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.id', $id)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->first();
+    }
+
+    public function getParticipatedDonation($idEvent)
+    {
+        return ParticipateDonation::selectRaw('participate_donation.*,transaction.*, users.name as name, users.photoProfile as photoProfile')
+            ->where('participate_donation.idDonation', $idEvent)
+            ->join('users', 'participate_donation.idParticipant', 'users.id')
+            ->join('transaction', 'participate_donation.idDonation', 'transaction.idDonation')
+            // ->where('transaction.status', 1)
+            ->get();
+    }
+
+    public function getABudgetingDonation($idEvent)
+    {
+        return DetailAllocation::where('idDonation', $idEvent)->get();
+    }
+
+    //! Mencari Donasi sesuai dengan 
+    //! status event aktif dan keyword tertentu
+    public function searchDonationByKeyword($status, $keyword)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mencari donasi sesuai dengan
+    //! keyword dan kategori tertentu
+    public function searchDonationCategory($status, $keyword, $category)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->where('category', $category)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mencari Donasi sesuai dengan
+    //! keyword, sorting ascending, dan kategori tertentu
+    public function searchDonationCategorySortAsc($status, $keyword, $category, $table)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->where('category', $category)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->orderBy($table)
+            ->get();
+    }
+
+    //! Mencari Donasi sesuai dengan
+    //! keyword, sorting sisa target donasi, dan kategori tertentu
+    // public function searchDonationCategorySortTargetLeft($status, $keyword, $category, $table)
+    // {
+    //     return Donation::selectRaw('donation.*, users.name as name')
+    //         ->where('donation.status', $status)
+    //         ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+    //         ->where('category', $category)
+    //         ->join('users', 'donation.idCampaigner', 'users.id')
+    //         ->orderByAsc($table)
+    //         ->get();
+    // }
+
+    //! Mencari donasi sesuai dengan
+    //! keyword dan sorting asc tertentu
+    public function searchDonationSortBy($status, $keyword, $table)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->orderBy($table)
+            ->get();
+    }
+
+    //! Mencari donasi sesuai dengan
+    //! keyword, kategori tertentu, dan donasi yang pernah dibuat campaigner
+    public function searchDonationCategoryByMe($keyword, $category, $idCampaigner)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.category', $category)
+            ->where('donation.idCampaigner', $idCampaigner)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mencari donasi sesuai dengan
+    //! keyword, kategori tertentu, dan donasi yang pernah diikuti participant
+    public function searchDonationCategoryParticipated($keyword, $category, $idParticipant)
+    {
+        return ParticipateDonation::selectRaw('donation.*, users.name as name, participate_donation.*')
+            ->where('participate_donation.idParticipant', $idParticipant)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->where('donation.category', $category)
+            ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mencari donasi sesuai dengan
+    //! keyword, kategori tertentu, dan donasi yang pernah dibuat campaigner
+    public function searchDonationByMe($keyword, $idCampaigner)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.idCampaigner', $idCampaigner)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mencari donasi sesuai dengan
+    //! keyword, kategori tertentu, dan donasi yang pernah diikuti participant
+    public function searchDonationParticipated($keyword, $idParticipant)
+    {
+        return ParticipateDonation::selectRaw('donation.*, users.name as name, participate_donation.*')
+            ->where('participate_donation.idParticipant', $idParticipant)
+            ->where('donation.title', 'LIKE', '%' . $keyword . "%")
+            ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mengurutkan donasi sesuai dengan
+    //! sorting ascending dan kategori tertentu
+    public function sortDonationCategory($category, $status, $table)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->where('donation.category', $category)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->orderBy($table)
+            ->get();
+    }
+
+    //! Mengurutkan petisi dengan status tertentu 
+    //! secara descending sesuai dengan ketentuan yang dipilih
+    public function sortDonation($status, $table)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->orderBy($table)
+            ->get();
+    }
+
+    //! Menampilkan petisi dengan status tertentu sesuai kategori tertentu
+    public function donationByCategory($category, $status)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', $status)
+            ->where('category', $category)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mengurutkan donasi yang pernah diikuti participant sesuai kategori tertentu
+    public function sortDonationCategoryParticipated($category, $idParticipant)
+    {
+        return ParticipateDonation::selectRaw('donation.*, users.name as name, participate_donation.*')
+            ->where('participate_donation.idParticipant', $idParticipant)
+            ->where('donation.category', $category)
+            ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mengurutkan donasi yang pernah diikuti participant
+    public function sortDonationParticipated($idParticipant)
+    {
+        return ParticipateDonation::selectRaw('donation.*, users.name as name, participate_donation.*')
+            ->where('participate_donation.idParticipant', $idParticipant)
+            ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mengurutkan donasi yang pernah dibuat campaigner sesuai kategori tertentu
+    public function sortDonationCategoryByCampaigner($category, $idCampaigner)
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.category', $category)
+            ->where('donation.idCampaigner', $idCampaigner)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    //! Mengurutkan donasi yang pernah dibuat oleh campaigner
+    public function sortDonationByCampaigner($idCampaigner)
+    {
+        return ParticipateDonation::selectRaw('donation.*, users.name as name')
+            ->where('donation.idCampaigner', $idCampaigner)
+            ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->get();
+    }
+
+    public function updateStatusEvent($id, $status)
+    {
+        Donation::where('id', $id)->update([
+            'status' => $status
         ]);
     }
 }
