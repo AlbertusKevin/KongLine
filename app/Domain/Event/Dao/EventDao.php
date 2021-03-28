@@ -504,6 +504,35 @@ class EventDao
         return DetailAllocation::where('idDonation', $idEvent)->get();
     }
 
+    public function postDonate($participateDonation)
+    {
+        ParticipateDonation::where('idDonation', $participateDonation->getIdDonation())->create([
+            'idDonation' => $participateDonation->getIdDonation(),
+            'idParticipant' => $participateDonation->getIdParticipant(),
+            'comment' => $participateDonation->getComment(),
+            'created_at' => $participateDonation->getCreatedAt(),
+            'annonymous_comment' => $participateDonation->getAnnonymous()
+        ]);
+    }
+
+    public function postTransaction($transaction)
+    {
+        Transaction::where('idDonation', $transaction->getIdDonation())->create([
+            'idDonation' => $transaction->getIdDonation(),
+            'idParticipant' => $transaction->getIdParticipant(),
+            'accountNumber' => $transaction->getAccountNumber(),
+            'nominal' => $transaction->getNominal(),
+            'annonymous_donate' => $transaction->getAnnonymous(),
+            'status' => $transaction->getStatus(),
+            'created_at' => $transaction->getCreatedAt()
+        ]);
+    }
+
+    public function getAUserTransaction($id)
+    {
+        return Transaction::where('idParticipant', $id)->first();
+    }
+
     //! Mencari Donasi sesuai dengan 
     //! status event aktif dan keyword tertentu
     public function searchDonationByKeyword($status, $keyword)

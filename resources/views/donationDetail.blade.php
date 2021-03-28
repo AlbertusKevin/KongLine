@@ -46,7 +46,10 @@
                                                     </div>
                                                 @else
                                                     <div class="alert alert-info alert-donated">
-                                                        Donasi Anda menunggu konfirmasi.
+                                                        <p>Menunggu konfirmasi</p>
+                                                        <small><a
+                                                                href="/donation/confirm_donate/{{ $donation->id }}">konfirmasi
+                                                                pembayaran</a></small>
                                                     </div>
                                                 @endif
                                                 <span

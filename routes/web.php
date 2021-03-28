@@ -89,14 +89,25 @@ Route::post('/petition/{id}', [EventController::class, 'signPetition']);
 //? =========================
 //! Router Donation
 //? =========================
+//* --- pemanggilan ajax ---
 Route::get('/donation/search', [EventController::class, 'searchDonation']);
 Route::get('/donation/sort', [EventController::class, 'sortDonation']);
 
+//* --- menampilkan donasi ---
 Route::get('/donation', [EventController::class, 'listDonation']);
-Route::get('/donation/create', [EventController::class, 'createView']);
 Route::get('/donation/{id}', [EventController::class, 'getADonation']);
-Route::get('/donation/donate/{id}', [EventController::class, 'formDonate']);
 
+//* --- buat donasi ---
+Route::get('/donation/create', [EventController::class, 'createView']);
+Route::post('/donation/create', [EventController::class, 'createView']);
+
+//* --- partisipasi dalam donasi ---
+Route::get('/donation/donate/{id}', [EventController::class, 'formDonate']);
+Route::post('/donation/donate/{id}', [EventController::class, 'postDonate']);
+
+//* --- konfirmasi pembayaran donasi ---
+Route::get('/donation/confirm_donate/{id}', [EventController::class, 'formConfirm']);
+Route::put('/donation/confirm_donate/{id}', [EventController::class, 'postConfirm']);
 //? =========================
 //! Route Communication
 //? =========================
@@ -106,10 +117,9 @@ Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show'
 //? =========================
 //! Router Admin
 //? =========================
+Route::get('/admin/listUser', [AdminController::class, 'getAll']);
 Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
 
 Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
 
 Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middleware('admin');
-Route::get('/admin/listUser', [AdminController::class, 'getAll']);
-

@@ -20,10 +20,10 @@ class TransactionSeeder extends Seeder
                 'idDonation' => 1,
                 'idParticipant' => 1,
                 'accountNumber' => '209708591099',
-                'bank' => 'BCA',
                 'nominal' => 10000,
                 'repaymentPicture' => 'images/buktitrf.jpg',
                 'status' => 1,
+                'annonymous_donate' => 0,
                 'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );

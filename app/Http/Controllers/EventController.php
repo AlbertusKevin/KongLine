@@ -209,9 +209,56 @@ class EventController extends Controller
         );
     }
 
-    public function formDonate()
+    public function formDonate($id)
     {
-        dd("Hello World");
+        $user = $this->eventService->showProfile();
+        $donation = $this->eventService->getADonation($id);
+        return view('donateForm', compact('user', 'donation'));
+    }
+
+    public function postDonate(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'nominal' => 'required|numeric|min:10000',
+            'comment' => 'nullable|min:20',
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            Alert::error('Gagal Berdonasi', [$messageError]);
+            return redirect('/donation/donate/' . $id)->withInput();
+        };
+
+        $user = $this->eventService->showProfile();
+        $annonymousComment = $this->eventService->checkAnnonym($request->annonymousComment);
+        $annonymousDonate = $this->eventService->checkAnnonym($request->annonymousDonatur);
+
+        $participateDonation = new Model\ParticipateDonation($id, $user->id, $request->comment, Carbon::now()->format('Y-m-d'), $annonymousComment);
+        $transaction = new Model\Transaction($id, $user->id, $user->accountNumber, $request->nominal, $annonymousDonate, 0, Carbon::now()->format("Y-m-d"));
+        $this->eventService->postDonate($participateDonation);
+        $this->eventService->postTransaction($transaction);
+
+        Alert::success('Berhasil', 'Donasi Anda telah ditambahkan. Lanjutkan ke konfirmasi pembayaran.');
+        return redirect('/donation/confirm_donate/' . $id);
+    }
+
+    public function formConfirm($id)
+    {
+        $donation = $this->eventService->getADonation($id);
+        $user = $this->eventService->showProfile();
+        $transaction = $this->eventService->getAUserTransaction($user->id);
+
+        return view('donateConfirm', compact('donation', 'user', 'transaction'));
+    }
+
+    public function postConfirm(Request $request, $id)
+    {
+        dd("post confirm");
     }
 
     public function createView()
