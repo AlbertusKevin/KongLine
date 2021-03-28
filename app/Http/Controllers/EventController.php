@@ -54,34 +54,8 @@ class EventController extends Controller
     {
         $user = $this->eventService->showProfile();
         $petition = $this->eventService->showPetition($idEvent);
-
-        if ($user->role != "guest") {
-            $isParticipated = $this->eventService->checkParticipated($idEvent, $user->id, 'petition');
-        } else {
-            $isParticipated = false;
-        }
-
-        if ($petition->status == 0) {
-            $message = [
-                'header' => 'Menunggu Konfirmasi',
-                'content' => 'Event ini sudah didaftarkan. Tunggu konfirmasi dari pihak admin.'
-            ];
-        } else if ($petition->status == 2) {
-            $message = [
-                'header' => 'Telah Selesai',
-                'content' => 'Event ini sudah selesai. Tidak menerima tandatangan lagi.'
-            ];
-        } else if ($petition->status == 3) {
-            $message = [
-                'header' => 'Sudah Ditutup',
-                'content' => 'Event ini telah ditutup oleh penyelenggara / admin.'
-            ];
-        } else {
-            $message = [
-                'header' => 'Dibatalkan',
-                'content' => 'Event ini dibatalkan oleh penyelenggara.'
-            ];
-        }
+        $isParticipated = $this->eventService->checkParticipated($idEvent, $user, PETITION);
+        $message = $this->eventService->messageOfEvent($petition->status);
 
         return view('petition.petitionDetail', compact('petition', 'user', 'isParticipated', 'message'));
     }
@@ -134,7 +108,7 @@ class EventController extends Controller
     //! Memproses tandatangan peserta pada petisi tertentu
     public function signPetition(Request $request, $idEvent)
     {
-        $user = Auth::user();
+        $user = $this->eventService->showProfile();
         $this->eventService->signPetition($request, $idEvent, $user);
         Alert::success('Berhasil Menandatangai petisi ini.', 'Terimakasih ikut berpartisipasi!');
         return redirect("/petition/" . $idEvent);
@@ -146,6 +120,21 @@ class EventController extends Controller
         $user = $this->eventService->showProfile();
         $listCategory = $this->eventService->listCategory();
         return view('petition.petitionCreate', compact('user', 'listCategory'));
+    }
+
+    //! Mengecek verifikasi data diri yang diberikan sebelum membuat event
+    public function verifyProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'phone' => 'numeric|nullable'
+        ]);
+
+        if ($validator->fails()) {
+            return json_encode("Validation Error");
+        };
+
+        return json_encode($this->eventService->verifyProfile($request->email, $request->phone));
     }
 
     //! Menyimpan data petisi ke database
@@ -167,7 +156,7 @@ class EventController extends Controller
             foreach ($validator->errors()->all() as $message) {
                 $messageError = $message;
             }
-            
+
             Alert::error('Gagal Mendaftarkan Petisi', [$messageError]);
             return redirect('/petition/create');
         };
@@ -185,6 +174,60 @@ class EventController extends Controller
     //* =========================================================================================
     public function listDonation()
     {
-        return view('donation');
+        $donations = $this->eventService->getListDonation();
+        $categories = $this->eventService->listCategory();
+        $user = $this->eventService->showProfile();
+
+        return view('donation', compact('donations', 'categories', 'user'));
+    }
+
+    public function getADonation($id)
+    {
+        $donation = $this->eventService->getADonation($id);
+        $user = $this->eventService->showProfile();
+        $progress = $this->eventService->countProgressDonation($donation); // untuk progress bar
+        $category = $this->eventService->getACategory($donation->category); // untuk menampilkan deskripsi kategori
+        $participatedDonation = $this->eventService->getParticipatedDonation($id); // untuk tab donatur
+        $alocationBudget = $this->eventService->getABudgetingDonation($id); // untuk tab alokasi dana
+        $isParticipated = $this->eventService->checkParticipated($id, $user, DONATION); // untuk pengecekan apakah pernah donasi atau tidak
+        $message = $this->eventService->messageOfEvent($donation->status);
+        $userTransactionStatus = $this->eventService->checkUserTransactionStatus($participatedDonation, $user->id);
+
+        return view(
+            'donationDetail',
+            compact(
+                'donation',
+                'user',
+                'progress',
+                'category',
+                'participatedDonation',
+                'alocationBudget',
+                'isParticipated',
+                'message',
+                'userTransactionStatus'
+            )
+        );
+    }
+
+    public function formDonate()
+    {
+        dd("Hello World");
+    }
+
+    public function createView()
+    {
+        dd("Hello World");
+    }
+
+    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
+    public function searchDonation(Request $request)
+    {
+        return $this->eventService->searchDonation($request);
+    }
+
+    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
+    public function sortDonation(Request $request)
+    {
+        return $this->eventService->sortDonation($request);
     }
 }

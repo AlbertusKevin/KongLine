@@ -39,10 +39,18 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 //? =========================
 //! Router Profile
 //? =========================
-Route::get('/profile/{id}', [ProfileController::class, 'edit']);
-Route::put('/profile/{id}', [ProfileController::class, 'update']);
+Route::get('/profile', [ProfileController::class, 'edit']);
+Route::put('/profile', [ProfileController::class, 'update']);
 
-Route::get('/delete/{id}', [ProfileController::class, 'delete']);
+Route::get('/delete', [ProfileController::class, 'delete']);
+
+Route::get('/profile/campaigner', [ProfileController::class, 'editCampaigner']);
+Route::put('/profile/campaigner', [ProfileController::class, 'updateCampaigner']);
+
+Route::get('/campaigner', [ProfileController::class, 'dataCampaigner']);
+
+Route::get('/change', [ProfileController::class, 'viewChangePassword']);
+Route::put('/change', [ProfileController::class, 'changePassword']);
 
 
 
@@ -66,6 +74,7 @@ Route::post('/reset', [AuthController::class, 'postReset'])->name('reset');
 Route::get('/petition/type', [EventController::class, 'listPetitionType']);
 Route::get('/petition/search', [EventController::class, 'searchPetition']);
 Route::get('/petition/sort', [EventController::class, 'sortPetition']);
+Route::post('/petition/create/verification', [EventController::class, 'verifyProfile']);
 
 Route::get('/petition', [EventController::class, 'indexPetition']);
 Route::get('/petition/create', [EventController::class, 'createPetition']);
@@ -78,7 +87,18 @@ Route::post('/petition/progress/{id}', [EventController::class, 'storeProgressPe
 Route::post('/petition/{id}', [EventController::class, 'signPetition']);
 
 //? =========================
-//! Router Communication
+//! Router Donation
+//? =========================
+Route::get('/donation/search', [EventController::class, 'searchDonation']);
+Route::get('/donation/sort', [EventController::class, 'sortDonation']);
+
+Route::get('/donation', [EventController::class, 'listDonation']);
+Route::get('/donation/create', [EventController::class, 'createView']);
+Route::get('/donation/{id}', [EventController::class, 'getADonation']);
+Route::get('/donation/donate/{id}', [EventController::class, 'formDonate']);
+
+//? =========================
+//! Route Communication
 //? =========================
 Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
 Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
@@ -86,4 +106,7 @@ Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show'
 //? =========================
 //! Router Admin
 //? =========================
+Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
+
+Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);

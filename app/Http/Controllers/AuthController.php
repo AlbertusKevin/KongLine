@@ -38,15 +38,14 @@ class AuthController extends Controller
         $svc = new EventService();
         $result = $svc->authRegis($request);
 
-        if($result){
+        if ($result) {
             Alert::success('Register Success', 'Please Login.');
             return redirect('login');
-        }{
+        } {
             Alert::error('Register Gagal', 'Mohon cek kembali data Anda');
             return redirect('/register')
                 ->withInput();
         }
-
     }
 
     public function getLogin()
@@ -77,7 +76,7 @@ class AuthController extends Controller
 
         if ($result) {
             // dd(Auth::user()->status);
-            if(Auth::user()->status == 1 || Auth::user()->status == 3){
+            if (Auth::user()->status == 1 || Auth::user()->status == 3) {
                 // dd("yooo");
                 return redirect('/home');
             }
@@ -89,7 +88,6 @@ class AuthController extends Controller
 
         Alert::error('Email atau password salah', 'Silahkan coba lagi');
         return redirect('/login');
-
     }
 
     public function logout()
@@ -103,7 +101,8 @@ class AuthController extends Controller
         return view('auth.forgot');
     }
 
-    public function postForgot(Request $request){
+    public function postForgot(Request $request)
+    {
         $request->validate([
             'email' => 'required|email|exists:users',
         ]);
@@ -116,25 +115,24 @@ class AuthController extends Controller
 
         Alert::toast('Silahkan cek email Anda');
         return back();
-
-
     }
 
-    public function getReset($email, $token){
-        return view('auth.reset', ['token' => $token , 'email' => $email]);
+    public function getReset($email, $token)
+    {
+        return view('auth.reset', ['token' => $token, 'email' => $email]);
     }
 
-    public function postReset(Request $request){
+    public function postReset(Request $request)
+    {
 
         $svc = new EventService();
         $result = $svc->authReset($request);
 
-        if($result){
+        if ($result) {
             return redirect('/login')->with('message', 'Your password has been changed!');
-        }else{
+        } else {
             Alert::toast('Gagal ganti password, silahkan coba lagi');
             return back();
         }
-
     }
 }

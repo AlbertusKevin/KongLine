@@ -1,3 +1,4 @@
+
 // fungsi umum
 const checkTypePetition = (type) => {
     if (type.includes("Berlangsung")) {
@@ -80,6 +81,53 @@ const listPetitionTypeEmpty = (keyword) => {
     `;
 };
 
+const changeDonationList = (donation) => {
+    return /*html*/ `
+    <div class="card col-md-4 p-2 mb-3" style="padding: 0; ">
+        <div style="position:relative;">
+            <img src=${donation.photo} class="img-donation card-img-top"
+                alt=" ${donation.title} donation's picture">
+            <p class="donate-count">${donation.totalDonatur} Donatur</p>
+            <p class="time-left">
+            ${Math.ceil(
+                (new Date(donation.deadline) - new Date().getTime()) /
+                    (60 * 60 * 24 * 1000)
+            )}
+                hari lagi
+            </p>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title title-donation">${donation.title}</h5>
+            <p class="card-text ">${donation.name}</p>
+            <div class="row d-flex justify-content-between">
+                <p class="font-weight-bold text-left pl-3">
+                    Rp. ${donation.donationCollected.toLocaleString("en")},00
+                </p>
+                <p class="font-weight-bold text-right">Rp.
+                    Rp. ${(
+                        donation.donationTarget - donation.donationCollected
+                    ).toLocaleString("en")},00
+                </p>
+            </div>
+            <div class="row  d-flex justify-content-between">
+                <p class="font-weight-light text-left pl-3 mb-0">Terkumpul</p>
+                <p class="font-weight-light text-right pl-1 mb-0">Menuju Target</p>
+            </div>
+        </div>
+    </div>
+    `;
+};
+
+const listDonationEmpty = (keyword) => {
+    return /*html*/ `
+    <div class="card col-md-12 p-2 mb-3">
+        <div class="card-body">
+            <h5 class="card-title title-donation">Event donasi dengan judul ${keyword} tidak ditemukan</h5>
+        </div>
+    </div>
+    `;
+};
+
 const sortListPetition = (sortBy, category, typePetition) => {
     $.ajax({
         url: "/petition/sort",
@@ -96,6 +144,27 @@ const sortListPetition = (sortBy, category, typePetition) => {
             } else {
                 html += listPetitionEmpty();
                 $("#petition-list").html(html);
+            }
+        },
+    });
+};
+
+const sortListDonation = (sortBy, category) => {
+    $.ajax({
+        url: "/donation/sort",
+        data: { sortBy, category },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                data.forEach((petition) => {
+                    // console.log(petition);
+                    html += changeDonationList(petition);
+                });
+                $("#donation-list").html(html);
+            } else {
+                html += listDonationEmpty();
+                $("#donation-list").html(html);
             }
         },
     });
@@ -127,15 +196,58 @@ $(".nav-link").ready(function () {
     }
 });
 
-//done
+$("#check-terms-agreement").on("click", function () {
+    if (this.checked) {
+        $(".verify-profile").attr("disabled", false);
+    } else {
+        $(".verify-profile").attr("disabled", true);
+    }
+});
+
 $("#check-privacy-policy").on("click", function () {
     if (this.checked) {
-        console.log("true");
         $("#sign-petition-button").attr("disabled", false);
     } else {
-        console.log("false");
         $("#sign-petition-button").attr("disabled", true);
     }
+});
+
+$(".verification-create-petition").on("click", function () {
+    const email = $("#email").val();
+    const phone = $("#phone").val();
+    const _token = $(this).parent().prev().prev().prev().val();
+
+    $.ajax({
+        url: "/petition/create/verification",
+        method: "post",
+        data: { email, phone, _token },
+        dataType: "json",
+        success: (checked) => {
+            $(".close-dismiss").trigger("click");
+            if (checked == "Validation Error") {
+                swal(
+                    "Verifikasi gagal",
+                    "Periksa kembali input Anda.",
+                    "error"
+                );
+            } else if (checked) {
+                swal("Berhasil", "Verifikasi Berhasil!", "success");
+                console.log($(".new-petition"));
+                $(".new-petition").removeAttr("disabled");
+            } else {
+                swal(
+                    "Verifikasi Gagal",
+                    `Data dengan email ${email} dan ${phone} tidak ditemukan`,
+                    "error"
+                );
+            }
+        },
+    });
+});
+
+$(".donation-detail").on("click", function () {
+    $(".donation-detail").removeClass("active");
+    $(this).addClass("active");
 });
 
 $(".petition-type").on("click", function () {
@@ -171,8 +283,6 @@ $(".petition-type").on("click", function () {
             "Lihat Petisi yang Telah Saya Tandatangani di Website Ini"
         );
     }
-
-    console.log(typePetition);
 
     $.ajax({
         url: "/petition/type",
@@ -246,3 +356,240 @@ $(".category-petition").on("click", function (e) {
     let typePetition = checkTypePetition($(".btn-primary").html());
     sortListPetition(sortBy, category, typePetition);
 });
+
+// Untuk donasi
+$("#search-donation").on("keyup", function () {
+    let keyword = $(this).val();
+    let category = $("#category-donation-selected").val();
+    let sortBy = $("#sort-donation-selected").val();
+
+    $.ajax({
+        url: "/donation/search",
+        data: { keyword, category, sortBy },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                data.forEach((donation) => {
+                    html += changeDonationList(donation);
+                });
+                $("#donation-list").html(html);
+            } else {
+                html += listDonationEmpty(keyword);
+                $("#donation-list").html(html);
+            }
+        },
+    });
+});
+
+$(".sort-select-donation").on("click", function (e) {
+    e.preventDefault();
+    let sortBy = $(this).html();
+    $("#sort-donation-selected").val(sortBy);
+
+    $(".sort-select-donation").removeClass("active");
+    $(this).addClass("active");
+
+    let category = $("#category-donation-selected").val();
+    sortListDonation(sortBy, category);
+});
+
+$(".category-select-donation").on("click", function (e) {
+    e.preventDefault();
+    let category = $(this).html();
+    $("#category-donation-selected").val(category);
+
+    $(".category-select-donation").removeClass("active");
+    $(this).addClass("active");
+
+    let sortBy = $("#sort-donation-selected").val();
+    sortListDonation(sortBy, category);
+});
+
+$(".show-budgeting").on("click", function () {
+    const html = $("#budgeting").html();
+    $(".card-text").html(html);
+});
+
+$(".show-description").on("click", function () {
+    const html = $("#description").html();
+    $(".card-text").html(html);
+});
+
+$(".show-donatur").on("click", function () {
+    const html = $("#donatur").html();
+    $(".card-text").html(html);
+});
+$(".show-comment").on("click", function () {
+    const html = $("#comment").html();
+    $(".card-text").html(html);
+});
+
+// ADMIN
+const viewUserParticipantRole = (user, countParticipated) => {
+    console.log("role : " + user.role);
+    // console.log("tanggal : " + user.created_at);
+    return /*html*/ `
+        <tr>
+            <td class="text-center">
+                ${changeDateFormat(user.created_at)}
+            </td>
+            <td>
+                ${user.name}
+            </td>
+            <td>
+                ${user.email}
+            </td>
+            <td>
+                ${countParticipated[1]}
+            </td>
+            <td class="text-left">
+                    <span class="badge badge-primary p-2">${user.role}</span>
+            </td>
+        </tr>
+    `;
+};
+
+const viewUserCampaignerRole = (user, countParticipated) => {
+    console.log("role : " + user.role);
+    // console.log("tanggal : " + user.created_at);
+    return /*html*/ `
+        <tr>
+            <td class="text-center">
+                ${changeDateFormat(user.created_at)}
+            </td>
+            <td>
+                ${user.name}
+            </td>
+            <td>
+                ${user.email}
+            </td>
+            <td>
+                ${countParticipated[1]}
+            </td>
+            <td class="text-left">
+                    <span class="badge badge-success p-2">${user.role}</span>
+            </td>
+        </tr>
+    `;
+};
+
+const viewUserGuestRole = (user, countParticipated) => {
+    console.log("role : " + user.role);
+    // console.log("tanggal : " + user.created_at);
+    return /*html*/ `
+        <tr>
+            <td class="text-center">
+                ${changeDateFormat(user.created_at)}
+            </td>
+            <td>
+                ${user.name}
+            </td>
+            <td>
+                ${user.email}
+            </td>
+            <td>
+                ${countParticipated[1]}
+            </td>
+            <td class="text-left">
+                    <span class="badge badge-dark p-2">${user.role}</span>
+            </td>
+        </tr>
+    `;
+};
+
+const viewUserByRoleIsEmpty = (roleType) => {
+    return /* html */ `
+        <tr>
+            <td colspan = "5" class="text-center">
+                Maaf, tidak ada data user ${roleType}
+            </td>
+        </tr>
+    `;
+}
+
+const roleTypeUser = (type) => {
+    if (type.includes("Participant")) {
+        return "participant";
+    }
+    if (type.includes("Campaigner")) {
+        return "campaigner";
+    }
+    if (type.includes("Pengajuan")) {
+        return "pengajuan";
+    }
+    return "semua";
+};
+
+$(".role-type").on("click", function () {
+    // cari yang ada class btn-primary
+    $(".role-type").removeClass("btn-primary");
+    $(".role-type").addClass("btn-light");
+
+    $(this).addClass("btn-primary");
+    $(this).removeClass("btn-light");
+
+    let roleType = $(this).html();
+    roleType = roleTypeUser(roleType);
+    console.log(roleType);
+
+    $.ajax({
+        url: "/admin/listUser/role",
+        data: { roleType },
+        dataType: "json",
+        success: (data) => {
+            console.log(data);
+            let html = "";
+            if (data[1].length != 0) {
+                const user = data[0];
+                const countParticipated = data[1];
+
+                for (let i = 0; i < user.length; i++){
+                    if(user[i].role == "participant"){
+                        html += viewUserParticipantRole(user[i],countParticipated[i]);
+                    }else if (user[i].role == "campaigner"){
+                        html += viewUserCampaignerRole(user[i], countParticipated[i]);
+                    }else if (user[i].role == "guest"){
+                        html += viewUserGuestRole(user[i], countParticipated[i]);
+                    }else{
+
+                    }
+                }
+
+                $("#user-list-role").html(html);
+            } else {
+                html += viewUserByRoleIsEmpty(roleType);
+                $("#user-list-role").html(html);
+            }
+        },
+    });
+    
+});
+
+const countEventParticipate = (userId) => {
+    console.log(userId);
+
+    $.ajax({
+        url: "/admin/listUser/countEvent",
+        data: { userId },
+        dataType: "json",
+        success: (data) => {
+            console.log(data);
+            return data;
+        },
+    });
+}
+
+//Mengubah Format tanggal, ex:2019-10-02 ---> 2019/10/02
+const changeDateFormat = (date) => {
+
+    if(date != null){
+        var result = date.slice(0, 10);
+        var format = result.replace(/-/g,"/");
+    }else{
+        var format = " ";
+    }
+    
+    return format;
+}
+
