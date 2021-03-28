@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Domain\Event\Service\EventService;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfileController extends Controller
@@ -21,14 +19,14 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = $this->event_service->showProfile();
-        return view('profile', compact('user'));
+        return view('profile.profile', compact('user'));
     }
 
     public function update(Request $request)
     {
         $user = $this->event_service->showProfile();
         $this->event_service->updateProfile($request, $user->id);
-        return redirect('profile');
+        return redirect('/profile');
     }
 
     public function delete()
@@ -41,17 +39,17 @@ class ProfileController extends Controller
     public function editCampaigner()
     {
         $user = $this->event_service->showProfile();
-        if ($user->role == 'campaigner') {
+        if ($user->role == CAMPAIGNER) {
             return redirect('/campaigner');
         }
-        return view('updateCampaigner', compact('user'));
+        return view('profile.updateCampaigner', compact('user'));
     }
 
     public function updateCampaigner(Request $request)
     {
         $user = $this->event_service->showProfile();
 
-        if ($user->role == 'campaigner') {
+        if ($user->role == CAMPAIGNER) {
             $validator = Validator::make($request->all(), [
                 'rekening' => 'required',
             ]);
@@ -81,12 +79,12 @@ class ProfileController extends Controller
     public function dataCampaigner()
     {
         $user = $this->event_service->showProfile();
-        return view('detailCampaigner', compact('user'));
+        return view('profile.detailCampaigner', compact('user'));
     }
 
     public function viewChangePassword()
     {
-        return view('changePassword');
+        return view('profile.changePassword');
     }
 
     public function changePassword(Request $request)

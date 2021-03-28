@@ -22,14 +22,15 @@ class EventService
     //* =========================================================================================
     //* ------------------------------------- Service Umum --------------------------------------
     //* =========================================================================================
-    //! Mengambil user tertentu yang sedang mengakses aplikasi (NullObject Pattern)
+    //! Mengambil data user tertentu yang sedang mengakses aplikasi. 
+    //! Jika tidak ada, maka dikembalikan akun guest (NULLOBJECT PATTERN)
     public function showProfile()
     {
         if (Auth::check()) {
             return Auth::user();
         }
 
-        return $this->dao->showProfile(ACTIVE);
+        return $this->dao->showProfile(GUEST_ID);
     }
 
     //! Mengupload gambar dan mengembalikan path dari gambar yang diupload
@@ -100,7 +101,7 @@ class EventService
     //* ----------------------------------- Service Profile -------------------------------------
     //* =========================================================================================
     //! Menampilkan halaman detail + form untuk update profile user tertentu
-    public function editProfile($id)
+    public function editProfile()
     {
         return $this->showProfile();
     }
@@ -120,7 +121,7 @@ class EventService
 
     public function updateCampaigner($request, $user)
     {
-        if ($user->role == 'campaigner') {
+        if ($user->role == CAMPAIGNER) {
             return $this->dao->updateAccountNumber($request, $user->id);
         }
 
@@ -497,34 +498,27 @@ class EventService
 
     public function authLogin($request)
     {
-        $result = $this->dao->login($request);
-        return $result;
+        return $this->dao->login($request);
     }
 
     public function authRegis($request)
     {
-        $role = "participant";
-        $status = 1;
-        $photo = "images/profile/photo/default.svg";
-
         $data = new User();
         $data->name = $request->firstname . ' ' . $request->lastname;
         $data->email = $request->email;
-        $data->status = $status;
-        $data->role = $role;
-        $data->photoProfile = $photo;
+        $data->status = ACTIVE;
+        $data->role = PARTICIPANT;
+        $data->photoProfile = "images/profile/photo/default.svg";
 
         if ($request->password) {
             $data->password = Hash::make($request->password);
         }
 
-        $result = $this->dao->register($data);
-        return $result;
+        return $this->dao->register($data);
     }
 
     public function authForgot($request, $view, $subject)
     {
-
         $token = Str::random(64);
 
         $resultReset = $this->dao->reset($token, $request);
@@ -532,9 +526,9 @@ class EventService
 
         if ($resultReset && $resultMail) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function authReset($request)
@@ -547,9 +541,9 @@ class EventService
             $this->dao->deleteToken($request);
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     //* =========================================================================================

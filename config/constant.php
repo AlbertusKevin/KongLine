@@ -17,6 +17,7 @@ define("GUEST", "guest");
 define("ADMIN", "admin");
 define("PARTICIPANT", "participant");
 define("CAMPAIGNER", "campaigner");
+define("GUEST_ID", 1);
 
 //event
 define("PETITION", "petition");
@@ -46,3 +47,7 @@ define("PARTICIPATED_DONATION", "Ikut Serta");
 //sort table in donation
 define("DEADLINE_COLUMN", "deadline");
 define("COLLECTED_COLUMN", "donationCollected");
+
+//List User Admin
+define("PENGAJUAN", "pengajuan");
+define("SEMUA", "semua");

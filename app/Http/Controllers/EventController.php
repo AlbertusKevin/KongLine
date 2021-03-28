@@ -6,7 +6,6 @@ use App\Domain\Event\Model;
 use Illuminate\Http\Request;
 use App\Domain\Event\Service\EventService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -178,7 +177,7 @@ class EventController extends Controller
         $categories = $this->eventService->listCategory();
         $user = $this->eventService->showProfile();
 
-        return view('donation', compact('donations', 'categories', 'user'));
+        return view('donation.donation', compact('donations', 'categories', 'user'));
     }
 
     public function getADonation($id)
@@ -194,7 +193,7 @@ class EventController extends Controller
         $userTransactionStatus = $this->eventService->checkUserTransactionStatus($participatedDonation, $user->id);
 
         return view(
-            'donationDetail',
+            'donation.donationDetail',
             compact(
                 'donation',
                 'user',
@@ -213,7 +212,7 @@ class EventController extends Controller
     {
         $user = $this->eventService->showProfile();
         $donation = $this->eventService->getADonation($id);
-        return view('donateForm', compact('user', 'donation'));
+        return view('donation.donateForm', compact('user', 'donation'));
     }
 
     public function postDonate(Request $request, $id)
@@ -253,7 +252,7 @@ class EventController extends Controller
         $user = $this->eventService->showProfile();
         $transaction = $this->eventService->getAUserTransaction($user->id);
 
-        return view('donateConfirm', compact('donation', 'user', 'transaction'));
+        return view('donation.donateConfirm', compact('donation', 'user', 'transaction'));
     }
 
     public function postConfirm(Request $request, $id)

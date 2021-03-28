@@ -37,11 +37,11 @@ class EventDao
     //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
     public function checkParticipated($idEvent, $idParticipant, $typeEvent)
     {
-        if ($typeEvent == 'petition') {
+        if ($typeEvent == PETITION) {
             return ParticipatePetition::where('idParticipant', $idParticipant)->where('idPetition', $idEvent)->first();
-        } else {
-            return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
         }
+
+        return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
     }
     //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
     public function verifyProfile($email, $phone)
@@ -77,7 +77,7 @@ class EventDao
     public function deleteAccount($id)
     {
         User::where('id', $id)->update([
-            'status' => 0
+            'status' => DELETED
         ]);
     }
 
@@ -424,7 +424,7 @@ class EventDao
     //* =========================================================================================
     public function login($request)
     {
-        return $temp = Auth::attempt([
+        return Auth::attempt([
             'email' =>  $request->email,
             'password' => $request->password
         ]);
@@ -459,7 +459,7 @@ class EventDao
 
     public function updateUser($request)
     {
-        $user = User::where('email', $request->email)
+        User::where('email', $request->email)
             ->update(['password' => Hash::make($request->password)]);
     }
 

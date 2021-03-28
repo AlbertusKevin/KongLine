@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use \App\Domain\Event\Entity\User;
 use \App\Domain\Communication\Entity\Service;
 use Illuminate\Support\Facades\Auth;

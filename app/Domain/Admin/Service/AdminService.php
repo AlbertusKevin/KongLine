@@ -24,6 +24,7 @@ class AdminService
     public function countEventParticipate($users)
     {
         $eventCount = array();
+
         foreach ($users as $user) {
             $totalCount = array();
 
@@ -32,12 +33,10 @@ class AdminService
 
             $total = $countDonation + $countPetition;
             array_push($totalCount, $user->id, $total);
-
             array_push($eventCount, $totalCount);
         }
+
         return $eventCount;
-
-
     }
 
     //Mengubah Format tanggal, ex:2019-10-02 ---> 2019/10/02
@@ -47,10 +46,9 @@ class AdminService
         $tanggal = array();
         foreach ($users as $user) {
             $tanggalDibuat = $user->created_at;
-            $tanggalDibuat = explode(" ",$tanggalDibuat);
-            $tanggalDibuat = str_replace("-","/",$tanggalDibuat[0]);
+            $tanggalDibuat = explode(" ", $tanggalDibuat);
+            $tanggalDibuat = str_replace("-", "/", $tanggalDibuat[0]);
             array_push($tanggal, $tanggalDibuat);
-
         }
         return $tanggal;
     }
@@ -59,51 +57,58 @@ class AdminService
     {
         $roleType = $request->roleType;
 
-        if($roleType == 'participant' or $roleType == 'campaigner'){
+        if ($roleType == PARTICIPANT or $roleType == CAMPAIGNER) {
             return $this->dao->listUserByRole($roleType);
-        }elseif($roleType == 'pengajuan'){
+        } elseif ($roleType == PENGAJUAN) {
             return $this->dao->listUserByPengajuan();
-        }elseif($roleType == 'semua'){
+        } elseif ($roleType == SEMUA) {
             return $this->dao->listUserByAll();
         }
     }
 
-    public function countUser(){
+    public function countUser()
+    {
         $user = $this->dao->getAllUser();
         return $user->count();
     }
 
-    public function countParticipant(){
+    public function countParticipant()
+    {
         return $this->dao->getCountParticipant();
     }
 
-    public function countCampaigner(){
+    public function countCampaigner()
+    {
         return $this->dao->getCountCampaigner();
     }
 
-    public function countWaitingCampaigner(){
+    public function countWaitingCampaigner()
+    {
         return $this->dao->getCountWaitingCampaigner();
     }
 
-    public function countWaitingPetition(){
+    public function countWaitingPetition()
+    {
         return $this->dao->getCountWaitingPetition();
     }
 
-    public function countWaitingDonation(){
+    public function countWaitingDonation()
+    {
         return $this->dao->getCountWaitingDonation();
     }
 
-    public function getDonationLimit(){
+    public function getDonationLimit()
+    {
         return $this->dao->getListDonationLimit();
     }
 
-    public function getPetitionLimit(){
+    public function getPetitionLimit()
+    {
         return $this->dao->getListPetitionLimit();
     }
 
-    public function getDate(){
-        $mytime = Carbon::now();
-        return $mytime->format('d-m-Y');
+    public function getDate()
+    {
+        return Carbon::now()->format('d-m-Y');
     }
-
 }

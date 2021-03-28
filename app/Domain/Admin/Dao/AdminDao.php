@@ -2,8 +2,6 @@
 
 namespace App\Domain\Admin\Dao;
 
-use App\Admin\Entity\CommentForum;
-use App\Admin\Entity\StatusUser;
 use App\Domain\Event\Entity\Donation;
 use App\Domain\Event\Entity\User;
 use App\Domain\Event\Entity\ParticipateDonation;
@@ -19,27 +17,27 @@ class AdminDao
 
     public function getCountParticipant()
     {
-        return User::where('role','participant')->count();
+        return User::where('role', 'participant')->count();
     }
 
     public function getCountCampaigner()
     {
-        return User::where('role','campaigner')->count();
+        return User::where('role', 'campaigner')->count();
     }
 
     public function getCountWaitingCampaigner()
     {
-        return User::where('status',3)->count();
+        return User::where('status', 3)->count();
     }
 
     public function getCountWaitingDonation()
     {
-        return Donation::where('status',0)->count();
+        return Donation::where('status', 0)->count();
     }
 
     public function getCountWaitingPetition()
     {
-        return Petition::where('status',0)->count();
+        return Petition::where('status', 0)->count();
     }
 
     public function getCountParticipatePetition($id)
@@ -60,8 +58,8 @@ class AdminDao
     public function listUserByAll()
     {
         return User::where('role', '!=', 'admin')
-                            ->orWhereNull('role')
-                            ->get();
+            ->orWhereNull('role')
+            ->get();
     }
 
     public function listUserByPengajuan()

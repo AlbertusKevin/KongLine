@@ -6,9 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
-
-
-use Illuminate\Support\Carbon;
 use App\Domain\Event\Service\EventService;
 
 class AuthController extends Controller
@@ -29,23 +26,22 @@ class AuthController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        // if ($validator->fails()) {
-        //     return redirect('/register')
-        //         ->withInput()
-        //         ->withErrors($validator);
-        // }
+        if ($validator->fails()) {
+            return redirect('/register')
+                ->withInput()
+                ->withErrors($validator);
+        }
 
-        $svc = new EventService();
-        $result = $svc->authRegis($request);
+        $result = $this->eventService->authRegis($request);
 
         if ($result) {
             Alert::success('Register Success', 'Please Login.');
             return redirect('login');
-        } {
-            Alert::error('Register Gagal', 'Mohon cek kembali data Anda');
-            return redirect('/register')
-                ->withInput();
         }
+
+        Alert::error('Register Gagal', 'Mohon cek kembali data Anda');
+        return redirect('/register')
+            ->withInput();
     }
 
     public function getLogin()
@@ -71,21 +67,16 @@ class AuthController extends Controller
                 ->withErrors($validator);
         };
 
-        $svc = new EventService();
-        $result = $svc->authLogin($request);
+        $result = $this->eventService->authLogin($request);
 
         if ($result) {
-            if(auth()->user()->role == 'admin'){
+            if (auth()->user()->role == 'admin') {
                 return redirect('/admin');
-            }elseif (Auth::user()->status == 1 || Auth::user()->status == 3) {
-              // dd("yooo");
-              return redirect('/home');
+            } elseif (Auth::user()->status == 1 || Auth::user()->status == 3) {
+                return redirect('/home');
             }
-          
-            Alert::error('Akun tidak ditemukan', 'Silahkan coba lagi');
-            return view('auth.login');
         }
-      
+
         Alert::error('Email atau password salah', 'Silahkan coba lagi');
         return redirect('/login');
     }
@@ -110,8 +101,7 @@ class AuthController extends Controller
         $view = 'auth.verify';
         $subject = 'Reset Password';
 
-        $svc = new EventService();
-        $result = $svc->authForgot($request, $view, $subject);
+        $this->eventService->authForgot($request, $view, $subject);
 
         Alert::toast('Silahkan cek email Anda');
         return back();
@@ -124,15 +114,13 @@ class AuthController extends Controller
 
     public function postReset(Request $request)
     {
-
-        $svc = new EventService();
-        $result = $svc->authReset($request);
+        $result = $this->eventService->authReset($request);
 
         if ($result) {
             return redirect('/login')->with('message', 'Your password has been changed!');
-        } else {
-            Alert::toast('Gagal ganti password, silahkan coba lagi');
-            return back();
         }
+
+        Alert::toast('Gagal ganti password, silahkan coba lagi');
+        return back();
     }
 }

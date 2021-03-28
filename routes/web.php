@@ -5,7 +5,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\DummyController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 
@@ -19,25 +18,17 @@ use App\Http\Controllers\HomeController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-//! ========================== Controller untuk uji coba ==========================
-Route::get('/uji_coba', [DummyController::class, 'cobaModifikasiEntity']);
-
-Route::get('/donation', function () {
-    return view('donation');
-});
-
-
-
 //? =========================
 //! App Start
 //? =========================
 Route::get('/', function () {
     return redirect('/home');
 });
+
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //? =========================
-//! Router Profile
+//! Route Profile
 //? =========================
 Route::get('/profile', [ProfileController::class, 'edit']);
 Route::put('/profile', [ProfileController::class, 'update']);
@@ -52,23 +43,25 @@ Route::get('/campaigner', [ProfileController::class, 'dataCampaigner']);
 Route::get('/change', [ProfileController::class, 'viewChangePassword']);
 Route::put('/change', [ProfileController::class, 'changePassword']);
 
-
-
 //? =========================
-//! Router Auth
+//! Route Auth
 //? =========================
 Route::get('/login', [AuthController::class, 'getLogin'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
+
 Route::get('/register', [AuthController::class, 'getRegister'])->name('register')->middleware('guest');
 Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
+
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::get('/forgot', [AuthController::class, 'getForgot']);
 Route::post('/forgot', [AuthController::class, 'postForgot'])->name('forgot');
+
 Route::get('/reset/{email}/{token}', [AuthController::class, 'getReset']);
 Route::post('/reset', [AuthController::class, 'postReset'])->name('reset');
 
 //? =========================
-//! Router Petition
+//! Route Petition
 //? =========================
 //* --- pemanggilan ajax ---
 Route::get('/petition/type', [EventController::class, 'listPetitionType']);
@@ -87,7 +80,7 @@ Route::post('/petition/progress/{id}', [EventController::class, 'storeProgressPe
 Route::post('/petition/{id}', [EventController::class, 'signPetition']);
 
 //? =========================
-//! Router Donation
+//! Route Donation
 //? =========================
 //* --- pemanggilan ajax ---
 Route::get('/donation/search', [EventController::class, 'searchDonation']);
@@ -115,7 +108,7 @@ Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
 Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
 
 //? =========================
-//! Router Admin
+//! Route Admin
 //? =========================
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
 Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
