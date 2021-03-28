@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\Event\Entity\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
 
+
+use Illuminate\Support\Carbon;
+use App\Domain\Event\Service\EventService;
+
 class AuthController extends Controller
 {
+    private $eventService;
+
+    public function __construct()
+    {
+        $this->eventService = new EventService();
+    }
+
     public function postRegister(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -20,29 +29,23 @@ class AuthController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        if ($validator->fails()) {
+        // if ($validator->fails()) {
+        //     return redirect('/register')
+        //         ->withInput()
+        //         ->withErrors($validator);
+        // }
+
+        $svc = new EventService();
+        $result = $svc->authRegis($request);
+
+        if ($result) {
+            Alert::success('Register Success', 'Please Login.');
+            return redirect('login');
+        } {
+            Alert::error('Register Gagal', 'Mohon cek kembali data Anda');
             return redirect('/register')
-                ->withInput()
-                ->withErrors($validator);
+                ->withInput();
         }
-        $role = "participant";
-        $status = 1;
-        $photo = "images/profile/photo/default.svg";
-
-        $data = new User();
-        $data->name = $request->firstname . ' ' . $request->lastname;
-        $data->email = $request->email;
-        $data->status = $status;
-        $data->role = $role;
-        $data->photoProfile = $photo;
-
-        if ($request->password) {
-            $data->password = Hash::make($request->password);
-        }
-        $data->save();
-
-        Alert::success('Register Success', 'Please Login.');
-        return redirect('login');
     }
 
     public function getLogin()
@@ -68,31 +71,68 @@ class AuthController extends Controller
                 ->withErrors($validator);
         };
 
-        $temp = Auth::attempt([
-            'email' =>  $request->email,
-            'password' => $request->password
-        ]);
+        $svc = new EventService();
+        $result = $svc->authLogin($request);
 
-        if ($temp) {
-            // dd(Auth::user()->status);
-            if(Auth::user()->status == 1 || Auth::user()->status == 3){
-                // dd("yooo");
-                return redirect('/home');
+        if ($result) {
+            if(auth()->user()->role == 'admin'){
+                return redirect('/admin');
+            }elseif (Auth::user()->status == 1 || Auth::user()->status == 3) {
+              // dd("yooo");
+              return redirect('/home');
             }
-            
+          
             Alert::error('Akun tidak ditemukan', 'Silahkan coba lagi');
             return view('auth.login');
-            // dd(Auth::user()->status == 1 || Auth::user()->status == 3);
         }
-        
+      
         Alert::error('Email atau password salah', 'Silahkan coba lagi');
         return redirect('/login');
-        
     }
-    
+
     public function logout()
     {
         Auth::logout();
         return redirect('/login');
+    }
+
+    public function getForgot()
+    {
+        return view('auth.forgot');
+    }
+
+    public function postForgot(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users',
+        ]);
+
+        $view = 'auth.verify';
+        $subject = 'Reset Password';
+
+        $svc = new EventService();
+        $result = $svc->authForgot($request, $view, $subject);
+
+        Alert::toast('Silahkan cek email Anda');
+        return back();
+    }
+
+    public function getReset($email, $token)
+    {
+        return view('auth.reset', ['token' => $token, 'email' => $email]);
+    }
+
+    public function postReset(Request $request)
+    {
+
+        $svc = new EventService();
+        $result = $svc->authReset($request);
+
+        if ($result) {
+            return redirect('/login')->with('message', 'Your password has been changed!');
+        } else {
+            Alert::toast('Gagal ganti password, silahkan coba lagi');
+            return back();
+        }
     }
 }

@@ -39,10 +39,19 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 //? =========================
 //! Router Profile
 //? =========================
-Route::get('/profile/{id}', [ProfileController::class, 'edit']);
-Route::put('/profile/{id}', [ProfileController::class, 'update']);
+Route::get('/profile', [ProfileController::class, 'edit']);
+Route::put('/profile', [ProfileController::class, 'update']);
 
-Route::get('/delete/{id}', [ProfileController::class, 'delete']);
+Route::get('/delete', [ProfileController::class, 'delete']);
+
+Route::get('/profile/campaigner', [ProfileController::class, 'editCampaigner']);
+Route::put('/profile/campaigner', [ProfileController::class, 'updateCampaigner']);
+
+Route::get('/campaigner', [ProfileController::class, 'dataCampaigner']);
+
+Route::get('/change', [ProfileController::class, 'viewChangePassword']);
+Route::put('/change', [ProfileController::class, 'changePassword']);
+
 
 
 //? =========================
@@ -53,6 +62,10 @@ Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
 Route::get('/register', [AuthController::class, 'getRegister'])->name('register')->middleware('guest');
 Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/forgot', [AuthController::class, 'getForgot']);
+Route::post('/forgot', [AuthController::class, 'postForgot'])->name('forgot');
+Route::get('/reset/{email}/{token}', [AuthController::class, 'getReset']);
+Route::post('/reset', [AuthController::class, 'postReset'])->name('reset');
 
 //? =========================
 //! Router Petition
@@ -105,3 +118,8 @@ Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show'
 //! Router Admin
 //? =========================
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
+Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
+
+Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
+
+Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middleware('admin');

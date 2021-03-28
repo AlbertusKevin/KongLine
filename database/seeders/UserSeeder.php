@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Admin',
                 'email' => 'admin1@gmail.com',
-                'password' => Hash::make('admin'),
+                'password' => Hash::make('adminadmin'),
                 'status' => 1,
                 'role' => 'admin',
                 'photoProfile' => 'images/profile/photo/default.png'

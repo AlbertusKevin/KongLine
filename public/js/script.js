@@ -1,3 +1,4 @@
+
 // fungsi umum
 const checkTypePetition = (type) => {
     if (type.includes("Berlangsung")) {
@@ -356,6 +357,7 @@ $(".category-petition").on("click", function (e) {
     sortListPetition(sortBy, category, typePetition);
 });
 
+// Untuk donasi
 $("#search-donation").on("keyup", function () {
     let keyword = $(this).val();
     let category = $("#category-donation-selected").val();
@@ -422,3 +424,172 @@ $(".show-comment").on("click", function () {
     const html = $("#comment").html();
     $(".card-text").html(html);
 });
+
+// ADMIN
+const viewUserParticipantRole = (user, countParticipated) => {
+    console.log("role : " + user.role);
+    // console.log("tanggal : " + user.created_at);
+    return /*html*/ `
+        <tr>
+            <td class="text-center">
+                ${changeDateFormat(user.created_at)}
+            </td>
+            <td>
+                ${user.name}
+            </td>
+            <td>
+                ${user.email}
+            </td>
+            <td>
+                ${countParticipated[1]}
+            </td>
+            <td class="text-left">
+                    <span class="badge badge-primary p-2">${user.role}</span>
+            </td>
+        </tr>
+    `;
+};
+
+const viewUserCampaignerRole = (user, countParticipated) => {
+    console.log("role : " + user.role);
+    // console.log("tanggal : " + user.created_at);
+    return /*html*/ `
+        <tr>
+            <td class="text-center">
+                ${changeDateFormat(user.created_at)}
+            </td>
+            <td>
+                ${user.name}
+            </td>
+            <td>
+                ${user.email}
+            </td>
+            <td>
+                ${countParticipated[1]}
+            </td>
+            <td class="text-left">
+                    <span class="badge badge-success p-2">${user.role}</span>
+            </td>
+        </tr>
+    `;
+};
+
+const viewUserGuestRole = (user, countParticipated) => {
+    console.log("role : " + user.role);
+    // console.log("tanggal : " + user.created_at);
+    return /*html*/ `
+        <tr>
+            <td class="text-center">
+                ${changeDateFormat(user.created_at)}
+            </td>
+            <td>
+                ${user.name}
+            </td>
+            <td>
+                ${user.email}
+            </td>
+            <td>
+                ${countParticipated[1]}
+            </td>
+            <td class="text-left">
+                    <span class="badge badge-dark p-2">${user.role}</span>
+            </td>
+        </tr>
+    `;
+};
+
+const viewUserByRoleIsEmpty = (roleType) => {
+    return /* html */ `
+        <tr>
+            <td colspan = "5" class="text-center">
+                Maaf, tidak ada data user ${roleType}
+            </td>
+        </tr>
+    `;
+}
+
+const roleTypeUser = (type) => {
+    if (type.includes("Participant")) {
+        return "participant";
+    }
+    if (type.includes("Campaigner")) {
+        return "campaigner";
+    }
+    if (type.includes("Pengajuan")) {
+        return "pengajuan";
+    }
+    return "semua";
+};
+
+$(".role-type").on("click", function () {
+    // cari yang ada class btn-primary
+    $(".role-type").removeClass("btn-primary");
+    $(".role-type").addClass("btn-light");
+
+    $(this).addClass("btn-primary");
+    $(this).removeClass("btn-light");
+
+    let roleType = $(this).html();
+    roleType = roleTypeUser(roleType);
+    console.log(roleType);
+
+    $.ajax({
+        url: "/admin/listUser/role",
+        data: { roleType },
+        dataType: "json",
+        success: (data) => {
+            console.log(data);
+            let html = "";
+            if (data[1].length != 0) {
+                const user = data[0];
+                const countParticipated = data[1];
+
+                for (let i = 0; i < user.length; i++){
+                    if(user[i].role == "participant"){
+                        html += viewUserParticipantRole(user[i],countParticipated[i]);
+                    }else if (user[i].role == "campaigner"){
+                        html += viewUserCampaignerRole(user[i], countParticipated[i]);
+                    }else if (user[i].role == "guest"){
+                        html += viewUserGuestRole(user[i], countParticipated[i]);
+                    }else{
+
+                    }
+                }
+
+                $("#user-list-role").html(html);
+            } else {
+                html += viewUserByRoleIsEmpty(roleType);
+                $("#user-list-role").html(html);
+            }
+        },
+    });
+    
+});
+
+const countEventParticipate = (userId) => {
+    console.log(userId);
+
+    $.ajax({
+        url: "/admin/listUser/countEvent",
+        data: { userId },
+        dataType: "json",
+        success: (data) => {
+            console.log(data);
+            return data;
+        },
+    });
+}
+
+//Mengubah Format tanggal, ex:2019-10-02 ---> 2019/10/02
+const changeDateFormat = (date) => {
+
+    if(date != null){
+        var result = date.slice(0, 10);
+        var format = result.replace(/-/g,"/");
+    }else{
+        var format = " ";
+    }
+    
+    return format;
+}
+

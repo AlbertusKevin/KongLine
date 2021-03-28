@@ -45,3 +45,108 @@
     background: #147C85;
     color: white;
 }
+
+.welcome{
+    background-image: url('https://images.unsplash.com/photo-1588421357574-87938a86fa28?crop=entropy&cs=srgb&fm=jpg&ixid=Mnw3MjAxN3wwfDF8c2VhcmNofDF8fGJsdWV8ZW58MHx8fHwxNjE2Njc5OTQ1&ixlib=rb-1.2.1&q=85&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450');
+    max-height: 100%;
+    color: white;
+    background-size: cover;
+    padding: 2% 3%;
+    width: auto;
+}
+
+.date{
+    background-color: white;
+    max-width: 100%;
+    padding: 10px 3% 10px;
+    box-shadow: 2px 2px 5px grey;
+}
+
+.card-admin{
+    height: 100%;
+    width: 100%;
+    color: white;
+    box-shadow: 2px 2px 5px grey;
+    text-align: center;
+    padding: 20px;
+}
+
+#total-pengguna{
+    background-color: #03254C;
+    padding-bottom: 0px;
+}
+
+#validasi{
+    background-color: #1565C0;
+}
+
+#donasi-validasi{
+    background-color: #EF3939;
+}
+
+#petisi{
+    background-color: #FF9900;
+}
+
+#service{
+    text-align: left;
+    background-color: #00FF66;
+}
+
+.text-bold{
+    font-weight: bold;
+}
+
+.text-12{
+    font-size: 12px;
+}
+
+.participant , .campaigner{
+    height: 100px;
+    width: 50%;
+    float: left;
+}
+
+.sub{
+    margin-top: 11%;
+}
+
+#pengajuan-petisi{
+    background-color: #147C85;
+    text-align: left;
+}
+
+#pengajuan-donasi{
+    background-color: #777777;
+    text-align: left;
+}
+
+.card-sub{
+    color: black;
+    padding: 2% 5%;
+}
+
+.height{
+    height: 280px;
+}
+
+.name p{
+    float: left;
+}
+
+.name a{
+    float: right;
+    text-decoration: none;
+    color: lightgray;
+}
+
+.chat p{
+    float: left;
+}
+
+.chat i{
+    float: right;
+    text-decoration: none;
+    color: white;
+}
+

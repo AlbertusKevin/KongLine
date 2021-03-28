@@ -5,7 +5,10 @@ namespace App\Domain\Event\Service;
 use App\Domain\Event\Dao\EventDao;
 use Illuminate\Support\Facades\Auth;
 use App\Domain\Event\Entity\ParticipatePetition;
+use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Domain\Event\Entity\User;
+use Illuminate\Support\Str;
 
 class EventService
 {
@@ -99,14 +102,14 @@ class EventService
     //! Menampilkan halaman detail + form untuk update profile user tertentu
     public function editProfile($id)
     {
-        return $this->dao->showProfile($id);
+        return $this->showProfile();
     }
 
     //! Memproses update profile
     public function updateProfile($request, $id)
     {
-        $pathProfile = $this->uploadImage($request->file('profile/profile_picture'), 'photo');
-        $pathBackground = $this->uploadImage($request->file('profile/zoom_picture'), 'background');
+        $pathProfile = $this->uploadImage($request->file('profile_picture'), 'profile/photo');
+        $pathBackground = $this->uploadImage($request->file('zoom_picture'), 'profile/background');
         $this->dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
@@ -115,10 +118,37 @@ class EventService
         return $this->dao->deleteAccount($id);
     }
 
+    public function updateCampaigner($request, $user)
+    {
+        if ($user->role == 'campaigner') {
+            return $this->dao->updateAccountNumber($request, $user->id);
+        }
+
+        $pathKTP = $this->uploadImage($request->file('KTP_picture'), 'profile/KTP');
+        return $this->dao->updateToCampaigner($request, $user->id, $pathKTP);
+    }
+
+    public function changePassword($request)
+    {
+
+        $user = $this->showProfile();
+
+        if (Hash::check($request->old_password, $user->password)) {
+            if ($request->new_password == $request->verification) {
+                $password = Hash::make($request->new_password);
+                $this->dao->changePassword($user, $password);
+                return 'true';
+            }
+            return 'failed_verification';
+        }
+
+        return 'failed_password';
+    }
+
     //* =========================================================================================
     //* ------------------------------------ Service Petisi -------------------------------------
     //* =========================================================================================
-    //! Menampilkan seluruh petisi yang sedang berlangsung 
+    //! Menampilkan seluruh petisi yang sedang berlangsung
     public function indexPetition()
     {
         return $this->dao->indexPetition();
@@ -459,6 +489,67 @@ class EventService
         }
 
         return true;
+    }
+
+    //* =========================================================================================
+    //* ------------------------------------- Service Auth --------------------------------------
+    //* =========================================================================================
+
+    public function authLogin($request)
+    {
+        $result = $this->dao->login($request);
+        return $result;
+    }
+
+    public function authRegis($request)
+    {
+        $role = "participant";
+        $status = 1;
+        $photo = "images/profile/photo/default.svg";
+
+        $data = new User();
+        $data->name = $request->firstname . ' ' . $request->lastname;
+        $data->email = $request->email;
+        $data->status = $status;
+        $data->role = $role;
+        $data->photoProfile = $photo;
+
+        if ($request->password) {
+            $data->password = Hash::make($request->password);
+        }
+
+        $result = $this->dao->register($data);
+        return $result;
+    }
+
+    public function authForgot($request, $view, $subject)
+    {
+
+        $token = Str::random(64);
+
+        $resultReset = $this->dao->reset($token, $request);
+        $resultMail = $this->dao->mail($token, $request, $view, $subject);
+
+        if ($resultReset && $resultMail) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function authReset($request)
+    {
+
+        $resultGetPassword = $this->dao->getPasswordReset($request);
+
+        if ($resultGetPassword) {
+            $this->dao->updateUser($request);
+            $this->dao->deleteToken($request);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //* =========================================================================================
