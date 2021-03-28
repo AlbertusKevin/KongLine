@@ -101,7 +101,8 @@ Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show'
 //? =========================
 //! Router Admin
 //? =========================
+Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
+
+Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
-Route::get('/admin', function () {
-    return view('userAdmin');
-});
+
