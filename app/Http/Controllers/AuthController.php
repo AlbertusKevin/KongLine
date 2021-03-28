@@ -75,17 +75,17 @@ class AuthController extends Controller
         $result = $svc->authLogin($request);
 
         if ($result) {
-            // dd(Auth::user()->status);
-            if (Auth::user()->status == 1 || Auth::user()->status == 3) {
-                // dd("yooo");
-                return redirect('/home');
+            if(auth()->user()->role == 'admin'){
+                return redirect('/admin');
+            }elseif (Auth::user()->status == 1 || Auth::user()->status == 3) {
+              // dd("yooo");
+              return redirect('/home');
             }
-
+          
             Alert::error('Akun tidak ditemukan', 'Silahkan coba lagi');
             return view('auth.login');
-            // dd(Auth::user()->status == 1 || Auth::user()->status == 3);
         }
-
+      
         Alert::error('Email atau password salah', 'Silahkan coba lagi');
         return redirect('/login');
     }

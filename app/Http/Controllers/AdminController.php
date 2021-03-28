@@ -20,7 +20,7 @@ class AdminController extends Controller
         $eventCount = $this->admin_service->countEventParticipate($users);
         $changeDateFormat = $this->admin_service->changeDateFormat();
         return view('/admin/listUser', compact('users', 'eventCount', 'changeDateFormat'));
-        
+
     }
 
     public function listUserByRole(Request $request)
@@ -43,4 +43,30 @@ class AdminController extends Controller
         $eventCount = $this->admin_service->countEventParticipate($request);
         return $eventCount;
     }
+
+    public function home()
+    {
+        $users = $this->admin_service->countUser();
+        $participant =  $this->admin_service->countParticipant();
+        $campaigner  =$this->admin_service->countCampaigner();
+        $campaign_valid  = $this->admin_service->countWaitingCampaigner();
+        $donasi_valid = $this->admin_service->countWaitingDonation();
+        $petisi_valid = $this->admin_service->countWaitingPetition();
+        $donations = $this->admin_service->getDonationLimit();
+        $petitions = $this->admin_service->getPetitionLimit();
+        $date = $this->admin_service->getDate();
+
+        return view('admin.home' , [
+            'users' => $users,
+            'participant' => $participant,
+            'campaigner' => $campaigner,
+            'waiting_campaigner' => $campaign_valid,
+            'waiting_donation' => $donasi_valid,
+            'waiting_petition'=> $petisi_valid,
+            'donations' => $donations,
+            'petitions' => $petitions,
+            'date' => $date,
+        ]);
+    }
+
 }

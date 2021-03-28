@@ -109,4 +109,7 @@ Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show'
 Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
 
 Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
+
+Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middleware('admin');
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
+

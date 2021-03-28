@@ -3,6 +3,7 @@
 namespace App\Domain\Admin\Service;
 
 use App\Domain\Admin\Dao\AdminDao;
+use Illuminate\Support\Carbon;
 
 class AdminService
 {
@@ -26,7 +27,7 @@ class AdminService
         foreach ($users as $user) {
             $totalCount = array();
 
-            $countPetition = $this->dao->getCountParticipatePetition($user->id);   
+            $countPetition = $this->dao->getCountParticipatePetition($user->id);
             $countDonation = $this->dao->getCountParticipateDonation($user->id);
 
             $total = $countDonation + $countPetition;
@@ -35,8 +36,8 @@ class AdminService
             array_push($eventCount, $totalCount);
         }
         return $eventCount;
-            
-        
+
+
     }
 
     //Mengubah Format tanggal, ex:2019-10-02 ---> 2019/10/02
@@ -49,11 +50,11 @@ class AdminService
             $tanggalDibuat = explode(" ",$tanggalDibuat);
             $tanggalDibuat = str_replace("-","/",$tanggalDibuat[0]);
             array_push($tanggal, $tanggalDibuat);
-            
+
         }
         return $tanggal;
     }
-    
+
     public function listUserByRole($request)
     {
         $roleType = $request->roleType;
@@ -66,4 +67,43 @@ class AdminService
             return $this->dao->listUserByAll();
         }
     }
+
+    public function countUser(){
+        $user = $this->dao->getAllUser();
+        return $user->count();
+    }
+
+    public function countParticipant(){
+        return $this->dao->getCountParticipant();
+    }
+
+    public function countCampaigner(){
+        return $this->dao->getCountCampaigner();
+    }
+
+    public function countWaitingCampaigner(){
+        return $this->dao->getCountWaitingCampaigner();
+    }
+
+    public function countWaitingPetition(){
+        return $this->dao->getCountWaitingPetition();
+    }
+
+    public function countWaitingDonation(){
+        return $this->dao->getCountWaitingDonation();
+    }
+
+    public function getDonationLimit(){
+        return $this->dao->getListDonationLimit();
+    }
+
+    public function getPetitionLimit(){
+        return $this->dao->getListPetitionLimit();
+    }
+
+    public function getDate(){
+        $mytime = Carbon::now();
+        return $mytime->format('d-m-Y');
+    }
+
 }
