@@ -22,6 +22,12 @@ use App\Http\Controllers\HomeController;
 //! ========================== Controller untuk uji coba ==========================
 Route::get('/uji_coba', [DummyController::class, 'cobaModifikasiEntity']);
 
+Route::get('/donation', function () {
+    return view('donation');
+});
+
+
+
 //? =========================
 //! App Start
 //? =========================
@@ -31,13 +37,24 @@ Route::get('/', function () {
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //? =========================
-//! Route Profile
+//! Router Profile
 //? =========================
-Route::get('/profile/{id}', [ProfileController::class, 'edit']);
-Route::put('/profile/{id}', [ProfileController::class, 'update']);
+Route::get('/profile', [ProfileController::class, 'edit']);
+Route::put('/profile', [ProfileController::class, 'update']);
+
+Route::get('/delete', [ProfileController::class, 'delete']);
+
+Route::get('/profile/campaigner', [ProfileController::class, 'editCampaigner']);
+Route::put('/profile/campaigner', [ProfileController::class, 'updateCampaigner']);
+
+Route::get('/campaigner', [ProfileController::class, 'dataCampaigner']);
+
+Route::get('/change', [ProfileController::class, 'viewChangePassword']);
+Route::put('/change', [ProfileController::class, 'changePassword']);
+
 
 //? =========================
-//! Route Auth
+//! Router Auth
 //? =========================
 Route::get('/login', [AuthController::class, 'getLogin'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
@@ -46,12 +63,13 @@ Route::post('/register', [AuthController::class, 'postRegister'])->name('postReg
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //? =========================
-//! Route Petition
+//! Router Petition
 //? =========================
 //* --- pemanggilan ajax ---
 Route::get('/petition/type', [EventController::class, 'listPetitionType']);
 Route::get('/petition/search', [EventController::class, 'searchPetition']);
 Route::get('/petition/sort', [EventController::class, 'sortPetition']);
+Route::post('/petition/create/verification', [EventController::class, 'verifyProfile']);
 
 Route::get('/petition', [EventController::class, 'indexPetition']);
 Route::get('/petition/create', [EventController::class, 'createPetition']);
@@ -66,7 +84,13 @@ Route::post('/petition/{id}', [EventController::class, 'signPetition']);
 //? =========================
 //! Router Donation
 //? =========================
+Route::get('/donation/search', [EventController::class, 'searchDonation']);
+Route::get('/donation/sort', [EventController::class, 'sortDonation']);
+
 Route::get('/donation', [EventController::class, 'listDonation']);
+Route::get('/donation/create', [EventController::class, 'createView']);
+Route::get('/donation/{id}', [EventController::class, 'getADonation']);
+Route::get('/donation/donate/{id}', [EventController::class, 'formDonate']);
 
 //? =========================
 //! Route Communication
@@ -75,9 +99,10 @@ Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
 Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
 
 //? =========================
-//! Route Admin
+//! Router Admin
 //? =========================
-Route::get('/admin/listUser', [AdminController::class, 'getAll']);//Nampilin List User
 Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
 
 Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
+Route::get('/admin/listUser', [AdminController::class, 'getAll']);
+

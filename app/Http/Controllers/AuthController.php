@@ -70,19 +70,26 @@ class AuthController extends Controller
 
         $temp = Auth::attempt([
             'email' =>  $request->email,
-            'password' => $request->password,
+            'password' => $request->password
         ]);
 
-        // dd($request->email . " " . $request->password);
-
-        if ($temp == true) {
-            return redirect('/home');
-        } else {
-            Alert::error('Email atau password salah', 'Silahkan coba lagi');
-            return redirect('/login');
+        if ($temp) {
+            // dd(Auth::user()->status);
+            if(Auth::user()->status == 1 || Auth::user()->status == 3){
+                // dd("yooo");
+                return redirect('/home');
+            }
+            
+            Alert::error('Akun tidak ditemukan', 'Silahkan coba lagi');
+            return view('auth.login');
+            // dd(Auth::user()->status == 1 || Auth::user()->status == 3);
         }
+        
+        Alert::error('Email atau password salah', 'Silahkan coba lagi');
+        return redirect('/login');
+        
     }
-
+    
     public function logout()
     {
         Auth::logout();

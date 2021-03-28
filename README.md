@@ -1,5 +1,6 @@
 <h1>Petunjuk Penggunaan dan Demonstrasi:</h1>
-<p>Untuk Clone Pertama Kali:</p>
+<hr>
+<h2>Untuk Clone Pertama Kali:</h2>
     <ul>
         <li>buat database (phpmyadmin, mariadb) dengan nama &lt;nama&gt;</li>
         <li>Jalankan: composer install</li>
@@ -8,15 +9,16 @@
         <li>php artisan migrate:fresh --seed (untuk migrasi ulang database dan juga memanggil seeder)</li>
     </ul>
 
-<p>Sweet Alert (https://realrashid.github.io/sweet-alert/):</p>
+<h2>Sweet Alert (https://realrashid.github.io/sweet-alert/):</h2>
     <ul>
         <li>jalankan di root projek: composer require realrashid/sweet-alert</li>
         <li>tambahkan baris: <strong>RealRashid\SweetAlert\SweetAlertServiceProvider::class</strong>, di file <b>config/app.php</b> bagian <b>'providers' => [</b></li>
         <li>tambahkan baris: <strong>'Alert' => RealRashid\SweetAlert\Facades\Alert::class,</strong> di file <b>config/app bagian 'aliases' => [</b></li>
     </ul>
 
-<p>Live Wire:</p>
+<h3>Live Wire:</h3>
     <li>jalankan di root projek: composer require livewire/livewire</li>
+    <li>Notes: jika composer masih versi 1, lakukan update terlebih dahulu dengan perintah: composer self-update --2</li>
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
