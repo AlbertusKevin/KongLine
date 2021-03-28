@@ -7,14 +7,13 @@
         <div class="row justify-content-center h-100 align-items-center">
             <div class="col-md-20 w-35">
                 <div class="shadow p-5 bg-white round">
-                    <form method="POST" action="{{ route('postLogin') }}">
+                    <form method="POST" action="{{ route('forgot') }}">
                         {{ csrf_field() }}
-                        <h4 class="text-center font-weight-bold mb-4"> Masuk ke Akun </h4>
+                        <h4 class="font-weight-bold mb-4"> Reset Password </h4>
+                        <p class="text-gray"> Silahkan masukkan email kamu di bawah, kami akan mengirimkan link untuk mengubah password kamu. </p>
 						<input type="email" id="authForm" name="email" class="form-control mb-2" placeholder="E-mail" autofocus required>
-						<input type="password" id="authForm" name="password" class="form-control mb-2" placeholder="Password" autofocus required>
-                        <p class="text-right text-gray"><a href="/forgot">Lupa password?</a></p>
-                        <button class="btn-blue font-weight-bold mb-2" type="submit">MASUK</button>
-                        <p class="text-center" >Belum punya akun? <a href="/register" class="text-blue">Daftar Sekarang!</a></p>
+                        <button class="btn-blue font-weight-bold mb-2" type="submit">KIRIM</button>
+                        <p class="text-center" >Sudah ingat password? <a href="/login" class="text-blue">Coba lagi!</a></p>
                     </form>
                 </div>
             </div>

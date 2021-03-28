@@ -53,6 +53,7 @@ Route::get('/change', [ProfileController::class, 'viewChangePassword']);
 Route::put('/change', [ProfileController::class, 'changePassword']);
 
 
+
 //? =========================
 //! Router Auth
 //? =========================
@@ -61,6 +62,10 @@ Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
 Route::get('/register', [AuthController::class, 'getRegister'])->name('register')->middleware('guest');
 Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/forgot', [AuthController::class, 'getForgot']);
+Route::post('/forgot', [AuthController::class, 'postForgot'])->name('forgot');
+Route::get('/reset/{email}/{token}', [AuthController::class, 'getReset']);
+Route::post('/reset', [AuthController::class, 'postReset'])->name('reset');
 
 //? =========================
 //! Router Petition
@@ -105,4 +110,3 @@ Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
 
 Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
-

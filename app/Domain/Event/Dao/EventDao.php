@@ -16,6 +16,10 @@ use App\Domain\Event\Entity\Transaction;
 use App\Domain\Event\Entity\UpdateNews;
 use App\Domain\Event\Entity\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
 class EventDao
 {
@@ -104,7 +108,7 @@ class EventDao
     //* =========================================================================================
     //* -------------------------------------- DAO Petisi ---------------------------------------
     //* =========================================================================================
-    //! Mencari petisi sesuai dengan 
+    //! Mencari petisi sesuai dengan
     //! status (berdasarkan tipe petisi) dan keyword tertentu
 
     public function searchPetition($status, $keyword)
@@ -123,7 +127,7 @@ class EventDao
             ->get();
     }
 
-    //! Mencari petisi yang dibuat oleh campaigner sesuai dengan 
+    //! Mencari petisi yang dibuat oleh campaigner sesuai dengan
     //! keyword, sorting desc, dan kategori tertentu
     public function searchPetitionByMeCategorySort($idCampaigner, $keyword, $category, $table)
     {
@@ -239,7 +243,7 @@ class EventDao
             ->get();
     }
 
-    //! Mengurutkan petisi dengan status tertentu 
+    //! Mengurutkan petisi dengan status tertentu
     //! secara descending sesuai dengan ketentuan yang dipilih
     public function sortPetition($status, $table)
     {
@@ -256,7 +260,7 @@ class EventDao
             ->get();
     }
 
-    //! Mengurutkan petisi yang dibuat oleh campaigner dan sesuai kategori tertentu 
+    //! Mengurutkan petisi yang dibuat oleh campaigner dan sesuai kategori tertentu
     //! secara descending sesuai dengan ketentuan yang dipilih
     public function sortPetitionCategoryByMe($category, $idCampaigner, $table)
     {
@@ -283,7 +287,7 @@ class EventDao
             ->get();
     }
 
-    //! Mengurutkan petisi yang pernah diikuti participant sesuai kategori tertentu 
+    //! Mengurutkan petisi yang pernah diikuti participant sesuai kategori tertentu
     //! secara descending sesuai dengan ketentuan yang dipilih
     public function sortPetitionCategoryParticipated($category, $idParticipant, $table)
     {
@@ -413,6 +417,55 @@ class EventDao
         return Petition::where('id', $idEvent)->update([
             'signedCollected' => $count
         ]);
+    }
+
+    //* =========================================================================================
+    //* --------------------------------------- DAO Auth ----------------------------------------
+    //* =========================================================================================
+    public function login($request)
+    {
+        return $temp = Auth::attempt([
+            'email' =>  $request->email,
+            'password' => $request->password
+        ]);
+    }
+
+    public function register($data)
+    {
+        return $data->save();
+    }
+
+    public function reset($token, $request)
+    {
+        return DB::table('password_resets')->insert(
+            ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]
+        );
+    }
+
+    public function mail($token, $request, $view, $subject)
+    {
+        Mail::send($view, ['token' => $token, 'email' => $request->email], function ($message) use ($request, $subject) {
+            $message->to($request->email);
+            $message->subject($subject);
+        });
+    }
+
+    public function getPasswordReset($request)
+    {
+        return DB::table('password_resets')
+            ->where(['email' => $request->email, 'token' => $request->token])
+            ->first();
+    }
+
+    public function updateUser($request)
+    {
+        $user = User::where('email', $request->email)
+            ->update(['password' => Hash::make($request->password)]);
+    }
+
+    public function deleteToken($request)
+    {
+        DB::table('password_resets')->where(['email' => $request->email])->delete();
     }
 
     //* =========================================================================================

@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Domain\Event\Entity\ParticipatePetition;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Domain\Event\Entity\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class EventService
 {
@@ -146,7 +149,7 @@ class EventService
     //* =========================================================================================
     //* ------------------------------------ Service Petisi -------------------------------------
     //* =========================================================================================
-    //! Menampilkan seluruh petisi yang sedang berlangsung 
+    //! Menampilkan seluruh petisi yang sedang berlangsung
     public function indexPetition()
     {
         return $this->dao->indexPetition();
@@ -477,6 +480,67 @@ class EventService
         }
 
         return true;
+    }
+
+    //* =========================================================================================
+    //* ------------------------------------- Service Auth --------------------------------------
+    //* =========================================================================================
+
+    public function authLogin($request)
+    {
+        $result = $this->dao->login($request);
+        return $result;
+    }
+
+    public function authRegis($request)
+    {
+        $role = "participant";
+        $status = 1;
+        $photo = "images/profile/photo/default.svg";
+
+        $data = new User();
+        $data->name = $request->firstname . ' ' . $request->lastname;
+        $data->email = $request->email;
+        $data->status = $status;
+        $data->role = $role;
+        $data->photoProfile = $photo;
+
+        if ($request->password) {
+            $data->password = Hash::make($request->password);
+        }
+
+        $result = $this->dao->register($data);
+        return $result;
+    }
+
+    public function authForgot($request, $view, $subject)
+    {
+
+        $token = Str::random(64);
+
+        $resultReset = $this->dao->reset($token, $request);
+        $resultMail = $this->dao->mail($token, $request, $view, $subject);
+
+        if ($resultReset && $resultMail) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function authReset($request)
+    {
+
+        $resultGetPassword = $this->dao->getPasswordReset($request);
+
+        if ($resultGetPassword) {
+            $this->dao->updateUser($request);
+            $this->dao->deleteToken($request);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //* =========================================================================================
