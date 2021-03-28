@@ -1,22 +1,25 @@
 <h1>Petunjuk Penggunaan dan Demonstrasi:</h1>
-<p>Untuk Clone Pertama Kali:</p>
+<hr>
+<h2>Untuk Clone Pertama Kali:</h2>
     <ul>
         <li>buat database (phpmyadmin, mariadb) dengan nama &lt;nama&gt;</li>
         <li>Jalankan: composer install</li>
         <li>Copy file env.example, rename file copy dengan .env, sesuaikan: DB_DATABASE= &lt;nama &gt; (line 13)</li>
+        <li> untuk mengaktifkan verifikasi email , ubah .env (baca line 32) </li>
         <li>php artisan key:generate</li>
         <li>php artisan migrate:fresh --seed (untuk migrasi ulang database dan juga memanggil seeder)</li>
     </ul>
 
-<p>Sweet Alert (https://realrashid.github.io/sweet-alert/):</p>
+<h2>Sweet Alert (https://realrashid.github.io/sweet-alert/):</h2>
     <ul>
         <li>jalankan di root projek: composer require realrashid/sweet-alert</li>
         <li>tambahkan baris: <strong>RealRashid\SweetAlert\SweetAlertServiceProvider::class</strong>, di file <b>config/app.php</b> bagian <b>'providers' => [</b></li>
         <li>tambahkan baris: <strong>'Alert' => RealRashid\SweetAlert\Facades\Alert::class,</strong> di file <b>config/app bagian 'aliases' => [</b></li>
     </ul>
 
-<p>Live Wire:</p>
+<h3>Live Wire:</h3>
     <li>jalankan di root projek: composer require livewire/livewire</li>
+    <li>Notes: jika composer masih versi 1, lakukan update terlebih dahulu dengan perintah: composer self-update --2</li>
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
@@ -26,6 +29,21 @@
 <a href="https:/s/packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
+
+
+## Untuk Verifikasi Email:
+ubah .env
+
+APP_NAME=YukBisaYuk
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME=teknikinformatikaithb18@gmail.com
+MAIL_PASSWORD=8084ithb
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS=teknikinformatikaithb18@gmail.com
+MAIL_FROM_NAME="${APP_NAME}"
+
 
 ## About Laravel
 

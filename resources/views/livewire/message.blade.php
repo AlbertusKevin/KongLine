@@ -27,8 +27,7 @@
                 </div>
             </div>
         @endif
-        <div class="col-md-8">
-            <div class="HeadChatAdmin card">
+            <div class="card">
                 <div class="card-header">
                     @if(isset($clicked_user)) {{ $clicked_user->name }}
 
@@ -76,6 +75,5 @@
                     </div>
                 @endif
             </div>
-        </div>
     </div>
 </div>

@@ -9,7 +9,6 @@ class Service extends Model
 {
     use HasFactory;
     protected $table = 'service';
-    public $timestamps = false;
     protected $fillable = ['message', 'user_id'];
 
     public function user()
