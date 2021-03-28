@@ -8,7 +8,6 @@ use App\Domain\Event\Entity\ParticipatePetition;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use App\Domain\Event\Entity\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class EventService
