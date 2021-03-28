@@ -38,7 +38,9 @@
                     <a class="nav-link" href="{{ url('/donation') }}">Donasi</a>
                     <a class="nav-link" href="{{ url('/petition') }}">Petisi</a>
                     <a class="nav-link" href="{{ url('/') }}">Forum</a>
-                    <a class="nav-link" href="{{ url('/inbox') }}">Service</a>
+                    @if(auth()->user()->role == 'admin')
+                        <a class="nav-link" href="{{ url('/inbox') }}">Service</a>
+                    @endif
                     @if (Auth::check())
                         <div class="dropdown m-2 mr-2">
                             <div data-toggle="dropdown">
