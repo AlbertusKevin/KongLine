@@ -3,8 +3,9 @@
 namespace App\Domain\Event\Entity;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Petition extends Event
+class Petition extends Model
 {
     // konfigurasi ORM
     use HasFactory;

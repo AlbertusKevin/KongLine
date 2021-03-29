@@ -21,7 +21,7 @@ class CreateTransactionsTable extends Migration
             $table->string('repaymentPicture')->nullable();
             $table->tinyInteger('status')->unsigned();
             $table->boolean('annonymous_donate');
-            $table->date('created_at');
+            $table->timestamps();
         });
 
         Schema::table('transaction', function (Blueprint $table) {

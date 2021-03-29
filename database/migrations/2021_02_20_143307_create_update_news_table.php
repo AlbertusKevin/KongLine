@@ -19,7 +19,7 @@ class CreateUpdateNewsTable extends Migration
             $table->string('image');
             $table->string('title');
             $table->longText('content');
-            $table->string('link');
+            $table->string('link')->nullable();
             $table->date('created_at');
         });
 

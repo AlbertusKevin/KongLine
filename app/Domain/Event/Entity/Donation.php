@@ -13,9 +13,6 @@ class Donation extends Model
     public $timestamps = false;
     protected $guarded = ['id'];
 
-    // Attribute
-    private $assistedSubject, $donationCollected, $donationTarget;
-
     // Relasi
     public function detailallocation()
     {

@@ -9,5 +9,5 @@ class ForumLike extends Model
 {
     use HasFactory;
     protected $table = 'forum_like';
-    protected $fillable = ['idForum', 'idParticipant'];
+    protected $fillable = ['idForum', 'idParticipant', 'created_at'];
 }
