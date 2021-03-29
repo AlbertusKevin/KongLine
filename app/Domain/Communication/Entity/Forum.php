@@ -10,4 +10,5 @@ class Forum extends Model
     use HasFactory;
     protected $table = 'forum';
     protected $guarded = ['id'];
+    public $timestamps = false;
 }

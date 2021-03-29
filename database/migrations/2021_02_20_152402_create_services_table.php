@@ -19,7 +19,7 @@ class CreateServicesTable extends Migration
             $table->foreignId('receiver');
             $table->longText('message');
             $table->boolean('is_seen')->default(0);
-            $table->date('created_at');
+            $table->timestamps();
         });
 
         Schema::table('service', function (Blueprint $table) {
