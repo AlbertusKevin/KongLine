@@ -38,10 +38,10 @@
                     <a class="nav-link" href="{{ url('/donation') }}">Donasi</a>
                     <a class="nav-link" href="{{ url('/petition') }}">Petisi</a>
                     <a class="nav-link" href="{{ url('/') }}">Forum</a>
-                    @if(auth()->user()->role == 'admin')
-                        <a class="nav-link" href="{{ url('/inbox') }}">Service</a>
-                    @endif
                     @if (Auth::check())
+                        @if (auth()->user()->role == 'admin')
+                            <a class="nav-link" href="{{ url('/inbox') }}">Service</a>
+                        @endif
                         <div class="dropdown m-2 mr-2">
                             <div data-toggle="dropdown">
                                 <img src="/img/profile.png">
@@ -51,14 +51,15 @@
                                 <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
                             </div>
                         </div>
-                @else
-                    <div class="text-center">
-                        <a type="button" class="btn btn-outline-info ml-1 mr-2" href="{{ url('/login') }}"> Login </a>
-                        <a type="button" class="btn btn-info mr-2" href="{{ url('/register') }}"> Daftar </a>
-                    </div>
-                @endif
+                    @else
+                        <div class="text-center">
+                            <a type="button" class="btn btn-outline-info ml-1 mr-2" href="{{ url('/login') }}"> Login
+                            </a>
+                            <a type="button" class="btn btn-info mr-2" href="{{ url('/register') }}"> Daftar </a>
+                        </div>
+                    @endif
+                </div>
             </div>
-        </div>
         </div>
 
     </nav>

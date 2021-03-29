@@ -16,14 +16,20 @@ class HomeController extends Controller
     public function index()
     {
         $users = User::orderBy('id', 'DESC')->get();
+        $login = Auth::check();
 
-        if (Auth::user()->role == 'admin') {
-            $messages = Service::where('user_id', auth()->id())->orWhere('receiver', auth()->id())->orderBy('id', 'DESC')->get();
+        if ($login) {
+            if (Auth::user()->role == 'admin') {
+                $messages = Service::where('user_id', auth()->id())->orWhere('receiver', auth()->id())->orderBy('id', 'DESC')->get();
+            }
+
+            return view('home', [
+                'users' => $users,
+                'messages' => $messages ?? null,
+                'login' => $login
+            ]);
         }
 
-        return view('home', [
-            'users' => $users,
-            'messages' => $messages ?? null,
-        ]);
+        return view('home', compact('login'));
     }
 }
