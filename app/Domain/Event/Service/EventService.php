@@ -459,6 +459,7 @@ class EventService
         }else{
             return false;
         }
+
     }
 
     public function authReset($request){

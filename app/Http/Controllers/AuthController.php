@@ -129,6 +129,17 @@ class AuthController extends Controller
         $svc = new EventService();
         $result = $svc->authReset($request);
 
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|min:6|required_with:passwordConfirm|same:passwordConfirm',
+            'passwordConfirm' => 'required|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return back()
+                ->withInput()
+                ->withErrors($validator);
+        }
+
         if($result){
             return redirect('/login')->with('message', 'Your password has been changed!');
         }else{
