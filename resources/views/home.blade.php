@@ -131,17 +131,18 @@
     </div>
     {{-- @endforeach --}}
   </div>
-  @if($login)
-    @if(auth()->user()->role != 'admin')
+
+    @if($user->role != ADMIN && $user->role != GUEST )
       <button id="btnopenchat" class="open-button" onclick="openChat()">Chat</button>
       <button id="btnclosechat" class="open-button" onclick="closeChat()" style="display:block;">Chat</button>
+      
+      <div id="myChat">
+        @livewire('message', ['users' => $users, 'messages' => $messages ?? null])
+      </div>
     @endif
     <!-- <div class="card" style="width: 18rem;"> -->
-    <div id="myChat">
-      @livewire('message', ['users' => $users, 'messages' => $messages ?? null])
-    </div>
     <!-- </div> -->
-  @endif
+
 
 
   <script>

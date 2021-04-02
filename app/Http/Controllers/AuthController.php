@@ -27,6 +27,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
+            Alert::error("Gagal Mendaftar", "Sepertinya input ada yang kurang tepat.");
             return redirect('/register')
                 ->withInput()
                 ->withErrors($validator);

@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use \App\Domain\Event\Entity\User;
 use \App\Domain\Communication\Entity\Service;
+use App\Domain\Event\Service\EventService;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    private $eventService;
+
+    public function __construct()
+    {
+        $this->eventService = new EventService();
+    }
     /**
      * Show the application dashboard.
      *
@@ -16,20 +23,20 @@ class HomeController extends Controller
     public function index()
     {
         $users = User::orderBy('id', 'DESC')->get();
-        $login = Auth::check();
+        $user = $this->eventService->showProfile();
 
-        if ($login) {
-            if (Auth::user()->role == 'admin') {
-                $messages = Service::where('user_id', auth()->id())->orWhere('receiver', auth()->id())->orderBy('id', 'DESC')->get();
-            }
-
-            return view('home', [
-                'users' => $users,
-                'messages' => $messages ?? null,
-                'login' => $login
-            ]);
+        if ($user->role == GUEST) {
+            return view('home', compact('user'));
         }
 
-        return view('home', compact('login'));
+        if ($user->role == ADMIN) {
+            $messages = Service::where('user_id', auth()->id())->orWhere('receiver', auth()->id())->orderBy('id', 'DESC')->get();
+        }
+
+        return view('home', [
+            'users' => $users,
+            'messages' => $messages ?? null,
+            'user' => $user
+        ]);
     }
 }
