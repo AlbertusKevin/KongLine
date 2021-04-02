@@ -18,7 +18,7 @@ class DonationSeeder extends Seeder
         DB::table('donation')->insert(
             [
                 'category' => 12,
-                'deadline' => new Carbon('first day of May 2021'),
+                'deadline' => Carbon::create('2021', '04', '28')->format("Y-m-d"),
                 'idCampaigner' => 11,
                 'photo' => 'images/donation/pantiAsuhan.jpeg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -35,7 +35,7 @@ class DonationSeeder extends Seeder
         DB::table('donation')->insert(
             [
                 'category' => 9,
-                'deadline' => Carbon::create('2021', '04', '28'),
+                'deadline' => Carbon::create('2021', '04', '28')->format("Y-m-d"),
                 'idCampaigner' => 12,
                 'photo' => 'images/donation/tupperware.jpg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -52,7 +52,7 @@ class DonationSeeder extends Seeder
         DB::table('donation')->insert(
             [
                 'category' => 7,
-                'deadline' => Carbon::create('2021', '04', '15'),
+                'deadline' => Carbon::create('2021', '04', '15')->format("Y-m-d"),
                 'idCampaigner' => 13,
                 'photo' => 'images/donation/telorGulung.jpg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -69,7 +69,7 @@ class DonationSeeder extends Seeder
         DB::table('donation')->insert(
             [
                 'category' => 1,
-                'deadline' => Carbon::create('2021', '03', '24'),
+                'deadline' => Carbon::create('2021', '03', '24')->format("Y-m-d"),
                 'idCampaigner' => 11,
                 'photo' => 'images/donation/androidStudio.png',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -80,13 +80,13 @@ class DonationSeeder extends Seeder
                 'assistedSubject' => 'Mahasiswa',
                 'donationCollected' => 750000,
                 'donationTarget' => 750000,
-                'created_at' => Carbon::create('2021', '03', '15'),
+                'created_at' => Carbon::create('2021', '03', '15')->format("Y-m-d"),
             ]
         );
         DB::table('donation')->insert(
             [
                 'category' => 5,
-                'deadline' => Carbon::create('2021', '03', '26'),
+                'deadline' => Carbon::create('2021', '03', '26')->format("Y-m-d"),
                 'idCampaigner' => 10,
                 'photo' => 'images/donation/hpTiktok.jpg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -97,13 +97,13 @@ class DonationSeeder extends Seeder
                 'assistedSubject' => 'Pekerjaan',
                 'donationCollected' => 2500000,
                 'donationTarget' => 2500000,
-                'created_at' => Carbon::create('2021', '03', '17'),
+                'created_at' => Carbon::create('2021', '03', '17')->format("Y-m-d"),
             ]
         );
         DB::table('donation')->insert(
             [
                 'category' => 13,
-                'deadline' => Carbon::create('2021', '04', '06'),
+                'deadline' => Carbon::create('2021', '04', '06')->format("Y-m-d"),
                 'idCampaigner' => 12,
                 'photo' => 'images/donation/gereja.jpg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -114,13 +114,13 @@ class DonationSeeder extends Seeder
                 'assistedSubject' => 'Rumah Ibadah',
                 'donationCollected' => 800000000,
                 'donationTarget' => 800000000,
-                'created_at' => Carbon::create('2021', '03', '17'),
+                'created_at' => Carbon::create('2021', '03', '17')->format("Y-m-d"),
             ]
         );
         DB::table('donation')->insert(
             [
                 'category' => 3,
-                'deadline' => Carbon::create('2021', '03', '30'),
+                'deadline' => Carbon::create('2021', '03', '30')->format("Y-m-d"),
                 'idCampaigner' => 11,
                 'photo' => 'images/donation/gereja.jpg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -131,13 +131,13 @@ class DonationSeeder extends Seeder
                 'assistedSubject' => 'Difabel',
                 'donationCollected' => 15000000,
                 'donationTarget' => 15000000,
-                'created_at' => Carbon::create('2021', '03', '20'),
+                'created_at' => Carbon::create('2021', '03', '20')->format("Y-m-d"),
             ]
         );
         DB::table('donation')->insert(
             [
                 'category' => 5,
-                'deadline' => Carbon::create('2021', '04', '10'),
+                'deadline' => Carbon::create('2021', '04', '10')->format("Y-m-d"),
                 'idCampaigner' => 12,
                 'photo' => 'images/donation/keyboard.jpg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -148,7 +148,7 @@ class DonationSeeder extends Seeder
                 'assistedSubject' => 'Hardware',
                 'donationCollected' => 1500000,
                 'donationTarget' => 1500000,
-                'created_at' => Carbon::create('2021', '03', '30'),
+                'created_at' => Carbon::create('2021', '03', '30')->format("Y-m-d"),
             ]
         );
     }

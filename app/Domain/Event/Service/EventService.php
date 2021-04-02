@@ -33,6 +33,20 @@ class EventService
         return $this->dao->showProfile(GUEST_ID);
     }
 
+    public function updateCalculatedCount($idEvent, $idUser)
+    {
+        // Update Count dari jumlah ttd petisi
+        $count = $this->dao->calculatedSign($idEvent, PETITION);
+        $this->dao->updateCalculatedSign($idEvent, $count);
+
+        // Update jumlah event yang diikuti user
+        $countParticipatedDonation = $this->dao->countDonationParticipatedByUser($idUser);
+        $countParticipatedPetition = $this->dao->countPetitionParticipatedByUser($idUser);
+        $totalEvent = $countParticipatedDonation + $countParticipatedPetition;
+
+        $this->dao->updateCountEventParticipatedByUser($idUser, $totalEvent);
+    }
+
     //! Mengupload gambar dan mengembalikan path dari gambar yang diupload
     private function uploadImage($img, $folder)
     {
@@ -438,11 +452,10 @@ class EventService
         $petition->idPetition = $idEvent;
         $petition->idParticipant = $user->id;
         $petition->comment = $request->petitionComment;
-        $petition->created_CCREATED_COLUMN_at = Carbon::now()->format('Y-m-d');
+        $petition->created_at = Carbon::now()->format('Y-m-d');
 
         $this->dao->signPetition($petition, $idEvent, $user);
-        $count = $this->dao->calculatedSign($idEvent);
-        $this->dao->updateCalculatedSign($idEvent, $count);
+        $this->updateCalculatedCount($idEvent, $user->id);
     }
 
     //! Menyimpan data petisi ke database

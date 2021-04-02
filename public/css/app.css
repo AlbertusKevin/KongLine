@@ -143,6 +143,10 @@ button.close-event{
   line-height: 1.5;
 }
 
+.petition-comment-img-profile.img-thumbnail {
+  height: 250px;
+}
+
 /* Petition Style */
 a.btn-create-petition {
   background: #147C85;

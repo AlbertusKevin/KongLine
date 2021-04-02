@@ -38,13 +38,12 @@
             <div class="col-md-12">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <div class="row">
+                        <div class="row text-center">
                             <div class="col-md-3">
-                                <img src="/{{ $donation->photo }}" class="card-img-top detail-donate-photo"
-                                    height="300px">
+                                <img src="/{{ $donation->photo }}" class="card-img-top detail-donate-photo">
                             </div>
-                            <div class="col-md-9">
-                                <h3 class="font-weight-bold title-donation-detail" style="line-height: 500%;">
+                            <div class="col-md-9 pt-4">
+                                <h3 class="font-weight-bold title-donation-detail">
                                     {{ $donation->title }}
                                 </h3>
                             </div>
@@ -53,7 +52,7 @@
                 </div>
             </div>
         </div>
-        <form action="/donation/donate/{{ $donation->id }}" method="post">
+        <form action=" /donation/donate/{{ $donation->id }}" method="post">
             @csrf
             <div class="row w-75 ml-auto mr-auto mt-4">
                 <div class="col-md-12">
@@ -62,7 +61,8 @@
                             <h5 class="font-weight-bold">Isi Nominal Donasi&nbsp;<sup>*</sup></h5>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="nominal" name="nominal">
-                                <small class="form-text text-muted">Donasi mulai dari Rp 10,000,-</small>
+                                <small class="form-text text-muted">Donasi mulai dari Rp
+                                    10,000,-</small>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="annonymousDonatur"
@@ -70,6 +70,20 @@
                                 <label class="form-check-label" for="annonymousDonatur">
                                     Donasi sebagai anonymus
                                 </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row w-75 ml-auto mr-auto mt-4">
+                <div class="col-md-12">
+                    <div class="modal-content">
+                        <div class="modal-body p-4">
+                            <h5 class="font-weight-bold">Nomor Rekening<sup>*</sup></h5>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="rekeningUser" name="rekeningUser">
+                                <small class="form-text text-muted">Nomor rekening yang kamu
+                                    gunakan</small>
                             </div>
                         </div>
                     </div>
@@ -97,7 +111,8 @@
             </div>
             <div class="row w-75 ml-auto mr-auto mt-4">
                 <div class="col-md-12">
-                    <button class="btn btn-danger btn-donate" type="submit">Konfirmasi Pembayaran</button>
+                    <button class="btn btn-danger btn-donate" type="submit">Konfirmasi
+                        Pembayaran</button>
                 </div>
             </div>
         </form>

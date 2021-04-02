@@ -18,7 +18,7 @@
             @if ($user->id == $petition->idCampaigner && $petition->status == 0)
                 <div class="col-md-8 mb-5 ml-auto mr-auto mt-5" style="max-width: 800px;">
                 @else
-                    <div class="mb-5 ml-auto mr-auto mt-5" style="max-width: 800px;">
+                    <div class="col-md-12 mb-5 ml-auto mr-auto mt-5" style="max-width: 800px;">
             @endif
             <div class="mb-5">
                 <h3 class="font-weight-bold">Berita Terbaru</h3>

@@ -22,6 +22,7 @@ class CreateDonationsTable extends Migration
             $table->longText('purpose');
             $table->tinyInteger('status')->unsigned();
             $table->string('title')->unique();
+            $table->integer('totalDonatur')->default(0);
             $table->string('assistedSubject');
             $table->bigInteger('donationCollected');
             $table->bigInteger('donationTarget');

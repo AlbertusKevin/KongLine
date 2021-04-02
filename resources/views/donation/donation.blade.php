@@ -50,8 +50,8 @@
     <div class="container px-5">
         <div class="row card-top" id="donation-list">
             @foreach ($donations as $donation)
-                <div class="card col-md-4 p-2 mb-3" style="padding: 0; ">
-                    <div style="position:relative;">
+                <div class="card col-md-4 p-2 mb-5" style="width: 18rem;">
+                    <div style=" position:relative;">
                         <img src="{{ $donation->photo }}" class="img-donation card-img-top"
                             alt="{{ $donation->title }} donation's picture">
                         <p class="donate-count">{{ $donation->totalDonatur }} Donatur</p>
@@ -68,13 +68,22 @@
                             <p class="font-weight-bold text-left pl-3">Rp.
                                 {{ number_format($donation->donationCollected, 2, ',', '.') }}
                             </p>
-                            <p class="font-weight-bold text-right">Rp.
-                                {{ number_format($donation->donationTarget - $donation->donationCollected, 2, ',', '.') }},-
+                            <p class="font-weight-bold text-right">
+                                @if ($donation->donationTarget - $donation->donationCollected >= 0)
+                                    Rp.
+                                    {{ number_format($donation->donationTarget - $donation->donationCollected, 2, ',', '.') }}
+                                @else
+                                    Rp. {{ number_format($donation->donationTarget, 2, ',', '.') }}
+                                @endif
                             </p>
                         </div>
                         <div class="row  d-flex justify-content-between">
                             <p class="font-weight-light text-left pl-3 mb-0">Terkumpul</p>
-                            <p class="font-weight-light text-right pl-1 mb-0">Menuju Target</p>
+                            @if ($donation->donationTarget - $donation->donationCollected >= 0)
+                                <p class="font-weight-light text-right pl-1 mb-0">Menuju Target</p>
+                            @else
+                                <p class="font-weight-light text-right pl-1 mb-0">Mencapai Target</p>
+                            @endif
                         </div>
                     </div>
                 </div>

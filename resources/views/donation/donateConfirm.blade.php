@@ -39,9 +39,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="confirm-donate ml-auto mr-auto text-center w-75">
-                    <h3 class="mt-5">Transfer Rp 100,021,00</h3>
+                    <h3 class="mt-5">Transfer Rp {{ number_format($transaction->nominal, 2, ',', '.') }}</h3>
                     <small>ke Virtual Account BCA </small>
-                    <h4 class="mt-3"><u>1702272081</u></h4>
+                    <h4 class="mt-3"><u>{{ ACCOUNT }}</u></h4>
                 </div>
             </div>
         </div>
@@ -84,7 +84,7 @@
                                 </tr>
                                 <tr>
                                     <td>No. Rekening:</td>
-                                    <td>{{ $user->acountNumber }}</td>
+                                    <td>{{ $transaction->accountNumber }}</td>
                                 </tr>
                                 <tr>
                                     <td>Donasi Oleh:</td>

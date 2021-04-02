@@ -18,42 +18,42 @@ class ForumLikeSeeder extends Seeder
         DB::table('forum_like')->insert(
             [
                 'idForum' => 1,
-                'idParticipant' => 1,
+                'idParticipant' => 5,
                 'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
         DB::table('forum_like')->insert(
             [
                 'idForum' => 1,
-                'idParticipant' => 2,
+                'idParticipant' => 6,
                 'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
         DB::table('forum_like')->insert(
             [
                 'idForum' => 2,
-                'idParticipant' => 1,
+                'idParticipant' => 5,
                 'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
         DB::table('forum_like')->insert(
             [
                 'idForum' => 2,
-                'idParticipant' => 2,
+                'idParticipant' => 10,
                 'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
         DB::table('forum_like')->insert(
             [
                 'idForum' => 1,
-                'idParticipant' => 3,
+                'idParticipant' => 9,
                 'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
         DB::table('forum_like')->insert(
             [
                 'idForum' => 2,
-                'idParticipant' => 3,
+                'idParticipant' => 8,
                 'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );

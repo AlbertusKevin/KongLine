@@ -219,7 +219,8 @@ class EventController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nominal' => 'required|numeric|min:10000',
-            'comment' => 'nullable|min:20',
+            'rekeningUser' => 'required|numeric',
+            'comment' => 'nullable|min:20'
         ]);
 
         if ($validator->fails()) {
@@ -238,7 +239,7 @@ class EventController extends Controller
         $annonymousDonate = $this->eventService->checkAnnonym($request->annonymousDonatur);
 
         $participateDonation = new Model\ParticipateDonation($id, $user->id, $request->comment, Carbon::now()->format('Y-m-d'), $annonymousComment);
-        $transaction = new Model\Transaction($id, $user->id, $user->accountNumber, $request->nominal, $annonymousDonate, 0, Carbon::now()->format("Y-m-d"));
+        $transaction = new Model\Transaction($id, $user->id, $request->rekeningUser, $request->nominal, $annonymousDonate, 0, Carbon::now()->format("Y-m-d"));
         $this->eventService->postDonate($participateDonation);
         $this->eventService->postTransaction($transaction);
 

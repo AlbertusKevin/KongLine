@@ -43,10 +43,30 @@ class EventDao
 
         return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
     }
+
     //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
     public function verifyProfile($email, $phone)
     {
         return User::where('email', $email)->where('phoneNumber', $phone)->first();
+    }
+
+    //! Menghitung total event yang sudah pernah diikuti user tertentu
+    public function countDonationParticipatedByUser($idUser)
+    {
+        return ParticipateDonation::where('idParticipant', $idUser)->count();
+    }
+
+    //! Menghitung total event yang sudah pernah diikuti user tertentu
+    public function countPetitionParticipatedByUser($idUser)
+    {
+        return ParticipatePetition::where('idParticipant', $idUser)->count();
+    }
+
+    public function updateCountEventParticipatedByUser($idUser, $count)
+    {
+        User::where('id', $idUser)->update([
+            'countEvent' => $count
+        ]);
     }
 
     //* =========================================================================================
@@ -406,9 +426,13 @@ class EventDao
     }
 
     //! Mengambil jumlah total tandatangan petisi tertentu saat itu
-    public function calculatedSign($idEvent)
+    public function calculatedSign($idEvent, $typeEvent)
     {
-        return ParticipatePetition::where('idPetition', $idEvent)->count();
+        if ($typeEvent == PETITION) {
+            return ParticipatePetition::where('idPetition', $idEvent)->count();
+        }
+
+        // return ParticipatePetition::where('idPetition', $idEvent)->count();
     }
 
     //! Update jumlah tandatangan petisi tertentu

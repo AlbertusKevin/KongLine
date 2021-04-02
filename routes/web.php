@@ -73,7 +73,9 @@ Route::get('/petition', [EventController::class, 'indexPetition']);
 Route::get('/petition/create', [EventController::class, 'createPetition']);
 Route::post('/petition/create', [EventController::class, 'storePetition']);
 Route::get('/petition/{id}', [EventController::class, 'showPetition']);
+
 Route::get('/petition/comments/{id}', [EventController::class, 'commentPetition']);
+
 Route::get('/petition/progress/{id}', [EventController::class, 'progressPetition']);
 Route::post('/petition/progress/{id}', [EventController::class, 'storeProgressPetition']);
 
