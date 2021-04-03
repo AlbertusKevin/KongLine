@@ -432,6 +432,19 @@ $(".show-comment").on("click", function () {
     $(".card-text").html(html);
 });
 
+$("#repaymentPicture").on("change", function () {
+    const cover = document.querySelector("#repaymentPicture");
+    const coverLabel = document.querySelector(".custom-file-label");
+    const imgPreview = document.querySelector(".img-preview");
+
+    coverLabel.textContent = cover.files[0].name;
+    const fileCover = new FileReader();
+    fileCover.readAsDataURL(cover.files[0]);
+    fileCover.onload = function (e) {
+        imgPreview.src = e.target.result;
+    };
+});
+
 // ADMIN
 const viewUserParticipantRole = (user, countParticipated) => {
     console.log("role : " + user.role);

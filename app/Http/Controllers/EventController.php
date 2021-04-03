@@ -182,16 +182,19 @@ class EventController extends Controller
 
     public function getADonation($id)
     {
-        $donation = $this->eventService->getADonation($id);
+        $donation = $this->eventService->getADonation($id); // detail donasi mencakup siapa pembuat event itu
         $user = $this->eventService->showProfile();
         $progress = $this->eventService->countProgressDonation($donation); // untuk progress bar
-        $category = $this->eventService->getACategory($donation->category); // untuk menampilkan deskripsi kategori
-        $participatedDonation = $this->eventService->getParticipatedDonation($id); // untuk tab donatur
+        $category = $this->eventService->getACategory($donation->category); // untuk menampilkan kategori
+        $participatedDonation = $this->eventService->getParticipatedDonation($id); // untuk tab donatur dan comment
         $alocationBudget = $this->eventService->getABudgetingDonation($id); // untuk tab alokasi dana
         $isParticipated = $this->eventService->checkParticipated($id, $user, DONATION); // untuk pengecekan apakah pernah donasi atau tidak
-        $message = $this->eventService->messageOfEvent($donation->status);
+        $message = $this->eventService->messageOfEvent($donation->status); // Menampilkan pesan status sebuah event
+        // pengecekan, apakah donasi di event ini sudah dikonfirmasi pembayaran oleh user
         $userTransactionStatus = $this->eventService->checkUserTransactionStatus($participatedDonation, $user->id);
+        $allStatusZero = $this->eventService->checkStatusIsZero($participatedDonation);
 
+        // dd($userTransactionStatus);
         return view(
             'donation.donationDetail',
             compact(
@@ -203,7 +206,8 @@ class EventController extends Controller
                 'alocationBudget',
                 'isParticipated',
                 'message',
-                'userTransactionStatus'
+                'userTransactionStatus',
+                'allStatusZero'
             )
         );
     }
@@ -258,7 +262,25 @@ class EventController extends Controller
 
     public function postConfirm(Request $request, $id)
     {
-        dd("post confirm");
+        $validator = Validator::make($request->all(), [
+            'repaymentPicture' => 'required|image'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            Alert::error('Gagal Konfirmasi', [$messageError]);
+            return redirect('/donation/confirm_donate/' . $id)->withInput();
+        };
+
+        $this->eventService->confirmationPictureDonation($request->file('repaymentPicture'), $id);
+
+        Alert::success('Berhasil', 'Konfirmasi pembayaran akan segera diproses');
+        return redirect('/donation/' . $id);
     }
 
     public function createView()

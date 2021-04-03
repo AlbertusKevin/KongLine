@@ -43,6 +43,11 @@
                     </div>
                 </div>
             </div>
+            @if ($user->role == CAMPAIGNER)
+                <div class="row mt-3">
+                    <a type="button" href="/donation/create" class="btn btn-create-donation">Ajukan Donasi</a>
+                </div>
+            @endif
         </div>
     </div>
 

@@ -552,6 +552,13 @@ class EventDao
         ]);
     }
 
+    public function confirmationPictureDonation($file, $id)
+    {
+        Transaction::where('idDonation', $id)->update([
+            'repaymentPicture' => $file
+        ]);
+    }
+
     public function getAUserTransaction($id)
     {
         return Transaction::where('idParticipant', $id)->first();

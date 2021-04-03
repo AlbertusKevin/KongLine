@@ -621,12 +621,38 @@ class EventService
     public function checkUserTransactionStatus($participatedDonation, $id)
     {
         foreach ($participatedDonation as $participate) {
-            if ($participate->status == 1 && $participate->idParticipant == $id) {
-                return true;
+            // dd($participate);
+            // if ($participate->status == 1 && $participate->idParticipant == $id) {
+            //     return true;
+            // }
+
+            if ($participate->idParticipant == $id) {
+                if ($participate->status == 1) {
+                    return FINISHED;
+                }
+                if (!empty($participate->repaymentPicture) && $participate->status == 0) {
+                    return WAITING;
+                }
             }
         }
 
-        return false;
+        return NOT_CONFIRMED;
+    }
+
+    public function checkStatusIsZero($participatedDonation)
+    {
+        foreach ($participatedDonation as $comment) {
+            if ($comment->status == 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function confirmationPictureDonation($picture, $id)
+    {
+        $pathRepaymentPicture = $this->uploadImage($picture, 'donation/bukti_transfer');
+        $this->dao->confirmationPictureDonation($pathRepaymentPicture, $id);
     }
 
     public function countProgressDonation($donation)

@@ -53,10 +53,26 @@
                 <div class="col-md-12">
                     <div class="modal-content">
                         <div class="modal-body p-4">
-                            <div class="custom-file mb-3">
-                                <input type="file" class="custom-file-input">
-                                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="repaymentPicture"
+                                        name="repaymentPicture">
+                                    <label class="custom-file-label" for="repaymentPicture">Input gambar bukti pembayaran
+                                        (jpg, png)</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit">Upload</button>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row w-35 ml-auto mr-auto mt-4">
+                <div class="col-md-12">
+                    <div class="modal-content">
+                        <div class="modal-body p-4 text-center">
+                            <img src="{{ DEFAULT_FILE_PREVIEW }}" alt="file preview" class="img-preview">
                         </div>
                     </div>
                 </div>

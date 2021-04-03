@@ -115,6 +115,21 @@ img.donatur-photo {
   width: 50px;
   border-radius: 50%;
 }
+
+.img-preview{
+  height: 300px;
+  max-height: 300px;
+  min-height: 300px;
+}
+
+a.btn-create-donation {
+  width: 200px;
+  height: 50px;
+  color: whitesmoke;
+  background: #147C85;
+  border-radius: 30px;
+  padding-top: 10px;
+}
 /*
 =================================== Style untuk petisi ===================================
 */
