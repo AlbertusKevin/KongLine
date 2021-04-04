@@ -5,14 +5,16 @@ namespace App\Domain\Event\Model;
 class Donation extends Event
 {
     // Attribute
-    private $assistedSubject, $donationCollected, $donationTarget;
+    private $assistedSubject, $donationCollected, $donationTarget, $totalDonatur, $bank, $accountNumber;
 
-    public function __construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at, $donationCollected, $donationTarget, $assistedSubject)
+    public function __construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at, $donationCollected, $donationTarget, $assistedSubject, $bank, $accountNumber)
     {
         parent::__construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at);
         $this->assistedSubject = $assistedSubject;
         $this->donationCollected = $donationCollected;
         $this->donationTarget = $donationTarget;
+        $this->accountNumber = $accountNumber;
+        $this->bank = $bank;
     }
 
     public function setPhoto($img)
@@ -73,5 +75,13 @@ class Donation extends Event
     public function getDonationTarget()
     {
         return $this->donationTarget;
+    }
+    public function getBank()
+    {
+        return $this->bank;
+    }
+    public function getAccountNumber()
+    {
+        return $this->accountNumber;
     }
 }

@@ -1,11 +1,11 @@
 @extends('layout.app')
 @section('title')
-    New Petition
+    New Donation
 @endsection
 
 @section('content')
     <div class="container">
-        <form action="/petition/create" method="POST" enctype="multipart/form-data">
+        <form action="/donation/create" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row mt-5 mb-5">
                 <div class="col-md-10 offset-md-2 mb-5">
@@ -15,12 +15,13 @@
                     <div class="form-group mb-5">
                         <label for="title">Judul Event</label>
                         <input type="text" class="form-control" id="title" name="title" aria-describedby="title"
-                            placeholder="Judul Event">
+                            placeholder="Judul Event" value="{{ old('title') }}">
                     </div>
                     <div class="form-group">
                         <label for="purpose">Tujuan dan Alasan Galang Dana</label>
                         <textarea class="form-control" id="purpose" name="purpose" rows="10"
-                            placeholder="Tuliskan tujuan dan alasan dari event ini" aria-describedby="purpose"></textarea>
+                            placeholder="Tuliskan tujuan dan alasan dari event ini"
+                            aria-describedby="purpose">value="{{ old('purpose') }}"</textarea>
                     </div>
                     <div class="form-group mb-5">
                         <label for="category">Kategori</label>
@@ -31,9 +32,9 @@
                         </select>
                     </div>
                     <div class="form-group mb-5">
-                        <label for="signedTarget">Target Donasi</label>
-                        <input type="text" class="form-control" id="signedTarget" name="signedTarget"
-                            aria-describedby="signedTarget">
+                        <label for="donationTarget">Target Jumlah Donasi</label>
+                        <input type="text" class="form-control" id="donationTarget" name="donationTarget"
+                            aria-describedby="donationTarget" value="{{ old('donationTarget') }}">
                     </div>
                     <div class="form-group mb-5">
                         <label for="deadline">Batas Waktu</label>
@@ -47,9 +48,52 @@
                 </div>
                 <div class="col-md-5">
                     <div class="form-group mb-5">
-                        <label for="targetPerson">Penerima Manfaat</label>
-                        <input type="text" class="form-control" id="targetPerson" name="targetPerson"
-                            aria-describedby="targetPerson">
+                        <label for="assistedSubject">Penerima Manfaat</label>
+                        <input type="text" class="form-control" id="assistedSubject" name="assistedSubject"
+                            aria-describedby="assistedSubject" value="{{ old('assistedSubject') }}">
+                    </div>
+                    <div class="form-group mb-5">
+                        <label for="category">Bank</label>
+                        <select class="form-control" id="bank" name="bank" aria-describedby="bank">
+                            @foreach ($listBank as $bank)
+                                <option value="{{ $bank->id }}">{{ $bank->bank }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group mb-5">
+                        <label for="accountNumber">No Rekening</label>
+                        <input type="text" class="form-control" id="accountNumber" name="accountNumber"
+                            aria-describedby="accountNumber" value="{{ $user->accountNumber }}"
+                            placeholder="No Rekening untuk transfer jika donasi terkumpul">
+                    </div>
+                    <div class="form-group mb-5">
+                        <label>Rincian Penggunaan Dana</label>
+                        <button type="button" class="ml-2 badge badge-pill badge-primary btn-add-allocation">add</button>
+                        <table class="table table-sm text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nominal</th>
+                                    <th scope="col">Alokasi</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="allocation-list">
+                                <tr>
+                                    <td scope="row">
+                                        <input type="text" name="nominal[]" placeholder="nominal"
+                                            class="w-100 input-allocation">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="allocationFor[]" placeholder="allocationFor"
+                                            class="w-100 input-allocation">
+                                    </td>
+                                    <td>
+                                        <button type="button"
+                                            class="badge badge-danger badge-pill btn-remove-allocation">remove</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="form-group form-check">
                         <input type="checkbox" class="form-check-input" id="check-terms-agreement">

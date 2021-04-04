@@ -285,7 +285,43 @@ class EventController extends Controller
 
     public function createView()
     {
-        dd("Hello World");
+        $user = $this->eventService->showProfile();
+        $listCategory = $this->eventService->listCategory();
+        $listBank = $this->eventService->listBank();
+
+        return view('donation.donationCreate', compact('user', 'listCategory', 'listBank'));
+    }
+
+    public function storeDonation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'purpose' => 'required|min:150',
+            'category' => 'required',
+            'donationTarget' => 'required|numeric',
+            'deadline' => 'required',
+            'photo' => 'required|image',
+            'assistedSubject' => 'required',
+            'bank' => 'required',
+            'accountNumber' => 'required|numeric',
+            'nominal' => 'required|numeric',
+            'nominal.*' => 'numeric',
+            'allocationFor' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            Alert::error('Gagal', [$messageError]);
+            // return redirect('/donation/create')->withInput();
+        };
+
+        Alert::success('Berhasil', 'Event Anda sudah didaftarkan. Tunggu konfirmasi dari admin.');
+        return redirect('/donation');
     }
 
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik

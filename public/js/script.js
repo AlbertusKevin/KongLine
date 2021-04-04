@@ -445,6 +445,30 @@ $("#repaymentPicture").on("change", function () {
     };
 });
 
+$(".btn-add-allocation").on("click", function () {
+    let html = /*html*/ `
+    <tr>
+        <td scope="row">
+            <input type="text" name="nominal[]" placeholder="nominal"
+                class="w-100 input-allocation">
+        </td>
+        <td>
+            <input type="text" name="allocationFor[]" placeholder="allocationFor"
+                class="w-100 input-allocation">
+        </td>
+        <td>
+            <button type="button"
+                class="badge badge-danger badge-pill btn-remove-allocation">remove</button>
+        </td>
+    </tr>
+    `;
+    $("#allocation-list").append(html);
+});
+
+$(document).on("click", ".btn-remove-allocation", function () {
+    $(this).parent().parent().remove();
+});
+
 // ADMIN
 const viewUserParticipantRole = (user, countParticipated) => {
     console.log("role : " + user.role);

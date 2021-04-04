@@ -2,6 +2,7 @@
 
 namespace App\Domain\Event\Dao;
 
+use App\Domain\Event\Entity\Bank;
 use App\Domain\Event\Entity\Category;
 use App\Domain\Event\Entity\DetailAllocation;
 use App\Domain\Event\Entity\Donation;
@@ -27,6 +28,12 @@ class EventDao
     public function listCategory()
     {
         return Category::all();
+    }
+
+    //! Mengambil nama bank yang bisa digunakan untuk transfer
+    public function listBank()
+    {
+        return Bank::all();
     }
 
     public function getACategory($id)

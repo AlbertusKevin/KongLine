@@ -90,7 +90,7 @@ Route::get('/donation/sort', [EventController::class, 'sortDonation']);
 
 //* --- buat donasi ---
 Route::get('/donation/create', [EventController::class, 'createView']);
-Route::post('/donation/create', [EventController::class, 'createView']);
+Route::post('/donation/create', [EventController::class, 'storeDonation']);
 
 //* --- menampilkan donasi ---
 Route::get('/donation', [EventController::class, 'listDonation']);

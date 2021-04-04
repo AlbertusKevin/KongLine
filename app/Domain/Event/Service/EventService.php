@@ -87,6 +87,12 @@ class EventService
         return $this->dao->listCategory();
     }
 
+    //! Mengambil nama bank yang bisa digunakan untuk transfer
+    public function listBank()
+    {
+        return $this->dao->listBank();
+    }
+
     public function messageOfEvent($status)
     {
         if ($status == NOT_CONFIRMED) {

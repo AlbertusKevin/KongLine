@@ -29,7 +29,9 @@ class DonationSeeder extends Seeder
                 'assistedSubject' => 'Panti Asuhan',
                 'donationCollected' => 16000000,
                 'donationTarget' => 1500000,
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'created_at' => Carbon::now()->format('Y-m-d'),
+                'bank' => 1,
+                'accountNumber' => "112233445566"
             ]
         );
         DB::table('donation')->insert(
@@ -46,7 +48,9 @@ class DonationSeeder extends Seeder
                 'assistedSubject' => 'Kehidupan Sosial',
                 'donationCollected' => 50000,
                 'donationTarget' => 42000,
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'created_at' => Carbon::now()->format('Y-m-d'),
+                'bank' => 2,
+                'accountNumber' => "18283681623"
             ]
         );
         DB::table('donation')->insert(
@@ -63,7 +67,9 @@ class DonationSeeder extends Seeder
                 'assistedSubject' => 'Pekerjaan',
                 'donationCollected' => 5000000,
                 'donationTarget' => 1250000,
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'created_at' => Carbon::now()->format('Y-m-d'),
+                'bank' => 3,
+                'accountNumber' => "2876201623"
             ]
         );
         DB::table('donation')->insert(
@@ -81,6 +87,8 @@ class DonationSeeder extends Seeder
                 'donationCollected' => 750000,
                 'donationTarget' => 750000,
                 'created_at' => Carbon::create('2021', '03', '15')->format("Y-m-d"),
+                'bank' => 4,
+                'accountNumber' => "112233445566"
             ]
         );
         DB::table('donation')->insert(
@@ -98,6 +106,8 @@ class DonationSeeder extends Seeder
                 'donationCollected' => 2500000,
                 'donationTarget' => 2500000,
                 'created_at' => Carbon::create('2021', '03', '17')->format("Y-m-d"),
+                'bank' => 1,
+                'accountNumber' => "0972289566"
             ]
         );
         DB::table('donation')->insert(
@@ -115,6 +125,8 @@ class DonationSeeder extends Seeder
                 'donationCollected' => 800000000,
                 'donationTarget' => 800000000,
                 'created_at' => Carbon::create('2021', '03', '17')->format("Y-m-d"),
+                'bank' => 3,
+                'accountNumber' => "09876281"
             ]
         );
         DB::table('donation')->insert(
@@ -132,6 +144,8 @@ class DonationSeeder extends Seeder
                 'donationCollected' => 15000000,
                 'donationTarget' => 15000000,
                 'created_at' => Carbon::create('2021', '03', '20')->format("Y-m-d"),
+                'bank' => 3,
+                'accountNumber' => "55674298312"
             ]
         );
         DB::table('donation')->insert(
@@ -149,6 +163,8 @@ class DonationSeeder extends Seeder
                 'donationCollected' => 1500000,
                 'donationTarget' => 1500000,
                 'created_at' => Carbon::create('2021', '03', '30')->format("Y-m-d"),
+                'bank' => 2,
+                'accountNumber' => "332086539123"
             ]
         );
     }
