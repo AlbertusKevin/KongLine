@@ -27,22 +27,24 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            Alert::error("Gagal Mendaftar", "Sepertinya input ada yang kurang tepat.");
+            // Alert::error("Gagal Mendaftar", "Sepertinya input ada yang kurang tepat.");
             return redirect('/register')
                 ->withInput()
-                ->withErrors($validator);
+                ->withErrors($validator)
+                ->with(['type' => "error", 'message' => 'Sepertinya input ada yang kurang tepat.']);
         }
 
         $result = $this->eventService->authRegis($request);
 
         if ($result) {
-            Alert::success('Register Success', 'Please Login.');
-            return redirect('login');
+            // Alert::success('Register Success', 'Please Login.');
+            return redirect('login')->with(['type' => "success", 'message' => 'Registrasi berhasil. Silahkan login.']);
         }
 
-        Alert::error('Register Gagal', 'Mohon cek kembali data Anda');
+        // Alert::error('Register Gagal', 'Mohon cek kembali data Anda');
         return redirect('/register')
-            ->withInput();
+            ->withInput()
+            ->with(['type' => "error", 'message' => 'Register Gagal. Mohon cek kembali data Anda']);
     }
 
     public function getLogin()
@@ -65,7 +67,8 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return redirect('/login')
                 ->withInput()
-                ->withErrors($validator);
+                ->withErrors($validator)
+                ->with(['type' => "error", 'message' => 'Login tidak berhasil. Input kurang tepat.']);
         };
 
         $result = $this->eventService->authLogin($request);
@@ -78,8 +81,8 @@ class AuthController extends Controller
             }
         }
 
-        Alert::error('Email atau password salah', 'Silahkan coba lagi');
-        return redirect('/login');
+        // Alert::error('Email atau password salah', 'Silahkan coba lagi');
+        return redirect('/login')->with(['type' => "error", 'message' => 'Email atau password salah. Silahkan coba lagi']);;
     }
 
     public function logout()

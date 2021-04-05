@@ -100,8 +100,7 @@ class EventController extends Controller
         $updateNews = new Model\UpdateNews($idEvent, $request->title, $request->content, $request->link, $request->file('image'), Carbon::now()->format('Y-m-d'));
         $this->eventService->storeProgressPetition($updateNews);
 
-        Alert::success('Berhasil', 'Perkembangan terbaru dari petisi ini berhasil ditambahkan!');
-        return redirect('/petition/progress/' . $idEvent);
+        return redirect('/petition/progress/' . $idEvent)->with(['type' => "success", 'message' => 'Perkembangan terbaru dari petisi ini berhasil ditambahkan!']);
     }
 
     //! Memproses tandatangan peserta pada petisi tertentu
@@ -109,8 +108,8 @@ class EventController extends Controller
     {
         $user = $this->eventService->showProfile();
         $this->eventService->signPetition($request, $idEvent, $user);
-        Alert::success('Berhasil Menandatangai petisi ini.', 'Terimakasih ikut berpartisipasi!');
-        return redirect("/petition/" . $idEvent);
+
+        return redirect("/petition/" . $idEvent)->with(['type' => "success", 'message' => 'Berhasil Menandatangai petisi ini. Terimakasih ikut berpartisipasi!']);
     }
 
     //! Menampilkan halaman form untuk membuat petisi
@@ -156,16 +155,14 @@ class EventController extends Controller
                 $messageError = $message;
             }
 
-            Alert::error('Gagal Mendaftarkan Petisi', [$messageError]);
-            return redirect('/petition/create');
+            return redirect('/petition/create')->withInput()->with(['type' => "error", 'message' => 'Gagal Mendaftarkan petisi' . $messageError]);
         };
 
         $user = $this->eventService->showProfile();
         $petition = new Model\Petition($user->id, $request->title, $request->file('photo'), $request->category, $request->purpose, $request->deadline, 0, Carbon::now()->format('Y-m-d'), $request->signedTarget, 0, $request->targetPerson);
         $this->eventService->storePetition($petition);
 
-        Alert::success('Berhasil', 'Petisi Anda telah didaftarkan. Tunggu konfirmasi dari admin.');
-        return redirect('/petition');
+        return redirect('/petition')->with(['type' => "success", 'message' => 'Petisi Anda telah didaftarkan. Tunggu konfirmasi dari admin.']);
     }
 
     //* =========================================================================================
@@ -182,16 +179,19 @@ class EventController extends Controller
 
     public function getADonation($id)
     {
-        $donation = $this->eventService->getADonation($id);
+        $donation = $this->eventService->getADonation($id); // detail donasi mencakup siapa pembuat event itu
         $user = $this->eventService->showProfile();
         $progress = $this->eventService->countProgressDonation($donation); // untuk progress bar
-        $category = $this->eventService->getACategory($donation->category); // untuk menampilkan deskripsi kategori
-        $participatedDonation = $this->eventService->getParticipatedDonation($id); // untuk tab donatur
+        $category = $this->eventService->getACategory($donation->category); // untuk menampilkan kategori
+        $participatedDonation = $this->eventService->getParticipatedDonation($id); // untuk tab donatur dan comment
         $alocationBudget = $this->eventService->getABudgetingDonation($id); // untuk tab alokasi dana
         $isParticipated = $this->eventService->checkParticipated($id, $user, DONATION); // untuk pengecekan apakah pernah donasi atau tidak
-        $message = $this->eventService->messageOfEvent($donation->status);
+        $message = $this->eventService->messageOfEvent($donation->status); // Menampilkan pesan status sebuah event
+        // pengecekan, apakah donasi di event ini sudah dikonfirmasi pembayaran oleh user
         $userTransactionStatus = $this->eventService->checkUserTransactionStatus($participatedDonation, $user->id);
+        $allStatusZero = $this->eventService->checkStatusIsZero($participatedDonation);
 
+        // dd($userTransactionStatus);
         return view(
             'donation.donationDetail',
             compact(
@@ -203,7 +203,8 @@ class EventController extends Controller
                 'alocationBudget',
                 'isParticipated',
                 'message',
-                'userTransactionStatus'
+                'userTransactionStatus',
+                'allStatusZero'
             )
         );
     }
@@ -219,7 +220,8 @@ class EventController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nominal' => 'required|numeric|min:10000',
-            'comment' => 'nullable|min:20',
+            'rekeningUser' => 'required|numeric',
+            'comment' => 'nullable|min:20'
         ]);
 
         if ($validator->fails()) {
@@ -229,8 +231,7 @@ class EventController extends Controller
                 $messageError = $message;
             }
 
-            Alert::error('Gagal Berdonasi', [$messageError]);
-            return redirect('/donation/donate/' . $id)->withInput();
+            return redirect('/donation/donate/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
         };
 
         $user = $this->eventService->showProfile();
@@ -238,31 +239,106 @@ class EventController extends Controller
         $annonymousDonate = $this->eventService->checkAnnonym($request->annonymousDonatur);
 
         $participateDonation = new Model\ParticipateDonation($id, $user->id, $request->comment, Carbon::now()->format('Y-m-d'), $annonymousComment);
-        $transaction = new Model\Transaction($id, $user->id, $user->accountNumber, $request->nominal, $annonymousDonate, 0, Carbon::now()->format("Y-m-d"));
+        $transaction = new Model\Transaction($id, $user->id, $request->rekeningUser, $request->nominal, $annonymousDonate, 0, Carbon::now()->format("Y-m-d"));
         $this->eventService->postDonate($participateDonation);
         $this->eventService->postTransaction($transaction);
 
-        Alert::success('Berhasil', 'Donasi Anda telah ditambahkan. Lanjutkan ke konfirmasi pembayaran.');
-        return redirect('/donation/confirm_donate/' . $id);
+        return redirect('/donation/confirm_donate/' . $id)->with(['type' => "success", 'message' => 'Donasi Anda telah ditambahkan. Lanjutkan ke konfirmasi pembayaran.']);
     }
 
     public function formConfirm($id)
     {
         $donation = $this->eventService->getADonation($id);
         $user = $this->eventService->showProfile();
-        $transaction = $this->eventService->getAUserTransaction($user->id);
-
+        $transaction = $this->eventService->getAUserTransaction($user->id, $id);
         return view('donation.donateConfirm', compact('donation', 'user', 'transaction'));
     }
 
     public function postConfirm(Request $request, $id)
     {
-        dd("post confirm");
+        $validator = Validator::make($request->all(), [
+            'repaymentPicture' => 'required|image'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            return redirect('/donation/confirm_donate/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
+        };
+
+        $this->eventService->confirmationPictureDonation($request->file('repaymentPicture'), $id);
+
+        return redirect('/donation/' . $id)->with(['type' => "success", 'message' => 'Konfirmasi pembayaran akan segera diproses']);
     }
 
     public function createView()
     {
-        dd("Hello World");
+        $user = $this->eventService->showProfile();
+        $listCategory = $this->eventService->listCategory();
+        $listBank = $this->eventService->listBank();
+
+        return view('donation.donationCreate', compact('user', 'listCategory', 'listBank'));
+    }
+
+    public function storeDonation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'purpose' => 'required|min:150',
+            'category' => 'required',
+            'donationTarget' => 'required|numeric',
+            'deadline' => 'required',
+            'photo' => 'required|image',
+            'assistedSubject' => 'required',
+            'bank' => 'required',
+            'accountNumber' => 'required|numeric',
+            'nominal' => 'required',
+            'nominal.*' => 'numeric',
+            'allocationFor' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            return redirect('/donation/create')->with(['type' => "error", 'message' => $messageError])->withInput();
+        };
+
+        $user = $this->eventService->showProfile();
+
+        $donation = new Model\Donation(
+            $user->id,
+            $request->title,
+            $request->file('photo'),
+            $request->category,
+            $request->purpose,
+            $request->deadline,
+            0,
+            Carbon::now()->format("Y-m-d"),
+            0,
+            $request->donationTarget,
+            0,
+            $request->assistedSubject,
+            $request->bank,
+            $request->accountNumber
+        );
+
+        $this->eventService->storeDonationCreated($donation);
+        $idDonation = $this->eventService->getLastIdDonation()->id;
+
+        for ($i = 0; $i < count($request->nominal); $i++) {
+            $allocationDetail = new Model\DetailAllocation($idDonation, $request->allocationFor[$i], $request->nominal[$i]);
+            $this->eventService->storeDetailAllocation($allocationDetail);
+        }
+
+        return redirect('/donation')->with(['type' => "success", 'message' => 'Event Anda sudah didaftarkan. Tunggu konfirmasi dari admin.']);
     }
 
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik

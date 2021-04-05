@@ -1,4 +1,9 @@
 <?php
+//constant data
+define("ACCOUNT", "1702272081");
+define("DEFAULT_PROFILE", "/images/profile/photo/default.png");
+define("DEFAULT_FILE_PREVIEW", "/images/folder.png");
+
 // Status Event
 define("NOT_CONFIRMED", 0);
 define("ACTIVE", 1);

@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+    @include('layout.message')
     <div class="container">
         <h2 class="mt-3" style="color: #1167B1">{{ $petition->title }}</h2>
         <small><a href="/petition" style="color: blue">-> kembali ke daftar petisi</a></small>
@@ -18,7 +19,7 @@
             @if ($user->id == $petition->idCampaigner && $petition->status == 0)
                 <div class="col-md-8 mb-5 ml-auto mr-auto mt-5" style="max-width: 800px;">
                 @else
-                    <div class="mb-5 ml-auto mr-auto mt-5" style="max-width: 800px;">
+                    <div class="col-md-12 mb-5 ml-auto mr-auto mt-5" style="max-width: 800px;">
             @endif
             <div class="mb-5">
                 <h3 class="font-weight-bold">Berita Terbaru</h3>

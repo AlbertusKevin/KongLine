@@ -1,4 +1,3 @@
-
 // fungsi umum
 const checkTypePetition = (type) => {
     if (type.includes("Berlangsung")) {
@@ -82,6 +81,31 @@ const listPetitionTypeEmpty = (keyword) => {
 };
 
 const changeDonationList = (donation) => {
+    let collectedNum, collectedDesc;
+
+    if (donation.donationTarget - donation.donationCollected <= 0) {
+        collectedNum = donation.donationTarget;
+        collectedDesc = "Mencapai Target";
+    } else {
+        collectedNum = donation.donationTarget - donation.donationCollected;
+        collectedDesc = "Menuju Target";
+    }
+
+    if (
+        Math.ceil(
+            (new Date(donation.deadline) - new Date().getTime()) /
+                (60 * 60 * 24 * 1000)
+        ) > 0
+    ) {
+        deadline =
+            Math.ceil(
+                (new Date(donation.deadline) - new Date().getTime()) /
+                    (60 * 60 * 24 * 1000)
+            ) + " hari lagi";
+    } else {
+        deadline = "Selesai";
+    }
+
     return /*html*/ `
     <div class="card col-md-4 p-2 mb-3" style="padding: 0; ">
         <div style="position:relative;">
@@ -89,29 +113,25 @@ const changeDonationList = (donation) => {
                 alt=" ${donation.title} donation's picture">
             <p class="donate-count">${donation.totalDonatur} Donatur</p>
             <p class="time-left">
-            ${Math.ceil(
-                (new Date(donation.deadline) - new Date().getTime()) /
-                    (60 * 60 * 24 * 1000)
-            )}
-                hari lagi
+                ${deadline}
             </p>
         </div>
         <div class="card-body">
-            <h5 class="card-title title-donation">${donation.title}</h5>
+            <h5 class="card-title title-donation"><a href="/donation/${
+                donation.id
+            }">${donation.title}</a></h5>
             <p class="card-text ">${donation.name}</p>
             <div class="row d-flex justify-content-between">
                 <p class="font-weight-bold text-left pl-3">
                     Rp. ${donation.donationCollected.toLocaleString("en")},00
                 </p>
-                <p class="font-weight-bold text-right">Rp.
-                    Rp. ${(
-                        donation.donationTarget - donation.donationCollected
-                    ).toLocaleString("en")},00
+                <p class="font-weight-bold text-right">
+                    Rp. ${collectedNum.toLocaleString("en")},00
                 </p>
             </div>
             <div class="row  d-flex justify-content-between">
                 <p class="font-weight-light text-left pl-3 mb-0">Terkumpul</p>
-                <p class="font-weight-light text-right pl-1 mb-0">Menuju Target</p>
+                <p class="font-weight-light text-right pl-1 mb-0">${collectedDesc}</p>
             </div>
         </div>
     </div>
@@ -122,7 +142,17 @@ const listDonationEmpty = (keyword) => {
     return /*html*/ `
     <div class="card col-md-12 p-2 mb-3">
         <div class="card-body">
-            <h5 class="card-title title-donation">Event donasi dengan judul ${keyword} tidak ditemukan</h5>
+            <h5 class="card-title title-donation">Event donasi dengan judul "${keyword}" tidak ditemukan</h5>
+        </div>
+    </div>
+    `;
+};
+
+const noListDonation = () => {
+    return /*html*/ `
+    <div class="card col-md-12 p-2 mb-3">
+        <div class="card-body">
+            <h5 class="card-title title-donation">Belum ada donasi pada daftar ini.</h5>
         </div>
     </div>
     `;
@@ -137,7 +167,6 @@ const sortListPetition = (sortBy, category, typePetition) => {
             let html = "";
             if (data.length != 0) {
                 data.forEach((petition) => {
-                    // console.log(petition);
                     html += changePetitionList(petition);
                 });
                 $("#petition-list").html(html);
@@ -157,13 +186,12 @@ const sortListDonation = (sortBy, category) => {
         success: (data) => {
             let html = "";
             if (data.length != 0) {
-                data.forEach((petition) => {
-                    // console.log(petition);
-                    html += changeDonationList(petition);
+                data.forEach((donation) => {
+                    html += changeDonationList(donation);
                 });
                 $("#donation-list").html(html);
             } else {
-                html += listDonationEmpty();
+                html += noListDonation();
                 $("#donation-list").html(html);
             }
         },
@@ -420,9 +448,47 @@ $(".show-donatur").on("click", function () {
     const html = $("#donatur").html();
     $(".card-text").html(html);
 });
+
 $(".show-comment").on("click", function () {
     const html = $("#comment").html();
     $(".card-text").html(html);
+});
+
+$("#repaymentPicture").on("change", function () {
+    const cover = document.querySelector("#repaymentPicture");
+    const coverLabel = document.querySelector(".custom-file-label");
+    const imgPreview = document.querySelector(".img-preview");
+
+    coverLabel.textContent = cover.files[0].name;
+    const fileCover = new FileReader();
+    fileCover.readAsDataURL(cover.files[0]);
+    fileCover.onload = function (e) {
+        imgPreview.src = e.target.result;
+    };
+});
+
+$(".btn-add-allocation").on("click", function () {
+    let html = /*html*/ `
+    <tr>
+        <td scope="row">
+            <input type="text" name="nominal[]" placeholder="nominal"
+                class="w-100 input-allocation">
+        </td>
+        <td>
+            <input type="text" name="allocationFor[]" placeholder="allocationFor"
+                class="w-100 input-allocation">
+        </td>
+        <td>
+            <button type="button"
+                class="badge badge-danger badge-pill btn-remove-allocation">remove</button>
+        </td>
+    </tr>
+    `;
+    $("#allocation-list").append(html);
+});
+
+$(document).on("click", ".btn-remove-allocation", function () {
+    $(this).parent().parent().remove();
 });
 
 // ADMIN
@@ -506,7 +572,7 @@ const viewUserByRoleIsEmpty = (roleType) => {
             </td>
         </tr>
     `;
-}
+};
 
 const roleTypeUser = (type) => {
     if (type.includes("Participant")) {
@@ -544,15 +610,23 @@ $(".role-type").on("click", function () {
                 const user = data[0];
                 const countParticipated = data[1];
 
-                for (let i = 0; i < user.length; i++){
-                    if(user[i].role == "participant"){
-                        html += viewUserParticipantRole(user[i],countParticipated[i]);
-                    }else if (user[i].role == "campaigner"){
-                        html += viewUserCampaignerRole(user[i], countParticipated[i]);
-                    }else if (user[i].role == "guest"){
-                        html += viewUserGuestRole(user[i], countParticipated[i]);
-                    }else{
-
+                for (let i = 0; i < user.length; i++) {
+                    if (user[i].role == "participant") {
+                        html += viewUserParticipantRole(
+                            user[i],
+                            countParticipated[i]
+                        );
+                    } else if (user[i].role == "campaigner") {
+                        html += viewUserCampaignerRole(
+                            user[i],
+                            countParticipated[i]
+                        );
+                    } else if (user[i].role == "guest") {
+                        html += viewUserGuestRole(
+                            user[i],
+                            countParticipated[i]
+                        );
+                    } else {
                     }
                 }
 
@@ -563,7 +637,6 @@ $(".role-type").on("click", function () {
             }
         },
     });
-    
 });
 
 const countEventParticipate = (userId) => {
@@ -578,18 +651,16 @@ const countEventParticipate = (userId) => {
             return data;
         },
     });
-}
+};
 
 //Mengubah Format tanggal, ex:2019-10-02 ---> 2019/10/02
 const changeDateFormat = (date) => {
-
-    if(date != null){
+    if (date != null) {
         var result = date.slice(0, 10);
-        var format = result.replace(/-/g,"/");
-    }else{
+        var format = result.replace(/-/g, "/");
+    } else {
         var format = " ";
     }
-    
-    return format;
-}
 
+    return format;
+};

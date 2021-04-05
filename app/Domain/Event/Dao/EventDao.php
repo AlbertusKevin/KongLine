@@ -2,6 +2,7 @@
 
 namespace App\Domain\Event\Dao;
 
+use App\Domain\Event\Entity\Bank;
 use App\Domain\Event\Entity\Category;
 use App\Domain\Event\Entity\DetailAllocation;
 use App\Domain\Event\Entity\Donation;
@@ -29,6 +30,12 @@ class EventDao
         return Category::all();
     }
 
+    //! Mengambil nama bank yang bisa digunakan untuk transfer
+    public function listBank()
+    {
+        return Bank::all();
+    }
+
     public function getACategory($id)
     {
         return Category::where('id', $id)->first();
@@ -43,10 +50,30 @@ class EventDao
 
         return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
     }
+
     //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
     public function verifyProfile($email, $phone)
     {
         return User::where('email', $email)->where('phoneNumber', $phone)->first();
+    }
+
+    //! Menghitung total event yang sudah pernah diikuti user tertentu
+    public function countDonationParticipatedByUser($idUser)
+    {
+        return ParticipateDonation::where('idParticipant', $idUser)->count();
+    }
+
+    //! Menghitung total event yang sudah pernah diikuti user tertentu
+    public function countPetitionParticipatedByUser($idUser)
+    {
+        return ParticipatePetition::where('idParticipant', $idUser)->count();
+    }
+
+    public function updateCountEventParticipatedByUser($idUser, $count)
+    {
+        User::where('id', $idUser)->update([
+            'countEvent' => $count
+        ]);
     }
 
     //* =========================================================================================
@@ -406,9 +433,13 @@ class EventDao
     }
 
     //! Mengambil jumlah total tandatangan petisi tertentu saat itu
-    public function calculatedSign($idEvent)
+    public function calculatedSignDonation($idEvent, $typeEvent)
     {
-        return ParticipatePetition::where('idPetition', $idEvent)->count();
+        if ($typeEvent == PETITION) {
+            return ParticipatePetition::where('idPetition', $idEvent)->count();
+        }
+
+        // return ParticipatePetition::where('idPetition', $idEvent)->count();
     }
 
     //! Update jumlah tandatangan petisi tertentu
@@ -528,9 +559,16 @@ class EventDao
         ]);
     }
 
-    public function getAUserTransaction($id)
+    public function confirmationPictureDonation($file, $id)
     {
-        return Transaction::where('idParticipant', $id)->first();
+        Transaction::where('idDonation', $id)->update([
+            'repaymentPicture' => $file
+        ]);
+    }
+
+    public function getAUserTransaction($idUser, $idEvent)
+    {
+        return Transaction::where('idParticipant', $idUser)->where('idDonation', $idEvent)->first();
     }
 
     //! Mencari Donasi sesuai dengan 
@@ -709,11 +747,44 @@ class EventDao
     //! Mengurutkan donasi yang pernah dibuat oleh campaigner
     public function sortDonationByCampaigner($idCampaigner)
     {
-        return ParticipateDonation::selectRaw('donation.*, users.name as name')
+        return Donation::selectRaw('donation.*, users.name as name')
             ->where('donation.idCampaigner', $idCampaigner)
-            ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
             ->join('users', 'donation.idCampaigner', 'users.id')
             ->get();
+    }
+
+    public function storeDonationCreated($donation)
+    {
+        Donation::create([
+            'category' => $donation->getCategory(),
+            'deadline' => $donation->getDeadline(),
+            'idCampaigner' => $donation->getIdCampaigner(),
+            'photo' => $donation->getPhoto(),
+            'purpose' => $donation->getPurpose(),
+            'status' => $donation->getStatus(),
+            'title' => $donation->getTitle(),
+            'totalDonatur' => $donation->getTotalDonatur(),
+            'assistedSubject' => $donation->getAssistedSubject(),
+            'donationCollected' => $donation->getDonationCollected(),
+            'donationTarget' => $donation->getDonationTarget(),
+            'accountNumber' => $donation->getAccountNumber(),
+            'bank' => $donation->getBank(),
+            'created_at' => $donation->getCreatedAt()
+        ]);
+    }
+
+    public function storeDetailAllocation($allocationDetail)
+    {
+        DetailAllocation::create([
+            'idDonation' => $allocationDetail->getIdDonation(),
+            'nominal' => $allocationDetail->getNominal(),
+            'description' => $allocationDetail->getDescription()
+        ]);
+    }
+
+    public function getLastIdDonation()
+    {
+        return Donation::orderBy('id', 'desc')->take(1)->first();
     }
 
     public function updateStatusEvent($id, $status)

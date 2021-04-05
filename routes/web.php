@@ -73,7 +73,9 @@ Route::get('/petition', [EventController::class, 'indexPetition']);
 Route::get('/petition/create', [EventController::class, 'createPetition']);
 Route::post('/petition/create', [EventController::class, 'storePetition']);
 Route::get('/petition/{id}', [EventController::class, 'showPetition']);
+
 Route::get('/petition/comments/{id}', [EventController::class, 'commentPetition']);
+
 Route::get('/petition/progress/{id}', [EventController::class, 'progressPetition']);
 Route::post('/petition/progress/{id}', [EventController::class, 'storeProgressPetition']);
 
@@ -86,13 +88,13 @@ Route::post('/petition/{id}', [EventController::class, 'signPetition']);
 Route::get('/donation/search', [EventController::class, 'searchDonation']);
 Route::get('/donation/sort', [EventController::class, 'sortDonation']);
 
+//* --- buat donasi ---
+Route::get('/donation/create', [EventController::class, 'createView']);
+Route::post('/donation/create', [EventController::class, 'storeDonation']);
+
 //* --- menampilkan donasi ---
 Route::get('/donation', [EventController::class, 'listDonation']);
 Route::get('/donation/{id}', [EventController::class, 'getADonation']);
-
-//* --- buat donasi ---
-Route::get('/donation/create', [EventController::class, 'createView']);
-Route::post('/donation/create', [EventController::class, 'createView']);
 
 //* --- partisipasi dalam donasi ---
 Route::get('/donation/donate/{id}', [EventController::class, 'formDonate']);
@@ -100,7 +102,7 @@ Route::post('/donation/donate/{id}', [EventController::class, 'postDonate']);
 
 //* --- konfirmasi pembayaran donasi ---
 Route::get('/donation/confirm_donate/{id}', [EventController::class, 'formConfirm']);
-Route::put('/donation/confirm_donate/{id}', [EventController::class, 'postConfirm']);
+Route::patch('/donation/confirm_donate/{id}', [EventController::class, 'postConfirm']);
 //? =========================
 //! Route Communication
 //? =========================

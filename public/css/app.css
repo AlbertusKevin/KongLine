@@ -115,6 +115,27 @@ img.donatur-photo {
   width: 50px;
   border-radius: 50%;
 }
+
+.img-preview{
+  height: 300px;
+  max-height: 300px;
+  min-height: 300px;
+}
+
+a.btn-create-donation {
+  width: 200px;
+  height: 50px;
+  color: whitesmoke;
+  background: #147C85;
+  border-radius: 30px;
+  padding-top: 10px;
+}
+
+.input-allocation {
+  border: solid 1px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  padding: 5px;
+}
 /*
 =================================== Style untuk petisi ===================================
 */
@@ -141,6 +162,10 @@ button.close-event{
   text-align: justify;
   text-indent: 50px;
   line-height: 1.5;
+}
+
+.petition-comment-img-profile.img-thumbnail {
+  height: 250px;
 }
 
 /* Petition Style */

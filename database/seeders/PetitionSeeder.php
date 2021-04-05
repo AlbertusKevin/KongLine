@@ -18,7 +18,7 @@ class PetitionSeeder extends Seeder
         DB::table('petition')->insert(
             [
                 'category' => 1,
-                'deadline' => Carbon::create('2021', '04', '01'),
+                'deadline' => Carbon::create('2021', '04', '01')->format("Y-m-d"),
                 'idCampaigner' => 13,
                 'photo' => 'images/petition/studentStudy.png',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -35,7 +35,7 @@ class PetitionSeeder extends Seeder
         DB::table('petition')->insert(
             [
                 'category' => 9,
-                'deadline' => Carbon::create('2021', '04', '01'),
+                'deadline' => Carbon::create('2021', '04', '01')->format("Y-m-d"),
                 'idCampaigner' => 11,
                 'photo' => 'images/petition/uangJajan.jpeg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -52,7 +52,7 @@ class PetitionSeeder extends Seeder
         DB::table('petition')->insert(
             [
                 'category' => 1,
-                'deadline' => Carbon::create('2021', '04', '20'),
+                'deadline' => Carbon::create('2021', '04', '20')->format("Y-m-d"),
                 'idCampaigner' => 12,
                 'photo' => 'images/petition/study.jpg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -69,7 +69,7 @@ class PetitionSeeder extends Seeder
         DB::table('petition')->insert(
             [
                 'category' => 11,
-                'deadline' => Carbon::create('2021', '04', '10'),
+                'deadline' => Carbon::create('2021', '04', '10')->format("Y-m-d"),
                 'idCampaigner' => 4,
                 'photo' => 'images/petition/petition2.jpg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -80,13 +80,13 @@ class PetitionSeeder extends Seeder
                 'targetPerson' => 'Masyarakat Umum',
                 'signedCollected' => 1938,
                 'signedTarget' => 5000,
-                'created_at' => Carbon::create('2021', '03', '29'),
+                'created_at' => Carbon::create('2021', '03', '29')->format("Y-m-d"),
             ]
         );
         DB::table('petition')->insert(
             [
                 'category' => 9,
-                'deadline' => Carbon::create('2021', '04', '20'),
+                'deadline' => Carbon::create('2021', '04', '20')->format("Y-m-d"),
                 'idCampaigner' => 10,
                 'photo' => 'images/petition/vaksin.jpeg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -97,13 +97,13 @@ class PetitionSeeder extends Seeder
                 'targetPerson' => 'Masyarakat Umum',
                 'signedCollected' => 19325,
                 'signedTarget' => 50000,
-                'created_at' => Carbon::create('2021', '03', '29'),
+                'created_at' => Carbon::create('2021', '03', '29')->format("Y-m-d"),
             ]
         );
         DB::table('petition')->insert(
             [
                 'category' => 15,
-                'deadline' => Carbon::create('2021', '03', '30'),
+                'deadline' => Carbon::create('2021', '03', '30')->format("Y-m-d"),
                 'idCampaigner' => 10,
                 'photo' => 'images/petition/tiktok.png',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -114,13 +114,13 @@ class PetitionSeeder extends Seeder
                 'targetPerson' => 'Masyarakat Umum',
                 'signedCollected' => 60000,
                 'signedTarget' => 60000,
-                'created_at' => Carbon::create('2021', '03', '20'),
+                'created_at' => Carbon::create('2021', '03', '20')->format("Y-m-d"),
             ]
         );
         DB::table('petition')->insert(
             [
                 'category' => 6,
-                'deadline' => Carbon::create('2021', '03', '28'),
+                'deadline' => Carbon::create('2021', '03', '28')->format("Y-m-d"),
                 'idCampaigner' => 12,
                 'photo' => 'images/petition/rebahan.jpg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -131,13 +131,13 @@ class PetitionSeeder extends Seeder
                 'targetPerson' => 'Mahasiswa Mahasiswi',
                 'signedCollected' => 288,
                 'signedTarget' => 288,
-                'created_at' => Carbon::create('2021', '03', '25'),
+                'created_at' => Carbon::create('2021', '03', '25')->format("Y-m-d"),
             ]
         );
         DB::table('petition')->insert(
             [
                 'category' => 16,
-                'deadline' => Carbon::create('2021', '03', '30'),
+                'deadline' => Carbon::create('2021', '03', '30')->format("Y-m-d"),
                 'idCampaigner' => 11,
                 'photo' => 'images/petition/bocahML.jpg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -148,13 +148,13 @@ class PetitionSeeder extends Seeder
                 'targetPerson' => 'Masyarakat Umum',
                 'signedCollected' => 1000,
                 'signedTarget' => 1000,
-                'created_at' => Carbon::create('2021', '03', '22'),
+                'created_at' => Carbon::create('2021', '03', '22')->format("Y-m-d"),
             ]
         );
         DB::table('petition')->insert(
             [
                 'category' => 9,
-                'deadline' => Carbon::create('2021', '03', '28'),
+                'deadline' => Carbon::create('2021', '03', '28')->format("Y-m-d"),
                 'idCampaigner' => 13,
                 'photo' => 'images/petition/buburDiaduk.png',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -165,13 +165,13 @@ class PetitionSeeder extends Seeder
                 'targetPerson' => 'Masyarakat Umum',
                 'signedCollected' => 5000,
                 'signedTarget' => 5000,
-                'created_at' => Carbon::create('2021', '03', '25'),
+                'created_at' => Carbon::create('2021', '03', '25')->format("Y-m-d"),
             ]
         );
         DB::table('petition')->insert(
             [
                 'category' => 16,
-                'deadline' => Carbon::create('2021', '03', '28'),
+                'deadline' => Carbon::create('2021', '03', '28')->format("Y-m-d"),
                 'idCampaigner' => 11,
                 'photo' => 'images/petition/jomblo.jpg',
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
@@ -182,7 +182,7 @@ class PetitionSeeder extends Seeder
                 'targetPerson' => 'Masyarakat Umum',
                 'signedCollected' => 400,
                 'signedTarget' => 2,
-                'created_at' => Carbon::create('2021', '03', '25'),
+                'created_at' => Carbon::create('2021', '03', '25')->format("Y-m-d"),
             ]
         );
     }

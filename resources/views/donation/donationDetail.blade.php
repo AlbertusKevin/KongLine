@@ -3,7 +3,7 @@
     Detail Donation
 @endsection
 @section('content')
-
+    @include('layout.message')
     <div class="container">
         <div class="row mt-5">
             <div class="col-md-12">
@@ -40,13 +40,17 @@
                                             </div>
                                         @else
                                             <div class="col-md-6">
-                                                @if ($userTransactionStatus)
+                                                @if ($userTransactionStatus == WAITING)
+                                                    <div class="alert alert-info alert-donated">
+                                                        Konfirmasi Pembayaran Sedang diproses.
+                                                    </div>
+                                                @elseif ($userTransactionStatus == FINISHED)
                                                     <div class="alert alert-info alert-donated">
                                                         Terima kasih telah berdonasi.
                                                     </div>
                                                 @else
                                                     <div class="alert alert-info alert-donated">
-                                                        <p>Menunggu konfirmasi</p>
+                                                        <p>Upload konfirmasi Anda</p>
                                                         <small><a
                                                                 href="/donation/confirm_donate/{{ $donation->id }}">konfirmasi
                                                                 pembayaran</a></small>
@@ -109,7 +113,7 @@
                             <li class="nav-item">
                                 <a class="nav-link donation-detail show-budgeting">Alokasi Dana</a>
                             </li>
-                            @if (count($participatedDonation) != 0)
+                            @if (count($participatedDonation) != 0 && !$allStatusZero)
                                 <li class="nav-item">
                                     <a class="nav-link donation-detail show-donatur">Donatur</a>
                                 </li>
@@ -140,7 +144,7 @@
                     <h5 class="font-weight-bold">Upgrade akun mu menjadi <i>campaigner</i>!</h5>
                     <p>Mulailah membawa perubahan dengan menolong
                         sesama.</p>
-                    <a type="button" class="btn btn-primary mt-2" href="/profile/campaigner/{{ $user->id }}">Daftar
+                    <a type="button" class="btn btn-primary mt-2" href="/profile/campaigner">Daftar
                         Campaigner</a>
                 @endif
             </div>
@@ -174,9 +178,14 @@
                 @foreach ($participatedDonation as $donatur)
                     @if ($donatur->status != 0)
                         <li class="list-group-item">
-                            <img src="/{{ $donatur->photoProfile }}" alt="{{ $donatur->name }} Profile"
-                                class="donatur-photo">
-                            <span class="ml-3"> {{ $donatur->name }} </span>
+                            @if ($donatur->annonymous_comment == 1)
+                                <img src="{{ DEFAULT_PROFILE }}" alt="Photo Profile" class="donatur-photo">
+                                <span class="ml-3"> Annonymous </span>
+                            @else
+                                <img src="/{{ $donatur->photoProfile }}" alt="{{ $donatur->name }} Profile"
+                                    class="donatur-photo">
+                                <span class="ml-3"> {{ $donatur->name }} </span>
+                            @endif
                         </li>
                     @endif
                 @endforeach
@@ -185,20 +194,37 @@
         <div id="comment">
             @foreach ($participatedDonation as $donatur)
                 @if ($donatur->comment != null && $donatur->status != 0)
-                    <div class="card mb-4">
-                        <div class=" row no-gutters">
-                            <div class="col-md-2 offset-md-2 text-center p-3">
-                                <img src="/{{ $donatur->photoProfile }}" class="img-thumbnail rounded-circle"
-                                    alt="Participant's Image Profile">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title font-weight-bold">{{ $donatur->name }}</h5>
-                                    <p class="petition-description">{{ $donatur->comment }}</p>
+                    @if ($donatur->annonymous_comment == 1)
+                        <div class="card mb-4">
+                            <div class=" row no-gutters">
+                                <div class="col-md-2 offset-md-2 text-center p-3">
+                                    <img src="{{ DEFAULT_PROFILE }}" class="img-thumbnail rounded-circle"
+                                        alt="Participant's Image Profile">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title font-weight-bold">Annonymous</h5>
+                                        <p class="petition-description">{{ $donatur->comment }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="card mb-4">
+                            <div class=" row no-gutters">
+                                <div class="col-md-2 offset-md-2 text-center p-3">
+                                    <img src="/{{ $donatur->photoProfile }}" class="img-thumbnail rounded-circle"
+                                        alt="Participant's Image Profile">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title font-weight-bold">{{ $donatur->name }}</h5>
+                                        <p class="petition-description">{{ $donatur->comment }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 @endif
             @endforeach
         </div>
