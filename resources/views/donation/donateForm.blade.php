@@ -3,6 +3,7 @@
     Form Donate
 @endsection
 @section('content')
+    @include('layout.message')
     <div class="container mt-5">
         <div class="row text-center">
             <div class="col-md-2 offset-md-3">

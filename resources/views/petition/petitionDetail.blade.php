@@ -3,6 +3,7 @@
     Petition Detail
 @endsection
 @section('content')
+    @include('layout.message')
     <div class="container">
         <h2 class="mt-3" style="color: #1167B1">{{ $petition->title }}</h2>
         <small><a href="/petition" style="color: blue">-> kembali ke daftar petisi</a></small>

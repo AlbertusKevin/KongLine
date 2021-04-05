@@ -7,7 +7,7 @@ class Donation extends Event
     // Attribute
     private $assistedSubject, $donationCollected, $donationTarget, $totalDonatur, $bank, $accountNumber;
 
-    public function __construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at, $donationCollected, $donationTarget, $assistedSubject, $bank, $accountNumber)
+    public function __construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at, $donationCollected, $donationTarget, $totalDonatur, $assistedSubject, $bank, $accountNumber)
     {
         parent::__construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at);
         $this->assistedSubject = $assistedSubject;
@@ -15,6 +15,7 @@ class Donation extends Event
         $this->donationTarget = $donationTarget;
         $this->accountNumber = $accountNumber;
         $this->bank = $bank;
+        $this->totalDonatur = $totalDonatur;
     }
 
     public function setPhoto($img)
@@ -76,6 +77,12 @@ class Donation extends Event
     {
         return $this->donationTarget;
     }
+
+    public function getTotalDonatur()
+    {
+        return $this->totalDonatur;
+    }
+
     public function getBank()
     {
         return $this->bank;

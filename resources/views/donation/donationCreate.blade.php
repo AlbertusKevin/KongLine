@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+    @include('layout.message')
     <div class="container">
         <form action="/donation/create" method="POST" enctype="multipart/form-data">
             @csrf
@@ -21,13 +22,13 @@
                         <label for="purpose">Tujuan dan Alasan Galang Dana</label>
                         <textarea class="form-control" id="purpose" name="purpose" rows="10"
                             placeholder="Tuliskan tujuan dan alasan dari event ini"
-                            aria-describedby="purpose">value="{{ old('purpose') }}"</textarea>
+                            aria-describedby="purpose">{{ old('purpose') }}</textarea>
                     </div>
                     <div class="form-group mb-5">
                         <label for="category">Kategori</label>
                         <select class="form-control" id="category" name="category" aria-describedby="category">
                             @foreach ($listCategory as $category)
-                                <option value="{{ $category->id }}">{{ $category->description }}</option>
+                                <option <?php $category->id == old('category') ? 'selected' : ''; ?> value="{{ $category->id }}">{{ $category->description }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -56,7 +57,8 @@
                         <label for="category">Bank</label>
                         <select class="form-control" id="bank" name="bank" aria-describedby="bank">
                             @foreach ($listBank as $bank)
-                                <option value="{{ $bank->id }}">{{ $bank->bank }}</option>
+                                <option value="{{ $bank->id }}" <?php $bank->id == old('bank') ?
+                                    'selected' : ''; ?>>{{ $bank->bank }}</option>
                             @endforeach
                         </select>
                     </div>

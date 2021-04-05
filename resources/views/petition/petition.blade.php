@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+    @include('layout.message')
     <div class="container">
         <div class="row">
             @if ($user->role == 'campaigner')

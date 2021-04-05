@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-
+    @include('layout.message')
     {{-- Untuk search dan sort --}}
     <div class="jumbotron-donation">
         <div class="container p-5">
@@ -61,40 +61,44 @@
                             alt="{{ $donation->title }} donation's picture">
                         <p class="donate-count">{{ $donation->totalDonatur }} Donatur</p>
                         <p class="time-left">
+                            @if (ceil((strtotime($donation->deadline) - time()) / (60 * 60 * 24)) > 0)
                             {{ ceil((strtotime($donation->deadline) - time()) / (60 * 60 * 24)) }}
                             hari lagi
-                        </p>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title title-donation"><a
-                                href="/donation/{{ $donation->id }}">{{ $donation->title }}</a></h5>
-                        <p class="card-text ">{{ $donation->name }}</p>
-                        <div class="row d-flex justify-content-between">
-                            <p class="font-weight-bold text-left pl-3">Rp.
-                                {{ number_format($donation->donationCollected, 2, ',', '.') }}
-                            </p>
-                            <p class="font-weight-bold text-right">
-                                @if ($donation->donationTarget - $donation->donationCollected >= 0)
-                                    Rp.
-                                    {{ number_format($donation->donationTarget - $donation->donationCollected, 2, ',', '.') }}
-                                @else
-                                    Rp. {{ number_format($donation->donationTarget, 2, ',', '.') }}
-                                @endif
-                            </p>
-                        </div>
-                        <div class="row  d-flex justify-content-between">
-                            <p class="font-weight-light text-left pl-3 mb-0">Terkumpul</p>
-                            @if ($donation->donationTarget - $donation->donationCollected >= 0)
-                                <p class="font-weight-light text-right pl-1 mb-0">Menuju Target</p>
-                            @else
-                                <p class="font-weight-light text-right pl-1 mb-0">Mencapai Target</p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            @endforeach
+                        @else
+                            Selesai
+            @endif
+            </p>
         </div>
-        {{-- <nav>
+        <div class="card-body">
+            <h5 class="card-title title-donation"><a href="/donation/{{ $donation->id }}">{{ $donation->title }}</a>
+            </h5>
+            <p class="card-text ">{{ $donation->name }}</p>
+            <div class="row d-flex justify-content-between">
+                <p class="font-weight-bold text-left pl-3">Rp.
+                    {{ number_format($donation->donationCollected, 2, ',', '.') }}
+                </p>
+                <p class="font-weight-bold text-right">
+                    @if ($donation->donationTarget - $donation->donationCollected >= 0)
+                        Rp.
+                        {{ number_format($donation->donationTarget - $donation->donationCollected, 2, ',', '.') }}
+                    @else
+                        Rp. {{ number_format($donation->donationTarget, 2, ',', '.') }}
+                    @endif
+                </p>
+            </div>
+            <div class="row  d-flex justify-content-between">
+                <p class="font-weight-light text-left pl-3 mb-0">Terkumpul</p>
+                @if ($donation->donationTarget - $donation->donationCollected >= 0)
+                    <p class="font-weight-light text-right pl-1 mb-0">Menuju Target</p>
+                @else
+                    <p class="font-weight-light text-right pl-1 mb-0">Mencapai Target</p>
+                @endif
+            </div>
+        </div>
+    </div>
+    @endforeach
+    </div>
+    {{-- <nav>
             <ul class="pagination justify-content-center mt-3">
                 <li class="page-item page-link page-link pagination-donation border text-white">Page x of xx</li>
                 <li class="page-item"><a class="page-link pagination-donation border text-white" href="#">Next > </a></li>

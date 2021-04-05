@@ -754,6 +754,40 @@ class EventDao
             ->get();
     }
 
+    public function storeDonationCreated($donation)
+    {
+        Donation::create([
+            'category' => $donation->getCategory(),
+            'deadline' => $donation->getDeadline(),
+            'idCampaigner' => $donation->getIdCampaigner(),
+            'photo' => $donation->getPhoto(),
+            'purpose' => $donation->getPurpose(),
+            'status' => $donation->getStatus(),
+            'title' => $donation->getTitle(),
+            'totalDonatur' => $donation->getTotalDonatur(),
+            'assistedSubject' => $donation->getAssistedSubject(),
+            'donationCollected' => $donation->getDonationCollected(),
+            'donationTarget' => $donation->getDonationTarget(),
+            'accountNumber' => $donation->getAccountNumber(),
+            'bank' => $donation->getBank(),
+            'created_at' => $donation->getCreatedAt()
+        ]);
+    }
+
+    public function storeDetailAllocation($allocationDetail)
+    {
+        DetailAllocation::create([
+            'idDonation' => $allocationDetail->getIdDonation(),
+            'nominal' => $allocationDetail->getNominal(),
+            'description' => $allocationDetail->getDescription()
+        ]);
+    }
+
+    public function getLastIdDonation()
+    {
+        return Donation::orderBy('id', 'desc')->take(1)->first();
+    }
+
     public function updateStatusEvent($id, $status)
     {
         Donation::where('id', $id)->update([

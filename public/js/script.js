@@ -91,6 +91,21 @@ const changeDonationList = (donation) => {
         collectedDesc = "Menuju Target";
     }
 
+    if (
+        Math.ceil(
+            (new Date(donation.deadline) - new Date().getTime()) /
+                (60 * 60 * 24 * 1000)
+        ) > 0
+    ) {
+        deadline =
+            Math.ceil(
+                (new Date(donation.deadline) - new Date().getTime()) /
+                    (60 * 60 * 24 * 1000)
+            ) + " hari lagi";
+    } else {
+        deadline = "Selesai";
+    }
+
     return /*html*/ `
     <div class="card col-md-4 p-2 mb-3" style="padding: 0; ">
         <div style="position:relative;">
@@ -98,15 +113,13 @@ const changeDonationList = (donation) => {
                 alt=" ${donation.title} donation's picture">
             <p class="donate-count">${donation.totalDonatur} Donatur</p>
             <p class="time-left">
-            ${Math.ceil(
-                (new Date(donation.deadline) - new Date().getTime()) /
-                    (60 * 60 * 24 * 1000)
-            )}
-                hari lagi
+                ${deadline}
             </p>
         </div>
         <div class="card-body">
-            <h5 class="card-title title-donation">${donation.title}</h5>
+            <h5 class="card-title title-donation"><a href="/donation/${
+                donation.id
+            }">${donation.title}</a></h5>
             <p class="card-text ">${donation.name}</p>
             <div class="row d-flex justify-content-between">
                 <p class="font-weight-bold text-left pl-3">

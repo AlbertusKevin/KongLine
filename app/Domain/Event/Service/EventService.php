@@ -33,7 +33,7 @@ class EventService
         return $this->dao->showProfile(GUEST_ID);
     }
 
-    public function updateCalculatedCount($idEvent, $idUser)
+    private function updateCalculatedCount($idEvent, $idUser)
     {
         // Update Count dari jumlah ttd petisi
         $count = $this->dao->calculatedSign($idEvent, PETITION);
@@ -69,7 +69,7 @@ class EventService
     }
 
     //! Mengembalikan kategori event petisi atau donasi yang dipilih
-    public function categorySelect($request)
+    private function categorySelect($request)
     {
         $listCategory = $this->dao->listCategory();
 
@@ -783,5 +783,22 @@ class EventService
         if ($request->sortBy == NONE) {
             return $this->dao->donationByCategory($category, ACTIVE);
         }
+    }
+
+    public function storeDonationCreated($donation)
+    {
+        $pathPhoto = $this->uploadImage($donation->getPhoto(), 'images/donation');
+        $donation->setPhoto($pathPhoto);
+        $this->dao->storeDonationCreated($donation);
+    }
+
+    public function storeDetailAllocation($allocationDetail)
+    {
+        $this->dao->storeDetailAllocation($allocationDetail);
+    }
+
+    public function getLastIdDonation()
+    {
+        return $this->dao->getLastIdDonation();
     }
 }
