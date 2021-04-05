@@ -144,7 +144,7 @@
                     <h5 class="font-weight-bold">Upgrade akun mu menjadi <i>campaigner</i>!</h5>
                     <p>Mulailah membawa perubahan dengan menolong
                         sesama.</p>
-                    <a type="button" class="btn btn-primary mt-2" href="/profile/campaigner/{{ $user->id }}">Daftar
+                    <a type="button" class="btn btn-primary mt-2" href="/profile/campaigner">Daftar
                         Campaigner</a>
                 @endif
             </div>

@@ -433,7 +433,7 @@ class EventDao
     }
 
     //! Mengambil jumlah total tandatangan petisi tertentu saat itu
-    public function calculatedSign($idEvent, $typeEvent)
+    public function calculatedSignDonation($idEvent, $typeEvent)
     {
         if ($typeEvent == PETITION) {
             return ParticipatePetition::where('idPetition', $idEvent)->count();
@@ -566,9 +566,9 @@ class EventDao
         ]);
     }
 
-    public function getAUserTransaction($id)
+    public function getAUserTransaction($idUser, $idEvent)
     {
-        return Transaction::where('idParticipant', $id)->first();
+        return Transaction::where('idParticipant', $idUser)->where('idDonation', $idEvent)->first();
     }
 
     //! Mencari Donasi sesuai dengan 
@@ -747,9 +747,8 @@ class EventDao
     //! Mengurutkan donasi yang pernah dibuat oleh campaigner
     public function sortDonationByCampaigner($idCampaigner)
     {
-        return ParticipateDonation::selectRaw('donation.*, users.name as name')
+        return Donation::selectRaw('donation.*, users.name as name')
             ->where('donation.idCampaigner', $idCampaigner)
-            ->join('donation', 'participate_donation.idDonation', '=', 'donation.id')
             ->join('users', 'donation.idCampaigner', 'users.id')
             ->get();
     }

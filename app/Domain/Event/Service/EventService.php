@@ -33,11 +33,13 @@ class EventService
         return $this->dao->showProfile(GUEST_ID);
     }
 
-    private function updateCalculatedCount($idEvent, $idUser)
+    private function updateCalculatedCount($idEvent, $idUser, $typeEvent)
     {
         // Update Count dari jumlah ttd petisi
-        $count = $this->dao->calculatedSign($idEvent, PETITION);
-        $this->dao->updateCalculatedSign($idEvent, $count);
+        if ($typeEvent == PETITION) {
+            $count = $this->dao->calculatedSignDonation($idEvent, PETITION);
+            $this->dao->updateCalculatedSign($idEvent, $count);
+        }
 
         // Update jumlah event yang diikuti user
         $countParticipatedDonation = $this->dao->countDonationParticipatedByUser($idUser);
@@ -461,7 +463,7 @@ class EventService
         $petition->created_at = Carbon::now()->format('Y-m-d');
 
         $this->dao->signPetition($petition, $idEvent, $user);
-        $this->updateCalculatedCount($idEvent, $user->id);
+        $this->updateCalculatedCount($idEvent, $user->id, PETITION);
     }
 
     //! Menyimpan data petisi ke database
@@ -619,9 +621,9 @@ class EventService
         $this->dao->postTransaction($transaction);
     }
 
-    public function getAUserTransaction($id)
+    public function getAUserTransaction($idUser, $idEvent)
     {
-        return $this->dao->getAUserTransaction($id);
+        return $this->dao->getAUserTransaction($idUser, $idEvent);
     }
 
     public function checkUserTransactionStatus($participatedDonation, $id)

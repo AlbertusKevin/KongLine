@@ -142,7 +142,17 @@ const listDonationEmpty = (keyword) => {
     return /*html*/ `
     <div class="card col-md-12 p-2 mb-3">
         <div class="card-body">
-            <h5 class="card-title title-donation">Event donasi dengan judul ${keyword} tidak ditemukan</h5>
+            <h5 class="card-title title-donation">Event donasi dengan judul "${keyword}" tidak ditemukan</h5>
+        </div>
+    </div>
+    `;
+};
+
+const noListDonation = () => {
+    return /*html*/ `
+    <div class="card col-md-12 p-2 mb-3">
+        <div class="card-body">
+            <h5 class="card-title title-donation">Belum ada donasi pada daftar ini.</h5>
         </div>
     </div>
     `;
@@ -157,7 +167,6 @@ const sortListPetition = (sortBy, category, typePetition) => {
             let html = "";
             if (data.length != 0) {
                 data.forEach((petition) => {
-                    // console.log(petition);
                     html += changePetitionList(petition);
                 });
                 $("#petition-list").html(html);
@@ -177,13 +186,12 @@ const sortListDonation = (sortBy, category) => {
         success: (data) => {
             let html = "";
             if (data.length != 0) {
-                data.forEach((petition) => {
-                    // console.log(petition);
-                    html += changeDonationList(petition);
+                data.forEach((donation) => {
+                    html += changeDonationList(donation);
                 });
                 $("#donation-list").html(html);
             } else {
-                html += listDonationEmpty();
+                html += noListDonation();
                 $("#donation-list").html(html);
             }
         },
@@ -440,6 +448,7 @@ $(".show-donatur").on("click", function () {
     const html = $("#donatur").html();
     $(".card-text").html(html);
 });
+
 $(".show-comment").on("click", function () {
     const html = $("#comment").html();
     $(".card-text").html(html);

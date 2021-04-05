@@ -108,6 +108,7 @@ class EventController extends Controller
     {
         $user = $this->eventService->showProfile();
         $this->eventService->signPetition($request, $idEvent, $user);
+
         return redirect("/petition/" . $idEvent)->with(['type' => "success", 'message' => 'Berhasil Menandatangai petisi ini. Terimakasih ikut berpartisipasi!']);
     }
 
@@ -249,8 +250,7 @@ class EventController extends Controller
     {
         $donation = $this->eventService->getADonation($id);
         $user = $this->eventService->showProfile();
-        $transaction = $this->eventService->getAUserTransaction($user->id);
-
+        $transaction = $this->eventService->getAUserTransaction($user->id, $id);
         return view('donation.donateConfirm', compact('donation', 'user', 'transaction'));
     }
 
