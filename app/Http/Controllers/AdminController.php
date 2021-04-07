@@ -43,9 +43,9 @@ class AdminController extends Controller
         $users = $this->admin_service->countUser();
         $participant =  $this->admin_service->countParticipant();
         $campaigner  = $this->admin_service->countCampaigner();
-        $campaign_valid  = $this->admin_service->countWaitingCampaigner();
-        $donasi_valid = $this->admin_service->countWaitingDonation();
-        $petisi_valid = $this->admin_service->countWaitingPetition();
+        $campaigner_waiting  = $this->admin_service->countWaitingCampaigner();
+        $donasi_waiting = $this->admin_service->countWaitingDonation();
+        $petisi_waiting = $this->admin_service->countWaitingPetition();
         $donations = $this->admin_service->getDonationLimit();
         $petitions = $this->admin_service->getPetitionLimit();
         $date = $this->admin_service->getDate();
@@ -54,9 +54,9 @@ class AdminController extends Controller
             'users' => $users,
             'participant' => $participant,
             'campaigner' => $campaigner,
-            'waiting_campaigner' => $campaign_valid,
-            'waiting_donation' => $donasi_valid,
-            'waiting_petition' => $petisi_valid,
+            'waiting_campaigner' => $campaigner_waiting,
+            'waiting_donation' => $donasi_waiting,
+            'waiting_petition' => $petisi_waiting,
             'donations' => $donations,
             'petitions' => $petitions,
             'date' => $date,

@@ -2,6 +2,7 @@
 @section('title')
     Form Konfirmasi
 @endsection
+
 @section('content')
     @include('layout.message')
     <div class="container mt-5">

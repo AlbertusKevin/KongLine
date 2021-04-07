@@ -1,4 +1,8 @@
-@extends('layout.app')
+@if ($user->role != ADMIN)
+    @extends('layout.app')
+@else
+    @extends('layout.adminNavbar')
+@endif
 @section('title')
     Petition List
 @endsection

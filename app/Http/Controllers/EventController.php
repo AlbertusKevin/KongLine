@@ -93,8 +93,8 @@ class EventController extends Controller
             foreach ($validator->errors()->all() as $message) {
                 $messageError = $message;
             }
-            Alert::error('Gagal Menyimpan Perubahan', [$messageError]);
-            return redirect('/petition/progress/' . $idEvent);
+            // Alert::error('Gagal Menyimpan Perubahan', [$messageError]);
+            return redirect('/petition/progress/' . $idEvent)->with(['type' => "error", 'message' => $messageError]);
         };
 
         $updateNews = new Model\UpdateNews($idEvent, $request->title, $request->content, $request->link, $request->file('image'), Carbon::now()->format('Y-m-d'));
