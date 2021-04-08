@@ -95,6 +95,15 @@ class EventService
         return $this->dao->listBank();
     }
 
+    public static function getNavbar($user)
+    {
+        if ($user->role != ADMIN) {
+            return 'layout.app';
+        }
+
+        return 'layout.adminNavbar';
+    }
+
     public function messageOfEvent($status)
     {
         if ($status == NOT_CONFIRMED) {
@@ -194,6 +203,14 @@ class EventService
             return $this->dao->listPetitionParticipated($user->id);
         }
 
+        if ($request->typePetition == DIBATALKAN) {
+            return $this->dao->listPetitionType(CANCELED);
+        }
+
+        if ($request->typePetition == BELUM_VALID) {
+            return $this->dao->listPetitionType(NOT_CONFIRMED);
+        }
+
         return $this->dao->listPetitionByMe($user->id);
     }
 
@@ -203,6 +220,8 @@ class EventService
         $userId = $this->showProfile()->id;
         $category = $this->categorySelect($request);
         $sortBy = $request->sortBy;
+
+        dd($request->typePetition);
 
         if ($request->typePetition == BERLANGSUNG) {
             if ($category == 0 && $sortBy == NONE) {
@@ -307,6 +326,68 @@ class EventService
                 }
                 if ($sortBy == EVENT_TERBARU) {
                     return $this->dao->searchPetitionByMeSort($userId, $request->keyword, CREATED_COLUMN);
+                }
+            }
+        }
+
+        if ($request->typePetition == DIBATALKAN) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->dao->searchPetition(CANCELED, $request->keyword);
+            }
+
+            // jika berdasarkan sort dan category
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchPetitionCategorySort(CANCELED, $request->keyword, $category, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchPetitionCategorySort(CANCELED, $request->keyword, $category, CREATED_COLUMN);
+                }
+            }
+
+            // Jika hanya berdasarkan category
+            if ($category != 0) {
+                return $this->dao->searchPetitionCategory(CANCELED, $request->keyword, $category);
+            }
+
+            // Jika hanya berdasarkan sort
+            if ($sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchPetitionSortBy(CANCELED, $request->keyword, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchPetitionSortBy(CANCELED, $request->keyword, CREATED_COLUMN);
+                }
+            }
+        }
+
+        if ($request->typePetition == BELUM_VALID) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->dao->searchPetition(NOT_CONFIRMED, $request->keyword);
+            }
+
+            // jika berdasarkan sort dan category
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchPetitionCategorySort(NOT_CONFIRMED, $request->keyword, $category, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchPetitionCategorySort(NOT_CONFIRMED, $request->keyword, $category, CREATED_COLUMN);
+                }
+            }
+
+            // Jika hanya berdasarkan category
+            if ($category != 0) {
+                return $this->dao->searchPetitionCategory(NOT_CONFIRMED, $request->keyword, $category);
+            }
+
+            // Jika hanya berdasarkan sort
+            if ($sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchPetitionSortBy(NOT_CONFIRMED, $request->keyword, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchPetitionSortBy(NOT_CONFIRMED, $request->keyword, CREATED_COLUMN);
                 }
             }
         }

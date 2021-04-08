@@ -1,8 +1,9 @@
-@if ($user->role != ADMIN)
-    @extends('layout.app')
-@else
+{{-- @if ($user->role != ADMIN) --}}
+@extends($navbar)
+{{-- @else
     @extends('layout.adminNavbar')
-@endif
+@endif --}}
+
 @section('title')
     Petition List
 @endsection
@@ -29,14 +30,12 @@
                     class="btn btn-primary petition-type rounded-pill">Berlangsung</button>
                 <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">Telah
                     Menang</button>
-                @if (Auth::check())
-                    @if (Auth::user()->role == 'participant' || Auth::user()->role == 'campaigner')
-                        <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">Ikut
-                            Serta</button>
-                    @endif
-                    @if (Auth::user()->role == 'campaigner')
-                        <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Petisi Saya</button>
-                    @endif
+                @if ($user->role == 'participant' || $user->role == 'campaigner')
+                    <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">Ikut
+                        Serta</button>
+                @endif
+                @if ($user->role == 'campaigner')
+                    <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Petisi Saya</button>
                 @endif
             </div>
 

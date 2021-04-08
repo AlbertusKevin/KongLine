@@ -1,8 +1,4 @@
-@if ($user->role != ADMIN)
-    @extends('layout.app')
-@else
-    @extends('layout.adminNavbar')
-@endif
+@extends($navbar)
 
 @section('content')
     @include('layout.message')

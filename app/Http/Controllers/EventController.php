@@ -27,7 +27,9 @@ class EventController extends Controller
         $user = $this->eventService->showProfile();
         $listCategory = $this->eventService->listCategory();
         $petitionList = $this->eventService->indexPetition();
-        return view('petition.petition', compact('petitionList', 'user', 'listCategory'));
+        $navbar = EventService::getNavbar($user);
+
+        return view('petition.petition', compact('petitionList', 'user', 'listCategory', 'navbar'));
     }
 
     //! {{-- lewat ajax --}} Menampilkan daftar petisi berdasarkan tipe (berlangsung, telah menang, dll)
@@ -55,17 +57,20 @@ class EventController extends Controller
         $petition = $this->eventService->showPetition($idEvent);
         $isParticipated = $this->eventService->checkParticipated($idEvent, $user, PETITION);
         $message = $this->eventService->messageOfEvent($petition->status);
+        $navbar = EventService::getNavbar($user);
 
-        return view('petition.petitionDetail', compact('petition', 'user', 'isParticipated', 'message'));
+        return view('petition.petitionDetail', compact('petition', 'user', 'isParticipated', 'message', 'navbar'));
     }
 
     //! Menampilkan seluruh komentar pada petisi tertentu sesuai ID Petisi
     public function commentPetition($idEvent)
     {
+        $user = $this->eventService->showProfile();
         $petition = $this->eventService->showPetition($idEvent);
         $comments = $this->eventService->commentsPetition($idEvent);
+        $navbar = EventService::getNavbar($user);
 
-        return view('petition.petitionComment', compact('petition', 'comments'));
+        return view('petition.petitionComment', compact('petition', 'comments', 'navbar'));
     }
 
     //! Menampilkan seluruh berita perkembangan petisi tertentu sesuai ID Petisi
@@ -74,8 +79,9 @@ class EventController extends Controller
         $petition = $this->eventService->showPetition($idEvent);
         $news = $this->eventService->newsPetition($idEvent);
         $user = $this->eventService->showProfile();
+        $navbar = EventService::getNavbar($user);
 
-        return view('petition.petitionProgress', compact('petition', 'news', 'user'));
+        return view('petition.petitionProgress', compact('petition', 'news', 'user', 'navbar'));
     }
 
     //! Menyimpan perkembangan berita terbaru yang diinput oleh pengguna pada petisi tertentu
@@ -173,8 +179,9 @@ class EventController extends Controller
         $donations = $this->eventService->getListDonation();
         $categories = $this->eventService->listCategory();
         $user = $this->eventService->showProfile();
+        $navbar = EventService::getNavbar($user);
 
-        return view('donation.donation', compact('donations', 'categories', 'user'));
+        return view('donation.donation', compact('donations', 'categories', 'user', 'navbar'));
     }
 
     public function getADonation($id)
@@ -190,6 +197,7 @@ class EventController extends Controller
         // pengecekan, apakah donasi di event ini sudah dikonfirmasi pembayaran oleh user
         $userTransactionStatus = $this->eventService->checkUserTransactionStatus($participatedDonation, $user->id);
         $allStatusZero = $this->eventService->checkStatusIsZero($participatedDonation);
+        $navbar = EventService::getNavbar($user);
 
         // dd($userTransactionStatus);
         return view(
@@ -204,7 +212,8 @@ class EventController extends Controller
                 'isParticipated',
                 'message',
                 'userTransactionStatus',
-                'allStatusZero'
+                'allStatusZero',
+                'navbar'
             )
         );
     }

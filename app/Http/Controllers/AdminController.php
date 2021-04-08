@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Domain\Admin\Service\AdminService;
+use App\Domain\Event\Service\EventService;
 
 class AdminController extends Controller
 {
     private $admin_service;
+    private $eventService;
 
     public function __construct()
     {
         $this->admin_service = new AdminService();
+        $this->eventService = new EventService();
     }
 
     public function getAll()
@@ -61,5 +64,16 @@ class AdminController extends Controller
             'petitions' => $petitions,
             'date' => $date,
         ]);
+    }
+
+    //? ========================================
+    //! ~~~~~~~~~~~~~~~~ Petisi ~~~~~~~~~~~~~~~~
+    //? ========================================
+    public function getListPetition()
+    {
+        $listCategory = $this->eventService->listCategory();
+        $petitionList = $this->admin_service->allPetition();
+        // dd($petitionList);
+        return view('admin.listPetition', compact('listCategory', 'petitionList'));
     }
 }

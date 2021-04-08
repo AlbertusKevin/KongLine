@@ -76,4 +76,12 @@ class AdminDao
     {
         return Petition::all()->sortByDesc("created_at")->take(3);
     }
+
+    public function allPetition()
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->get();
+    }
 }

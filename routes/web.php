@@ -118,3 +118,6 @@ Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
 Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
 
 Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middleware('admin');
+
+
+Route::get('/admin/petition', [AdminController::class, 'getListPetition'])->name('admin')->middleware('admin');

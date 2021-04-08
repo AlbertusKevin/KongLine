@@ -33,6 +33,8 @@ define("BERLANGSUNG", "berlangsung");
 define("MENANG", "menang");
 define("PARTISIPASI", "partisipasi");
 define("PETISI_SAYA", "petisi_saya");
+define("DIBATALKAN", "dibatalkan");
+define("BELUM_VALID", "belum_valid");
 
 //Sort Petition
 define("TANDA_TANGAN", "Jumlah Tanda Tangan");

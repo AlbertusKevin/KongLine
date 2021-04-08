@@ -111,4 +111,9 @@ class AdminService
     {
         return Carbon::now()->format('d-m-Y');
     }
+
+    public function allPetition()
+    {
+        return $this->dao->allPetition();
+    }
 }

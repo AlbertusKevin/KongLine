@@ -1,8 +1,5 @@
-@if ($user->role != ADMIN)
-    @extends('layout.app')
-@else
-    @extends('layout.adminNavbar')
-@endif
+@extends($navbar)
+
 @section('title')
     Petition's Progress
 @endsection
@@ -11,7 +8,9 @@
     @include('layout.message')
     <div class="container">
         <h2 class="mt-3" style="color: #1167B1">{{ $petition->title }}</h2>
-        <small><a href="/petition" style="color: blue">-> kembali ke daftar petisi</a></small>
+        @if ($user->role != ADMIN)
+            <small><a href="/petition" style="color: blue">-> kembali ke daftar petisi</a></small>
+        @endif
         <div class="text-center mt-5">
             <a href="/petition/{{ $petition->id }}" type="button" class="btn btn-light rounded-pill">Detail Petisi</a>
             <a href="/petition/comments/{{ $petition->id }}" type="button"

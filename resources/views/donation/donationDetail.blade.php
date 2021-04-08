@@ -1,8 +1,5 @@
-@if ($user->role != ADMIN)
-    @extends('layout.app')
-@else
-    @extends('layout.adminNavbar')
-@endif
+@extends($navbar)
+
 @section('title')
     Detail Donation
 @endsection

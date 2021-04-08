@@ -1,3 +1,6 @@
+const baseURL = "http://localhost:8000";
+
+const getNowURL = () => window.location.href.split("/")[3];
 // fungsi umum
 const checkTypePetition = (type) => {
     if (type.includes("Berlangsung")) {
@@ -9,7 +12,45 @@ const checkTypePetition = (type) => {
     if (type.includes("Petisi")) {
         return "petisi_saya";
     }
+    if (type.includes("Semua")) {
+        return "semua";
+    }
+    if (type.includes("Dibatalkan")) {
+        return "dibatalkan";
+    }
+    if (type.includes("Belum")) {
+        return "belum_valid";
+    }
     return "partisipasi";
+};
+
+const changeTablePetition = (petition) => {
+    return /*html*/ `
+    <tr>
+        <td>${petition.created_at}</td>
+        <td><a href="/petition/${petition.id}">${petition.title}</a></td>
+        <td>${petition.category}</td>
+        <td>${petition.signedTarget}</td>
+        <td>${petition.deadline}</td>
+        <td>${petition.status}</td>
+    </tr>
+        `;
+};
+
+const emptyTablePetition = () => {
+    return /*html*/ `
+    <tr>
+        <td colspan="6">Belum ada petisi pada daftar ini</td>
+    </tr>
+        `;
+};
+
+const emptySearchTablePetition = (keyword) => {
+    return /*html*/ `
+    <tr>
+        <td colspan="6">Petisi dengan judul ~${keyword}~ tidak ditemukan</td>
+    </tr>
+        `;
 };
 
 const changePetitionList = (petition) => {
@@ -201,7 +242,7 @@ const sortListDonation = (sortBy, category) => {
 // fungsi trigger
 //untuk active link sesuai page yang diklik
 $(".nav-link").ready(function () {
-    let url = window.location.href.split("/")[3];
+    let url = getNowURL();
 
     if (url == "petition") {
         $(".nav-link").each(function () {
@@ -288,28 +329,35 @@ $(".petition-type").on("click", function () {
 
     let typePetition = $(this).html();
     typePetition = checkTypePetition(typePetition);
-    // console.log(typePetition);
 
-    if (typePetition == "berlangsung") {
-        $(".petition-page-title").html("Daftar Petisi");
-        $(".petition-page-subtitle").html(
-            "Lihat Petisi yang Sedang Berlangsung di Website"
-        );
-    } else if (typePetition == "menang") {
-        $(".petition-page-title").html("Kemenangan Petisi");
-        $(".petition-page-subtitle").html(
-            "Lihat petisi yang telah menang dan mengubah dunia"
-        );
-    } else if (typePetition == "petisi_saya") {
-        $(".petition-page-title").html("Daftar Petisi Saya");
-        $(".petition-page-subtitle").html(
-            "Lihat Petisi yang Telah Saya Buat di Website Ini"
-        );
+    let url = getNowURL();
+
+    if (url != "admin") {
+        if (typePetition == "berlangsung") {
+            $(".petition-page-title").html("Daftar Petisi");
+            $(".petition-page-subtitle").html(
+                "Lihat Petisi yang Sedang Berlangsung di Website"
+            );
+        } else if (typePetition == "menang") {
+            $(".petition-page-title").html("Kemenangan Petisi");
+            $(".petition-page-subtitle").html(
+                "Lihat petisi yang telah menang dan mengubah dunia"
+            );
+        } else if (typePetition == "petisi_saya") {
+            $(".petition-page-title").html("Daftar Petisi Saya");
+            $(".petition-page-subtitle").html(
+                "Lihat Petisi yang Telah Saya Buat di Website Ini"
+            );
+        } else {
+            $(".petition-page-title").html("Daftar Ikut Serta Petisi");
+            $(".petition-page-subtitle").html(
+                "Lihat Petisi yang Telah Saya Tandatangani di Website Ini"
+            );
+        }
     } else {
-        $(".petition-page-title").html("Daftar Ikut Serta Petisi");
-        $(".petition-page-subtitle").html(
-            "Lihat Petisi yang Telah Saya Tandatangani di Website Ini"
-        );
+        if (typePetition == "semua") {
+            window.location.href = `${baseURL}/admin/petition`;
+        }
     }
 
     $.ajax({
@@ -317,15 +365,25 @@ $(".petition-type").on("click", function () {
         data: { typePetition },
         dataType: "json",
         success: (data) => {
-            console.log(data);
             let html = "";
             if (data.length != 0) {
-                data.forEach((petition) => {
-                    html += changePetitionList(petition);
-                });
+                if (url != "admin") {
+                    data.forEach((petition) => {
+                        html += changePetitionList(petition);
+                    });
+                } else {
+                    data.forEach((petition) => {
+                        html += changeTablePetition(petition);
+                    });
+                }
                 $("#petition-list").html(html);
             } else {
-                html += listPetitionEmpty();
+                if (url != "admin") {
+                    html += listPetitionEmpty();
+                } else {
+                    html += emptyTablePetition();
+                }
+
                 $("#petition-list").html(html);
             }
         },
@@ -333,6 +391,7 @@ $(".petition-type").on("click", function () {
 });
 
 $("#search-petition").on("keyup", function () {
+    let url = getNowURL();
     let keyword = $(this).val();
     let typePetition = $(".btn-primary").html();
     let category = $("#category-choosen").val();
@@ -347,12 +406,23 @@ $("#search-petition").on("keyup", function () {
         success: (data) => {
             let html = "";
             if (data.length != 0) {
-                data.forEach((petition) => {
-                    html += changePetitionList(petition);
-                });
+                if (url != "admin") {
+                    data.forEach((petition) => {
+                        html += changePetitionList(petition);
+                    });
+                } else {
+                    data.forEach((petition) => {
+                        html += changeTablePetition(petition);
+                    });
+                }
                 $("#petition-list").html(html);
             } else {
-                html += listPetitionTypeEmpty(keyword);
+                if (url != "admin") {
+                    html += listPetitionTypeEmpty(keyword);
+                } else {
+                    html += emptySearchTablePetition(keyword);
+                }
+
                 $("#petition-list").html(html);
             }
         },
