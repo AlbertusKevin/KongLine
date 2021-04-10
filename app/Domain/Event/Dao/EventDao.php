@@ -270,6 +270,34 @@ class EventDao
             ->get();
     }
 
+    public function allStatusSortPetitionCategory($category, $table)
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->where('category', $category)
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->orderByDesc($table)
+            ->get();
+    }
+
+    public function allStatusSortPetition($table)
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->orderByDesc($table)
+            ->get();
+    }
+
+    public function allStatusPetitionByCategory($category)
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->where('category', $category)
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->get();
+    }
+
     //! Mengurutkan petisi dengan status tertentu
     //! secara descending sesuai dengan ketentuan yang dipilih
     public function sortPetition($status, $table)

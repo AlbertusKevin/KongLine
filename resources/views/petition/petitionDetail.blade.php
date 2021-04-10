@@ -26,7 +26,7 @@
             </div>
             <div class="col-md-4">
                 @if ($petition->status == 1)
-                    @if ($user->role == 'guest')
+                    @if ($user->role == GUEST)
                         <h4 class="mt-5 ml-4">{{ $petition->signedCollected }} dari {{ $petition->signedTarget }} </h4>
                         <p class="ml-4">Orang telah menendatangani Petisi ini !</p>
                         <div class="row row-cols-2">
@@ -39,7 +39,7 @@
                                 <a href="/register" type="button" class="btn btn-primary">Daftar</a>
                             </div>
                         </div>
-                    @elseif($user->role == 'admin')
+                    @elseif($user->role == ADMIN)
                         <form action="">
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">
@@ -92,20 +92,44 @@
                         @endif
                     @endif
                 @else
-                    <div class="row mt-5">
-                        <div class="col-md-10 offset-md-2">
-                            <div class="card bg-light mb-3" style="max-width: 18rem;">
-                                <h5 class="card-header text-center font-weight-bold">{{ $message['header'] }}</h5>
-                                <div class="card-body">
-                                    <p class="card-text">{{ $message['content'] }}
-                                    </p>
-                                    <a href="/inbox" type="button"
-                                        class="btn btn-outline-secondary btn-sm rounded-pill">Hubungi
-                                        Admin</a>
+                    @if ($user->role != ADMIN)
+                        <div class="row mt-5">
+                            <div class="col-md-10 offset-md-2">
+                                <div class="card bg-light mb-3" style="max-width: 18rem;">
+                                    <h5 class="card-header text-center font-weight-bold">{{ $message['header'] }}</h5>
+                                    <div class="card-body">
+                                        <p class="card-text">{{ $message['content'] }}
+                                        </p>
+                                        <a href="/inbox" type="button"
+                                            class="btn btn-outline-secondary btn-sm rounded-pill">Hubungi
+                                            Admin</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @else
+                        @if ($petition->status == 0)
+                            <form action="">
+                                @csrf
+                                @method('patch')
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">
+                                        <h3 class="font-weight-bold mt-5">Alasan Ditolak</h3>
+                                    </label>
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-danger close-event">Tolak Event</button>
+                            </form>
+                            <form action="">
+                                @csrf
+                                @method('patch')
+                                <button type="submit" class="btn btn-primary approve-event mt-3">Setujui Event</button>
+                            </form>
+                        @elseif ($petition->status == 2)
+                        @elseif ($petition->status == 3)
+                        @elseif ($petition->status == 4)
+                        @endif
+                    @endif
                 @endif
             </div>
 

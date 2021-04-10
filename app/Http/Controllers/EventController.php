@@ -38,6 +38,11 @@ class EventController extends Controller
         return $this->eventService->listPetitionType($request);
     }
 
+    public function getAllCategory()
+    {
+        return $this->eventService->listCategory();
+    }
+
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
     public function searchPetition(Request $request)
     {

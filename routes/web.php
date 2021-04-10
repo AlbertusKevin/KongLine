@@ -64,6 +64,7 @@ Route::post('/reset', [AuthController::class, 'postReset'])->name('reset');
 //! Route Petition
 //? =========================
 //* --- pemanggilan ajax ---
+Route::get('/category', [EventController::class, 'getAllCategory']);
 Route::get('/petition/type', [EventController::class, 'listPetitionType']);
 Route::get('/petition/search', [EventController::class, 'searchPetition']);
 Route::get('/petition/sort', [EventController::class, 'sortPetition']);

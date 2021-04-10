@@ -24,15 +24,71 @@ const checkTypePetition = (type) => {
     return "partisipasi";
 };
 
+const getStatus = (idStatusEvent) => {
+    switch (idStatusEvent) {
+        case 0:
+            return "not confirmed";
+        case 1:
+            return "active";
+        case 2:
+            return "finished";
+        case 3:
+            return "closed";
+        case 4:
+            return "canceled";
+    }
+};
+
+const getACategory = (idCategory) => {
+    console.log(idCategory);
+    switch (idCategory) {
+        case 1:
+            return "Pendidikan";
+            break;
+        case 2:
+            return "Bencana Alam";
+            break;
+        case 3:
+            return "Difabel";
+            break;
+        case 4:
+            return "Infrastruktur Umum";
+        case 5:
+            return "Teknologi";
+        case 6:
+            return "Budaya";
+        case 7:
+            return "Karya Kreatif dan Modal Usaha";
+        case 8:
+            return "Kegiatan Sosial";
+        case 9:
+            return "Kemanusiaan";
+        case 10:
+            return "Lingkungan";
+        case 11:
+            return "Hewan";
+        case 12:
+            return "Panti Asuhan";
+        case 13:
+            return "Rumah Ibadah";
+        case 14:
+            return "Ekonomi";
+        case 15:
+            return "Politik";
+        case 16:
+            return "Keadilan";
+    }
+};
+
 const changeTablePetition = (petition) => {
     return /*html*/ `
     <tr>
         <td>${petition.created_at}</td>
         <td><a href="/petition/${petition.id}">${petition.title}</a></td>
-        <td>${petition.category}</td>
+        <td>${getACategory(petition.category)}</td>
         <td>${petition.signedTarget}</td>
         <td>${petition.deadline}</td>
-        <td>${petition.status}</td>
+        <td>${getStatus(petition.status)}</td>
     </tr>
         `;
 };
@@ -200,6 +256,8 @@ const noListDonation = () => {
 };
 
 const sortListPetition = (sortBy, category, typePetition) => {
+    const url = getNowURL();
+
     $.ajax({
         url: "/petition/sort",
         data: { sortBy, category, typePetition },
@@ -207,12 +265,23 @@ const sortListPetition = (sortBy, category, typePetition) => {
         success: (data) => {
             let html = "";
             if (data.length != 0) {
-                data.forEach((petition) => {
-                    html += changePetitionList(petition);
-                });
+                if (url != "admin") {
+                    data.forEach((petition) => {
+                        html += changePetitionList(petition);
+                    });
+                } else {
+                    data.forEach((petition) => {
+                        html += changeTablePetition(petition);
+                    });
+                }
+
                 $("#petition-list").html(html);
             } else {
-                html += listPetitionEmpty();
+                if (url != "admin") {
+                    html += listPetitionEmpty();
+                } else {
+                    html += emptyTablePetition();
+                }
                 $("#petition-list").html(html);
             }
         },
@@ -438,7 +507,9 @@ $(".sort-petition").on("click", function (e) {
     $(this).addClass("font-weight-bold");
 
     let category = $("#category-choosen").val();
-    let typePetition = checkTypePetition($(".btn-primary").html());
+    let typePetition = checkTypePetition(
+        $(".petition-type.btn-primary").html()
+    );
     sortListPetition(sortBy, category, typePetition);
 });
 
@@ -451,7 +522,9 @@ $(".category-petition").on("click", function (e) {
     $(this).addClass("font-weight-bold");
 
     let sortBy = $("#sort-by").val();
-    let typePetition = checkTypePetition($(".btn-primary").html());
+    let typePetition = checkTypePetition(
+        $(".petition-type.btn-primary").html()
+    );
     sortListPetition(sortBy, category, typePetition);
 });
 
