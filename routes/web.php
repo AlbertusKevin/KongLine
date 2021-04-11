@@ -128,6 +128,5 @@ Route::get('/admin/donation', [AdminController::class, 'getListDonation'])->midd
 
 //* -------- ajax -----------
 Route::get('/admin/donation/sort', [AdminController::class, 'adminSortDonation'])->middleware('admin');
-// Route::get('/admin/donation/search', [AdminController::class, 'getListDonation'])->middleware('admin');
-// Route::get('/admin/donation/category', [AdminController::class, 'getListDonation'])->middleware('admin');
-Route::get('/admin/donation/type', [EventController::class, 'donationType']);
+Route::get('/admin/donation/search', [AdminController::class, 'adminSearchDonation'])->middleware('admin');
+Route::get('/admin/donation/type', [AdminController::class, 'donationType']);

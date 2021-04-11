@@ -115,8 +115,18 @@ class AdminController extends Controller
         return view("admin.listDonation", compact('listCategory', 'donationList'));
     }
 
+    public function donationType(Request $request)
+    {
+        return $this->admin_service->donationType($request->typeDonation);
+    }
+
     public function adminSortDonation(Request $request)
     {
         return $this->admin_service->adminSortDonation($request);
+    }
+
+    public function adminSearchDonation(Request $request)
+    {
+        return $this->admin_service->adminSearchDonation($request);
     }
 }

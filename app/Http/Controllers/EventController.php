@@ -366,9 +366,4 @@ class EventController extends Controller
     {
         return $this->eventService->sortDonation($request);
     }
-
-    public function donationType(Request $request)
-    {
-        return $this->eventService->donationType($request->typeDonation);
-    }
 }

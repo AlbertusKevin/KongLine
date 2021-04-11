@@ -894,28 +894,6 @@ class EventService
         }
     }
 
-    //! {{-- lewat ajax --}} Menampilkan daftar donasi berdasarkan tipe (berlangsung, telah menang, dll)
-    public function donationType($typeDonation)
-    {
-        if ($typeDonation == SEMUA) {
-            return $this->dao->allDonation();
-        }
-
-        if ($typeDonation == BERLANGSUNG) {
-            return $this->dao->selectDonation(ACTIVE);
-        }
-
-        if ($typeDonation == SELESAI) {
-            return $this->dao->selectDonation(FINISHED);
-        }
-
-        if ($typeDonation == DIBATALKAN) {
-            return $this->dao->selectDonation(CANCELED);
-        }
-
-        return $this->dao->selectDonation(NOT_CONFIRMED);
-    }
-
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
     public function sortDonation($request)
     {

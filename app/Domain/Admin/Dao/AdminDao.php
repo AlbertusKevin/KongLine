@@ -111,6 +111,15 @@ class AdminDao
             ->get();
     }
 
+    public function selectDonation($status)
+    {
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->where('status', $status)
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
+            ->get();
+    }
+
     //! Mengurutkan petisi sesuai dengan
     //! sorting desc dan kategori tertentu
     public function sortDonationCategory($category, $status, $table)
@@ -172,6 +181,96 @@ class AdminDao
             ->where('category', $category)
             ->join('category', 'donation.category', 'category.id')
             ->join('event_status', 'donation.status', 'event_status.id')
+            ->get();
+    }
+
+    public function searchAllStatusDonation($keyword)
+    {
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
+            ->get();
+    }
+
+    public function searchAllDonationSortBy($keyword, $table)
+    {
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
+            ->orderByDesc($table)
+            ->get();
+    }
+
+    public function searchAllDonationCategory($keyword, $category)
+    {
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->where('category', $category)
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
+            ->get();
+    }
+
+    public function searchAllDonationCategorySort($keyword, $category, $table)
+    {
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->where('category', $category)
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
+            ->orderByDesc($table)
+            ->get();
+    }
+
+    public function searchDonation($status, $keyword)
+    {
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->where('status', $status)
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
+            ->get();
+    }
+
+    //! Mencari petisi sesuai dengan
+    //! keyword, sorting desc, dan kategori tertentu
+    public function searchDonationCategorySort($status, $keyword, $category, $table)
+    {
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->where('status', $status)
+            ->where('category', $category)
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
+            ->orderByDesc($table)
+            ->get();
+    }
+
+    //! Mencari petisi sesuai dengan
+    //! keyword dan kategori tertentu
+    public function searchDonationCategory($status, $keyword, $category)
+    {
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->where('status', $status)
+            ->where('category', $category)
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
+            ->get();
+    }
+
+    //! Mencari petisi sesuai dengan
+    //! keyword dan sorting desc tertentu
+    public function searchDonationSortBy($status, $keyword, $table)
+    {
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->where('status', $status)
+            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
+            ->orderByDesc($table)
             ->get();
     }
 }

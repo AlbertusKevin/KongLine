@@ -118,7 +118,7 @@ const changeTableDonation = (donation) => {
         <td>${donation.created_at}</td>
         <td><a href="/donation/${donation.id}">${donation.title}</a></td>
         <td>${donation.category}</td>
-        <td>${donation.donationTarget}</td>
+        <td>Rp. ${donation.donationTarget.toLocaleString("en")},00</td>
         <td>${donation.deadline}</td>
         <td>${donation.status}</td>
     </tr>
@@ -587,23 +587,47 @@ $("#search-donation").on("keyup", function () {
     let category = $("#category-donation-selected").val();
     let sortBy = $("#sort-donation-selected").val();
 
-    $.ajax({
-        url: "/donation/search",
-        data: { keyword, category, sortBy },
-        dataType: "json",
-        success: (data) => {
-            let html = "";
-            if (data.length != 0) {
-                data.forEach((donation) => {
-                    html += changeDonationList(donation);
-                });
-                $("#donation-list").html(html);
-            } else {
-                html += listDonationEmpty(keyword);
-                $("#donation-list").html(html);
-            }
-        },
-    });
+    if (getNowURL() == "admin") {
+        const typeDonation = checkTypePetition(
+            $(".donation-type.btn-primary").html()
+        );
+
+        $.ajax({
+            url: "/admin/donation/search",
+            data: { keyword, category, sortBy, typeDonation },
+            dataType: "json",
+            success: (data) => {
+                let html = "";
+                if (data.length != 0) {
+                    data.forEach((donation) => {
+                        html += changeTableDonation(donation);
+                    });
+                    $("#donation-list").html(html);
+                } else {
+                    html += emptySearchTableDonation(keyword);
+                    $("#donation-list").html(html);
+                }
+            },
+        });
+    } else {
+        $.ajax({
+            url: "/donation/search",
+            data: { keyword, category, sortBy },
+            dataType: "json",
+            success: (data) => {
+                let html = "";
+                if (data.length != 0) {
+                    data.forEach((donation) => {
+                        html += changeDonationList(donation);
+                    });
+                    $("#donation-list").html(html);
+                } else {
+                    html += listDonationEmpty(keyword);
+                    $("#donation-list").html(html);
+                }
+            },
+        });
+    }
 });
 
 $(".sort-select-donation").on("click", function (e) {

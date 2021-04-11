@@ -147,6 +147,28 @@ class AdminService
         return $this->dao->allDonation();
     }
 
+    //! {{-- lewat ajax --}} Menampilkan daftar donasi berdasarkan tipe (berlangsung, telah menang, dll)
+    public function donationType($typeDonation)
+    {
+        if ($typeDonation == SEMUA) {
+            return $this->dao->allDonation();
+        }
+
+        if ($typeDonation == BERLANGSUNG) {
+            return $this->dao->selectDonation(ACTIVE);
+        }
+
+        if ($typeDonation == SELESAI) {
+            return $this->dao->selectDonation(FINISHED);
+        }
+
+        if ($typeDonation == DIBATALKAN) {
+            return $this->dao->selectDonation(CANCELED);
+        }
+
+        return $this->dao->selectDonation(NOT_CONFIRMED);
+    }
+
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
     public function adminSortDonation($request)
     {
@@ -155,7 +177,7 @@ class AdminService
 
         //jika tidak sort dan tidak pilih category
         if ($request->sortBy == NONE && $category == 0) {
-            return $this->eventService->donationType($request->typeDonation);
+            return $this->donationType($request->typeDonation);
         }
 
         if ($request->typeDonation == BERLANGSUNG) {
@@ -286,6 +308,162 @@ class AdminService
             // Jika hanya pilih berdasarkan category
             if ($request->sortBy == NONE) {
                 return $this->dao->allStatusDonationByCategory($category);
+            }
+        }
+    }
+
+    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
+    public function adminSearchDonation($request)
+    {
+        $category = $this->eventService->categorySelect($request);
+        $sortBy = $request->sortBy;
+
+        if ($request->typeDonation == SEMUA) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->dao->searchAllStatusDonation($request->keyword);
+            }
+
+            // jika berdasarkan sort dan category
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == DEADLINE) {
+                    return $this->dao->searchAllDonationCategorySort($request->keyword, $category, DEADLINE_COLUMN);
+                }
+                if ($sortBy == SMALL_COLLECTED) {
+                    return $this->dao->searchAllDonationCategorySort($request->keyword, $category, COLLECTED_COLUMN);
+                }
+            }
+
+            // Jika hanya berdasarkan category
+            if ($category != 0) {
+                return $this->dao->searchAllDonationCategory($request->keyword, $category);
+            }
+
+            // Jika hanya berdasarkan sort
+            if ($sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchAllDonationSortBy($request->keyword, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchAllDonationSortBy($request->keyword, COLLECTED_COLUMN);
+                }
+            }
+        }
+
+        if ($request->typeDonation == BERLANGSUNG) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->dao->searchDonation(ACTIVE, $request->keyword);
+            }
+
+            // jika berdasarkan sort dan category
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == DEADLINE) {
+                    return $this->dao->searchDonationCategorySort(ACTIVE, $request->keyword, $category, DEADLINE_COLUMN);
+                }
+                if ($sortBy == SMALL_COLLECTED) {
+                    return $this->dao->searchDonationCategorySort(ACTIVE, $request->keyword, $category, COLLECTED_COLUMN);
+                }
+            }
+
+            // Jika hanya berdasarkan category
+            if ($category != 0) {
+                return $this->dao->searchDonationCategory(ACTIVE, $request->keyword, $category);
+            }
+
+            // Jika hanya berdasarkan sort
+            if ($sortBy != NONE) {
+                if ($sortBy == DEADLINE) {
+                    return $this->dao->searchDonationSortBy(ACTIVE, $request->keyword, DEADLINE_COLUMN);
+                }
+                if ($sortBy == SMALL_COLLECTED) {
+                    return $this->dao->searchDonationSortBy(ACTIVE, $request->keyword, COLLECTED_COLUMN);
+                }
+            }
+        }
+
+        if ($request->typeDonation == SELESAI) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->dao->searchDonation(FINISHED, $request->keyword);
+            }
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == DEADLINE) {
+                    return $this->dao->searchDonationCategorySort(FINISHED, $request->keyword, $category, DEADLINE_COLUMN);
+                }
+                if ($sortBy == SMALL_COLLECTED) {
+                    return $this->dao->searchDonationCategorySort(FINISHED, $request->keyword, $category, COLLECTED_COLUMN);
+                }
+            }
+            if ($category != 0) {
+                return $this->dao->searchDonationCategory(FINISHED, $request->keyword, $category);
+            }
+            if ($sortBy != NONE) {
+                if ($sortBy == DEADLINE) {
+                    return $this->dao->searchDonationSortBy(FINISHED, $request->keyword, DEADLINE_COLUMN);
+                }
+                if ($sortBy == SMALL_COLLECTED) {
+                    return $this->dao->searchDonationSortBy(FINISHED, $request->keyword, COLLECTED_COLUMN);
+                }
+            }
+        }
+
+        if ($request->typeDonation == DIBATALKAN) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->dao->searchDonation(CANCELED, $request->keyword);
+            }
+
+            // jika berdasarkan sort dan category
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == DEADLINE) {
+                    return $this->dao->searchDonationCategorySort(CANCELED, $request->keyword, $category, DEADLINE_COLUMN);
+                }
+                if ($sortBy == SMALL_COLLECTED) {
+                    return $this->dao->searchDonationCategorySort(CANCELED, $request->keyword, $category, COLLECTED_COLUMN);
+                }
+            }
+
+            // Jika hanya berdasarkan category
+            if ($category != 0) {
+                return $this->dao->searchDonationCategory(CANCELED, $request->keyword, $category);
+            }
+
+            // Jika hanya berdasarkan sort
+            if ($sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchDonationSortBy(CANCELED, $request->keyword, DEADLINE_COLUMN);
+                }
+                if ($sortBy == SMALL_COLLECTED) {
+                    return $this->dao->searchDonationSortBy(CANCELED, $request->keyword, COLLECTED_COLUMN);
+                }
+            }
+        }
+
+        if ($request->typeDonation == BELUM_VALID) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->dao->searchDonation(NOT_CONFIRMED, $request->keyword);
+            }
+
+            // jika berdasarkan sort dan category
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchDonationCategorySort(NOT_CONFIRMED, $request->keyword, $category, DEADLINE_COLUMN);
+                }
+                if ($sortBy == SMALL_COLLECTED) {
+                    return $this->dao->searchDonationCategorySort(NOT_CONFIRMED, $request->keyword, $category, COLLECTED_COLUMN);
+                }
+            }
+
+            // Jika hanya berdasarkan category
+            if ($category != 0) {
+                return $this->dao->searchDonationCategory(NOT_CONFIRMED, $request->keyword, $category);
+            }
+
+            // Jika hanya berdasarkan sort
+            if ($sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchDonationSortBy(NOT_CONFIRMED, $request->keyword, SIGNED_COLUMN);
+                }
+                if ($sortBy == SMALL_COLLECTED) {
+                    return $this->dao->searchDonationSortBy(NOT_CONFIRMED, $request->keyword, COLLECTED_COLUMN);
+                }
             }
         }
     }
