@@ -34,6 +34,11 @@ class EventService
         return $this->dao->showProfile(GUEST_ID);
     }
 
+    public function getCampaigner($id)
+    {
+        return $this->dao->showProfile($id);
+    }
+
     private function updateCalculatedCount($idEvent, $idUser, $typeEvent)
     {
         // Update Count dari jumlah ttd petisi
@@ -72,7 +77,7 @@ class EventService
     }
 
     //! Mengembalikan kategori event petisi atau donasi yang dipilih
-    private function categorySelect($request)
+    public function categorySelect($request)
     {
         $listCategory = $this->listCategory();
 
@@ -221,8 +226,6 @@ class EventService
         $userId = $this->showProfile()->id;
         $category = $this->categorySelect($request);
         $sortBy = $request->sortBy;
-
-        dd($request->typePetition);
 
         if ($request->typePetition == BERLANGSUNG) {
             if ($category == 0 && $sortBy == NONE) {
@@ -889,6 +892,28 @@ class EventService
                 return $this->dao->searchDonationParticipated($request->keyword, $userId);
             }
         }
+    }
+
+    //! {{-- lewat ajax --}} Menampilkan daftar donasi berdasarkan tipe (berlangsung, telah menang, dll)
+    public function donationType($typeDonation)
+    {
+        if ($typeDonation == SEMUA) {
+            return $this->dao->allDonation();
+        }
+
+        if ($typeDonation == BERLANGSUNG) {
+            return $this->dao->selectDonation(ACTIVE);
+        }
+
+        if ($typeDonation == SELESAI) {
+            return $this->dao->selectDonation(FINISHED);
+        }
+
+        if ($typeDonation == DIBATALKAN) {
+            return $this->dao->selectDonation(CANCELED);
+        }
+
+        return $this->dao->selectDonation(NOT_CONFIRMED);
     }
 
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih

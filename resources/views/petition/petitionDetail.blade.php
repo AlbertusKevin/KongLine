@@ -40,12 +40,14 @@
                             </div>
                         </div>
                     @elseif($user->role == ADMIN)
-                        <form action="">
+                        <form action="/admin/petition/close/{{ $petition->id }}">
+                            @csrf
+                            @method('patch')
                             <div class="form-group">
-                                <label for="exampleFormControlTextarea1">
-                                    <h3 class="font-weight-bold mt-5">Komentari Event Ini</h3>
+                                <label for="closeEvent">
+                                    <h5 class="font-weight-bold mt-5">Berikan Alasan Mengapa Event ini Ditutup</h5>
                                 </label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                <textarea class="form-control" id="closeEvent" name="closeEvent" rows="3"></textarea>
                             </div>
                             <button type="submit" class="btn btn-danger close-event">Tutup Event</button>
                         </form>
@@ -70,10 +72,10 @@
                                 </h4>
                                 <p class="ml-4">Orang telah menendatangani Petisi ini !</p>
                                 <div class="row row-cols-2">
-                                    <div class="col-sm-4"><img src="/{{ Auth::user()->photoProfile }}"
-                                            alt="petition profile" class="ml-4 img-thumbnail">
+                                    <div class="col-sm-4"><img src="/{{ $user->photoProfile }}" alt="petition profile"
+                                            class="ml-4 img-thumbnail">
                                     </div>
-                                    <div class="col-sm-8"><b>{{ Auth::user()->name }}</b>
+                                    <div class="col-sm-8"><b>{{ $user->name }}</b>
                                         <input class="form-control form-control-sm form-rounded mt-2" type="text"
                                             placeholder="Tulis Komentarmu" name="petitionComment">
                                     </div>
@@ -109,25 +111,22 @@
                         </div>
                     @else
                         @if ($petition->status == 0)
-                            <form action="">
+                            <form action="/admin/petition/reject/{{ $petition->id }}">
                                 @csrf
                                 @method('patch')
                                 <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">
+                                    <label for="rejectEvent">
                                         <h3 class="font-weight-bold mt-5">Alasan Ditolak</h3>
                                     </label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <textarea class="form-control" id="rejectEvent" name="rejectEvent" rows="3"></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-danger close-event">Tolak Event</button>
                             </form>
-                            <form action="">
+                            <form action="/admin/petition/accept/{{ $petition->id }}">
                                 @csrf
                                 @method('patch')
                                 <button type="submit" class="btn btn-primary approve-event mt-3">Setujui Event</button>
                             </form>
-                        @elseif ($petition->status == 2)
-                        @elseif ($petition->status == 3)
-                        @elseif ($petition->status == 4)
                         @endif
                     @endif
                 @endif

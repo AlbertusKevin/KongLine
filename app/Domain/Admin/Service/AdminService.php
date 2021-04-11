@@ -4,14 +4,17 @@ namespace App\Domain\Admin\Service;
 
 use App\Domain\Admin\Dao\AdminDao;
 use Illuminate\Support\Carbon;
+use App\Domain\Event\Service\EventService;
 
 class AdminService
 {
     private $dao;
+    private $eventService;
 
     public function __construct()
     {
         $this->dao = new AdminDao();
+        $this->eventService = new EventService();
     }
 
     //Mengambil semua user yang ada di DB
@@ -115,5 +118,175 @@ class AdminService
     public function allPetition()
     {
         return $this->dao->allPetition();
+    }
+
+    public function acceptPetition($id)
+    {
+        $this->dao->acceptPetition($id);
+    }
+
+    public function rejectPetition($id)
+    {
+        $this->dao->rejectPetition($id);
+    }
+
+    public function closePetition($id)
+    {
+        $this->dao->closePetition($id);
+    }
+
+    public function sendEmail($id)
+    {
+        $petition = $this->eventService->showPetition($id);
+        $campaigner = $this->eventService->getCampaigner($petition->idCampaigner);
+        $emailCampaigner = $campaigner->email;
+    }
+
+    public function allDonation()
+    {
+        return $this->dao->allDonation();
+    }
+
+    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
+    public function adminSortDonation($request)
+    {
+        $category = $this->eventService->categorySelect($request);
+        // dd($category . " " . $request->sortBy . " " . $request->typeDonation);
+
+        //jika tidak sort dan tidak pilih category
+        if ($request->sortBy == NONE && $category == 0) {
+            return $this->eventService->donationType($request->typeDonation);
+        }
+
+        if ($request->typeDonation == BERLANGSUNG) {
+            // Jika sort dipilih
+            if ($request->sortBy == DEADLINE) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortDonationCategory($category, ACTIVE, DEADLINE_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortDonation(ACTIVE, DEADLINE_COLUMN);
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == SMALL_COLLECTED) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortDonationCategory($category, ACTIVE, COLLECTED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortDonation(ACTIVE, COLLECTED_COLUMN);
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == NONE) {
+                return $this->dao->donationByCategory($category, ACTIVE);
+            }
+        }
+        if ($request->typeDonation == SELESAI) {
+            // Jika sort dipilih
+            if ($request->sortBy == DEADLINE) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortDonationCategory($category, FINISHED, DEADLINE_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortDonation(FINISHED, DEADLINE_COLUMN);
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == SMALL_COLLECTED) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortDonationCategory($category, FINISHED, COLLECTED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortDonation(FINISHED, COLLECTED_COLUMN);
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == NONE) {
+                return $this->dao->donationByCategory($category, FINISHED);
+            }
+        }
+        if ($request->typeDonation == DIBATALKAN) {
+            // Jika sort dipilih
+            if ($request->sortBy == DEADLINE) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortDonationCategory($category, CANCELED, DEADLINE_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortDonation(CANCELED, DEADLINE_COLUMN);
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == SMALL_COLLECTED) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortDonationCategory($category, CANCELED, COLLECTED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortDonation(CANCELED, COLLECTED_COLUMN);
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == NONE) {
+                return $this->dao->donationByCategory($category, CANCELED);
+            }
+        }
+        if ($request->typeDonation == BELUM_VALID) {
+            // Jika sort dipilih
+            if ($request->sortBy == DEADLINE) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortDonationCategory($category, NOT_CONFIRMED, DEADLINE_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortDonation(NOT_CONFIRMED, DEADLINE_COLUMN);
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == SMALL_COLLECTED) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortDonationCategory($category, NOT_CONFIRMED, COLLECTED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortDonation(NOT_CONFIRMED, COLLECTED_COLUMN);
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == NONE) {
+                return $this->dao->donationByCategory($category, NOT_CONFIRMED);
+            }
+        }
+        if ($request->typeDonation == SEMUA) {
+            // Jika sort dipilih
+            if ($request->sortBy == DEADLINE) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->allStatusSortDonationCategory($category, DEADLINE_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->allStatusSortDonation(DEADLINE_COLUMN);
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == SMALL_COLLECTED) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->allStatusSortDonationCategory($category, COLLECTED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->allStatusSortDonation(COLLECTED_COLUMN);
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == NONE) {
+                return $this->dao->allStatusDonationByCategory($category);
+            }
+        }
     }
 }

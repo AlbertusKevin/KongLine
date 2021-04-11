@@ -9,6 +9,9 @@ const checkTypePetition = (type) => {
     if (type.includes("Menang")) {
         return "menang";
     }
+    if (type.includes("Selesai")) {
+        return "selesai";
+    }
     if (type.includes("Petisi")) {
         return "petisi_saya";
     }
@@ -105,6 +108,35 @@ const emptySearchTablePetition = (keyword) => {
     return /*html*/ `
     <tr>
         <td colspan="6">Petisi dengan judul ~${keyword}~ tidak ditemukan</td>
+    </tr>
+        `;
+};
+
+const changeTableDonation = (donation) => {
+    return /*html*/ `
+    <tr>
+        <td>${donation.created_at}</td>
+        <td><a href="/donation/${donation.id}">${donation.title}</a></td>
+        <td>${donation.category}</td>
+        <td>${donation.donationTarget}</td>
+        <td>${donation.deadline}</td>
+        <td>${donation.status}</td>
+    </tr>
+        `;
+};
+
+const emptyTableDonation = () => {
+    return /*html*/ `
+    <tr>
+        <td colspan="6">Belum ada donasi pada daftar ini</td>
+    </tr>
+        `;
+};
+
+const emptySearchTableDonation = (keyword) => {
+    return /*html*/ `
+    <tr>
+        <td colspan="6">Donasi dengan judul ~${keyword}~ tidak ditemukan</td>
     </tr>
         `;
 };
@@ -255,7 +287,7 @@ const noListDonation = () => {
     `;
 };
 
-const sortListPetition = (sortBy, category, typePetition) => {
+const sortListPetition = (sortBy, category) => {
     const url = getNowURL();
 
     $.ajax({
@@ -283,6 +315,27 @@ const sortListPetition = (sortBy, category, typePetition) => {
                     html += emptyTablePetition();
                 }
                 $("#petition-list").html(html);
+            }
+        },
+    });
+};
+
+const adminSortListDonation = (sortBy, category, typeDonation) => {
+    $.ajax({
+        url: "/admin/donation/sort",
+        data: { sortBy, category, typeDonation },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                data.forEach((donation) => {
+                    html += changeTableDonation(donation);
+                });
+
+                $("#donation-list").html(html);
+            } else {
+                html += emptyTableDonation();
+                $("#donation-list").html(html);
             }
         },
     });
@@ -562,7 +615,16 @@ $(".sort-select-donation").on("click", function (e) {
     $(this).addClass("active");
 
     let category = $("#category-donation-selected").val();
-    sortListDonation(sortBy, category);
+
+    if (getNowURL() == "admin") {
+        const typeDonation = checkTypePetition(
+            $(".donation-type.btn-primary").html()
+        );
+
+        adminSortListDonation(sortBy, category, typeDonation);
+    } else {
+        sortListDonation(sortBy, category, typeDonation);
+    }
 });
 
 $(".category-select-donation").on("click", function (e) {
@@ -574,7 +636,48 @@ $(".category-select-donation").on("click", function (e) {
     $(this).addClass("active");
 
     let sortBy = $("#sort-donation-selected").val();
-    sortListDonation(sortBy, category);
+
+    if (getNowURL() == "admin") {
+        const typeDonation = checkTypePetition(
+            $(".donation-type.btn-primary").html()
+        );
+
+        adminSortListDonation(sortBy, category, typeDonation);
+    } else {
+        sortListDonation(sortBy, category);
+    }
+});
+
+$(".donation-type").on("click", function () {
+    // cari yang ada class btn-primary
+    $(".donation-type").removeClass("btn-primary");
+    $(".donation-type").addClass("btn-light");
+
+    $(this).addClass("btn-primary");
+    $(this).removeClass("btn-light");
+
+    let typeDonation = $(this).html();
+    typeDonation = checkTypePetition(typeDonation);
+
+    $.ajax({
+        url: "/admin/donation/type",
+        data: { typeDonation },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                data.forEach((donation) => {
+                    html += changeTableDonation(donation);
+                });
+
+                $("#donation-list").html(html);
+            } else {
+                html += emptyTableDonation();
+
+                $("#donation-list").html(html);
+            }
+        },
+    });
 });
 
 $(".show-budgeting").on("click", function () {

@@ -44,5 +44,11 @@ class EventStatusSeeder extends Seeder
                 'description' => 'canceled'
             ]
         );
+        DB::table('event_status')->insert(
+            [
+                'id' => 5,
+                'description' => 'rejected'
+            ]
+        );
     }
 }

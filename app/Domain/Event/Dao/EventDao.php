@@ -599,6 +599,23 @@ class EventDao
         return Transaction::where('idParticipant', $idUser)->where('idDonation', $idEvent)->first();
     }
 
+    public function allDonation()
+    {
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
+            ->get();
+    }
+
+    public function selectDonation($status)
+    {
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->where('status', $status)
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
+            ->get();
+    }
+
     //! Mencari Donasi sesuai dengan 
     //! status event aktif dan keyword tertentu
     public function searchDonationByKeyword($status, $keyword)

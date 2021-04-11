@@ -76,4 +76,47 @@ class AdminController extends Controller
         // dd($petitionList);
         return view('admin.listPetition', compact('listCategory', 'petitionList'));
     }
+
+    public function acceptPetition($id)
+    {
+        //ubah status dari 0 menjadi 1
+        $this->admin_service->acceptPetition($id);
+        //send email bahwa petisi yang dibuat sudah disetujui
+        $message = "Event yang kamu ajukan telah disetujui.";
+        $this->admin_service->sendEmail($id, $message);
+    }
+
+    public function rejectPetition(Request $request, $id)
+    {
+        //ubah status dari 0 menjadi 5
+        $this->admin_service->rejectPetition($id);
+        //send email bahwa petisi yang dibuat sudah disetujui
+        $message = $request->rejectEvent;
+        $this->admin_service->sendEmail($id, $message);
+    }
+
+    public function closePetition(Request $request, $id)
+    {
+        //ubah status dari 0 menjadi 3
+        $this->admin_service->closePetition($id);
+        //send email bahwa petisi yang dibuat sudah disetujui
+        $message = $request->closeEvent;
+        $this->admin_service->sendEmail($id, $message);
+    }
+
+    //? ========================================
+    //! ~~~~~~~~~~~~~~~~ Donasi ~~~~~~~~~~~~~~~~
+    //? ========================================
+    public function getListDonation()
+    {
+        $listCategory = $this->eventService->listCategory();
+        $donationList = $this->admin_service->allDonation();
+
+        return view("admin.listDonation", compact('listCategory', 'donationList'));
+    }
+
+    public function adminSortDonation(Request $request)
+    {
+        return $this->admin_service->adminSortDonation($request);
+    }
 }

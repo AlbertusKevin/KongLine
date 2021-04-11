@@ -113,12 +113,21 @@ Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show'
 //? =========================
 //! Route Admin
 //? =========================
-Route::get('/admin/listUser', [AdminController::class, 'getAll']);
-Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
-
-Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
-
 Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middleware('admin');
 
+Route::get('/admin/listUser', [AdminController::class, 'getAll']);
+Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
+Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
 
-Route::get('/admin/petition', [AdminController::class, 'getListPetition'])->name('admin')->middleware('admin');
+Route::get('/admin/petition', [AdminController::class, 'getListPetition'])->middleware('admin');
+Route::get('/admin/petition/accept/{id}', [AdminController::class, 'acceptPetition'])->middleware('admin');
+Route::get('/admin/petition/reject/{id}', [AdminController::class, 'rejectPetition'])->middleware('admin');
+Route::get('/admin/petition/close/{id}', [AdminController::class, 'closePetition'])->middleware('admin');
+
+Route::get('/admin/donation', [AdminController::class, 'getListDonation'])->middleware('admin');
+
+//* -------- ajax -----------
+Route::get('/admin/donation/sort', [AdminController::class, 'adminSortDonation'])->middleware('admin');
+// Route::get('/admin/donation/search', [AdminController::class, 'getListDonation'])->middleware('admin');
+// Route::get('/admin/donation/category', [AdminController::class, 'getListDonation'])->middleware('admin');
+Route::get('/admin/donation/type', [EventController::class, 'donationType']);
