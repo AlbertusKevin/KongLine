@@ -17,7 +17,9 @@ class AdminService
     //Mengambil semua user yang ada di DB
     public function getAllUser()
     {
-        return $this->dao->getAllUser();
+        $users = $this->dao->getAllUser();
+        $eventCount = $this->countEventParticipate($users);
+        return $users;
     }
 
     // Menghitung jumlah partisipasi setiap user
@@ -32,6 +34,7 @@ class AdminService
             $countDonation = $this->dao->getCountParticipateDonation($user->id);
 
             $total = $countDonation + $countPetition;
+            $this->dao->updateUserCountEvent($user->id, $total);
             array_push($totalCount, $user->id, $total);
             array_push($eventCount, $totalCount);
         }

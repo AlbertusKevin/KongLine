@@ -42,9 +42,7 @@ class AdminDao
 
     public function getCountParticipatePetition($id)
     {
-        $count = ParticipatePetition::where('idParticipant', $id)->count();
-        $user = User::where('idParticipant', $id);
-        return $count;
+        return ParticipatePetition::where('idParticipant', $id)->count();
     }
 
     public function getCountParticipateDonation($id)
@@ -136,5 +134,12 @@ class AdminDao
         return User::where('status' , '=', 3)
             ->where('name', 'LIKE', '%' . $keyword . '%')
             ->get();
+    }
+
+    public function updateUserCountEvent($userId, $total)
+    {
+        $user = User::where('id','=',$userId)->first();
+        $user->countEvent = $total;
+        $user->save();
     }
 }
