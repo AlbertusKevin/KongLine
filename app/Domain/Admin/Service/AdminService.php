@@ -483,8 +483,21 @@ class AdminService
         $this->dao->changeEventStatus($id, CLOSED, DONATION);
     }
 
+    public function confirmTransaction($id)
+    {
+    }
+
+    public function rejectTransaction($id)
+    {
+    }
+
     public function getAllNotConfirmedTransaction()
     {
         return $this->dao->getAllNotConfirmedTransaction();
+    }
+
+    public function getAUserTransaction($id)
+    {
+        return $this->dao->getAUserTransaction($id);
     }
 }

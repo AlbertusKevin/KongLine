@@ -8,6 +8,7 @@ use App\Domain\Event\Entity\ParticipateDonation;
 use App\Domain\Event\Entity\ParticipatePetition;
 use App\Domain\Event\Entity\Petition;
 use App\Domain\Event\Entity\Transaction;
+use Illuminate\Support\Facades\DB;
 
 class AdminDao
 {
@@ -271,12 +272,30 @@ class AdminDao
 
     public function getAllNotConfirmedTransaction()
     {
-        return Transaction::selectRaw('transaction.created_at, donation.title, users.name, transaction.nominal')
-            ->join('participate_donation', 'participate_donation.idDonation', 'transaction.idDonation')
-            ->join('users', 'participate_donation.idParticipant', 'users.id')
+        return Transaction::selectRaw('transaction.id, transaction.idParticipant, transaction.created_at, donation.title, users.name, transaction.nominal')
+            ->join('participate_donation', function ($join) {
+                $join->on('participate_donation.idParticipant', '=', 'transaction.idParticipant')
+                    ->on('transaction.idDonation', '=', 'participate_donation.idDonation');
+            })
             ->join('donation', 'donation.id', 'participate_donation.idDonation')
+            ->join('users', 'participate_donation.idParticipant', 'users.id')
             ->get();
+        // SELECT * FROM `transaction`
+        // JOIN `participate_donation` on transaction.idParticipant = participate_donation.idParticipant
+        // JOIN `donation` on donation.id = participate_donation.idDonation
+        // JOIN `users` on participate_donation.idParticipant = users.id
+        // WHERE transaction.idParticipant = participate_donation.idParticipant AND transaction.idDonation = participate_donation.idDonation
+    }
 
-        // return Transaction::all();
+    public function getAUserTransaction($id)
+    {
+        return Transaction::selectRaw('transaction.*, users.name')
+            ->where('transaction.id', $id)
+            ->join('participate_donation', function ($join) {
+                $join->on('participate_donation.idParticipant', 'transaction.idParticipant')
+                    ->on('participate_donation.idDonation', 'transaction.idDonation');
+            })
+            ->join('users', 'participate_donation.idParticipant', 'users.id')
+            ->first();
     }
 }

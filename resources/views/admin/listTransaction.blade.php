@@ -41,8 +41,9 @@
                                 <td>{{ $transaction->created_at }}</td>
                                 <td>{{ $transaction->title }}</td>
                                 <td>{{ $transaction->name }}</td>
-                                <td>{{ $transaction->nominal }}</td>
-                                <td><a href="" type="button" class="btn btn-primary">detail</a></td>
+                                <td>Rp. {{ number_format($transaction->nominal, 2, ',', '.') }}</td>
+                                <td><a href="/admin/donation/transaction/{{ $transaction->id }}" type="button"
+                                        class="btn btn-primary">detail</a></td>
                             </tr>
                         @endforeach
                     </tbody>

@@ -121,7 +121,16 @@ class AdminController extends Controller
     public function getAllNotConfirmedTransaction()
     {
         $transactions = $this->admin_service->getAllNotConfirmedTransaction();
+        // dd($transactions);
         return view('admin.listTransaction', compact('transactions'));
+    }
+
+    public function getATransaction($id)
+    {
+
+        $transaction = $this->admin_service->getAUserTransaction($id);
+        // dd($transaction);
+        return view('admin.detailTransaction', compact('transaction'));
     }
 
     public function donationType(Request $request)
@@ -167,5 +176,25 @@ class AdminController extends Controller
         // $message = $request->closeEvent;
         // $this->admin_service->sendEmail($id, $message);
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penutupan event donasi telah berhasil.']);
+    }
+
+    public function confirmTransaction($id)
+    {
+        //ubah status dari 0 menjadi 5
+        $this->admin_service->confirmTransaction($id);
+        //todo: send email
+        // $message = "Transaksi donasi Anda selesai diproses. Terimakasih telah berpartisipasi.";
+        // $this->admin_service->sendEmail($id, $message);
+        return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Transaksi telah berhasil disetujui.']);
+    }
+
+    public function rejectTransaction(Request $request, $id)
+    {
+        //ubah status dari 0 menjadi 5
+        $this->admin_service->rejectTransaction($id);
+        //todo: send email
+        // $message = $request->rejectEvent;
+        // $this->admin_service->sendEmail($id, $message);
+        return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Penolakan transaksi telah selesai.']);
     }
 }
