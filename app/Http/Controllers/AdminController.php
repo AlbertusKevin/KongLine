@@ -62,4 +62,21 @@ class AdminController extends Controller
             'date' => $date,
         ]);
     }
+
+    public function sortListUser(Request $request)
+    {
+        $users =  $this->admin_service->sortListUser($request);
+        $eventCount = $this->admin_service->countEventParticipate($users);
+        $combine = [];
+        $sortCountEvent = 
+        $combine[] = $users;
+        $combine[] = $eventCount;
+
+        return json_encode($combine);
+    }
+
+    public function searchUser(Request $request)
+    {
+        return $this->admin_service->searchUser($request);
+    }
 }

@@ -42,7 +42,9 @@ class AdminDao
 
     public function getCountParticipatePetition($id)
     {
-        return ParticipatePetition::where('idParticipant', $id)->count();
+        $count = ParticipatePetition::where('idParticipant', $id)->count();
+        $user = User::where('idParticipant', $id);
+        return $count;
     }
 
     public function getCountParticipateDonation($id)
@@ -67,6 +69,39 @@ class AdminDao
         return User::where('status', '==', 3)->get();
     }
 
+    public function sortByTanggalDibuat($role)
+    {
+        return User::where('role', $role)
+            ->orderBy('created_at', 'asc')->get();
+    }
+
+    public function sortByNama($role)
+    {
+        return User::where('role', $role)
+            ->orderBy('name', 'asc')->get();
+    }
+
+    public function sortByEmail($role)
+    {
+        return User::where('role', $role)
+            ->orderBy('email', 'asc')->get();
+    }
+
+    public function sortByTanggalDibuatAllUser()
+    {
+        return User::orderBy('created_at', 'asc')->get();
+    }
+
+    public function sortByNamaAllUser()
+    {
+        return User::orderBy('name', 'asc')->get();
+    }
+
+    public function sortByEmailAllUser()
+    {
+        return User::orderBy('email', 'asc')->get();
+    }
+
     public function getListDonationLimit()
     {
         return Donation::all()->sortByDesc("created_at")->take(3);
@@ -75,5 +110,31 @@ class AdminDao
     public function getListPetitionLimit()
     {
         return Petition::all()->sortByDesc("created_at")->take(3);
+    }
+    
+    public function searchUserAll($keyword)
+    {
+        return User::where('name', 'LIKE', '%' . $keyword . '%')->get();
+    }
+
+    public function searchUserParticipant($keyword)
+    {
+        return User::where('role', '=', 'participant')
+            ->where('name', 'LIKE', '%' . $keyword . '%')
+            ->get();
+    }
+
+    public function searchUserCampaigner($keyword)
+    {
+        return User::where('role' ,'=', 'campaigner')
+            ->where('name', 'LIKE', '%' . $keyword . '%')
+            ->get();
+    }
+
+    public function searchUserPengajuan($keyword)
+    {
+        return User::where('status' , '=', 3)
+            ->where('name', 'LIKE', '%' . $keyword . '%')
+            ->get();
     }
 }

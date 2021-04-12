@@ -111,4 +111,62 @@ class AdminService
     {
         return Carbon::now()->format('d-m-Y');
     }
+
+    public function sortlistUser($request)
+    {
+        if ($request->sortBy == 'None'){
+            return $this->listUserByRole($request->roleUserType);
+        }
+
+        if($request->sortBy == 'Tanggal dibuat'){
+            if($request->roleUserType == 'semua'){
+                return $this->dao->sortByTanggalDibuatAllUser();
+            }else{
+                return $this->dao->sortByTanggalDibuat($request->roleUserType);
+            }
+        }
+
+        if($request->sortBy == 'Nama'){
+            if($request->roleUserType == 'semua'){
+                return $this->dao->sortByNamaAllUser();
+            }else{
+                return $this->dao->sortByNama($request->roleUserType);
+            }
+        }
+
+        if($request->sortBy == 'Email'){
+            if($request->roleUserType == 'semua'){
+                return $this->dao->sortByEmailAllUser();
+            }else{
+                return $this->dao->sortByEmail($request->roleUserType);
+            }
+        }
+
+        if($request->sortBy == 'Jumlah Partisipasi'){
+            if($request->roleUserType == 'semua'){
+                return $this->dao->listUserByAll();
+            }else{
+                return $this->dao->listUserByRole($request->roleUserType);
+            }
+        }
+    }
+
+    public function searchUser($request)
+    {
+        if ($request->roleUserType == 'semua'){
+            return $this->dao->searchUserAll($request->keyword);
+        }
+
+        if ($request->roleUserType == 'participant'){
+            return $this->dao->searchUserParticipant($request->keyword);
+        }
+
+        if ($request->roleUserType == 'campaigner'){
+            return $this->dao->searchUserCampaigner($request->keyword);
+        }
+
+        if ($request->roleUserType == 'pengajuan'){
+            return $this->dao->searchUserPengajuan($request->keyword);
+        }
+    }
 }

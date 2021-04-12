@@ -7,7 +7,7 @@
 @section('content')
 <div class="container">
     <div class="form-inline my-2 my-lg-0 justify-content-center">
-        <input class="form-control mr-sm-2 w-50 mt-5" id="search-petition" type="search" placeholder="Cari Donasi"
+        <input class="form-control mr-sm-2 w-50 mt-5" id="search-user" type="search" placeholder="Cari User"
             aria-label="Cari Donasi">
         <input type="hidden" id="sort-by" value="None">
         <input type="hidden" id="category-choosen" value="None">
@@ -17,16 +17,16 @@
                 Sort By
             </button>
             <div class="dropdown-menu" aria-labelledby="sort-by">
-                <a class="dropdown-item sort-petition font-weight-bold">None</a>
-                <a class="dropdown-item sort-petition">Tanggal dibuat</a>
-                <a class="dropdown-item sort-petition">Nama</a>
-                <a class="dropdown-item sort-petition">Email</a>
-                <a class="dropdown-item sort-petition">Jumlah Partisipasi</a>
+                <a class="dropdown-item sort-list-user font-weight-bold btn-sort">None</a>
+                <a class="dropdown-item sort-list-user">Tanggal dibuat</a>
+                <a class="dropdown-item sort-list-user">Nama</a>
+                <a class="dropdown-item sort-list-user">Email</a>
+                <a class="dropdown-item sort-list-user">Jumlah Partisipasi</a>
             </div>
         </div>
         
     <div class="text-center my-5">
-        <button href="/listUser" type="button" class="btn btn-primary role-type rounded-pill">Semua</button>
+        <button href="/listUser" type="button" class="btn btn-primary role-type rounded-pill btn-role">Semua</button>
         <button href="/listUser" type="button" class="btn btn-light role-type rounded-pill ml-3">Participant</button>
         <button href="/listUser" type="button" class="btn btn-light role-type rounded-pill ml-3">Campaigner</button>
         <button href="/listUser" type="button" class="btn btn-light role-type rounded-pill ml-3">Pengajuan</button>

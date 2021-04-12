@@ -426,7 +426,7 @@ $(".show-comment").on("click", function () {
 });
 
 // ADMIN
-const viewUserParticipantRole = (user, countParticipated) => {
+const viewUserParticipantRole = (user) => {
     console.log("role : " + user.role);
     // console.log("tanggal : " + user.created_at);
     return /*html*/ `
@@ -441,7 +441,7 @@ const viewUserParticipantRole = (user, countParticipated) => {
                 ${user.email}
             </td>
             <td>
-                ${countParticipated[1]}
+                ${user.countEvent}
             </td>
             <td class="text-left">
                     <span class="badge badge-primary p-2">${user.role}</span>
@@ -450,7 +450,7 @@ const viewUserParticipantRole = (user, countParticipated) => {
     `;
 };
 
-const viewUserCampaignerRole = (user, countParticipated) => {
+const viewUserCampaignerRole = (user) => {
     console.log("role : " + user.role);
     // console.log("tanggal : " + user.created_at);
     return /*html*/ `
@@ -465,7 +465,7 @@ const viewUserCampaignerRole = (user, countParticipated) => {
                 ${user.email}
             </td>
             <td>
-                ${countParticipated[1]}
+                ${user.countEvent}
             </td>
             <td class="text-left">
                     <span class="badge badge-success p-2">${user.role}</span>
@@ -474,7 +474,7 @@ const viewUserCampaignerRole = (user, countParticipated) => {
     `;
 };
 
-const viewUserGuestRole = (user, countParticipated) => {
+const viewUserGuestRole = (user) => {
     console.log("role : " + user.role);
     // console.log("tanggal : " + user.created_at);
     return /*html*/ `
@@ -489,7 +489,7 @@ const viewUserGuestRole = (user, countParticipated) => {
                 ${user.email}
             </td>
             <td>
-                ${countParticipated[1]}
+                ${user.countEvent}
             </td>
             <td class="text-left">
                     <span class="badge badge-dark p-2">${user.role}</span>
@@ -528,6 +528,9 @@ $(".role-type").on("click", function () {
 
     $(this).addClass("btn-primary");
     $(this).removeClass("btn-light");
+
+    $(".role-type").removeClass("btn-role");
+    $(this).addClass("btn-role");
 
     let roleType = $(this).html();
     roleType = roleTypeUser(roleType);
@@ -593,3 +596,86 @@ const changeDateFormat = (date) => {
     return format;
 }
 
+// Trigger Tombol Sort, get Perintah
+$(".sort-list-user").on("click", function (e) {
+    e.preventDefault();//To Cancel the event
+    let sortBy = $(this).html();
+    $("#sort-by").val(sortBy);
+
+    $(".sort-list-user").removeClass("btn-sort");
+    $(this).addClass("btn-sort");
+    
+    $(".sort-list-user").removeClass("font-weight-bold");
+    $(this).addClass("font-weight-bold");
+    
+    let roleUserType = roleTypeUser($(".btn-role").html());
+
+    console.log("Sort By : ", sortBy);
+    console.log("Role User : ", roleUserType);
+
+    sortListUser(sortBy, roleUserType);
+});
+
+const sortListUser = (sortBy, roleUserType) => {
+    $.ajax({
+        url: "/admin/listUser/sort",
+        data: {sortBy,roleUserType},
+        dataType: "json",
+        success: (data) => {
+            console.log(data);
+            let html = "";
+            if(data[1].length != 0){
+                const pengguna = data[0];
+                const countEvent = data[1];
+                
+                for(let i = 0; i < pengguna.length; i++){
+                    if(pengguna[i].role == "participant"){
+                        html += viewUserParticipantRole(pengguna[i],countEvent[i]);
+                    }else if (pengguna[i].role == "campaigner"){
+                        html += viewUserCampaignerRole(pengguna[i], countEvent[i]);
+                    }else if (pengguna[i].role == "guest"){
+                        html += viewUserGuestRole(pengguna[i], countEvent[i]);
+                    }
+                }
+
+                $("#user-list-role").html(html);
+            } else{
+                html += viewUserByRoleIsEmpty(roleUserType);
+                $("#user-list-role").html(html);
+            }
+        },
+    });
+};
+
+$("#search-user").on("keyup", function (){
+    let keyword = $(this).val();
+    let roleUserType =  roleTypeUser($(".btn-role").html());
+
+    // console.log("Keyword : ", keyword, "Role User : ", roleUserType);
+
+
+    $.ajax({
+        url: "/admin/listUser/search",
+        data: {keyword, roleUserType},
+        dataType: "json",
+        success: (data) => {
+            // console.log(data);
+            let html = "";
+            if(data.length != 0){
+                data.forEach((user) => {
+                    if (user.role == 'participant'){
+                        html += viewUserParticipantRole(user);
+                    }else if(user.role == 'campaigner'){
+                        html += viewUserCampaignerRole(user);
+                    }else if(user.role == 'guest'){
+                        html += viewUserGuestRole(user);
+                    }
+                });
+                $("#user-list-role").html(html);
+            }else{
+                html += viewUserByRoleIsEmpty();
+                $("#user-list-role").html(html);
+            }
+        }
+    });
+});

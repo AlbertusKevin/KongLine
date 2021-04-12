@@ -112,6 +112,8 @@ Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show'
 //? =========================
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
 Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
+Route::get('/admin/listUser/sort', [AdminController::class, 'sortListUser']);//Sort List User
+Route::get('/admin/listUser/search', [AdminController::class, 'searchUser']);
 
 Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
 
