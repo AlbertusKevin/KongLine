@@ -79,4 +79,9 @@ class AdminController extends Controller
     {
         return $this->admin_service->searchUser($request);
     }
+
+    public function userInfo(Request $request)
+    {
+        return view('/admin/userAdmin');
+    }
 }

@@ -118,3 +118,5 @@ Route::get('/admin/listUser/search', [AdminController::class, 'searchUser']);
 Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
 
 Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middleware('admin');
+
+Route::get('/admin/user/{id}', [AdminController::class, 'userInfo']);
