@@ -44,41 +44,19 @@
       
     </div>
     <div class= "row">
-      {{-- @foreach() --}}
+      @foreach( $donasi as $d)
       <div class="card col m-2" style="padding: 0; ">
         <div style="position:relative;">
-          <img src="{{ asset('img/baby.png') }}" class="card-img-top" alt="donation picture">
-          <p  class="donate-count" >10 Donatur</p>
+          <img src="{{ $d->photo }}" class="card-img-top " alt="donation picture">
+          <p  class="donate-count" >{{ $d->participatedonation->count() }} Donatur</p>
         </div>
         <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <h5 class="card-title">User</h5>
-          <a href="#" class=" w-100 btn btn-primary">Donate</a>
+          <p class="card-text">{{ $d->title }}</p>
+          <h5 class="card-title">{{ $d->users->name }}</h5>
+          <a href="#" class=" w-100 btn btn-primary"> Detail </a>
         </div>
       </div>
-      <div class="card col m-2" style="padding: 0; ">
-        <div style="position:relative;">
-          <img src="{{ asset('img/baby.png') }}" class="card-img-top" alt="donation picture">
-          <p  class="donate-count" >10 Donatur</p>
-        </div>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <h5 class="card-title">User</h5>
-          <a href="#" class=" w-100 btn btn-primary">Donate</a>
-        </div>
-      </div>
-      <div class="card col m-2" style="padding: 0; ">
-        <div style="position:relative;">
-          <img src="{{ asset('img/baby.png') }}" class="card-img-top" alt="donation picture">
-          <p  class="donate-count" >10 Donatur</p>
-        </div>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <h5 class="card-title">User</h5>
-          <a href="#" class=" w-100 btn btn-primary">Donate</a>
-        </div>
-      </div>
-      {{-- @endforeach --}}
+      @endforeach
     </div>
     
   </section>
@@ -87,7 +65,7 @@
     <div class="row"> 
       <h2 class="col">Petisi</h2>
       <div class="col text-right align-self-center">
-        <a class=" link-button"> Lihat Selengkapnya <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+        <a class=" link-button" href="/petition"> Lihat Selengkapnya <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
           <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
         </svg></a>
@@ -95,41 +73,19 @@
       
     </div>
     <div class= "row">
-      {{-- @foreach() --}}
+      @foreach($petisi as $p)
       <div class="card col m-2" style="padding: 0; ">
         <div style="position:relative;">
-          <img src="{{ asset('img/baby.png') }}" class="card-img-top" alt="donation picture">
-          <p  class="donate-count" >10 Donatur</p>
+          <img src="{{ $p->photo }}" class="card-img-top" alt="petition picture">
+          <p  class="donate-count">{{ $p->signedCollected }} Partisipan</p>
         </div>
         <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <h5 class="card-title">User</h5>
-          <a href="#" class=" w-100 btn btn-primary">Vote</a>
+          <p class="card-text">{{ $p->title }}</p>
+          <h5 class="card-title">{{ $p->users->name }}</h5>
+          <a href="/petition/{{ $p->id }}" class=" w-100 btn btn-primary"> Detail </a>
         </div>
       </div>
-      <div class="card col m-2" style="padding: 0; ">
-        <div style="position:relative;">
-          <img src="{{ asset('img/baby.png') }}" class="card-img-top" alt="donation picture">
-          <p  class="donate-count" >10 Donatur</p>
-        </div>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <h5 class="card-title">User</h5>
-          <a href="#" class=" w-100 btn btn-primary">Vote</a>
-        </div>
-      </div>
-      <div class="card col m-2" style="padding: 0; ">
-        <div style="position:relative;">
-          <img src="{{ asset('img/baby.png') }}" class="card-img-top" alt="donation picture">
-          <p  class="donate-count" >10 Donatur</p>
-        </div>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <h5 class="card-title">User</h5>
-          <a href="#" class=" w-100 btn btn-primary">Vote</a>
-        </div>
-      </div>
-      {{-- @endforeach --}}
+      @endforeach
     </div>
     
     <button class="open-button" onclick="openChat()">Chat</button>

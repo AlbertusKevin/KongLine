@@ -20,7 +20,7 @@ class DonationSeeder extends Seeder
                 'category' => 1,
                 'deadline' => new Carbon('first day of March 2021'),
                 'idCampaigner' => 2,
-                'photo' => 'images/photo1',
+                'photo' => 'img/donation1.png',
                 'purpose' => 'Cancer',
                 'status' => 1,
                 'title' => 'Help Cancer',

@@ -24,6 +24,11 @@ class Donation extends Model
 
     public function participatedonation()
     {
-        return $this->hasMany(ParticipateDonation::class);
+        return $this->hasMany(ParticipateDonation::class, 'id','idDonation');
+    }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'idCampaigner', 'id');
     }
 }

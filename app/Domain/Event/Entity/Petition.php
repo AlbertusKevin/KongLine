@@ -15,11 +15,17 @@ class Petition extends Event
     // Relasi
     public function participatepetition()
     {
-        return $this->hasMany(ParticipatePetition::class);
+        return $this->hasMany(ParticipatePetition::class ,'id','idPetition');
     }
 
     public function updatenews()
     {
         return $this->hasMany(UpdateNews::class);
     }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'idCampaigner', 'id');
+    }
+
 }

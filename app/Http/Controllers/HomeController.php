@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Domain\Event\Service\EventService;
 
 class HomeController extends Controller
 {
@@ -11,8 +12,21 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    private $eventService;
+
+    public function __construct()
+    {
+        $this->eventService = new EventService();
+    }
+
     public function index()
     {
-        return view('home');
+        $svc = new EventService();
+        $donasi = $svc->getDonationLimit();
+        $petition = $svc->getPetitionLimit();
+        return view('home', [
+            'donasi' => $donasi,
+            'petisi' => $petition, 
+        ]);
     }
 }
