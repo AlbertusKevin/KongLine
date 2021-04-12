@@ -14,10 +14,12 @@ use Illuminate\Support\Str;
 class EventService
 {
     private $dao;
+    private $adminService;
 
     public function __construct()
     {
         $this->dao = new EventDao();
+        $this->adminService = new AdminService();
     }
 
     //* =========================================================================================
@@ -215,6 +217,10 @@ class EventService
 
         if ($request->typePetition == BELUM_VALID) {
             return $this->dao->listPetitionType(NOT_CONFIRMED);
+        }
+
+        if ($request->typePetition == SEMUA) {
+            return $this->adminService->allPetition();
         }
 
         return $this->dao->listPetitionByMe($user->id);

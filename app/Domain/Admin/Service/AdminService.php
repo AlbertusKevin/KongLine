@@ -17,6 +17,13 @@ class AdminService
         $this->eventService = new EventService();
     }
 
+    public function sendEmail($id)
+    {
+        $petition = $this->eventService->showPetition($id);
+        $campaigner = $this->eventService->getCampaigner($petition->idCampaigner);
+        $emailCampaigner = $campaigner->email;
+    }
+
     //Mengambil semua user yang ada di DB
     public function getAllUser()
     {
@@ -122,24 +129,17 @@ class AdminService
 
     public function acceptPetition($id)
     {
-        $this->dao->acceptPetition($id);
+        $this->dao->changeEventStatus($id, ACTIVE, PETITION);
     }
 
     public function rejectPetition($id)
     {
-        $this->dao->rejectPetition($id);
+        $this->dao->changeEventStatus($id, REJECTED, PETITION);
     }
 
     public function closePetition($id)
     {
-        $this->dao->closePetition($id);
-    }
-
-    public function sendEmail($id)
-    {
-        $petition = $this->eventService->showPetition($id);
-        $campaigner = $this->eventService->getCampaigner($petition->idCampaigner);
-        $emailCampaigner = $campaigner->email;
+        $this->dao->changeEventStatus($id, CLOSED, PETITION);
     }
 
     public function allDonation()
@@ -466,5 +466,20 @@ class AdminService
                 }
             }
         }
+    }
+
+    public function acceptDonation($id)
+    {
+        $this->dao->changeEventStatus($id, ACTIVE, DONATION);
+    }
+
+    public function rejectDonation($id)
+    {
+        $this->dao->changeEventStatus($id, REJECTED, DONATION);
+    }
+
+    public function closeDonation($id)
+    {
+        $this->dao->changeEventStatus($id, CLOSED, DONATION);
     }
 }

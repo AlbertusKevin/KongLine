@@ -17,6 +17,8 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Urutkan
                     </button>
+                    <br>
+                    <small class="text-muted" id="sort-label">None</small>
                     <div class="dropdown-menu" aria-labelledby="dropdown-sort">
                         <a class="dropdown-item sort-select-donation active">None</a>
                         <a class="dropdown-item sort-select-donation">Tenggat Waktu</a>
@@ -33,8 +35,10 @@
                 <div class="dropdown transparent text-white">
                     <button class="btn dropdown-toggle text-white border" type="button" id="dropdown-category"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Kategori
+                        Kategori:
                     </button>
+                    <br>
+                    <small class="text-muted" id="category-label">None</small>
                     <div class="dropdown-menu" aria-labelledby="dropdown-category">
                         <a class="dropdown-item category-select-donation active">None</a>
                         @foreach ($categories as $category)

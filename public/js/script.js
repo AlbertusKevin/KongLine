@@ -287,7 +287,7 @@ const noListDonation = () => {
     `;
 };
 
-const sortListPetition = (sortBy, category) => {
+const sortListPetition = (sortBy, category, typePetition) => {
     const url = getNowURL();
 
     $.ajax({
@@ -476,10 +476,6 @@ $(".petition-type").on("click", function () {
                 "Lihat Petisi yang Telah Saya Tandatangani di Website Ini"
             );
         }
-    } else {
-        if (typePetition == "semua") {
-            window.location.href = `${baseURL}/admin/petition`;
-        }
     }
 
     $.ajax({
@@ -559,6 +555,8 @@ $(".sort-petition").on("click", function (e) {
     $(".sort-petition").removeClass("font-weight-bold");
     $(this).addClass("font-weight-bold");
 
+    $("#sort-label").html(sortBy);
+
     let category = $("#category-choosen").val();
     let typePetition = checkTypePetition(
         $(".petition-type.btn-primary").html()
@@ -573,6 +571,8 @@ $(".category-petition").on("click", function (e) {
 
     $(".category-petition").removeClass("font-weight-bold");
     $(this).addClass("font-weight-bold");
+
+    $("#category-label").html(category);
 
     let sortBy = $("#sort-by").val();
     let typePetition = checkTypePetition(
@@ -638,6 +638,7 @@ $(".sort-select-donation").on("click", function (e) {
     $(".sort-select-donation").removeClass("active");
     $(this).addClass("active");
 
+    $("#sort-label").html(sortBy);
     let category = $("#category-donation-selected").val();
 
     if (getNowURL() == "admin") {
@@ -659,6 +660,7 @@ $(".category-select-donation").on("click", function (e) {
     $(".category-select-donation").removeClass("active");
     $(this).addClass("active");
 
+    $("#category-label").html(category);
     let sortBy = $("#sort-donation-selected").val();
 
     if (getNowURL() == "admin") {

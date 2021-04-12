@@ -40,7 +40,7 @@
                             </div>
                         </div>
                     @elseif($user->role == ADMIN)
-                        <form action="/admin/petition/close/{{ $petition->id }}">
+                        <form action="/admin/petition/close/{{ $petition->id }}" method="POST">
                             @csrf
                             @method('patch')
                             <div class="form-group">
@@ -111,7 +111,7 @@
                         </div>
                     @else
                         @if ($petition->status == 0)
-                            <form action="/admin/petition/reject/{{ $petition->id }}">
+                            <form action="/admin/petition/reject/{{ $petition->id }}" method="POST">
                                 @csrf
                                 @method('patch')
                                 <div class="form-group">
@@ -122,7 +122,7 @@
                                 </div>
                                 <button type="submit" class="btn btn-danger close-event">Tolak Event</button>
                             </form>
-                            <form action="/admin/petition/accept/{{ $petition->id }}">
+                            <form action="/admin/petition/accept/{{ $petition->id }}" method="POST">
                                 @csrf
                                 @method('patch')
                                 <button type="submit" class="btn btn-primary approve-event mt-3">Setujui Event</button>

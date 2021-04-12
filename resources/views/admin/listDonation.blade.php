@@ -17,8 +17,10 @@
                     <div class="dropdown mt-5 mr-2">
                         <button class="btn btn-primary dropdown-toggle" type="button" id="sort-by" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
-                            Sort By
+                            Sort By:
                         </button>
+                        <br>
+                        <small class="text-muted" id="sort-label">None</small>
                         <div class="dropdown-menu" aria-labelledby="sort-by">
                             <a class="dropdown-item sort-select-donation font-weight-bold">None</a>
                             <a class="dropdown-item sort-select-donation">Tenggat Waktu</a>
@@ -28,8 +30,10 @@
                     <div class="dropdown mt-5">
                         <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown-category"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Category
+                            Category:
                         </button>
+                        <br>
+                        <small class="text-muted" id="category-label">None</small>
                         <div class="dropdown-menu" aria-labelledby="dropdown-category">
                             <a class="dropdown-item category-select-donation font-weight-bold">None</a>
                             @foreach ($listCategory as $category)

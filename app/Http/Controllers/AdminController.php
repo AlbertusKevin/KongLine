@@ -81,27 +81,30 @@ class AdminController extends Controller
     {
         //ubah status dari 0 menjadi 1
         $this->admin_service->acceptPetition($id);
-        //send email bahwa petisi yang dibuat sudah disetujui
-        $message = "Event yang kamu ajukan telah disetujui.";
-        $this->admin_service->sendEmail($id, $message);
+        //todo: send email
+        // $message = "Event yang kamu ajukan telah disetujui.";
+        // $this->admin_service->sendEmail($id, $message);
+        return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Event petisi telah berhasil dikonfirmasi.']);
     }
 
     public function rejectPetition(Request $request, $id)
     {
         //ubah status dari 0 menjadi 5
         $this->admin_service->rejectPetition($id);
-        //send email bahwa petisi yang dibuat sudah disetujui
-        $message = $request->rejectEvent;
-        $this->admin_service->sendEmail($id, $message);
+        //todo: send email
+        // $message = $request->rejectEvent;
+        // $this->admin_service->sendEmail($id, $message);
+        return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Penolakan Event petisi berhasil.']);
     }
 
     public function closePetition(Request $request, $id)
     {
         //ubah status dari 0 menjadi 3
         $this->admin_service->closePetition($id);
-        //send email bahwa petisi yang dibuat sudah disetujui
-        $message = $request->closeEvent;
-        $this->admin_service->sendEmail($id, $message);
+        //todo: send email
+        // $message = $request->closeEvent;
+        // $this->admin_service->sendEmail($id, $message);
+        return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Penutupan Event petisi berhasil.']);
     }
 
     //? ========================================
@@ -128,5 +131,35 @@ class AdminController extends Controller
     public function adminSearchDonation(Request $request)
     {
         return $this->admin_service->adminSearchDonation($request);
+    }
+
+    public function acceptDonation($id)
+    {
+        //ubah status dari 0 menjadi 1
+        $this->admin_service->acceptDonation($id);
+        //todo: send email
+        // $message = "Event yang kamu ajukan telah disetujui.";
+        // $this->admin_service->sendEmail($id, $message);
+        return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Donasi telah berhasil dikonfirmasi']);
+    }
+
+    public function rejectDonation(Request $request, $id)
+    {
+        //ubah status dari 0 menjadi 5
+        $this->admin_service->rejectDonation($id);
+        //todo: send email
+        // $message = $request->rejectEvent;
+        // $this->admin_service->sendEmail($id, $message);
+        return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penolakan donasi telah berhasil.']);
+    }
+
+    public function closeDonation(Request $request, $id)
+    {
+        //ubah status dari 0 menjadi 3
+        $this->admin_service->closeDonation($id);
+        //todo: send email
+        // $message = $request->closeEvent;
+        // $this->admin_service->sendEmail($id, $message);
+        return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penutupan event donasi telah berhasil.']);
     }
 }

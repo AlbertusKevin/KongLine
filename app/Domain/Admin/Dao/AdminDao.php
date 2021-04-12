@@ -85,21 +85,6 @@ class AdminDao
             ->get();
     }
 
-    public function acceptPetition($id)
-    {
-        Petition::where('id', $id)->update(['status' => ACTIVE]);
-    }
-
-    public function rejectPetition($id)
-    {
-        Petition::where('id', $id)->update(['status' => REJECTED]);
-    }
-
-    public function closePetition($id)
-    {
-        Petition::where('id', $id)->update(['status' => CLOSED]);
-    }
-
     //
     //
     //
@@ -272,5 +257,14 @@ class AdminDao
             ->join('event_status', 'donation.status', 'event_status.id')
             ->orderByDesc($table)
             ->get();
+    }
+
+    public function changeEventStatus($id, $status, $event)
+    {
+        if ($event == DONATION) {
+            Donation::where('id', $id)->update(['status' => $status]);
+        }
+
+        Petition::where('id', $id)->update(['status' => $status]);
     }
 }
