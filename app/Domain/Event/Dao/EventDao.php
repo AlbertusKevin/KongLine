@@ -135,9 +135,16 @@ class EventDao
     //* =========================================================================================
     //* -------------------------------------- DAO Petisi ---------------------------------------
     //* =========================================================================================
+    public function allPetition()
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->get();
+    }
+
     //! Mencari petisi sesuai dengan
     //! status (berdasarkan tipe petisi) dan keyword tertentu
-
     public function searchPetition($status, $keyword)
     {
         return Petition::where('status', $status)

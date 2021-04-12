@@ -118,6 +118,12 @@ class AdminController extends Controller
         return view("admin.listDonation", compact('listCategory', 'donationList'));
     }
 
+    public function getAllNotConfirmedTransaction()
+    {
+        $transactions = $this->admin_service->getAllNotConfirmedTransaction();
+        return view('admin.listTransaction', compact('transactions'));
+    }
+
     public function donationType(Request $request)
     {
         return $this->admin_service->donationType($request->typeDonation);

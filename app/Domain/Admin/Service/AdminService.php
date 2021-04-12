@@ -482,4 +482,9 @@ class AdminService
     {
         $this->dao->changeEventStatus($id, CLOSED, DONATION);
     }
+
+    public function getAllNotConfirmedTransaction()
+    {
+        return $this->dao->getAllNotConfirmedTransaction();
+    }
 }

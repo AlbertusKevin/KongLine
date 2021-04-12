@@ -56,8 +56,9 @@
             </div>
         </div>
         <div class="row mt-5">
-            <div class="col-md-12 text-center">
-                <table class="table table-hover">
+            <div class="col-md-12">
+                <small><a href="/admin/donation/transaction">Transaksi donasi untuk diproses</a></small>
+                <table class="table table-hover text-center">
                     <thead>
                         <tr>
                             <th scope="col">Tanggal Dibuat</th>

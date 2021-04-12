@@ -2,7 +2,6 @@
 
 namespace App\Domain\Event\Service;
 
-use App\Domain\Admin\Service\AdminService;
 use App\Domain\Event\Dao\EventDao;
 use Illuminate\Support\Facades\Auth;
 use App\Domain\Event\Entity\ParticipatePetition;
@@ -19,7 +18,7 @@ class EventService
     public function __construct()
     {
         $this->dao = new EventDao();
-        $this->adminService = new AdminService();
+        // $this->adminService = new AdminService();
     }
 
     //* =========================================================================================
@@ -220,7 +219,7 @@ class EventService
         }
 
         if ($request->typePetition == SEMUA) {
-            return $this->adminService->allPetition();
+            return $this->dao->allPetition();
         }
 
         return $this->dao->listPetitionByMe($user->id);

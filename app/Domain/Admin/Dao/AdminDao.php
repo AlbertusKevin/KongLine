@@ -7,6 +7,7 @@ use App\Domain\Event\Entity\User;
 use App\Domain\Event\Entity\ParticipateDonation;
 use App\Domain\Event\Entity\ParticipatePetition;
 use App\Domain\Event\Entity\Petition;
+use App\Domain\Event\Entity\Transaction;
 
 class AdminDao
 {
@@ -266,5 +267,16 @@ class AdminDao
         }
 
         Petition::where('id', $id)->update(['status' => $status]);
+    }
+
+    public function getAllNotConfirmedTransaction()
+    {
+        return Transaction::selectRaw('transaction.created_at, donation.title, users.name, transaction.nominal')
+            ->join('participate_donation', 'participate_donation.idDonation', 'transaction.idDonation')
+            ->join('users', 'participate_donation.idParticipant', 'users.id')
+            ->join('donation', 'donation.id', 'participate_donation.idDonation')
+            ->get();
+
+        // return Transaction::all();
     }
 }
