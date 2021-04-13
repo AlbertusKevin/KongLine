@@ -2,7 +2,10 @@
 
 namespace App\Domain\Event\Entity;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Domain\Admin\Entity\CommentForum;
+use App\Domain\Communication\Entity\Forum;
+use App\Domain\Communication\Entity\ForumLike;
+use App\Domain\Communication\Entity\Service;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -41,6 +44,21 @@ class User extends Authenticatable
 
     public function message()
     {
-        return $this->hasMany("\App\Domain\Communication\Entity\Service");
+        return $this->hasMany(Service::class);
+    }
+
+    public function forums()
+    {
+        return $this->hasMany(Forum::class, 'idParticipant');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(CommentForum::class, 'idParticipant');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(ForumLike::class, 'idParticipant');
     }
 }

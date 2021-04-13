@@ -6,6 +6,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ForumController;
 use App\Http\Controllers\HomeController;
 
 /*
@@ -103,11 +104,18 @@ Route::post('/donation/donate/{id}', [EventController::class, 'postDonate']);
 //* --- konfirmasi pembayaran donasi ---
 Route::get('/donation/confirm_donate/{id}', [EventController::class, 'formConfirm']);
 Route::patch('/donation/confirm_donate/{id}', [EventController::class, 'postConfirm']);
+
 //? =========================
 //! Route Communication
 //? =========================
 Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
 Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
+
+//? =========================
+//! Route Forum
+//? =========================
+Route::get('/forum', [ForumController::class, 'index'])->name('forum');
+Route::get('/forum/{id}', [ForumController::class, 'comment'])->name('forum.comment');
 
 //? =========================
 //! Route Admin
