@@ -52,19 +52,46 @@
                 </div>
             </div>
         </div>
-        <div class="row w-35 ml-auto mr-auto mt-4 text-center">
-            <div class="col-md-12">
-                <form action="/admin/donation/transaction/confirm/{{ $transaction->id }}" method="post">
-                    @csrf
-                    @method('patch')
-                    <button class="btn btn-primary w-100">Konfirmasi</button>
-                </form>
+        @if ($transaction->status == 0)
+            <div class="row w-35 ml-auto mr-auto mt-4 text-center">
+                <div class="col-md-12">
+                    <form action="/admin/donation/transaction/confirm/{{ $transaction->id }}" method="post">
+                        @csrf
+                        @method('patch')
+                        <button type="submit" class="btn btn-primary w-100">Konfirmasi</button>
+                    </form>
+                    <button type="button" class="btn btn-danger w-100 mt-3" data-toggle="modal"
+                        data-target="#form-reject">Tolak</button>
+                </div>
+            </div>
+        @endif
+    </div>
+
+    <div class="modal fade" id="form-reject" tabindex="-1" aria-labelledby="form-reject-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
                 <form action="/admin/donation/transaction/reject/{{ $transaction->id }}" method="post">
                     @csrf
                     @method('patch')
-                    <button class="btn btn-danger w-100 mt-3">Tolak</button>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="form-reject-label">Alasan Ditolak</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <textarea class="form-control" id="rejectTransaction" name="rejectTransaction"
+                                rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button class="btn btn-danger" type="submit">Tolak</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
+
 @endsection

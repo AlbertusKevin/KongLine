@@ -141,6 +141,14 @@ const emptySearchTableDonation = (keyword) => {
         `;
 };
 
+const emptySearchTableTransaction = (keyword) => {
+    return /*html*/ `
+    <tr>
+        <td colspan="6">Transaksi dengan judul donasi ~${keyword}~ tidak ditemukan</td>
+    </tr>
+        `;
+};
+
 const changePetitionList = (petition) => {
     return /*html*/ `
         <div class="card mb-3 ml-auto mr-auto mt-5" style="max-width: 650px;">
@@ -359,6 +367,44 @@ const sortListDonation = (sortBy, category) => {
             }
         },
     });
+};
+
+const changeTableTransaction = (transaction) => {
+    let status = "";
+    let typeBadge = "";
+
+    if (transaction.status == 0) {
+        status = "Perlu Konfirmasi";
+        typeBadge = "info";
+    } else if (transaction.status == 1) {
+        status = "Dikonfirmasi";
+        typeBadge = "success";
+    } else {
+        status = "Ditolak";
+        typeBadge = "danger";
+    }
+
+    return /*html*/ `
+    <tr>
+        <td>${transaction.created_at}</td>
+        <td>${transaction.title}</td>
+        <td>${transaction.name}</td>
+        <td>Rp. ${transaction.nominal.toLocaleString("en")},00</td>
+        <td><p class="badge badge-${typeBadge}">${status}</p></td>
+        <td><a href="/admin/donation/transaction/${
+            transaction.id
+        }" type="button"
+                class="btn btn-primary">detail</a></td>
+    </tr>
+        `;
+};
+
+const emptyTableTransaction = () => {
+    return /*html*/ `
+    <tr>
+        <td colspan="6">Belum ada Transaksi pada daftar ini</td>
+    </tr>
+        `;
 };
 
 // fungsi trigger
@@ -936,3 +982,60 @@ const changeDateFormat = (date) => {
 
     return format;
 };
+
+$(".transaction-type").on("click", function () {
+    // cari yang ada class btn-primary
+    $(".transaction-type").removeClass("btn-primary");
+    $(".transaction-type").addClass("btn-light");
+
+    $(this).addClass("btn-primary");
+    $(this).removeClass("btn-light");
+
+    let typeTransaction = $(this).html().toLowerCase();
+
+    $.ajax({
+        url: "/admin/transaction/type",
+        data: { typeTransaction },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                data.forEach((transaction) => {
+                    html += changeTableTransaction(transaction);
+                });
+
+                $("#transaction-list").html(html);
+            } else {
+                html += emptyTableTransaction();
+
+                $("#transaction-list").html(html);
+            }
+        },
+    });
+});
+
+$("#search-transaction").on("keyup", function () {
+    let keyword = $(this).val();
+
+    const typeTransaction = $(".transaction-type.btn-primary")
+        .html()
+        .toLowerCase();
+
+    $.ajax({
+        url: "/admin/transaction/search",
+        data: { keyword, typeTransaction },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                data.forEach((transaction) => {
+                    html += changeTableTransaction(transaction);
+                });
+                $("#transaction-list").html(html);
+            } else {
+                html += emptySearchTableTransaction(keyword);
+                $("#transaction-list").html(html);
+            }
+        },
+    });
+});

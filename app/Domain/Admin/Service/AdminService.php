@@ -5,16 +5,19 @@ namespace App\Domain\Admin\Service;
 use App\Domain\Admin\Dao\AdminDao;
 use Illuminate\Support\Carbon;
 use App\Domain\Event\Service\EventService;
+use App\Domain\Event\Dao\EventDao;
 
 class AdminService
 {
     private $dao;
     private $eventService;
+    private $eventDao;
 
     public function __construct()
     {
         $this->dao = new AdminDao();
         $this->eventService = new EventService();
+        $this->eventDao = new EventDao();
     }
 
     public function sendEmail($id)
@@ -483,21 +486,72 @@ class AdminService
         $this->dao->changeEventStatus($id, CLOSED, DONATION);
     }
 
+    public function updateCalculationAfterConfirmDonate($transaction)
+    {
+        // ubah jumlah event yang diikuti untuk user tertentu
+        $petitionParticipated = $this->eventDao->countPetitionParticipatedByUser($transaction->idParticipant);
+        $donationParticipated = $this->eventDao->countDonationParticipatedByUser($transaction->idParticipant);
+        $totalEventParticipated = (int)$petitionParticipated + (int)$donationParticipated;
+        $this->eventDao->updateCountEventParticipatedByUser($transaction->idParticipant, $totalEventParticipated);
+
+        // ubah total donatur untuk event yang diikuti
+        $totalDonatur = $this->dao->countDonatur($transaction->idDonation);
+        $this->dao->updateTotalDonatur($transaction->idDonation, $totalDonatur);
+
+        // ubah jumlah yang terkumpul
+        // ambil jumlah donasi saat ini
+        $oldNominal = $this->dao->getDonationCollected($transaction->idDonation)->donationCollected;
+        // jumlahkan
+        $total = (int)$oldNominal + (int)$transaction->nominal;
+        // update db
+        $this->dao->updateDonationCollected($transaction->idDonation, $total);
+    }
+
     public function confirmTransaction($id)
     {
+        $this->dao->updateStatusTransaction($id, CONFIRMED_TRANSACTION);
     }
 
     public function rejectTransaction($id)
     {
+        $this->dao->updateStatusTransaction($id, REJECTED_TRANSACTION);
     }
 
-    public function getAllNotConfirmedTransaction()
+    public function getAllTransaction()
     {
-        return $this->dao->getAllNotConfirmedTransaction();
+        return $this->dao->getAllTransaction();
     }
 
     public function getAUserTransaction($id)
     {
         return $this->dao->getAUserTransaction($id);
+    }
+
+    //! {{-- lewat ajax --}} Menampilkan daftar transaksi berdasarkan status
+    public function transactionType($typeTransaction)
+    {
+
+        if ($typeTransaction == SEMUA) {
+            return $this->dao->getAllTransaction();
+        }
+
+        if ($typeTransaction == KONFIRMASI) {
+            return $this->dao->selectTransaction(NOT_CONFIRMED);
+        }
+        return $this->dao->selectTransaction(REJECTED_TRANSACTION);
+    }
+
+    //! {{-- lewat ajax --}} Menampilkan pencarian transaksi berdasarkan judul donasi
+    public function searchTransaction($typeTransaction, $keyword)
+    {
+
+        if ($typeTransaction == SEMUA) {
+            return $this->dao->searchTransactionByDonationTitle($keyword);
+        }
+
+        if ($typeTransaction == KONFIRMASI) {
+            return $this->dao->searchTransactionWithStatusByDonationTitle(NOT_CONFIRMED, $keyword);
+        }
+        return $this->dao->searchTransactionWithStatusByDonationTitle(REJECTED_TRANSACTION, $keyword);
     }
 }

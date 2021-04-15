@@ -60,3 +60,11 @@ define("COLLECTED_COLUMN", "donationCollected");
 //List User Admin
 define("PENGAJUAN", "pengajuan");
 define("SEMUA", "semua");
+
+//Transaction Type
+define("KONFIRMASI", 'konfirmasi');
+define("GAGAL", 'gagal');
+
+// Status Transaction
+define("CONFIRMED_TRANSACTION", 1);
+define("REJECTED_TRANSACTION", 2);
