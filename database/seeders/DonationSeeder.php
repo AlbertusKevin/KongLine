@@ -17,13 +17,6 @@ class DonationSeeder extends Seeder
     {
         DB::table('donation')->insert(
             [
-<<<<<<< HEAD
-                'category' => 1,
-                'deadline' => new Carbon('first day of March 2021'),
-                'idCampaigner' => 2,
-                'photo' => 'img/donation1.png',
-                'purpose' => 'Cancer',
-=======
                 'category' => 12,
                 'deadline' => Carbon::create('2021', '04', '28')->format("Y-m-d"),
                 'idCampaigner' => 11,
@@ -69,7 +62,6 @@ class DonationSeeder extends Seeder
                 'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
                 
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
->>>>>>> master
                 'status' => 1,
                 'title' => 'Bantu Pak Udil membangun usaha telor gulung',
                 'assistedSubject' => 'Pekerjaan',

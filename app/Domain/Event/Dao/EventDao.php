@@ -143,6 +143,11 @@ class EventDao
             ->get();
     }
 
+    public function listPetition()
+    {
+        return Petition::all();
+    }
+
     //! Mencari petisi sesuai dengan
     //! status (berdasarkan tipe petisi) dan keyword tertentu
     public function searchPetition($status, $keyword)
@@ -483,11 +488,6 @@ class EventDao
         return Petition::where('id', $idEvent)->update([
             'signedCollected' => $count
         ]);
-    }
-
-    public function listPetition()
-    {
-        return Petition::all();
     }
 
     //* =========================================================================================
