@@ -145,6 +145,12 @@ button.close-event{
   width: 350px;
 }
 
+button.approve-event{
+  background-color: #187BCD;
+  color: white;
+  width: 350px;
+}
+
 .petition-description {
   overflow: hidden;
   text-overflow: ellipsis;
