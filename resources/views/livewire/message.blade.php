@@ -1,4 +1,5 @@
 <div>
+    @if(auth()->user() != null)
     <div class="row justify-content-center" wire:poll="mount">
         @if(auth()->user()->role == 'admin')
             <div class="col-md-4">
@@ -6,8 +7,8 @@
                     <div class="card-header HeadAdmin">
                         Admin {{ auth()->user()->name }}
                     </div>
-                    <div class="card-body chatbox p-0"">
-                        <ul class="list-group list-group-flush" wire:poll="render"">
+                    <div class="card-body chatbox p-0">
+                        <ul class="list-group list-group-flush" wire:poll="render">
                             @foreach($users as $user)
                                 @php
                                     $not_seen = \App\Domain\Communication\Entity\Service::where('user_id', $user->id)->where('receiver', auth()->id())->where('is_seen', false)->get() ?? null
@@ -76,4 +77,5 @@
                 @endif
             </div>
     </div>
+    @endif
 </div>
