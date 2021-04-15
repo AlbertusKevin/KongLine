@@ -15,8 +15,10 @@
             <div class="dropdown mt-5 mr-2">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="sort-by" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                    Sort By
+                    Sort By:
                 </button>
+                <br>
+                <small class="text-muted" id="sort-label">None</small>
                 <div class="dropdown-menu" aria-labelledby="sort-by">
                     <a class="dropdown-item sort-petition font-weight-bold">None</a>
                     <a class="dropdown-item sort-petition">Tanggal dibuat</a>

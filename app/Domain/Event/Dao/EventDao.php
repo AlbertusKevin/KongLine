@@ -135,9 +135,16 @@ class EventDao
     //* =========================================================================================
     //* -------------------------------------- DAO Petisi ---------------------------------------
     //* =========================================================================================
+    public function allPetition()
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->get();
+    }
+
     //! Mencari petisi sesuai dengan
     //! status (berdasarkan tipe petisi) dan keyword tertentu
-
     public function searchPetition($status, $keyword)
     {
         return Petition::where('status', $status)
@@ -267,6 +274,34 @@ class EventDao
         return Petition::where('status', $status)
             ->where('category', $category)
             ->orderByDesc($table)
+            ->get();
+    }
+
+    public function allStatusSortPetitionCategory($category, $table)
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->where('category', $category)
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->orderByDesc($table)
+            ->get();
+    }
+
+    public function allStatusSortPetition($table)
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->orderByDesc($table)
+            ->get();
+    }
+
+    public function allStatusPetitionByCategory($category)
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->where('category', $category)
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
             ->get();
     }
 

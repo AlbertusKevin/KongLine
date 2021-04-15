@@ -1,3 +1,6 @@
+const baseURL = "http://localhost:8000";
+
+const getNowURL = () => window.location.href.split("/")[3];
 // fungsi umum
 const checkTypePetition = (type) => {
     if (type.includes("Berlangsung")) {
@@ -6,10 +9,136 @@ const checkTypePetition = (type) => {
     if (type.includes("Menang")) {
         return "menang";
     }
+    if (type.includes("Selesai")) {
+        return "selesai";
+    }
     if (type.includes("Petisi")) {
         return "petisi_saya";
     }
+    if (type.includes("Semua")) {
+        return "semua";
+    }
+    if (type.includes("Dibatalkan")) {
+        return "dibatalkan";
+    }
+    if (type.includes("Belum")) {
+        return "belum_valid";
+    }
     return "partisipasi";
+};
+
+const getStatus = (idStatusEvent) => {
+    switch (idStatusEvent) {
+        case 0:
+            return "not confirmed";
+        case 1:
+            return "active";
+        case 2:
+            return "finished";
+        case 3:
+            return "closed";
+        case 4:
+            return "canceled";
+    }
+};
+
+const getACategory = (idCategory) => {
+    console.log(idCategory);
+    switch (idCategory) {
+        case 1:
+            return "Pendidikan";
+            break;
+        case 2:
+            return "Bencana Alam";
+            break;
+        case 3:
+            return "Difabel";
+            break;
+        case 4:
+            return "Infrastruktur Umum";
+        case 5:
+            return "Teknologi";
+        case 6:
+            return "Budaya";
+        case 7:
+            return "Karya Kreatif dan Modal Usaha";
+        case 8:
+            return "Kegiatan Sosial";
+        case 9:
+            return "Kemanusiaan";
+        case 10:
+            return "Lingkungan";
+        case 11:
+            return "Hewan";
+        case 12:
+            return "Panti Asuhan";
+        case 13:
+            return "Rumah Ibadah";
+        case 14:
+            return "Ekonomi";
+        case 15:
+            return "Politik";
+        case 16:
+            return "Keadilan";
+    }
+};
+
+const changeTablePetition = (petition) => {
+    return /*html*/ `
+    <tr>
+        <td>${petition.created_at}</td>
+        <td><a href="/petition/${petition.id}">${petition.title}</a></td>
+        <td>${getACategory(petition.category)}</td>
+        <td>${petition.signedTarget}</td>
+        <td>${petition.deadline}</td>
+        <td>${getStatus(petition.status)}</td>
+    </tr>
+        `;
+};
+
+const emptyTablePetition = () => {
+    return /*html*/ `
+    <tr>
+        <td colspan="6">Belum ada petisi pada daftar ini</td>
+    </tr>
+        `;
+};
+
+const emptySearchTablePetition = (keyword) => {
+    return /*html*/ `
+    <tr>
+        <td colspan="6">Petisi dengan judul ~${keyword}~ tidak ditemukan</td>
+    </tr>
+        `;
+};
+
+const changeTableDonation = (donation) => {
+    return /*html*/ `
+    <tr>
+        <td>${donation.created_at}</td>
+        <td><a href="/donation/${donation.id}">${donation.title}</a></td>
+        <td>${donation.category}</td>
+        <td>Rp. ${donation.donationTarget.toLocaleString("en")},00</td>
+        <td>${donation.deadline}</td>
+        <td>${donation.status}</td>
+    </tr>
+        `;
+};
+
+const emptyTableDonation = () => {
+    return /*html*/ `
+    <tr>
+        <td colspan="6">Belum ada donasi pada daftar ini</td>
+    </tr>
+        `;
+};
+
+const emptySearchTableDonation = (keyword) => {
+    return /*html*/ `
+    <tr>
+        <td colspan="6">Donasi dengan judul ~${keyword}~ tidak ditemukan</td>
+    </tr>
+        `;
 };
 
 const changePetitionList = (petition) => {
@@ -159,6 +288,8 @@ const noListDonation = () => {
 };
 
 const sortListPetition = (sortBy, category, typePetition) => {
+    const url = getNowURL();
+
     $.ajax({
         url: "/petition/sort",
         data: { sortBy, category, typePetition },
@@ -166,13 +297,45 @@ const sortListPetition = (sortBy, category, typePetition) => {
         success: (data) => {
             let html = "";
             if (data.length != 0) {
-                data.forEach((petition) => {
-                    html += changePetitionList(petition);
-                });
+                if (url != "admin") {
+                    data.forEach((petition) => {
+                        html += changePetitionList(petition);
+                    });
+                } else {
+                    data.forEach((petition) => {
+                        html += changeTablePetition(petition);
+                    });
+                }
+
                 $("#petition-list").html(html);
             } else {
-                html += listPetitionEmpty();
+                if (url != "admin") {
+                    html += listPetitionEmpty();
+                } else {
+                    html += emptyTablePetition();
+                }
                 $("#petition-list").html(html);
+            }
+        },
+    });
+};
+
+const adminSortListDonation = (sortBy, category, typeDonation) => {
+    $.ajax({
+        url: "/admin/donation/sort",
+        data: { sortBy, category, typeDonation },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                data.forEach((donation) => {
+                    html += changeTableDonation(donation);
+                });
+
+                $("#donation-list").html(html);
+            } else {
+                html += emptyTableDonation();
+                $("#donation-list").html(html);
             }
         },
     });
@@ -201,7 +364,7 @@ const sortListDonation = (sortBy, category) => {
 // fungsi trigger
 //untuk active link sesuai page yang diklik
 $(".nav-link").ready(function () {
-    let url = window.location.href.split("/")[3];
+    let url = getNowURL();
 
     if (url == "petition") {
         $(".nav-link").each(function () {
@@ -288,28 +451,31 @@ $(".petition-type").on("click", function () {
 
     let typePetition = $(this).html();
     typePetition = checkTypePetition(typePetition);
-    // console.log(typePetition);
 
-    if (typePetition == "berlangsung") {
-        $(".petition-page-title").html("Daftar Petisi");
-        $(".petition-page-subtitle").html(
-            "Lihat Petisi yang Sedang Berlangsung di Website"
-        );
-    } else if (typePetition == "menang") {
-        $(".petition-page-title").html("Kemenangan Petisi");
-        $(".petition-page-subtitle").html(
-            "Lihat petisi yang telah menang dan mengubah dunia"
-        );
-    } else if (typePetition == "petisi_saya") {
-        $(".petition-page-title").html("Daftar Petisi Saya");
-        $(".petition-page-subtitle").html(
-            "Lihat Petisi yang Telah Saya Buat di Website Ini"
-        );
-    } else {
-        $(".petition-page-title").html("Daftar Ikut Serta Petisi");
-        $(".petition-page-subtitle").html(
-            "Lihat Petisi yang Telah Saya Tandatangani di Website Ini"
-        );
+    let url = getNowURL();
+
+    if (url != "admin") {
+        if (typePetition == "berlangsung") {
+            $(".petition-page-title").html("Daftar Petisi");
+            $(".petition-page-subtitle").html(
+                "Lihat Petisi yang Sedang Berlangsung di Website"
+            );
+        } else if (typePetition == "menang") {
+            $(".petition-page-title").html("Kemenangan Petisi");
+            $(".petition-page-subtitle").html(
+                "Lihat petisi yang telah menang dan mengubah dunia"
+            );
+        } else if (typePetition == "petisi_saya") {
+            $(".petition-page-title").html("Daftar Petisi Saya");
+            $(".petition-page-subtitle").html(
+                "Lihat Petisi yang Telah Saya Buat di Website Ini"
+            );
+        } else {
+            $(".petition-page-title").html("Daftar Ikut Serta Petisi");
+            $(".petition-page-subtitle").html(
+                "Lihat Petisi yang Telah Saya Tandatangani di Website Ini"
+            );
+        }
     }
 
     $.ajax({
@@ -317,15 +483,25 @@ $(".petition-type").on("click", function () {
         data: { typePetition },
         dataType: "json",
         success: (data) => {
-            console.log(data);
             let html = "";
             if (data.length != 0) {
-                data.forEach((petition) => {
-                    html += changePetitionList(petition);
-                });
+                if (url != "admin") {
+                    data.forEach((petition) => {
+                        html += changePetitionList(petition);
+                    });
+                } else {
+                    data.forEach((petition) => {
+                        html += changeTablePetition(petition);
+                    });
+                }
                 $("#petition-list").html(html);
             } else {
-                html += listPetitionEmpty();
+                if (url != "admin") {
+                    html += listPetitionEmpty();
+                } else {
+                    html += emptyTablePetition();
+                }
+
                 $("#petition-list").html(html);
             }
         },
@@ -333,6 +509,7 @@ $(".petition-type").on("click", function () {
 });
 
 $("#search-petition").on("keyup", function () {
+    let url = getNowURL();
     let keyword = $(this).val();
     let typePetition = $(".btn-primary").html();
     let category = $("#category-choosen").val();
@@ -347,12 +524,23 @@ $("#search-petition").on("keyup", function () {
         success: (data) => {
             let html = "";
             if (data.length != 0) {
-                data.forEach((petition) => {
-                    html += changePetitionList(petition);
-                });
+                if (url != "admin") {
+                    data.forEach((petition) => {
+                        html += changePetitionList(petition);
+                    });
+                } else {
+                    data.forEach((petition) => {
+                        html += changeTablePetition(petition);
+                    });
+                }
                 $("#petition-list").html(html);
             } else {
-                html += listPetitionTypeEmpty(keyword);
+                if (url != "admin") {
+                    html += listPetitionTypeEmpty(keyword);
+                } else {
+                    html += emptySearchTablePetition(keyword);
+                }
+
                 $("#petition-list").html(html);
             }
         },
@@ -367,8 +555,12 @@ $(".sort-petition").on("click", function (e) {
     $(".sort-petition").removeClass("font-weight-bold");
     $(this).addClass("font-weight-bold");
 
+    $("#sort-label").html(sortBy);
+
     let category = $("#category-choosen").val();
-    let typePetition = checkTypePetition($(".btn-primary").html());
+    let typePetition = checkTypePetition(
+        $(".petition-type.btn-primary").html()
+    );
     sortListPetition(sortBy, category, typePetition);
 });
 
@@ -380,8 +572,12 @@ $(".category-petition").on("click", function (e) {
     $(".category-petition").removeClass("font-weight-bold");
     $(this).addClass("font-weight-bold");
 
+    $("#category-label").html(category);
+
     let sortBy = $("#sort-by").val();
-    let typePetition = checkTypePetition($(".btn-primary").html());
+    let typePetition = checkTypePetition(
+        $(".petition-type.btn-primary").html()
+    );
     sortListPetition(sortBy, category, typePetition);
 });
 
@@ -391,23 +587,47 @@ $("#search-donation").on("keyup", function () {
     let category = $("#category-donation-selected").val();
     let sortBy = $("#sort-donation-selected").val();
 
-    $.ajax({
-        url: "/donation/search",
-        data: { keyword, category, sortBy },
-        dataType: "json",
-        success: (data) => {
-            let html = "";
-            if (data.length != 0) {
-                data.forEach((donation) => {
-                    html += changeDonationList(donation);
-                });
-                $("#donation-list").html(html);
-            } else {
-                html += listDonationEmpty(keyword);
-                $("#donation-list").html(html);
-            }
-        },
-    });
+    if (getNowURL() == "admin") {
+        const typeDonation = checkTypePetition(
+            $(".donation-type.btn-primary").html()
+        );
+
+        $.ajax({
+            url: "/admin/donation/search",
+            data: { keyword, category, sortBy, typeDonation },
+            dataType: "json",
+            success: (data) => {
+                let html = "";
+                if (data.length != 0) {
+                    data.forEach((donation) => {
+                        html += changeTableDonation(donation);
+                    });
+                    $("#donation-list").html(html);
+                } else {
+                    html += emptySearchTableDonation(keyword);
+                    $("#donation-list").html(html);
+                }
+            },
+        });
+    } else {
+        $.ajax({
+            url: "/donation/search",
+            data: { keyword, category, sortBy },
+            dataType: "json",
+            success: (data) => {
+                let html = "";
+                if (data.length != 0) {
+                    data.forEach((donation) => {
+                        html += changeDonationList(donation);
+                    });
+                    $("#donation-list").html(html);
+                } else {
+                    html += listDonationEmpty(keyword);
+                    $("#donation-list").html(html);
+                }
+            },
+        });
+    }
 });
 
 $(".sort-select-donation").on("click", function (e) {
@@ -418,8 +638,18 @@ $(".sort-select-donation").on("click", function (e) {
     $(".sort-select-donation").removeClass("active");
     $(this).addClass("active");
 
+    $("#sort-label").html(sortBy);
     let category = $("#category-donation-selected").val();
-    sortListDonation(sortBy, category);
+
+    if (getNowURL() == "admin") {
+        const typeDonation = checkTypePetition(
+            $(".donation-type.btn-primary").html()
+        );
+
+        adminSortListDonation(sortBy, category, typeDonation);
+    } else {
+        sortListDonation(sortBy, category, typeDonation);
+    }
 });
 
 $(".category-select-donation").on("click", function (e) {
@@ -430,8 +660,50 @@ $(".category-select-donation").on("click", function (e) {
     $(".category-select-donation").removeClass("active");
     $(this).addClass("active");
 
+    $("#category-label").html(category);
     let sortBy = $("#sort-donation-selected").val();
-    sortListDonation(sortBy, category);
+
+    if (getNowURL() == "admin") {
+        const typeDonation = checkTypePetition(
+            $(".donation-type.btn-primary").html()
+        );
+
+        adminSortListDonation(sortBy, category, typeDonation);
+    } else {
+        sortListDonation(sortBy, category);
+    }
+});
+
+$(".donation-type").on("click", function () {
+    // cari yang ada class btn-primary
+    $(".donation-type").removeClass("btn-primary");
+    $(".donation-type").addClass("btn-light");
+
+    $(this).addClass("btn-primary");
+    $(this).removeClass("btn-light");
+
+    let typeDonation = $(this).html();
+    typeDonation = checkTypePetition(typeDonation);
+
+    $.ajax({
+        url: "/admin/donation/type",
+        data: { typeDonation },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                data.forEach((donation) => {
+                    html += changeTableDonation(donation);
+                });
+
+                $("#donation-list").html(html);
+            } else {
+                html += emptyTableDonation();
+
+                $("#donation-list").html(html);
+            }
+        },
+    });
 });
 
 $(".show-budgeting").on("click", function () {

@@ -13,10 +13,12 @@ use Illuminate\Support\Str;
 class EventService
 {
     private $dao;
+    private $adminService;
 
     public function __construct()
     {
         $this->dao = new EventDao();
+        // $this->adminService = new AdminService();
     }
 
     //* =========================================================================================
@@ -31,6 +33,11 @@ class EventService
         }
 
         return $this->dao->showProfile(GUEST_ID);
+    }
+
+    public function getCampaigner($id)
+    {
+        return $this->dao->showProfile($id);
     }
 
     private function updateCalculatedCount($idEvent, $idUser, $typeEvent)
@@ -71,9 +78,9 @@ class EventService
     }
 
     //! Mengembalikan kategori event petisi atau donasi yang dipilih
-    private function categorySelect($request)
+    public function categorySelect($request)
     {
-        $listCategory = $this->dao->listCategory();
+        $listCategory = $this->listCategory();
 
         foreach ($listCategory as $cat) {
             if ($request->category == $cat->description) {
@@ -93,6 +100,15 @@ class EventService
     public function listBank()
     {
         return $this->dao->listBank();
+    }
+
+    public static function getNavbar($user)
+    {
+        if ($user->role != ADMIN) {
+            return 'layout.app';
+        }
+
+        return 'layout.adminNavbar';
     }
 
     public function messageOfEvent($status)
@@ -192,6 +208,18 @@ class EventService
 
         if ($request->typePetition == PARTISIPASI) {
             return $this->dao->listPetitionParticipated($user->id);
+        }
+
+        if ($request->typePetition == DIBATALKAN) {
+            return $this->dao->listPetitionType(CANCELED);
+        }
+
+        if ($request->typePetition == BELUM_VALID) {
+            return $this->dao->listPetitionType(NOT_CONFIRMED);
+        }
+
+        if ($request->typePetition == SEMUA) {
+            return $this->dao->allPetition();
         }
 
         return $this->dao->listPetitionByMe($user->id);
@@ -310,6 +338,68 @@ class EventService
                 }
             }
         }
+
+        if ($request->typePetition == DIBATALKAN) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->dao->searchPetition(CANCELED, $request->keyword);
+            }
+
+            // jika berdasarkan sort dan category
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchPetitionCategorySort(CANCELED, $request->keyword, $category, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchPetitionCategorySort(CANCELED, $request->keyword, $category, CREATED_COLUMN);
+                }
+            }
+
+            // Jika hanya berdasarkan category
+            if ($category != 0) {
+                return $this->dao->searchPetitionCategory(CANCELED, $request->keyword, $category);
+            }
+
+            // Jika hanya berdasarkan sort
+            if ($sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchPetitionSortBy(CANCELED, $request->keyword, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchPetitionSortBy(CANCELED, $request->keyword, CREATED_COLUMN);
+                }
+            }
+        }
+
+        if ($request->typePetition == BELUM_VALID) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->dao->searchPetition(NOT_CONFIRMED, $request->keyword);
+            }
+
+            // jika berdasarkan sort dan category
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchPetitionCategorySort(NOT_CONFIRMED, $request->keyword, $category, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchPetitionCategorySort(NOT_CONFIRMED, $request->keyword, $category, CREATED_COLUMN);
+                }
+            }
+
+            // Jika hanya berdasarkan category
+            if ($category != 0) {
+                return $this->dao->searchPetitionCategory(NOT_CONFIRMED, $request->keyword, $category);
+            }
+
+            // Jika hanya berdasarkan sort
+            if ($sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchPetitionSortBy(NOT_CONFIRMED, $request->keyword, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchPetitionSortBy(NOT_CONFIRMED, $request->keyword, CREATED_COLUMN);
+                }
+            }
+        }
     }
 
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
@@ -420,6 +510,84 @@ class EventService
                 }
                 // jika hanya sort
                 return $this->dao->sortMyPetition($userId, CREATED_COLUMN);
+            }
+        }
+        if ($request->typePetition == DIBATALKAN) {
+            // Jika sort dipilih
+            if ($request->sortBy == TANDA_TANGAN) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategory($category, CANCELED, SIGNED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortPetition(CANCELED, SIGNED_COLUMN);
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == EVENT_TERBARU) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategory($category, CANCELED, CREATED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortPetition(CANCELED, CREATED_COLUMN);
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == NONE) {
+                return $this->dao->petitionByCategory($category, CANCELED);
+            }
+        }
+        if ($request->typePetition == BELUM_VALID) {
+            // Jika sort dipilih
+            if ($request->sortBy == TANDA_TANGAN) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategory($category, NOT_CONFIRMED, SIGNED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortPetition(NOT_CONFIRMED, SIGNED_COLUMN);
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == EVENT_TERBARU) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategory($category, NOT_CONFIRMED, CREATED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortPetition(NOT_CONFIRMED, CREATED_COLUMN);
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == NONE) {
+                return $this->dao->petitionByCategory($category, NOT_CONFIRMED);
+            }
+        }
+        if ($request->typePetition == SEMUA) {
+            // Jika sort dipilih
+            if ($request->sortBy == TANDA_TANGAN) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->allStatusSortPetitionCategory($category, SIGNED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->allStatusSortPetition(SIGNED_COLUMN);
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == EVENT_TERBARU) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->allStatusSortPetitionCategory($category, CREATED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->allStatusSortPetition(CREATED_COLUMN);
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == NONE) {
+                return $this->dao->allStatusPetitionByCategory($category);
             }
         }
 
