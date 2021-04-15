@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+    @include('layout.message')
     <div class="container">
         <form action="/petition/create" method="POST" enctype="multipart/form-data">
             @csrf
@@ -56,10 +57,39 @@
                         <label for="check-terms-agreement">Setuju dengan Syarat & Ketentuan
                             YukBisaYuk</label>
                     </div>
-                    <button type="submit" class="btn btn-new-petition">Ajukan Event</button>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-secondary verify-profile" data-toggle="modal"
+                            data-target="#verification-petition" disabled>Verifikasi Profil</button>
+                        <button type="submit" class="btn btn-secondary new-petition" disabled>Ajukan Event</button>
+                    </div>
                 </div>
             </div>
         </form>
     </div>
 
+    <div class="modal fade" id="verification-petition" tabindex="-1" role="dialog" aria-labelledby="verification-petition"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5 class="modal-title mb-3 font-weight-bold text-center" id="verification-petition">Verifikasi Data
+                        Diri Anda</h5>
+                    <form action="/petition/create/verification" method="post">
+                        @csrf
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="email" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="phone" placeholder="No Telp">
+                        </div>
+                        <div class="form-group text-right">
+                            <button type="button" class="btn btn-primary verification-create-petition">Verifikasi</button>
+                            <button type="button" class="btn btn-secondary close-dismiss"
+                                data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

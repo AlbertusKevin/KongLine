@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'>
 
     <style>
         body {
@@ -32,32 +33,37 @@
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+            <div class="collapse navbar-collapse justify-content-end mr-5 pr-5" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link" href="{{ url('/donation') }}">Donasi</a>
                     <a class="nav-link" href="{{ url('/petition') }}">Petisi</a>
                     <a class="nav-link" href="{{ url('/') }}">Forum</a>
-                    <a class="nav-link" href="{{ url('/inbox') }}">Service</a>
                     @if (Auth::check())
+                        @if (auth()->user()->role == 'admin')
+                            <a class="nav-link" href="{{ url('/inbox') }}">Service</a>
+                        @endif
                         <div class="dropdown m-2 mr-2">
                             <div data-toggle="dropdown">
                                 <img src="/img/profile.png">
                             </div>
                             <div class="dropdown-menu">
-                                <a class="nav-link" href="{{ url('/profile/' . Auth::id()) }}">Edit Profile</a>
+                                <a class="nav-link" href="{{ url('/profile') }}">Edit Profile</a>
                                 <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
                             </div>
                         </div>
                     @else
-                        <a type="button" class="btn btn-outline-info ml-1 mr-2" href="{{ url('/login') }}"> Login </a>
-                        <a type="button" class="btn btn-info mr-2" href="{{ url('/register') }}"> Daftar </a>
+                        <div class="text-center">
+                            <a type="button" class="btn btn-outline-info ml-1 mr-2" href="{{ url('/login') }}"> Login
+                            </a>
+                            <a type="button" class="btn btn-info mr-2" href="{{ url('/register') }}"> Daftar </a>
+                        </div>
                     @endif
                 </div>
             </div>
         </div>
-        </div>
 
     </nav>
+    {{-- @include('layout.message') --}}
     @yield('content')
     <footer class="mt-5 pt-5">
         <div class="container-fluid">
@@ -109,6 +115,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous">
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
     <script src="{{ asset('js/script.js') }}" defer></script>
     <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

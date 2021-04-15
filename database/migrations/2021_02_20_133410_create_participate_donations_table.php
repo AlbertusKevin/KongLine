@@ -18,6 +18,7 @@ class CreateParticipateDonationsTable extends Migration
             $table->foreignId('idParticipant');
             $table->string('comment')->nullable();
             $table->date('created_at');
+            $table->boolean('annonymous_comment');
         });
 
         Schema::table('participate_donation', function (Blueprint $table) {

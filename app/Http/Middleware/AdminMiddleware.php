@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Domain\Event\Service\EventService;
 
 class AdminMiddleware
 {
@@ -17,11 +18,14 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->role == 'Admin') {
-            return dd("admin");
+        $eventService = new EventService();
+        $user = $eventService->showProfile();
+
+        if ($user->role == 'admin') {
+            return $next($request);
         }
 
-        Alert::error('Error','Anda tidak memiliki akses');
-        return redirect()->back();
+        // Alert::error('Error', 'Anda tidak memiliki akses');
+        return redirect('/home')->with(['type' => "error", 'message' => "Anda tidak memiliki akses"]);
     }
 }

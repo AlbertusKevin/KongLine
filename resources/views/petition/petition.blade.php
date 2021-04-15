@@ -1,9 +1,14 @@
-@extends('layout.app')
+@if ($user->role != ADMIN)
+    @extends('layout.app')
+@else
+    @extends('layout.adminNavbar')
+@endif
 @section('title')
     Petition List
 @endsection
 
 @section('content')
+    @include('layout.message')
     <div class="container">
         <div class="row">
             @if ($user->role == 'campaigner')

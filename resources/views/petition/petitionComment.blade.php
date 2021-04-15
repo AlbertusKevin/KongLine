@@ -1,9 +1,14 @@
-@extends('layout.app')
+@if ($user->role != ADMIN)
+    @extends('layout.app')
+@else
+    @extends('layout.adminNavbar')
+@endif
 @section('title')
     Petition's Comments
 @endsection
 
 @section('content')
+    @include('layout.message')
     <div class="container">
         <h2 class="mt-3" style="color: #1167B1">{{ $petition->title }}</h2>
         <small><a href="/petition" style="color: blue">-> kembali ke daftar petisi</a></small>
@@ -37,11 +42,11 @@
                 @if ($comment->comment != null)
                     <div class="card mb-4">
                         <div class=" row no-gutters">
-                            <div class="col-md-4 text-center">
-                                <img src="/{{ $comment->photoProfile }}" class="img-thumbnail"
-                                    alt="Participant's Image Profile">
+                            <div class="col-md-4 text-center pt-2 pb-2">
+                                <img src="/{{ $comment->photoProfile }}"
+                                    class="img-thumbnail petition-comment-img-profile" alt="Participant's Image Profile">
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-8 pt-2 pb-2">
                                 <div class="card-body">
                                     <h5 class="card-title font-weight-bold">{{ $comment->name }}</h5>
                                     <p class="card-text petition-description">{{ $comment->comment }}</p>

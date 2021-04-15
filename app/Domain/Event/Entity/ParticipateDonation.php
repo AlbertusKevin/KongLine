@@ -9,5 +9,6 @@ class ParticipateDonation extends Model
 {
     use HasFactory;
     protected $table = 'participate_donation';
-    protected $fillable = ['idDonation', 'idParticipant', 'comment'];
+    protected $fillable = ['idDonation', 'idParticipant', 'comment', 'created_at', 'annonymous_comment'];
+    public $timestamps = false;
 }

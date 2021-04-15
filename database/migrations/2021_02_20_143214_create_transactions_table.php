@@ -14,18 +14,18 @@ class CreateTransactionsTable extends Migration
     public function up()
     {
         Schema::create('transaction', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('idDonation');
             $table->foreignId('idParticipant');
             $table->string('accountNumber');
-            $table->string('bank');
             $table->integer('nominal');
-            $table->string('repaymentPicture');
+            $table->string('repaymentPicture')->nullable();
             $table->tinyInteger('status')->unsigned();
-            $table->date('created_at');
+            $table->boolean('annonymous_donate');
+            $table->timestamps();
         });
 
         Schema::table('transaction', function (Blueprint $table) {
-            $table->primary(['idDonation', 'idParticipant']);
             $table->foreign('idDonation')
                 ->references('id')
                 ->on('donation')
