@@ -37,7 +37,7 @@
                 <div class="navbar-nav">
                     <a class="nav-link" href="{{ url('/donation') }}">Donasi</a>
                     <a class="nav-link" href="{{ url('/petition') }}">Petisi</a>
-                    <a class="nav-link" href="{{ url('/') }}">Forum</a>
+                    <a class="nav-link" href="{{ url('/forum') }}">Forum</a>
                     @if (Auth::check())
                         @if (auth()->user()->role == 'admin')
                             <a class="nav-link" href="{{ url('/inbox') }}">Service</a>

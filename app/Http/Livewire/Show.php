@@ -6,7 +6,6 @@ use Livewire\Component;
 
 class Show extends Component
 {
-
     public $users;
     public $messages;
     public $sender;
@@ -39,5 +38,4 @@ class Show extends Component
         $new_message->receiver = $this->sender->id;
         $new_message->save();
     }
-
 }
