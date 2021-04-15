@@ -43,4 +43,9 @@ class User extends Authenticatable
     {
         return $this->hasMany("\App\Domain\Communication\Entity\Service");
     }
+
+    public function donation()
+    {
+        return $this->hasMany(Donation::class);
+    }
 }

@@ -501,6 +501,20 @@ class EventService
         return 0;
     }
 
+    public function getDonationLimit()
+    {
+        $result = $this->dao->listDonation();
+        $result->take(3);
+        return $result;
+    }
+
+    public function getPetitionLimit()
+    {
+        $result = $this->dao->listPetition();
+        $result->take(3);
+        return $result;
+    }
+
     //! Mengecek verifikasi data diri yang diberikan sebelum membuat event
     public function verifyProfile($email, $phone)
     {

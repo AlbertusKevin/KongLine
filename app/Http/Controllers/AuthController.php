@@ -120,7 +120,22 @@ class AuthController extends Controller
     {
         $result = $this->eventService->authReset($request);
 
+<<<<<<< HEAD
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|min:6|required_with:passwordConfirm|same:passwordConfirm',
+            'passwordConfirm' => 'required|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return back()
+                ->withInput()
+                ->withErrors($validator);
+        }
+
+        if($result){
+=======
         if ($result) {
+>>>>>>> master
             return redirect('/login')->with('message', 'Your password has been changed!');
         }
 
