@@ -270,9 +270,9 @@ class AdminDao
         Petition::where('id', $id)->update(['status' => $status]);
     }
 
-    public function getAllNotConfirmedTransaction()
+    public function getAllTransaction()
     {
-        return Transaction::selectRaw('transaction.id, transaction.idParticipant, transaction.created_at, donation.title, users.name, transaction.nominal')
+        return Transaction::selectRaw('transaction.id, transaction.idParticipant, transaction.created_at, donation.title, users.name, transaction.nominal, transaction.status')
             ->join('participate_donation', function ($join) {
                 $join->on('participate_donation.idParticipant', '=', 'transaction.idParticipant')
                     ->on('transaction.idDonation', '=', 'participate_donation.idDonation');
@@ -287,6 +287,46 @@ class AdminDao
         // WHERE transaction.idParticipant = participate_donation.idParticipant AND transaction.idDonation = participate_donation.idDonation
     }
 
+    public function selectTransaction($status)
+    {
+        return Transaction::selectRaw('transaction.id, transaction.idParticipant, transaction.created_at, donation.title, users.name, transaction.nominal, transaction.status')
+            ->where('transaction.status', $status)
+            ->join('participate_donation', function ($join) {
+                $join->on('participate_donation.idParticipant', '=', 'transaction.idParticipant')
+                    ->on('transaction.idDonation', '=', 'participate_donation.idDonation');
+            })
+            ->join('donation', 'donation.id', 'participate_donation.idDonation')
+            ->join('users', 'participate_donation.idParticipant', 'users.id')
+            ->get();
+    }
+
+    public function searchTransactionByDonationTitle($keyword)
+    {
+        return Transaction::selectRaw('transaction.id, transaction.idParticipant, transaction.created_at, donation.title, users.name, transaction.nominal, transaction.status')
+            ->where('donation.title', 'LIKE', "%" . $keyword . '%')
+            ->join('participate_donation', function ($join) {
+                $join->on('participate_donation.idParticipant', '=', 'transaction.idParticipant')
+                    ->on('transaction.idDonation', '=', 'participate_donation.idDonation');
+            })
+            ->join('donation', 'donation.id', 'participate_donation.idDonation')
+            ->join('users', 'participate_donation.idParticipant', 'users.id')
+            ->get();
+    }
+
+    public function searchTransactionWithStatusByDonationTitle($status, $keyword)
+    {
+        return Transaction::selectRaw('transaction.id, transaction.idParticipant, transaction.created_at, donation.title, users.name, transaction.nominal, transaction.status')
+            ->where('transaction.status', $status)
+            ->where('donation.title', 'LIKE', "%" . $keyword . '%')
+            ->join('participate_donation', function ($join) {
+                $join->on('participate_donation.idParticipant', '=', 'transaction.idParticipant')
+                    ->on('transaction.idDonation', '=', 'participate_donation.idDonation');
+            })
+            ->join('donation', 'donation.id', 'participate_donation.idDonation')
+            ->join('users', 'participate_donation.idParticipant', 'users.id')
+            ->get();
+    }
+
     public function getAUserTransaction($id)
     {
         return Transaction::selectRaw('transaction.*, users.name')
@@ -297,5 +337,34 @@ class AdminDao
             })
             ->join('users', 'participate_donation.idParticipant', 'users.id')
             ->first();
+    }
+    public function countDonatur($idDonation)
+    {
+        return ParticipateDonation::where('idDonation', $idDonation)->count();
+    }
+
+    public function updateTotalDonatur($idDonation, $totalDonatur)
+    {
+        Donation::where('id', $idDonation)->update([
+            'totalDonatur' => $totalDonatur
+        ]);
+    }
+    public function getDonationCollected($idDonation)
+    {
+        return Donation::find($idDonation);
+    }
+
+    public function  updateDonationCollected($idDonation, $total)
+    {
+        Donation::where('id', $idDonation)->update([
+            'donationCollected' => $total
+        ]);
+    }
+
+    public function updateStatusTransaction($id, $status)
+    {
+        Transaction::where('id', $id)->update([
+            'status' => $status
+        ]);
     }
 }

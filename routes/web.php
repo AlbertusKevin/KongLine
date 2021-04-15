@@ -136,7 +136,7 @@ Route::patch('/admin/petition/close/{id}', [AdminController::class, 'closePetiti
 
 //! Donation
 Route::get('/admin/donation', [AdminController::class, 'getListDonation'])->middleware('admin');
-Route::get('/admin/donation/transaction', [AdminController::class, 'getAllNotConfirmedTransaction'])->middleware('admin');
+Route::get('/admin/donation/transaction', [AdminController::class, 'getAllTransaction'])->middleware('admin');
 Route::get('/admin/donation/transaction/{idEvent}', [AdminController::class, 'getATransaction'])->middleware('admin');
 
 Route::patch('/admin/donation/transaction/confirm/{id}', [AdminController::class, 'confirmTransaction'])->middleware('admin');
@@ -150,3 +150,6 @@ Route::patch('/admin/donation/close/{id}', [AdminController::class, 'closeDonati
 Route::get('/admin/donation/sort', [AdminController::class, 'adminSortDonation'])->middleware('admin');
 Route::get('/admin/donation/search', [AdminController::class, 'adminSearchDonation'])->middleware('admin');
 Route::get('/admin/donation/type', [AdminController::class, 'donationType']);
+
+Route::get('/admin/transaction/type', [AdminController::class, 'transactionType']);
+Route::get('/admin/transaction/search', [AdminController::class, 'searchTransaction']);
