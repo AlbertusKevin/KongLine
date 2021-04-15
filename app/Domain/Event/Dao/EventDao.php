@@ -542,11 +542,6 @@ class EventDao
     //* =========================================================================================
     //* ------------------------------------ DAO Donation ---------------------------------------
     //* =========================================================================================
-    public function listDonation()
-    {
-        return Donation::all();
-    }
-
     //! Mengambil seluruh donasi dengan status aktif / sedang berlangsung
     public function getListDonation()
     {

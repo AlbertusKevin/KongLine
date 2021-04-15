@@ -58,6 +58,14 @@
     {{-- Untuk Card Donation --}}
     <div class="container px-5">
         <div class="row card-top" id="donation-list">
+            @if (count($donations) == 0)
+                <div class="card col-md-12 p-2 mb-5" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title title-donation">Belum ada donasi yang sedang berlangsung
+                        </h5>
+                    </div>
+                </div>
+            @endif
             @foreach ($donations as $donation)
                 <div class="card col-md-4 p-2 mb-5" style="width: 18rem;">
                     <div style=" position:relative;">
