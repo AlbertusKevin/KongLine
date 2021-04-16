@@ -121,12 +121,16 @@ Route::get('/forum/{id}', [ForumController::class, 'comment'])->name('forum.comm
 //? =========================
 //! Route Admin
 //? =========================
+
 Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middleware('admin');
 
 //! Users
 Route::get('/admin/listUser', [AdminController::class, 'getAll']);
 Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
+Route::get('/admin/listUser/sort', [AdminController::class, 'sortListUser']);//Sort List User
+Route::get('/admin/listUser/search', [AdminController::class, 'searchUser']);
 Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
+Route::get('/admin/user/{id}', [AdminController::class, 'userInfo'])->name('admin')->middleware('admin');
 
 //! Petition
 Route::get('/admin/petition', [AdminController::class, 'getListPetition'])->middleware('admin');

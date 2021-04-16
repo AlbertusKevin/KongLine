@@ -210,4 +210,24 @@ class AdminController extends Controller
         // $this->admin_service->sendEmail($id, $message);
         return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Penolakan transaksi telah selesai.']);
     }
+  public function sortListUser(Request $request)
+    {
+        $users =  $this->admin_service->sortListUser($request);
+        $eventCount = $this->admin_service->countEventParticipate($users);
+        $combine = [];
+        $sortCountEvent = 
+        $combine[] = $users;
+        $combine[] = $eventCount;
+
+        return json_encode($combine);
+    }
+
+    public function searchUser(Request $request)
+    {
+        return $this->admin_service->searchUser($request);
+    }
+
+    public function userInfo(Request $request)
+    {
+        return view('/admin/userAdmin');
 }
