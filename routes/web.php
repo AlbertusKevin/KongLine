@@ -110,7 +110,9 @@ Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show'
 //? =========================
 //! Route Admin
 //? =========================
-Route::get('/admin/listUser', [AdminController::class, 'getAll']);
+Route::get('/admin/listUser', [AdminController::class, 'getAll'])->name('admin')->middleware('admin');
+
+//Ajax 
 Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
 Route::get('/admin/listUser/sort', [AdminController::class, 'sortListUser']);//Sort List User
 Route::get('/admin/listUser/search', [AdminController::class, 'searchUser']);
@@ -119,4 +121,4 @@ Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventPar
 
 Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middleware('admin');
 
-Route::get('/admin/user/{id}', [AdminController::class, 'userInfo']);
+Route::get('/admin/user/{id}', [AdminController::class, 'userInfo'])->name('admin')->middleware('admin');
