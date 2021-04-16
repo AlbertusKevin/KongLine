@@ -1,9 +1,10 @@
-@extends('layout.app')
+@extends($navbar)
+
 @section('title')
     Detail Donation
 @endsection
 @section('content')
-
+    @include('layout.message')
     <div class="container">
         <div class="row mt-5">
             <div class="col-md-12">
@@ -20,50 +21,58 @@
                                 <p>{{ $donation->name }}</p>
                                 <div class="row mt-3">
                                     @if ($donation->status == ACTIVE)
-                                        @if ($isParticipated)
-                                            <div class="col-md-6">
-                                                @if ($user->role == GUEST || $user->role == ADMIN)
-                                                    <button type="button" class="btn btn-danger donate-button" disabled>
-                                                        Donasikan
-                                                    </button>
-                                                    <small>Login untuk ikut berdonasi</small>
-                                                    <p class="mt-2">
-                                                        {{ ceil((strtotime($donation->deadline) - time()) / (60 * 60 * 24)) }}
-                                                        Hari Lagi!</p>
-                                                @else
-                                                    <a type="button" class="btn btn-danger donate-button"
-                                                        href="/donation/donate/{{ $donation->id }}">Donasikan</a>
+                                        @if ($user->role != ADMIN)
+                                            @if ($isParticipated)
+                                                <div class="col-md-6">
+                                                    @if ($user->role == GUEST || $user->role == ADMIN)
+                                                        <button type="button" class="btn btn-danger donate-button" disabled>
+                                                            Donasikan
+                                                        </button>
+                                                        <small>Login untuk ikut berdonasi</small>
+                                                        <p class="mt-2">
+                                                            {{ ceil((strtotime($donation->deadline) - time()) / (60 * 60 * 24)) }}
+                                                            Hari Lagi!</p>
+                                                    @else
+                                                        <a type="button" class="btn btn-danger donate-button"
+                                                            href="/donation/donate/{{ $donation->id }}">Donasikan</a>
+                                                        <span
+                                                            class="ml-2">{{ ceil((strtotime($donation->deadline) - time()) / (60 * 60 * 24)) }}
+                                                            Hari Lagi!</span>
+                                                    @endif
+                                                </div>
+                                            @else
+                                                <div class="col-md-6">
+                                                    @if ($userTransactionStatus == WAITING)
+                                                        <div class="alert alert-info alert-donated">
+                                                            Konfirmasi Pembayaran Sedang diproses.
+                                                        </div>
+                                                    @elseif ($userTransactionStatus == FINISHED)
+                                                        <div class="alert alert-info alert-donated">
+                                                            Terima kasih telah berdonasi.
+                                                        </div>
+                                                    @else
+                                                        <div class="alert alert-info alert-donated">
+                                                            <p>Upload konfirmasi Anda</p>
+                                                            <small><a
+                                                                    href="/donation/confirm_donate/{{ $donation->id }}">konfirmasi
+                                                                    pembayaran</a></small>
+                                                        </div>
+                                                    @endif
                                                     <span
                                                         class="ml-2">{{ ceil((strtotime($donation->deadline) - time()) / (60 * 60 * 24)) }}
                                                         Hari Lagi!</span>
-                                                @endif
-                                            </div>
-                                        @else
-                                            <div class="col-md-6">
-                                                @if ($userTransactionStatus)
-                                                    <div class="alert alert-info alert-donated">
-                                                        Terima kasih telah berdonasi.
-                                                    </div>
-                                                @else
-                                                    <div class="alert alert-info alert-donated">
-                                                        <p>Menunggu konfirmasi</p>
-                                                        <small><a
-                                                                href="/donation/confirm_donate/{{ $donation->id }}">konfirmasi
-                                                                pembayaran</a></small>
-                                                    </div>
-                                                @endif
-                                                <span
-                                                    class="ml-2">{{ ceil((strtotime($donation->deadline) - time()) / (60 * 60 * 24)) }}
-                                                    Hari Lagi!</span>
-                                            </div>
+                                                </div>
+                                            @endif
                                         @endif
                                     @else
-                                        <div class="col-md-6">
-                                            <div class="alert alert-info alert-donated">
-                                                <h5>{{ $message['header'] }}</h5>
-                                                <small>{{ $message['content'] }}</small>
+                                        @if ($user->role != ADMIN)
+                                            <div class="col-md-6">
+                                                <div class="alert alert-info alert-donated">
+                                                    <h5>{{ $message['header'] }}</h5>
+                                                    <small>{{ $message['content'] }}</small>
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     @endif
                                     <div class="col-md-6">
                                         <p>Jumlah Donatur: <b>{{ count($participatedDonation) }}</b> Donatur</p>
@@ -89,6 +98,13 @@
                                                 Menuju Target
                                             </div>
                                         </div>
+                                        @if ($user->role == ADMIN)
+                                            <div class="row">
+                                                <p class="mt-2 ml-3">
+                                                    {{ ceil((strtotime($donation->deadline) - time()) / (60 * 60 * 24)) }}
+                                                    Hari Lagi!</p>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +125,7 @@
                             <li class="nav-item">
                                 <a class="nav-link donation-detail show-budgeting">Alokasi Dana</a>
                             </li>
-                            @if (count($participatedDonation) != 0)
+                            @if (count($participatedDonation) != 0 && !$allStatusZero)
                                 <li class="nav-item">
                                     <a class="nav-link donation-detail show-donatur">Donatur</a>
                                 </li>
@@ -127,21 +143,52 @@
                 </div>
             </div>
             <div class="col-md-4 text-right">
-                @if ($user->role == 'guest')
+                @if ($user->role == GUEST)
                     <h5 class="font-weight-bold">Ayo daftarkan dirimu sekarang!</h5>
                     <p>Mulailah membawa perubahan dengan menolong
                         sesama.</p>
                     <a type="button" href="/register" class="btn btn-primary mt-2">Daftar</a>
-                @elseif($user->role == 'campaigner')
+                @elseif($user->role == CAMPAIGNER)
                     <h5 class="font-weight-bold">Butuh Bantuan Donasi?</h5>
                     <p>Yuk buat donasimu sekarang juga!</p>
                     <a type="button" class="btn btn-primary mt-2" href="/donation/create">Ajukan Donasi</a>
-                @elseif($user->role == 'participant')
+                @elseif($user->role == PARTICIPANT)
                     <h5 class="font-weight-bold">Upgrade akun mu menjadi <i>campaigner</i>!</h5>
                     <p>Mulailah membawa perubahan dengan menolong
                         sesama.</p>
-                    <a type="button" class="btn btn-primary mt-2" href="/profile/campaigner/{{ $user->id }}">Daftar
+                    <a type="button" class="btn btn-primary mt-2" href="/profile/campaigner">Daftar
                         Campaigner</a>
+                @elseif($user->role == ADMIN)
+                    @if ($donation->status == ACTIVE)
+                        <form action="/admin/donation/close/{{ $donation->id }}" method="POST">
+                            @csrf
+                            @method('patch')
+                            <div class="form-group">
+                                <label for="closeEvent">
+                                    <h5 class="font-weight-bold mt-5">Berikan Alasan Mengapa Event ini Ditutup</h5>
+                                </label>
+                                <textarea class="form-control" id="closeEvent" name="closeEvent" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-danger close-event">Tutup Event</button>
+                        </form>
+                    @elseif($donation->status == NOT_CONFIRMED)
+                        <form action="/admin/donation/reject/{{ $donation->id }}" method="POST">
+                            @csrf
+                            @method('patch')
+                            <div class="form-group">
+                                <label for="rejectEvent">
+                                    <h4 class="font-weight-bold">Alasan Ditolak</h4>
+                                </label>
+                                <textarea class="form-control" id="rejectEvent" name="rejectEvent" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-danger close-event">Tolak Event</button>
+                        </form>
+                        <form action="/admin/donation/accept/{{ $donation->id }}" method="POST">
+                            @csrf
+                            @method('patch')
+                            <button type="submit" class="btn btn-primary approve-event mt-3">Setujui Event</button>
+                        </form>
+                    @endif
                 @endif
             </div>
         </div>
@@ -174,9 +221,14 @@
                 @foreach ($participatedDonation as $donatur)
                     @if ($donatur->status != 0)
                         <li class="list-group-item">
-                            <img src="/{{ $donatur->photoProfile }}" alt="{{ $donatur->name }} Profile"
-                                class="donatur-photo">
-                            <span class="ml-3"> {{ $donatur->name }} </span>
+                            @if ($donatur->annonymous_comment == 1)
+                                <img src="{{ DEFAULT_PROFILE }}" alt="Photo Profile" class="donatur-photo">
+                                <span class="ml-3"> Annonymous </span>
+                            @else
+                                <img src="/{{ $donatur->photoProfile }}" alt="{{ $donatur->name }} Profile"
+                                    class="donatur-photo">
+                                <span class="ml-3"> {{ $donatur->name }} </span>
+                            @endif
                         </li>
                     @endif
                 @endforeach
@@ -185,20 +237,37 @@
         <div id="comment">
             @foreach ($participatedDonation as $donatur)
                 @if ($donatur->comment != null && $donatur->status != 0)
-                    <div class="card mb-4">
-                        <div class=" row no-gutters">
-                            <div class="col-md-2 offset-md-2 text-center p-3">
-                                <img src="/{{ $donatur->photoProfile }}" class="img-thumbnail rounded-circle"
-                                    alt="Participant's Image Profile">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title font-weight-bold">{{ $donatur->name }}</h5>
-                                    <p class="petition-description">{{ $donatur->comment }}</p>
+                    @if ($donatur->annonymous_comment == 1)
+                        <div class="card mb-4">
+                            <div class=" row no-gutters">
+                                <div class="col-md-2 offset-md-2 text-center p-3">
+                                    <img src="{{ DEFAULT_PROFILE }}" class="img-thumbnail rounded-circle"
+                                        alt="Participant's Image Profile">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title font-weight-bold">Annonymous</h5>
+                                        <p class="petition-description">{{ $donatur->comment }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="card mb-4">
+                            <div class=" row no-gutters">
+                                <div class="col-md-2 offset-md-2 text-center p-3">
+                                    <img src="/{{ $donatur->photoProfile }}" class="img-thumbnail rounded-circle"
+                                        alt="Participant's Image Profile">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title font-weight-bold">{{ $donatur->name }}</h5>
+                                        <p class="petition-description">{{ $donatur->comment }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 @endif
             @endforeach
         </div>

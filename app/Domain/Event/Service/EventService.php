@@ -13,10 +13,12 @@ use Illuminate\Support\Str;
 class EventService
 {
     private $dao;
+    private $adminService;
 
     public function __construct()
     {
         $this->dao = new EventDao();
+        // $this->adminService = new AdminService();
     }
 
     //* =========================================================================================
@@ -31,6 +33,27 @@ class EventService
         }
 
         return $this->dao->showProfile(GUEST_ID);
+    }
+
+    public function getCampaigner($id)
+    {
+        return $this->dao->showProfile($id);
+    }
+
+    private function updateCalculatedCount($idEvent, $idUser, $typeEvent)
+    {
+        // Update Count dari jumlah ttd petisi
+        if ($typeEvent == PETITION) {
+            $count = $this->dao->calculatedSignDonation($idEvent, PETITION);
+            $this->dao->updateCalculatedSign($idEvent, $count);
+        }
+
+        // Update jumlah event yang diikuti user
+        $countParticipatedDonation = $this->dao->countDonationParticipatedByUser($idUser);
+        $countParticipatedPetition = $this->dao->countPetitionParticipatedByUser($idUser);
+        $totalEvent = $countParticipatedDonation + $countParticipatedPetition;
+
+        $this->dao->updateCountEventParticipatedByUser($idUser, $totalEvent);
     }
 
     //! Mengupload gambar dan mengembalikan path dari gambar yang diupload
@@ -57,7 +80,7 @@ class EventService
     //! Mengembalikan kategori event petisi atau donasi yang dipilih
     public function categorySelect($request)
     {
-        $listCategory = $this->dao->listCategory();
+        $listCategory = $this->listCategory();
 
         foreach ($listCategory as $cat) {
             if ($request->category == $cat->description) {
@@ -71,6 +94,21 @@ class EventService
     public function listCategory()
     {
         return $this->dao->listCategory();
+    }
+
+    //! Mengambil nama bank yang bisa digunakan untuk transfer
+    public function listBank()
+    {
+        return $this->dao->listBank();
+    }
+
+    public static function getNavbar($user)
+    {
+        if ($user->role != ADMIN) {
+            return 'layout.app';
+        }
+
+        return 'layout.adminNavbar';
     }
 
     public function messageOfEvent($status)
@@ -170,6 +208,18 @@ class EventService
 
         if ($request->typePetition == PARTISIPASI) {
             return $this->dao->listPetitionParticipated($user->id);
+        }
+
+        if ($request->typePetition == DIBATALKAN) {
+            return $this->dao->listPetitionType(CANCELED);
+        }
+
+        if ($request->typePetition == BELUM_VALID) {
+            return $this->dao->listPetitionType(NOT_CONFIRMED);
+        }
+
+        if ($request->typePetition == SEMUA) {
+            return $this->dao->allPetition();
         }
 
         return $this->dao->listPetitionByMe($user->id);
@@ -288,6 +338,68 @@ class EventService
                 }
             }
         }
+
+        if ($request->typePetition == DIBATALKAN) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->dao->searchPetition(CANCELED, $request->keyword);
+            }
+
+            // jika berdasarkan sort dan category
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchPetitionCategorySort(CANCELED, $request->keyword, $category, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchPetitionCategorySort(CANCELED, $request->keyword, $category, CREATED_COLUMN);
+                }
+            }
+
+            // Jika hanya berdasarkan category
+            if ($category != 0) {
+                return $this->dao->searchPetitionCategory(CANCELED, $request->keyword, $category);
+            }
+
+            // Jika hanya berdasarkan sort
+            if ($sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchPetitionSortBy(CANCELED, $request->keyword, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchPetitionSortBy(CANCELED, $request->keyword, CREATED_COLUMN);
+                }
+            }
+        }
+
+        if ($request->typePetition == BELUM_VALID) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->dao->searchPetition(NOT_CONFIRMED, $request->keyword);
+            }
+
+            // jika berdasarkan sort dan category
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchPetitionCategorySort(NOT_CONFIRMED, $request->keyword, $category, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchPetitionCategorySort(NOT_CONFIRMED, $request->keyword, $category, CREATED_COLUMN);
+                }
+            }
+
+            // Jika hanya berdasarkan category
+            if ($category != 0) {
+                return $this->dao->searchPetitionCategory(NOT_CONFIRMED, $request->keyword, $category);
+            }
+
+            // Jika hanya berdasarkan sort
+            if ($sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->dao->searchPetitionSortBy(NOT_CONFIRMED, $request->keyword, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->dao->searchPetitionSortBy(NOT_CONFIRMED, $request->keyword, CREATED_COLUMN);
+                }
+            }
+        }
     }
 
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
@@ -400,6 +512,84 @@ class EventService
                 return $this->dao->sortMyPetition($userId, CREATED_COLUMN);
             }
         }
+        if ($request->typePetition == DIBATALKAN) {
+            // Jika sort dipilih
+            if ($request->sortBy == TANDA_TANGAN) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategory($category, CANCELED, SIGNED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortPetition(CANCELED, SIGNED_COLUMN);
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == EVENT_TERBARU) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategory($category, CANCELED, CREATED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortPetition(CANCELED, CREATED_COLUMN);
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == NONE) {
+                return $this->dao->petitionByCategory($category, CANCELED);
+            }
+        }
+        if ($request->typePetition == BELUM_VALID) {
+            // Jika sort dipilih
+            if ($request->sortBy == TANDA_TANGAN) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategory($category, NOT_CONFIRMED, SIGNED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortPetition(NOT_CONFIRMED, SIGNED_COLUMN);
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == EVENT_TERBARU) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->sortPetitionCategory($category, NOT_CONFIRMED, CREATED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->sortPetition(NOT_CONFIRMED, CREATED_COLUMN);
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == NONE) {
+                return $this->dao->petitionByCategory($category, NOT_CONFIRMED);
+            }
+        }
+        if ($request->typePetition == SEMUA) {
+            // Jika sort dipilih
+            if ($request->sortBy == TANDA_TANGAN) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->allStatusSortPetitionCategory($category, SIGNED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->allStatusSortPetition(SIGNED_COLUMN);
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == EVENT_TERBARU) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->dao->allStatusSortPetitionCategory($category, CREATED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->dao->allStatusSortPetition(CREATED_COLUMN);
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == NONE) {
+                return $this->dao->allStatusPetitionByCategory($category);
+            }
+        }
 
         // Jika hanya pilih berdasarkan category
         return $this->dao->myPetitionByCategory($category, $userId);
@@ -438,11 +628,10 @@ class EventService
         $petition->idPetition = $idEvent;
         $petition->idParticipant = $user->id;
         $petition->comment = $request->petitionComment;
-        $petition->created_CCREATED_COLUMN_at = Carbon::now()->format('Y-m-d');
+        $petition->created_at = Carbon::now()->format('Y-m-d');
 
         $this->dao->signPetition($petition, $idEvent, $user);
-        $count = $this->dao->calculatedSign($idEvent);
-        $this->dao->updateCalculatedSign($idEvent, $count);
+        $this->updateCalculatedCount($idEvent, $user->id, PETITION);
     }
 
     //! Menyimpan data petisi ke database
@@ -478,6 +667,20 @@ class EventService
         }
 
         return 0;
+    }
+
+    public function getDonationLimit()
+    {
+        $result = $this->dao->getListDonation();
+        $result->take(3);
+        return $result;
+    }
+
+    public function getPetitionLimit()
+    {
+        $result = $this->dao->indexPetition();
+        $result->take(3);
+        return $result;
     }
 
     //! Mengecek verifikasi data diri yang diberikan sebelum membuat event
@@ -600,20 +803,46 @@ class EventService
         $this->dao->postTransaction($transaction);
     }
 
-    public function getAUserTransaction($id)
+    public function getAUserTransaction($idUser, $idEvent)
     {
-        return $this->dao->getAUserTransaction($id);
+        return $this->dao->getAUserTransaction($idUser, $idEvent);
     }
 
     public function checkUserTransactionStatus($participatedDonation, $id)
     {
         foreach ($participatedDonation as $participate) {
-            if ($participate->status == 1 && $participate->idParticipant == $id) {
-                return true;
+            // dd($participate);
+            // if ($participate->status == 1 && $participate->idParticipant == $id) {
+            //     return true;
+            // }
+
+            if ($participate->idParticipant == $id) {
+                if ($participate->status == 1) {
+                    return FINISHED;
+                }
+                if (!empty($participate->repaymentPicture) && $participate->status == 0) {
+                    return WAITING;
+                }
             }
         }
 
-        return false;
+        return NOT_CONFIRMED;
+    }
+
+    public function checkStatusIsZero($participatedDonation)
+    {
+        foreach ($participatedDonation as $comment) {
+            if ($comment->status == 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function confirmationPictureDonation($picture, $id)
+    {
+        $pathRepaymentPicture = $this->uploadImage($picture, 'donation/bukti_transfer');
+        $this->dao->confirmationPictureDonation($pathRepaymentPicture, $id);
     }
 
     public function countProgressDonation($donation)
@@ -738,5 +967,22 @@ class EventService
         if ($request->sortBy == NONE) {
             return $this->dao->donationByCategory($category, ACTIVE);
         }
+    }
+
+    public function storeDonationCreated($donation)
+    {
+        $pathPhoto = $this->uploadImage($donation->getPhoto(), 'images/donation');
+        $donation->setPhoto($pathPhoto);
+        $this->dao->storeDonationCreated($donation);
+    }
+
+    public function storeDetailAllocation($allocationDetail)
+    {
+        $this->dao->storeDetailAllocation($allocationDetail);
+    }
+
+    public function getLastIdDonation()
+    {
+        return $this->dao->getLastIdDonation();
     }
 }

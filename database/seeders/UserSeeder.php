@@ -72,6 +72,7 @@ class UserSeeder extends Seeder
                 'created_at' => Carbon::create('2021', '03', '23'),
             ]
         );
+
         DB::table('users')->insert(
             [
                 'name' => 'Wanda Maximoff',

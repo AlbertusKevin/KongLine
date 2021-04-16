@@ -1,9 +1,15 @@
-@extends('layout.app')
+{{-- @if ($user->role != ADMIN) --}}
+@extends($navbar)
+{{-- @else
+    @extends('layout.adminNavbar')
+@endif --}}
+
 @section('title')
     Petition List
 @endsection
 
 @section('content')
+    @include('layout.message')
     <div class="container">
         <div class="row">
             @if ($user->role == 'campaigner')
@@ -24,14 +30,12 @@
                     class="btn btn-primary petition-type rounded-pill">Berlangsung</button>
                 <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">Telah
                     Menang</button>
-                @if (Auth::check())
-                    @if (Auth::user()->role == 'participant' || Auth::user()->role == 'campaigner')
-                        <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">Ikut
-                            Serta</button>
-                    @endif
-                    @if (Auth::user()->role == 'campaigner')
-                        <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Petisi Saya</button>
-                    @endif
+                @if ($user->role == 'participant' || $user->role == 'campaigner')
+                    <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">Ikut
+                        Serta</button>
+                @endif
+                @if ($user->role == 'campaigner')
+                    <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Petisi Saya</button>
                 @endif
             </div>
 
@@ -43,8 +47,10 @@
                 <div class="dropdown mt-5 mr-2">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="sort-by" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        Sort By
+                        Sort By:
                     </button>
+                    <br>
+                    <small class="text-muted" id="sort-label">None</small>
                     <div class="dropdown-menu" aria-labelledby="sort-by">
                         <a class="dropdown-item sort-petition font-weight-bold">None</a>
                         <a class="dropdown-item sort-petition">Jumlah Tanda Tangan</a>
@@ -54,8 +60,10 @@
                 <div class="dropdown mt-5">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="category" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        Category
+                        Category:
                     </button>
+                    <br>
+                    <small class="text-muted" id="category-label">None</small>
                     <div class="dropdown-menu" aria-labelledby="category">
                         <a class="dropdown-item category-petition font-weight-bold">None</a>
                         @foreach ($listCategory as $category)

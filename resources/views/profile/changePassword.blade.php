@@ -1,6 +1,7 @@
 @extends('layout.app')
 
 @section('content')
+    @include('layout.message')
     <div class="container">
         <div class="row mt-5">
             <div class="col-md-0 ml-3"><img src="/img/changePassword.png" alt="change password"></div>

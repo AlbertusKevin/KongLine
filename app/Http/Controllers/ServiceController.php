@@ -47,4 +47,13 @@ class ServiceController extends Controller
             'sender' => $sender,
         ]);
     }
+
+    public function getRender($user, $admin)
+    {
+        return view('livewire.message', [
+            'users' => $user,
+            'admin' => $admin
+        ]);
+    }
+    
 }

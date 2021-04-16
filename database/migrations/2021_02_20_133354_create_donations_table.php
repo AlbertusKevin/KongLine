@@ -22,9 +22,12 @@ class CreateDonationsTable extends Migration
             $table->longText('purpose');
             $table->tinyInteger('status')->unsigned();
             $table->string('title')->unique();
+            $table->integer('totalDonatur')->default(0);
             $table->string('assistedSubject');
             $table->bigInteger('donationCollected');
             $table->bigInteger('donationTarget');
+            $table->string('accountNumber');
+            $table->tinyInteger('bank')->unsigned();
             $table->date('created_at');
         });
 
@@ -32,6 +35,11 @@ class CreateDonationsTable extends Migration
             $table->foreign('category')
                 ->references('id')
                 ->on('category')
+                ->onDelete('cascade');
+
+            $table->foreign('bank')
+                ->references('id')
+                ->on('bank')
                 ->onDelete('cascade');
 
             $table->foreign('status')

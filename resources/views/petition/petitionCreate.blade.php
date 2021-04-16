@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+    @include('layout.message')
     <div class="container">
         <form action="/petition/create" method="POST" enctype="multipart/form-data">
             @csrf

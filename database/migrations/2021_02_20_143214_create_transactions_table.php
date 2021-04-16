@@ -14,6 +14,7 @@ class CreateTransactionsTable extends Migration
     public function up()
     {
         Schema::create('transaction', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('idDonation');
             $table->foreignId('idParticipant');
             $table->string('accountNumber');
@@ -25,7 +26,6 @@ class CreateTransactionsTable extends Migration
         });
 
         Schema::table('transaction', function (Blueprint $table) {
-            $table->primary(['idDonation', 'idParticipant']);
             $table->foreign('idDonation')
                 ->references('id')
                 ->on('donation')

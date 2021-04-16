@@ -11,7 +11,7 @@
                             <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                 <td class="" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0; background-color: #187BCD; margin: 0; padding: 20px;"
                                     align="center" bgcolor="#71b6f9" valign="top">
-                                    <a href="http://127.0.0.1:8000/" style="font-size:32px;color:#fff;text-decoration:none;"> Yuk Bisa Yuk</a> <br>
+                                    <a href="{{ url('/') }}" style="font-size:32px;color:#fff;text-decoration:none;"> Yuk Bisa Yuk</a> <br>
                                     <span style="margin-top: 10px;display: block;"> Reset Password </span>
                                 </td>
                             </tr>

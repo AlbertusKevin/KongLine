@@ -1,10 +1,17 @@
 <?php
+//constant data
+define("ACCOUNT", "1702272081");
+define("DEFAULT_PROFILE", "/images/profile/photo/default.png");
+define("DEFAULT_FILE_PREVIEW", "/images/folder.png");
+define("GUEST_ID", 1);
+
 // Status Event
 define("NOT_CONFIRMED", 0);
 define("ACTIVE", 1);
 define("FINISHED", 2);
 define("CLOSED", 3);
 define("CANCELED", 4);
+define("REJECTED", 5);
 
 // Status User
 define("DELETED", 0);
@@ -17,7 +24,6 @@ define("GUEST", "guest");
 define("ADMIN", "admin");
 define("PARTICIPANT", "participant");
 define("CAMPAIGNER", "campaigner");
-define("GUEST_ID", 1);
 
 //event
 define("PETITION", "petition");
@@ -26,8 +32,11 @@ define("DONATION", "donation");
 //petition type
 define("BERLANGSUNG", "berlangsung");
 define("MENANG", "menang");
+define("SELESAI", "selesai");
 define("PARTISIPASI", "partisipasi");
 define("PETISI_SAYA", "petisi_saya");
+define("DIBATALKAN", "dibatalkan");
+define("BELUM_VALID", "belum_valid");
 
 //Sort Petition
 define("TANDA_TANGAN", "Jumlah Tanda Tangan");
@@ -51,3 +60,11 @@ define("COLLECTED_COLUMN", "donationCollected");
 //List User Admin
 define("PENGAJUAN", "pengajuan");
 define("SEMUA", "semua");
+
+//Transaction Type
+define("KONFIRMASI", 'konfirmasi');
+define("GAGAL", 'gagal');
+
+// Status Transaction
+define("CONFIRMED_TRANSACTION", 1);
+define("REJECTED_TRANSACTION", 2);

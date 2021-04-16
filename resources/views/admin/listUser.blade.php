@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+
 <div class="container">
     <div class="form-inline my-2 my-lg-0 justify-content-center">
         <input class="form-control mr-sm-2 w-50 mt-5" id="search-user" type="search" placeholder="Cari User"
@@ -51,33 +52,32 @@
                 @if ($users[$i]->role != 'admin')
                     <tr>
                         <td class="text-center">
-                            {{ $changeDateFormat[$i]}}
+                        {{ $changeDateFormat[$i] }}
                         </td>
                         <td>
                             <a href = "/admin/user/{{ $users[$i]->id}}"> {{ $users[$i]->name}}</a>
                         </td>
                         <td>
-                            {{ $users[$i]->email}}
+                        {{ $users[$i]->email }}
                         </td>
-                        @if ($eventCount[$i][0] == $users[$i] -> id)
+                        @if ($eventCount[$i][0] == $users[$i]->id)
                             <td>
-                                {{ $eventCount[$i][1]}}
+                            {{ $eventCount[$i][1] }}
+                            </td> @endif
+                            <td class="text-left">
+                                @if ($users[$i]->role == 'guest')
+                                    <span class="badge badge-dark p-2">{{ $users[$i]->role }}</span>
+                                @elseif ($users[$i]->role == 'participant')
+                                    <span class="badge badge-primary p-2">{{ $users[$i]->role }}</span>
+                                @elseif ($users[$i]->role == 'campaigner')
+                                    <span class="badge badge-success p-2">{{ $users[$i]->role }}</span>
+                                @endif
                             </td>
+                            </tr>
                         @endif
-                        <td class="text-left">
-                            @if ($users[$i]->role == 'guest')
-                                <span class="badge badge-dark p-2">{{ $users[$i]->role}}</span>
-                            @elseif ($users[$i]->role == 'participant')
-                                <span class="badge badge-primary p-2">{{ $users[$i]->role}}</span>
-                            @elseif ($users[$i]->role == 'campaigner')
-                                <span class="badge badge-success p-2">{{ $users[$i]->role}}</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endif
-            @endfor
-        </tbody>
-      </table>
-      
-</div>
-@endsection
+                    @endfor
+                </tbody>
+            </table>
+
+        </div>
+    @endsection

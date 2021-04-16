@@ -9,6 +9,6 @@ class DetailAllocation extends Model
 {
     use HasFactory;
     protected $table = 'detail_allocation';
-    protected $guarded = 'id';
+    protected $guarded = ['id'];
     public $timestamps = false;
 }
