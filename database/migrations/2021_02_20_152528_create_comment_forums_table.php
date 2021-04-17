@@ -18,6 +18,7 @@ class CreateCommentForumsTable extends Migration
             $table->foreignId('idForum');
             $table->foreignId('idParticipant');
             $table->longText('content');
+            $table->date('updated_at');
             $table->date('created_at');
         });
 

@@ -55,7 +55,7 @@
                         {{ $changeDateFormat[$i] }}
                         </td>
                         <td>
-                            <a href = "/admin/user/{{ $users[$i]->id}}"> {{ $users[$i]->name}}</a>
+                            <a href = "/admin/user/{{ $users[$i]->id}}" class="link-user"> {{ $users[$i]->name}}</a>
                         </td>
                         <td>
                         {{ $users[$i]->email }}

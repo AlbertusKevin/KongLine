@@ -227,7 +227,10 @@ class AdminController extends Controller
         return $this->admin_service->searchUser($request);
     }
 
-    public function userInfo(Request $request)
+    public function getUserInfo($id)
     {
-        return view('/admin/userAdmin');
+        $user = $this->admin_service->getUserInfo($id);
+        //dd($user);
+        return view('admin.userAdmin', compact('user'));
+    }
 }

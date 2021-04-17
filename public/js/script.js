@@ -819,7 +819,7 @@ const viewUserParticipantRole = (user) => {
                 ${changeDateFormat(user.created_at)}
             </td>
             <td>
-                ${user.name}
+                <a href = "/admin/user/${user.id}" class = "link-user"> ${user.name}</a>
             </td>
             <td>
                 ${user.email}
@@ -843,7 +843,7 @@ const viewUserCampaignerRole = (user) => {
                 ${changeDateFormat(user.created_at)}
             </td>
             <td>
-                ${user.name}
+                <a href = "/admin/user/${user.id}" class = "link-user"> ${user.name}</a>
             </td>
             <td>
                 ${user.email}
@@ -867,7 +867,7 @@ const viewUserGuestRole = (user) => {
                 ${changeDateFormat(user.created_at)}
             </td>
             <td>
-                ${user.name}
+                <a href = "/admin/user/${user.id}" class = "link-user"> ${user.name}</a>
             </td>
             <td>
                 ${user.email}

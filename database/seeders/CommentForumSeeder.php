@@ -20,7 +20,8 @@ class CommentForumSeeder extends Seeder
                 'id' => 1,
                 'idForum' => 1,
                 'idParticipant' => 2,
-                'content' => 'So fun',
+                'content' => 'Get Well Soon',
+                'updated_at' => Carbon::now()->format('Y-m-d'),
                 'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
@@ -29,7 +30,8 @@ class CommentForumSeeder extends Seeder
                 'id' => 2,
                 'idForum' => 2,
                 'idParticipant' => 2,
-                'content' => 'Best',
+                'content' => 'You Can Do It',
+                'updated_at' => Carbon::now()->format('Y-m-d'),
                 'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );

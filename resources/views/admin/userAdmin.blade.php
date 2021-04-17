@@ -1,14 +1,24 @@
-@extends('layout.app')
+@extends('layout.adminNavbar')
 
+@section('title')
+    User - Detail
+@endsection
 @section('content')
-    <div class="jumbotron text-center" style="background-image: url('/images/profile/background/coverProfile.png');">
-        <img src="images/profile/photo/default.svg" alt="profile" class="profile-picture rounded-circle">
-        <h3 class="display-4">Popon Tuti Wati</h3>
-        <p class="lead">popon1029@gmail.com</p>
-        <p>12/09/2020</p>
-        <button type="button" class="btn btn-success">Pengajuan</button><br>
-        <button type="button" class="btn btn-primary my-4 mr-5 rounded-pill">Terima Pengajuan</button>
-        <button type="button" class="btn btn-danger rounded-pill">Tolak Pengajuan</button>
+    <div class="jumbotron text-center" style="background-image: url('/{{ $user->backgroundPicture }}');">
+        <img src="/{{ $user->photoProfile}}" alt="profile" class="profile-picture rounded-circle">
+        <h3 class="display-4">{{ $user->name}}</h3>
+        <p class="lead">{{ $user->email }}</p>
+        @if($user->dob == null)
+            <p class="text-danger">Tidak ada data tanggal lahir.</p>
+        @else
+            <p>{{ $user->dob}}</p>
+        @endif
+        <button type="button" class="btn btn-success" disabled>{{ $user->role }}</button><br>
+        @if($user->status != 1)
+            <button type="button" class="btn btn-success">Pengajuan</button><br>
+            <button type="button" class="btn btn-primary my-4 mr-5 rounded-pill">Terima Pengajuan</button>
+            <button type="button" class="btn btn-danger rounded-pill">Tolak Pengajuan</button>
+        @endif
     </div>
 
     <div class="container">
@@ -19,82 +29,121 @@
                     Nama Lengkap
                 </div>
                 <div class="col-sm-10">
-                    Popon Tuti Wati
+                    {{ $user->name }}
                 </div>
             </div>
             <div class="row py-3">
                 <div class="col-sm-2">
                     Tentang Saya
                 </div>
-                <div class="col-sm-10">
-                    Seorang pengamat sosial yang menaruh perhatian khusus terkait acara penggalangan dana untuk membentuk sesama yang membutuhkan
-                </div>
+                @if($user->aboutMe == null)
+                    <div class="col-sm-10">
+                        <p class="text-danger">Tidak ada data Tentang Saya.</p>
+                    </div>
+                @else
+                    <div class="col-sm-10">
+                        {{ $user->aboutMe }}
+                    </div>
+                @endif
             </div>
             <div class="row py-3">
                 <div class="col-sm-2">
                     Kota
                 </div>
-                <div class="col-sm-10">
-                    Bandung
-                </div>
+                @if($user->city == null)
+                    <div class="col-sm-10">
+                        <p class="text-danger">Tidak ada data Kota.</p>
+                    </div>
+                @else
+                    <div class="col-sm-10">
+                        {{ $user->city }}
+                    </div>
+                @endif
             </div>
             <div class="row py-3">
                 <div class="col-sm-2">
                     Negara
                 </div>
-                <div class="col-sm-10">
-                    Indonesia
-                </div>
+                @if($user->country == null)
+                    <div class="col-sm-10">
+                        <p class="text-danger">Tidak ada data Negara.</p>
+                    </div>
+                @else
+                    <div class="col-sm-10">
+                        {{ $user->country }}
+                    </div>
+                @endif
             </div>
             <div class="row py-3">
                 <div class="col-sm-2">
                     Alamat
                 </div>
-                <div class="col-sm-10">
-                    Jalan Kenangan No. 21
-                </div>
+                @if($user->address == null)
+                    <div class="col-sm-10">
+                        <p class="text-danger">Tidak ada data Alamat.</p>
+                    </div>
+                @else
+                    <div class="col-sm-10">
+                        {{ $user->address }}
+                    </div>
+                @endif
             </div>
             <div class="row py-3">
                 <div class="col-sm-2">
                     Kode Pos
                 </div>
-                <div class="col-sm-10">
-                    40219
-                </div>
+                @if($user->zipCode == null)
+                    <div class="col-sm-10">
+                        <p class="text-danger">Tidak ada data Kode Pos.</p>
+                    </div>
+                @else
+                    <div class="col-sm-10">
+                        {{ $user->zipCode }}
+                    </div>
+                @endif
             </div>
             <div class="row py-3">
                 <div class="col-sm-2">
                     Nomor Telepon
                 </div>
-                <div class="col-sm-10">
-                    082133318
-                </div>
+                @if($user->phoneNumber == null)
+                    <div class="col-sm-10">
+                        <p class="text-danger">Tidak ada data Nomor Telepon.</p>
+                    </div>
+                @else
+                    <div class="col-sm-10">
+                        {{ $user->phoneNumber }}
+                    </div>
+                @endif
             </div>
-            <h3 class="mt-5">Campaigner</h3>
-            <div class="row py-3">
-                <div class="col-sm-2">
-                    NIK
+            @if( $user->role == 'campaigner')
+
+                <h3 class="mt-5">Campaigner</h3>
+                <div class="row py-3">
+                    <div class="col-sm-2">
+                        NIK
+                    </div>
+                    <div class="col-sm-10">
+                        {{ $user->nik }}
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                    0128301230129
+                <div class="row py-3">
+                    <div class="col-sm-2">
+                        Nomor Rekening
+                    </div>
+                    <div class="col-sm-10">
+                        {{ $user->accountNumber }}
+                    </div>
                 </div>
-            </div>
-            <div class="row py-3">
-                <div class="col-sm-2">
-                    Nomor Rekening
+                <div class="row py-3">
+                    <div class="col-sm-2">
+                        KTP
+                    </div>
+                    <div class="col-sm-10">
+                        <img src="/{{$user->ktpPicture}}" class="img-thumbnail" alt="tolak">
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                    10239102
-                </div>
-            </div>
-            <div class="row py-3">
-                <div class="col-sm-2">
-                    KTP
-                </div>
-                <div class="col-sm-10">
-                    <img src="/img/baby.png" class="img-thumbnail" alt="tolak">
-                </div>
-            </div>
+            @endif
         </div>
         <div class="container">
             <h3 class="mt-5">Event</h3>
@@ -109,31 +158,31 @@
                     <div class="card" style="width: 18rem;">
                         <img src="/img/baby.png" class="card-img-top" alt="...">
                         <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                          <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
                         </div>
-                      </div>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card" style="width: 18rem;">
                         <img src="/img/baby.png" class="card-img-top" alt="...">
                         <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                          <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
                         </div>
-                      </div>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card" style="width: 18rem;">
                         <img src="/img/baby.png" class="card-img-top" alt="...">
                         <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                          <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
                         </div>
-                      </div>
+                    </div>
                 </div>
             </div>
         </div>

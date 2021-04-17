@@ -433,4 +433,10 @@ class AdminDao
         $user->countEvent = $total;
         $user->save();
     }
+
+    public function getUserInfo($id)
+    {
+        $user = User::where('id', $id)->first();
+        return $user;
+    }
 }

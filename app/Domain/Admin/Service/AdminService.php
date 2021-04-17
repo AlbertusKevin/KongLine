@@ -614,4 +614,8 @@ class AdminService
             return $this->dao->searchUserPengajuan($request->keyword);
         }
     }
+
+    public function getUserInfo($id){
+        return $this->dao->getUserInfo($id);
+    }
 }

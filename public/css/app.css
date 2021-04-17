@@ -11277,3 +11277,11 @@ a.text-dark:focus {
   width: 175px;
   margin-left: 175px;
 }
+
+a.link-user:link{
+  color: black;
+}
+
+a.link-user:hover{
+  color: #3409dc;
+}
