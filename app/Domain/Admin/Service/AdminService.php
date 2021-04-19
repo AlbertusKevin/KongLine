@@ -618,4 +618,22 @@ class AdminService
     public function getUserInfo($id){
         return $this->dao->getUserInfo($id);
     }
+
+    public function getEventsUser($id){
+        $donations = $this->dao->getUserParticipateDonation($id);
+        $petitions = $this->dao->getUserParticipatePetition($id);
+        $events = collect();
+        $events->push($donations);
+        $events->push($petitions);
+        //dd($events);
+
+        return $events;
+    }
+
+    public function countEventMade($id){
+        $donationCount = $this->dao->countDonationMade($id);
+        $petitionCount = $this->dao->countPetitionMade($id);
+
+        return $donationCount + $petitionCount;
+    }
 }

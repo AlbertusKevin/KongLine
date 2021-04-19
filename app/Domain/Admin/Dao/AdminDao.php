@@ -401,11 +401,13 @@ class AdminDao
         ]);
     }
   
-  public function searchUserAll($keyword)
+    //Mencari User sesuai keyword untuk tab SEMUA
+    public function searchUserAll($keyword)
     {
         return User::where('name', 'LIKE', '%' . $keyword . '%')->get();
     }
 
+    //Mencari User sesuai keyword untuk tab PARTICIPANT
     public function searchUserParticipant($keyword)
     {
         return User::where('role', '=', 'participant')
@@ -413,6 +415,7 @@ class AdminDao
             ->get();
     }
 
+    //Mencari User sesuai keyword untuk tab CAMPAIGNER
     public function searchUserCampaigner($keyword)
     {
         return User::where('role' ,'=', 'campaigner')
@@ -420,6 +423,7 @@ class AdminDao
             ->get();
     }
 
+    ////Mencari User sesuai keyword untuk tab PENGAJUAN
     public function searchUserPengajuan($keyword)
     {
         return User::where('status' , '=', 3)
@@ -427,6 +431,9 @@ class AdminDao
             ->get();
     }
 
+    /*fungsi yang akan mengupdate kolom countEvent pada tabel users 
+    dengan jumlah partisipasi user di table participate_donation 
+    dan participate_petition*/
     public function updateUserCountEvent($userId, $total)
     {
         $user = User::where('id','=',$userId)->first();
@@ -434,9 +441,52 @@ class AdminDao
         $user->save();
     }
 
+    //Akan mengambil user berdasarkan id, untuk user profile
     public function getUserInfo($id)
     {
         $user = User::where('id', $id)->first();
         return $user;
     }
+
+    //akan mengambil data event donasi yang user ikut serta sebagai perticipant
+    public function getUserParticipateDonation($id){
+        $donations = Donation::join('participate_donation','donation.id','participate_donation.idDonation')
+                        ->join('users','users.id','donation.idCampaigner')
+                        ->join('category','category.id','donation.category')
+                        ->where('participate_donation.idParticipant', $id)
+                        ->select('donation.id','category.description','donation.photo','donation.title','users.name')
+                        ->get();
+    
+                        /*SQL Syntax :
+                            SELECT 'donation.id','donation.category','donation.photo','donation.title','users.name' 
+                            FROM `Donation` 
+                            JOIN(`participate_donation`) 
+                            ON `participate_donation.id` = `donation.id`
+                            JOIN(`users`)
+                            ON `users.id` = `donation.idCampaigner'
+                            WHERE('participate_donation.idParticipant' = $id);
+                        */    
+
+        return $donations;
+    }
+
+    public function getUserParticipatePetition($id){
+        $petitions = Petition::join('participate_petition','petition.id','participate_petition.idPetition')
+                        ->join('users','users.id','petition.idCampaigner')
+                        ->join('category','category.id','petition.category')
+                        ->where('participate_petition.idParticipant', $id)
+                        ->select('petition.id','category.description','petition.photo','petition.title','users.name')
+                        ->get();
+        
+        return $petitions;
+    }
+
+    public function countDonationMade($id){
+        return Donation::where('idCampaigner', $id)->count();
+    }
+
+    public function countPetitionMade($id){
+        return Petition::where('idCampaigner', $id)->count();
+    }
+
 }

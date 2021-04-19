@@ -1126,3 +1126,17 @@ $("#search-user").on("keyup", function (){
     });
 });
 
+$(".diikuti").on("click", function () {
+
+    $(this).removeClass("btn-light");
+    $(this).addClass("btn-primary");
+
+    $.ajax({
+        url: "/admin/user/{id}/diikuti",
+        data: {user, events, countTotal, eventMade},
+        dataType: "json",
+        success: (data) => {
+            console.log(data);
+        },
+    });
+});

@@ -116,7 +116,7 @@
                     </div>
                 @endif
             </div>
-            @if( $user->role == 'campaigner')
+            @if( $user->role == CAMPAIGNER)
 
                 <h3 class="mt-5">Campaigner</h3>
                 <div class="row py-3">
@@ -149,41 +149,51 @@
             <h3 class="mt-5">Event</h3>
             <div class="row">
                 <div class="col">
-                    <button type="button" class="btn btn-primary mx-2 rounded-pill my-3">Diikuti (20)</button>
-                    <button type="button" class="btn btn-light rounded-pill my-3">Dibuat (0)</button>
+                    <button type="button" class="btn btn-primary mx-2 rounded-pill my-3 diikuti">Diikuti ({{ $countTotal }})</button>
+                    @if( $user->role == CAMPAIGNER)
+                        <button type="button" class="btn btn-light rounded-pill my-3 dibuat">Dibuat ({{ $eventMade }})</button>
+                    @endif
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="card" style="width: 18rem;">
-                        <img src="/img/baby.png" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card" style="width: 18rem;">
-                        <img src="/img/baby.png" class="card-img-top" alt="...">
-                        <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card" style="width: 18rem;">
-                        <img src="/img/baby.png" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
-                </div>
+                @php
+                    $status = DONATION;
+                @endphp
+                @foreach ($events as $event)
+                    @foreach ( $event as $singleEvent)
+                        @if ($status == DONATION)
+                            <div class="col-md-4">
+                                <div class="card" style="width: 18rem;">
+                                    <img src="/{{$singleEvent->photo}}" class="card-img-top" alt="...">
+                                    <p class="time-left">Donation</p>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{$singleEvent->title}}</h5>
+                                        <p class="card-text">{{$singleEvent->table}}</p>
+                                        <a href="/donation/{{$singleEvent->id}}" class="btn btn-primary">Kunjungi event</a>
+                                    </div>
+                                </div>
+                            </div>
+                        @elseif ($status == PETITION)
+                            <div class="col-md-4">
+                                <div class="card" style="width: 18rem;">
+                                    <img src="/{{$singleEvent->photo}}" class="card-img-top" alt="...">
+                                    <p class="time-left-white">Petition</p>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{$singleEvent->title}}</h5>
+                                        <p class="card-text">{{$singleEvent->table}}</p>
+                                        <a href="/petition/{{$singleEvent->id}}" class="btn btn-primary">Kunjungi event</a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        
+                    @endforeach 
+                    @if ($loop->remaining)
+                        @php
+                            $status = PETITION;
+                        @endphp
+                    @endif
+                @endforeach
             </div>
         </div>
     </div>

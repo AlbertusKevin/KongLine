@@ -11285,3 +11285,13 @@ a.link-user:link{
 a.link-user:hover{
   color: #3409dc;
 }
+
+.time-left-white{
+  position:absolute; top: 0; left: 0;
+  margin: 0.7rem 0 0 0.7rem;
+  padding:0.4rem;
+  border-radius: 10px;
+  background-color: rgb(255, 255, 255);
+  font-weight: bold;
+  color: #187BCD;
+}
