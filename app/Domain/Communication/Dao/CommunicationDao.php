@@ -43,7 +43,7 @@ class CommunicationDao
 
     public function getAllForum()
     {
-        return Forum::all();
+        return Forum::orderBy('id', 'DESC')->get();
     }
 
     public function getForumbyId($id)
