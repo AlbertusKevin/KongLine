@@ -7,6 +7,7 @@
     <div class="jumbotron text-center" style="background-image: url('/{{ $user->backgroundPicture }}');">
         <img src="/{{ $user->photoProfile}}" alt="profile" class="profile-picture rounded-circle">
         <h3 class="display-4">{{ $user->name}}</h3>
+        {{-- <h6 class="userId={{$user->id}}">{{ $user->id }}</h6> --}}
         <p class="lead">{{ $user->email }}</p>
         @if($user->dob == null)
             <p class="text-danger">Tidak ada data tanggal lahir.</p>

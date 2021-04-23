@@ -240,16 +240,10 @@ class AdminController extends Controller
         return view('admin.userAdmin', compact('user','events', 'countTotal', 'eventMade'));
     }
 
-    public function getUserInfoDiikuti($id)
-    {
-        $user = $this->admin_service->getUserInfo($id);
-        $events = $this->admin_service->getEventsUser($id);
-        $eventMade = $this->admin_service->countEventMade($id);
-
-        $countDonation = $events[0]->count();
-        $countPetition = $events[1]->count();
-        $countTotal = $countDonation + $countPetition;
-        // dd($countTotal);
-        return view('admin.userAdmin', compact('user','events', 'countTotal', 'eventMade'));
+    public function getEventParticipate(Request $request)
+    {   
+        //dd($request);
+        $event = $this->admin_service->getEventUser($request->id);
+        return json_encode($event);
     }
 }

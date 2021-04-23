@@ -636,4 +636,9 @@ class AdminService
 
         return $donationCount + $petitionCount;
     }
+
+    public function test(){
+        $val = 13;
+        return $val;
+    }
 }

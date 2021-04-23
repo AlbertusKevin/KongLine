@@ -1126,17 +1126,36 @@ $("#search-user").on("keyup", function (){
     });
 });
 
-$(".diikuti").on("click", function () {
+$(".diikuti").on("click", function (e) {
+    e.preventDefault();
 
     $(this).removeClass("btn-light");
     $(this).addClass("btn-primary");
 
+    $(".dibuat").removeClass("btn-primary");
+    $(".dibuat").removeClass("btn-light");
+
+    const queryString = window.location.pathname;
+    console.log(queryString);
+
+    const id = queryString.substring(12,);
+    console.log(id);
+
     $.ajax({
-        url: "/admin/user/{id}/diikuti",
-        data: {user, events, countTotal, eventMade},
+        url: "/admin/user/diikuti",
+        data: { id },
         dataType: "json",
         success: (data) => {
             console.log(data);
         },
     });
+});
+
+$(".dibuat").on("click", function (e){
+
+    $(this).removeClass("btn-light");
+    $(this).addClass("btn-primary");
+
+    $(".diikuti").removeClass("btn-primary");
+    $(".diikuti").removeClass("btn-light");
 });
