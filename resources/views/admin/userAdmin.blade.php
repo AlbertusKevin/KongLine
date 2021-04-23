@@ -149,58 +149,59 @@
         <div class="container">
             <h3 class="mt-5">Event</h3>
             <div class="row">
-                <div class="col">
+                <div class="col-md-auto">
                     <button type="button" class="btn btn-primary mx-2 rounded-pill my-3 diikuti">Diikuti ({{ $countTotal }})</button>
+                </div>
+                <div class="col-md-auto">
                     @if( $user->role == CAMPAIGNER)
                         <button type="button" class="btn btn-light rounded-pill my-3 dibuat">Dibuat ({{ $eventMade }})</button>
                     @endif
                 </div>
             </div>
-            <div class="event-list">
+            {{-- <div class="event-list"> --}}
 
-                <div class="row">
-                    <div class="event">
-                        @php
-                            $status = DONATION;
-                        @endphp
-                        @foreach ($events as $event)
-                            @foreach ( $event as $singleEvent)
-                                @if ($status == DONATION)
-                                    <div class="col-md-4">
+            <div class="row flex-nowrap event horizontal-scroll">
+                {{-- <div class="event"> --}}
+                    @php
+                        $status = DONATION;
+                    @endphp
+                    @foreach ($events as $event)
+                        @foreach ( $event as $singleEvent)
+                            @if ($status == DONATION)
+                                <div class="m-2">
+                                    <div class="card" style="width: 18rem;">
+                                        <img src="/{{$singleEvent->photo}}" class="card-img-top" alt="...">
+                                        <p class="time-left">Donation</p>
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{$singleEvent->title}}</h5>
+                                            <p class="card-text">{{$singleEvent->name}}</p>
+                                            <a href="/donation/{{$singleEvent->id}}" class="btn btn-primary">Kunjungi event</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @elseif ($status == PETITION)
+                                    <div class="m-2">
                                         <div class="card" style="width: 18rem;">
                                             <img src="/{{$singleEvent->photo}}" class="card-img-top" alt="...">
-                                            <p class="time-left">Donation</p>
+                                            <p class="time-left-white">Petition</p>
                                             <div class="card-body">
                                                 <h5 class="card-title">{{$singleEvent->title}}</h5>
                                                 <p class="card-text">{{$singleEvent->name}}</p>
-                                                <a href="/donation/{{$singleEvent->id}}" class="btn btn-primary">Kunjungi event</a>
+                                                <a href="/petition/{{$singleEvent->id}}" class="btn btn-primary">Kunjungi event</a>
                                             </div>
                                         </div>
                                     </div>
-                                @elseif ($status == PETITION)
-                                        <div class="col-md-4">
-                                            <div class="card" style="width: 18rem;">
-                                                <img src="/{{$singleEvent->photo}}" class="card-img-top" alt="...">
-                                                <p class="time-left-white">Petition</p>
-                                                <div class="card-body">
-                                                    <h5 class="card-title">{{$singleEvent->title}}</h5>
-                                                    <p class="card-text">{{$singleEvent->name}}</p>
-                                                    <a href="/petition/{{$singleEvent->id}}" class="btn btn-primary">Kunjungi event</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @endif
-                                        
-                                        @endforeach 
-                                        @if ($loop->remaining)
-                                        @php
-                                    $status = PETITION;
-                                    @endphp
                             @endif
-                            @endforeach
-                    </div>
-                </div>
+                        @endforeach 
+                            @if ($loop->remaining)
+                                @php
+                                $status = PETITION;
+                                @endphp
+                            @endif
+                    @endforeach
+                {{-- </div> --}}
             </div>
+            {{-- </div> --}}
         </div>
     </div>
 @endsection

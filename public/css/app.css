@@ -11296,7 +11296,10 @@ a.link-user:hover{
   color: #187BCD;
 }
 
-.event{
-  overflow-x:scroll;
-  overflow-y:hidden;
+
+.horizontal-scroll{
+  flex-wrap: nowrap;
+  max-height: auto;
+  overflow-x: scroll;
+  display: flex;
 }

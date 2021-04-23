@@ -1211,7 +1211,7 @@ $(".dibuat").on("click", function (e){
 
 const makeDonationCardView = (event) =>{
     return `
-        <div class="col-md-4" style="padding: 0;">
+        <div class="m-2">
             <div class="card" style="width: 18rem; position:relative;">
                 <img src="/${event.photo}" class="card-img-top" alt="...">
                 <p class="time-left">Donation</p>
@@ -1227,7 +1227,7 @@ const makeDonationCardView = (event) =>{
 
 const makePetitionCardView = (event) =>{
     return `
-        <div class="col-md-4" style="padding: 0;">
+        <div class="m-2">
             <div class="card" style="width: 18rem; position:relative;">
                 <img src="/${event.photo}" class="card-img-top" alt="...">
                 <p class="time-left-white">Petition</p>
