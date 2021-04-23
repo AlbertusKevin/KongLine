@@ -66,7 +66,7 @@ class AdminDao
 
     public function listUserByPengajuan()
     {
-        return User::where('status', '==', 3)->get();
+        return User::where('status',3)->get();
     }
 
     public function sortByTanggalDibuat($role)

@@ -133,6 +133,8 @@ Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventPar
 Route::get('/admin/user/{id}', [AdminController::class, 'getUserInfo'])->middleware('admin');
 Route::get('/admin/user/diikuti/{id}', [AdminController::class, 'getEventParticipate']);
 Route::get('/admin/user/dibuat/{id}', [AdminController::class, 'getEventMade']);
+Route::put('/admin/user/terimaPengajuan/{id}', [AdminController::class, 'updateUserStatus']);
+Route::put('/admin/user/tolakPengajuan/{id}', [AdminController::class, 'rejectUserStatus']);
 
 //! Petition
 Route::get('/admin/petition', [AdminController::class, 'getListPetition'])->middleware('admin');

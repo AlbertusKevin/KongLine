@@ -14,11 +14,11 @@
         @else
             <p>{{ $user->dob}}</p>
         @endif
-        <button type="button" class="btn btn-success" disabled>{{ $user->role }}</button><br>
+        <button type="button" class="btn btn-success mb-2" disabled>{{ $user->role }}</button><br>
         @if($user->status != 1)
             <button type="button" class="btn btn-success">Pengajuan</button><br>
-            <button type="button" class="btn btn-primary my-4 mr-5 rounded-pill">Terima Pengajuan</button>
-            <button type="button" class="btn btn-danger rounded-pill">Tolak Pengajuan</button>
+            <button type="button" class="btn btn-primary my-4 mr-5 rounded-pill terimaPengajuan">Terima Pengajuan</button>
+            <button type="button" class="btn btn-danger rounded-pill tolakPengajuan">Tolak Pengajuan</button>
         @endif
     </div>
 
