@@ -240,10 +240,13 @@ class AdminController extends Controller
         return view('admin.userAdmin', compact('user','events', 'countTotal', 'eventMade'));
     }
 
-    public function getEventParticipate(Request $request)
+    public function getEventParticipate(Request $request, $id)
     {   
-        //dd($request);
-        $event = $this->admin_service->getEventUser($request->id);
-        return json_encode($event);
+        return $this->admin_service->getEventsUser($id);
+    }
+
+    public function getEventMade(Request $request, $id)
+    {   
+        return $this->admin_service->getEventsMade($id);
     }
 }

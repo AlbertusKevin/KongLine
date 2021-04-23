@@ -11295,3 +11295,8 @@ a.link-user:hover{
   font-weight: bold;
   color: #187BCD;
 }
+
+.event{
+  overflow-x:scroll;
+  overflow-y:hidden;
+}

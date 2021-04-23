@@ -637,8 +637,15 @@ class AdminService
         return $donationCount + $petitionCount;
     }
 
-    public function test(){
-        $val = 13;
-        return $val;
+    public function getEventsMade($id){
+        $donations = $this->dao->getUserMadeDonation($id);
+        $petitions = $this->dao->getUserMadePetition($id);
+        $events = collect();
+        $events->push($donations);
+        $events->push($petitions);
+        //dd($events);
+
+        return $events;
     }
+
 }

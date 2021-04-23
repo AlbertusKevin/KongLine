@@ -131,8 +131,8 @@ Route::get('/admin/listUser/sort', [AdminController::class, 'sortListUser']);//S
 Route::get('/admin/listUser/search', [AdminController::class, 'searchUser']);
 Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
 Route::get('/admin/user/{id}', [AdminController::class, 'getUserInfo'])->middleware('admin');
-Route::get('/admin/user/diikuti', [AdminController::class, 'getEventPaticipate']);
-Route::get('/admin/user/dibuat', [AdminController::class, 'getUserInfo'])->middleware('admin');
+Route::get('/admin/user/diikuti/{id}', [AdminController::class, 'getEventParticipate']);
+Route::get('/admin/user/dibuat/{id}', [AdminController::class, 'getEventMade']);
 
 //! Petition
 Route::get('/admin/petition', [AdminController::class, 'getListPetition'])->middleware('admin');

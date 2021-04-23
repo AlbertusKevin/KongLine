@@ -1141,12 +1141,29 @@ $(".diikuti").on("click", function (e) {
     const id = queryString.substring(12,);
     console.log(id);
 
+    var status = "DONATION";
+
     $.ajax({
-        url: "/admin/user/diikuti",
-        data: { id },
+        url: "/admin/user/diikuti/" + id,
         dataType: "json",
         success: (data) => {
-            console.log(data);
+            let html = "";
+            // console.log(data);
+            data.forEach(function(events){
+                if(status == "DONATION"){
+                    events.forEach(function(event){
+                        // console.log(event);
+                        html += makeDonationCardView(event);
+                    });
+                }else if(status == "PETITION"){
+                    events.forEach(function(event){
+                        // console.log(event);
+                        html += makePetitionCardView(event);
+                    });
+                }
+                status = "PETITION";
+            });
+            $(".event").html(html);
         },
     });
 });
@@ -1158,4 +1175,68 @@ $(".dibuat").on("click", function (e){
 
     $(".diikuti").removeClass("btn-primary");
     $(".diikuti").removeClass("btn-light");
+
+    const queryString = window.location.pathname;
+    console.log(queryString);
+
+    const id = queryString.substring(12,);
+    console.log(id);
+
+    var status = "DONATION";
+
+    $.ajax({
+        url: "/admin/user/dibuat/" + id,
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            console.log(data);
+            data.forEach(function(events){
+                if(status == "DONATION"){
+                    events.forEach(function(event){
+                        // console.log(event);
+                        html += makeDonationCardView(event);
+                    });
+                }else if(status == "PETITION"){
+                    events.forEach(function(event){
+                        // console.log(event);
+                        html += makePetitionCardView(event);
+                    });
+                }
+                status = "PETITION";
+            });
+            $(".event").html(html);
+        },
+    });
 });
+
+const makeDonationCardView = (event) =>{
+    return `
+        <div class="col-md-4" style="padding: 0;">
+            <div class="card" style="width: 18rem; position:relative;">
+                <img src="/${event.photo}" class="card-img-top" alt="...">
+                <p class="time-left">Donation</p>
+                <div class="card-body">
+                    <h5 class="card-title">${event.title}</h5>
+                    <p class="card-text">${event.name}</p>
+                    <a href="/donation/${event.id} class="btn btn-primary">Kunjungi event</a>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+const makePetitionCardView = (event) =>{
+    return `
+        <div class="col-md-4" style="padding: 0;">
+            <div class="card" style="width: 18rem; position:relative;">
+                <img src="/${event.photo}" class="card-img-top" alt="...">
+                <p class="time-left-white">Petition</p>
+                <div class="card-body">
+                    <h5 class="card-title">${event.title}</h5>
+                    <p class="card-text">${event.name}</p>
+                    <a href="/petition/${event.id} class="btn btn-primary">Kunjungi event</a>
+                </div>
+            </div>
+        </div>
+    `;
+};

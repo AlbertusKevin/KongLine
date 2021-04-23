@@ -489,4 +489,33 @@ class AdminDao
         return Petition::where('idCampaigner', $id)->count();
     }
 
+    public function getUserMadeDonation($id){
+        $donations = Donation::join('users','users.id','donation.idCampaigner')
+                        ->join('category','category.id','donation.category')
+                        ->where('donation.idCampaigner', $id)
+                        ->select('donation.id','category.description','donation.photo','donation.title','users.name')
+                        ->get();
+        return $donations;
+
+                    /*SQL Syntax :
+                            SELECT 'donation.id','donation.category','donation.photo','donation.title','users.name' 
+                            FROM `Donation` 
+                            JOIN(`users`)
+                            ON `users.id` = `donation.idCampaigner'
+                            JOIN(`category`)
+                            ON `categry.id` = `donation.category`
+                            WHERE('donation.idCampaigner' = $id);
+                        */ 
+    
+    }
+
+    public function getUserMadePetition($id){
+        $petitions = Petition::join('users','users.id','petition.idCampaigner')
+                        ->join('category','category.id','petition.category')
+                        ->where('petition.idCampaigner', $id)
+                        ->select('petition.id','category.description','petition.photo','petition.title','users.name')
+                        ->get();
+        
+        return $petitions;
+    }
 }
