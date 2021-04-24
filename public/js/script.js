@@ -1,6 +1,7 @@
 const baseURL = "http://localhost:8000";
 
 const getNowURL = () => window.location.href.split("/")[3];
+
 // fungsi umum
 const checkTypePetition = (type) => {
     if (type.includes("Berlangsung")) {
@@ -1273,35 +1274,39 @@ const makePetitionCardView = (event) =>{
     `;
 };
 
-$(".terimaPengajuan").on("click", function (){
+// $(".terimaPengajuan").on("click", function (){
 
-    const queryString = window.location.pathname;
-    console.log(queryString);
+//     const queryString = window.location.pathname;
+//     console.log(queryString);
 
-    const id = queryString.substring(12,);
-    console.log(id);
+//     const id = queryString.substring(12,);
+//     console.log(id);
 
-    $.ajax({
-        url: "/admin/user/terimaPengajuan/" + id,
-        dataType: "json",
-        success: (data) => {
+//     const name = $(".name").html();
+//     console.log(name);
+
+
+//     $.ajax({
+//         url: "/admin/user/terimaPengajuan/" + id,
+//         dataType: "json",
+//         success: (data) => {
             
-        },
-    });
-});
+//         },
+//     });
+// });
 
-$(".tolakPengajuan").on("click", function (){
+// $(".tolakPengajuan").on("click", function (){
 
-    const queryString = window.location.pathname;
-    console.log(queryString);
+//     const queryString = window.location.pathname;
+//     console.log(queryString);
 
-    const id = queryString.substring(12,);
-    console.log(id);
+//     const id = queryString.substring(12,);
+//     console.log(id);
 
-    $.ajax({
-        url: "/admin/user/tolakPengajuan/" + id,
-        dataType: "json",
-        success: (data) => {
-        },
-    });
-});
+//     $.ajax({
+//         url: "/admin/user/tolakPengajuan/" + id,
+//         dataType: "json",
+//         success: (data) => {
+//         },
+//     });
+// });

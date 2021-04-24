@@ -249,4 +249,16 @@ class AdminController extends Controller
     {   
         return $this->admin_service->getEventsMade($id);
     }
+
+    public function acceptUserToCampaigner($id){
+
+        $this->admin_service->acceptUserToCampaigner($id);
+        return redirect("/admin/user/$id")->with(["type" => 'success', 'message' => 'User berhasil upgrade ke campaigner']);
+    }
+
+    public function rejectUserToCampaigner($id){
+
+        $this->admin_service->rejectUserToCampaigner($id);
+        return redirect("/admin/user/$id")->with(["type" => 'fail', 'message' => 'User ditolak upgrade ke campaigner']);
+    }
 }

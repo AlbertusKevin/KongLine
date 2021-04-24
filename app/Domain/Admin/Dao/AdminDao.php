@@ -518,4 +518,22 @@ class AdminDao
         
         return $petitions;
     }
+
+    public function acceptUserToCampaigner($id, $status, $role){
+        $user = User::where('id', $id)->first();
+        
+        $user->status = $status;
+        $user->role = $role;
+
+        $user->save();
+    }
+    
+    public function rejectUserToCampaigner($id, $status, $role){
+        $user = User::where('id', $id)->first();
+        
+        $user->status = $status;
+        $user->role = $role;
+
+        $user->save();
+    }
 }

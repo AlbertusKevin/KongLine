@@ -126,15 +126,15 @@ Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middlewar
 
 //! Users
 Route::get('/admin/listUser', [AdminController::class, 'getAll'])->middleware('admin');
-Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
-Route::get('/admin/listUser/sort', [AdminController::class, 'sortListUser']);//Sort List User
-Route::get('/admin/listUser/search', [AdminController::class, 'searchUser']);
-Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
+Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole'])->middleware('admin');
+Route::get('/admin/listUser/sort', [AdminController::class, 'sortListUser'])->middleware('admin');//Sort List User
+Route::get('/admin/listUser/search', [AdminController::class, 'searchUser'])->middleware('admin');
+Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate'])->middleware('admin');
 Route::get('/admin/user/{id}', [AdminController::class, 'getUserInfo'])->middleware('admin');
-Route::get('/admin/user/diikuti/{id}', [AdminController::class, 'getEventParticipate']);
-Route::get('/admin/user/dibuat/{id}', [AdminController::class, 'getEventMade']);
-Route::put('/admin/user/terimaPengajuan/{id}', [AdminController::class, 'updateUserStatus']);
-Route::put('/admin/user/tolakPengajuan/{id}', [AdminController::class, 'rejectUserStatus']);
+Route::get('/admin/user/diikuti/{id}', [AdminController::class, 'getEventParticipate'])->middleware('admin');
+Route::get('/admin/user/dibuat/{id}', [AdminController::class, 'getEventMade'])->middleware('admin');
+Route::patch('/admin/user/terimaPengajuan/{id}', [AdminController::class, 'acceptUserToCampaigner'])->middleware('admin');
+Route::patch('/admin/user/tolakPengajuan/{id}', [AdminController::class, 'rejectUserToCampaigner'])->middleware('admin');
 
 //! Petition
 Route::get('/admin/petition', [AdminController::class, 'getListPetition'])->middleware('admin');

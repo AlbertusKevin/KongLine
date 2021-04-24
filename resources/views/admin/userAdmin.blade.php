@@ -6,7 +6,7 @@
 @section('content')
     <div class="jumbotron text-center" style="background-image: url('/{{ $user->backgroundPicture }}');">
         <img src="/{{ $user->photoProfile}}" alt="profile" class="profile-picture rounded-circle">
-        <h3 class="display-4">{{ $user->name}}</h3>
+        <h3 class="display-4 name">{{ $user->name}}</h3>
         {{-- <h6 class="userId={{$user->id}}">{{ $user->id }}</h6> --}}
         <p class="lead">{{ $user->email }}</p>
         @if($user->dob == null)
@@ -16,11 +16,41 @@
         @endif
         <button type="button" class="btn btn-success mb-2" disabled>{{ $user->role }}</button><br>
         @if($user->status != 1)
-            <button type="button" class="btn btn-success">Pengajuan</button><br>
-            <button type="button" class="btn btn-primary my-4 mr-5 rounded-pill terimaPengajuan">Terima Pengajuan</button>
-            <button type="button" class="btn btn-danger rounded-pill tolakPengajuan">Tolak Pengajuan</button>
+            <span class="badge badge-warning p-2">Pengajuan</span><br>
+            <form id="confirm-pengajuan" action="/admin/user/terimaPengajuan/{{ $user->id }}" method="POST">
+                @csrf
+                @method('patch')
+                <button type="submit" class="btn btn-primary my-4 mr-5 rounded-pill terimaPengajuan">Terima Pengajuan</button>
+            </form>
+
+            <form action="/admin/user/tolakPengajuan/{{ $user->id }}" method="POST">
+                @csrf
+                @method('patch')
+                <button type="submit" class="btn btn-danger rounded-pill tolakPengajuan">Tolak Pengajuan</button>
+            </form>
         @endif
     </div>
+
+    {{-- <script>
+        function confirmPengajuan(form_id){
+            Alert({
+                title: 'Terima Pengajuan?',
+                text: 'Anda akan menerima pengajuan upgrade ke Campaigner',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Terima pengajuan',
+            })
+            .then((accept) =>{
+                if(accept){
+                    $("#" + form_id).submit();
+                }else{
+                    Alert("Canceled!");
+                }
+            });
+        }
+    </script> --}}
 
     <div class="container">
         <div class="container">
@@ -117,9 +147,13 @@
                     </div>
                 @endif
             </div>
-            @if( $user->role == CAMPAIGNER)
+            @if( $user->role == CAMPAIGNER || $user->status == WAITING)
 
-                <h3 class="mt-5">Campaigner</h3>
+                @if ($user->role == CAMPAIGNER)
+                    <h3 class="mt-5">Campaigner</h3>
+                @else
+                    <h3 class="mt-5">Data Calon Campaigner</h3>
+                @endif
                 <div class="row py-3">
                     <div class="col-sm-2">
                         NIK

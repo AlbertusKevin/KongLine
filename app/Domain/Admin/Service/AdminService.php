@@ -648,4 +648,12 @@ class AdminService
         return $events;
     }
 
+    public function acceptUserToCampaigner($id){
+        return $this->dao->acceptUserToCampaigner($id, ACTIVE, CAMPAIGNER);
+    }
+    
+    public function rejectUserToCampaigner($id){
+        return $this->dao->rejectUserToCampaigner($id, ACTIVE, PARTICIPANT);
+    }
+
 }
