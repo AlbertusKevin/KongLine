@@ -102,6 +102,15 @@ class AdminDao
         return User::orderBy('email', 'asc')->get();
     }
 
+    public function sortByRoleAll(){
+        return User::orderBy('role', 'asc')->get();
+    }
+
+    public function sortByRoleSpecific($role){
+        return User::where('role', $role)
+            ->orderBy('role', 'asc')->get();
+    }
+
     public function getListDonationLimit()
     {
         return Donation::all()->sortByDesc("created_at")->take(3);

@@ -355,6 +355,14 @@ class AdminService
                 return $this->dao->listUserByRole($request->roleUserType);
             }
         }
+
+        if($request->sortBy == 'Role'){
+            if($request->roleUserType == 'semua'){
+                return $this->dao->sortByRoleAll();
+            }else{
+                return $this->dao->sortByRoleSpecific($request->roleUserType);
+            }
+        }
   }
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
     public function adminSearchDonation($request)

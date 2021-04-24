@@ -23,6 +23,7 @@
                 <a class="dropdown-item sort-list-user">Nama</a>
                 <a class="dropdown-item sort-list-user">Email</a>
                 <a class="dropdown-item sort-list-user">Jumlah Partisipasi</a>
+                <a class="dropdown-item sort-list-user">Role</a>
             </div>
         </div>
         
