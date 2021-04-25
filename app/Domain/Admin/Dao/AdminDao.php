@@ -9,6 +9,7 @@ use App\Domain\Event\Entity\ParticipatePetition;
 use App\Domain\Event\Entity\Petition;
 use App\Domain\Event\Entity\Transaction;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class AdminDao
 {
@@ -433,4 +434,23 @@ class AdminDao
         $user->countEvent = $total;
         $user->save();
     }
+
+    public function sendEmail($event, $view, $subject , $event_chosen)
+    {
+        Mail::send($view, ['event' => $event , 'event_chosen' => $event_chosen], function ($message) use ($event, $subject) {
+            $message->to($event->users->email);
+            $message->subject($subject);
+        });
+    }
+
+    public function getPetitionById($id)
+    {
+        return Petition::find($id);
+    }
+
+    public function getDonationById($id)
+    {
+        return Donation::find($id);
+    }
+
 }

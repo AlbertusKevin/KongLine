@@ -410,6 +410,11 @@ class EventDao
         return Petition::where('status', ACTIVE)->get();
     }
 
+    public function indexPetitionLimit()
+    {
+        return Petition::where('status', ACTIVE)->take(3)->get();
+    }
+
     //! Menampilkan detail petisi tertentu berdasarkan ID
     public function showPetition($id)
     {
@@ -550,6 +555,16 @@ class EventDao
             ->join('users', 'donation.idCampaigner', 'users.id')
             ->get();
     }
+
+    public function getListDonationLimit()
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', ACTIVE)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->take(3)
+            ->get();
+    }
+
 
     //! Mengambil seluruh donasi dengan status aktif / sedang berlangsung
     public function getADonation($id)

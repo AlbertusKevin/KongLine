@@ -20,11 +20,18 @@ class AdminService
         $this->eventDao = new EventDao();
     }
 
-    public function sendEmail($id)
+    public function sendEmailPetition($id , $view, $subject)
     {
-        $petition = $this->eventService->showPetition($id);
-        $campaigner = $this->eventService->getCampaigner($petition->idCampaigner);
-        $emailCampaigner = $campaigner->email;
+        $petition = $this->dao->getPetitionById($id);
+        $event = "petisi";
+        $emailCampaigner = $this->dao->sendEmail($petition, $view , $subject , $event);
+    }
+
+    public function sendEmailDonation($id , $view, $subject)
+    {
+        $donation = $this->dao->getDonationById($id);
+        $event = "donasi";
+        $emailCampaigner = $this->dao->sendEmail($donation, $view , $subject , $event);
     }
 
     //Mengambil semua user yang ada di DB

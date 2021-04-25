@@ -671,15 +671,13 @@ class EventService
 
     public function getDonationLimit()
     {
-        $result = $this->dao->getListDonation();
-        $result->take(3);
+        $result = $this->dao->getListDonationLimit();
         return $result;
     }
 
     public function getPetitionLimit()
     {
-        $result = $this->dao->indexPetition();
-        $result->take(3);
+        $result = $this->dao->indexPetitionLimit();
         return $result;
     }
 
