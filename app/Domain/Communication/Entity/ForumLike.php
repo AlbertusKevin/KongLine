@@ -13,6 +13,8 @@ class ForumLike extends Model
     protected $table = 'forum_like';
     protected $fillable = ['idForum', 'idParticipant', 'created_at'];
 
+    public $timestamps = false;
+
     public function forum()
     {
         return $this->belongsTo(Forum::class);

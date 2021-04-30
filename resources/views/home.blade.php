@@ -44,15 +44,17 @@
         </div>
         <div class="row">
             @foreach ($donasi as $d)
-                <div class="card col-md-4 m-2" style="padding: 0; ">
-                    <div style="position:relative;">
-                        <img src="{{ $d->photo }}" class="card-img-top " alt="donation picture">
-                        <p class="donate-count">{{ $d->participatedonation->count() }} Donatur</p>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">{{ $d->title }}</p>
-                        <h5 class="card-title">{{ $d->users->name }}</h5>
-                        <a href="#" class=" w-100 btn btn-primary"> Detail </a>
+                <div class="col-md-4">
+                    <div class="card m-2" style="padding: 0; ">
+                        <div style="position:relative;">
+                            <img src="{{ $d->photo }}" class="card-img-top " alt="donation picture">
+                            <p class="donate-count">{{ $d->participatedonation->count() }} Donatur</p>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ $d->title }}</p>
+                            <h5 class="card-title">{{ $d->users->name }}</h5>
+                            <a href="/donation/{{ $d->id }}" class=" w-100 btn btn-primary"> Detail </a>
+                        </div>
                     </div>
                 </div>
             @endforeach
@@ -74,15 +76,17 @@
         </div>
         <div class="row">
             @foreach ($petisi as $p)
-                <div class="card col-md-4 m-2" style="padding: 0; ">
-                    <div style="position:relative;">
-                        <img src="{{ $p->photo }}" class="card-img-top" alt="petition picture">
-                        <p class="donate-count">{{ $p->signedCollected }} Partisipan</p>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">{{ $p->title }}</p>
-                        <h5 class="card-title">{{ $p->users->name }}</h5>
-                        <a href="/petition/{{ $p->id }}" class=" w-100 btn btn-primary"> Detail </a>
+                <div class="col-md-4">
+                    <div class="card m-2" style="padding: 0; ">
+                        <div style="position:relative;">
+                            <img src="{{ $p->photo }}" class="card-img-top" alt="petition picture">
+                            <p class="donate-count">{{ $p->signedCollected }} Partisipan</p>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ $p->title }}</p>
+                            <h5 class="card-title">{{ $p->users->name }}</h5>
+                            <a href="/petition/{{ $p->id }}" class=" w-100 btn btn-primary"> Detail </a>
+                        </div>
                     </div>
                 </div>
             @endforeach
