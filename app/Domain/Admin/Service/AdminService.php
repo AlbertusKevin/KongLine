@@ -20,18 +20,18 @@ class AdminService
         $this->eventDao = new EventDao();
     }
 
-    public function sendEmailPetition($id , $view, $subject)
+    public function sendEmailPetition($id, $view, $subject)
     {
         $petition = $this->dao->getPetitionById($id);
         $event = "petisi";
-        $emailCampaigner = $this->dao->sendEmail($petition, $view , $subject , $event);
+        $emailCampaigner = $this->dao->sendEmail($petition, $view, $subject, $event);
     }
 
-    public function sendEmailDonation($id , $view, $subject)
+    public function sendEmailDonation($id, $view, $subject)
     {
         $donation = $this->dao->getDonationById($id);
         $event = "donasi";
-        $emailCampaigner = $this->dao->sendEmail($donation, $view , $subject , $event);
+        $emailCampaigner = $this->dao->sendEmail($donation, $view, $subject, $event);
     }
 
     //Mengambil semua user yang ada di DB
@@ -324,45 +324,45 @@ class AdminService
             }
         }
     }
-  
-  public function sortlistUser($request)
+
+    public function sortlistUser($request)
     {
-        if ($request->sortBy == 'None'){
+        if ($request->sortBy == 'None') {
             return $this->listUserByRole($request->roleUserType);
         }
 
-        if($request->sortBy == 'Tanggal dibuat'){
-            if($request->roleUserType == 'semua'){
+        if ($request->sortBy == 'Tanggal dibuat') {
+            if ($request->roleUserType == 'semua') {
                 return $this->dao->sortByTanggalDibuatAllUser();
-            }else{
+            } else {
                 return $this->dao->sortByTanggalDibuat($request->roleUserType);
             }
         }
 
-        if($request->sortBy == 'Nama'){
-            if($request->roleUserType == 'semua'){
+        if ($request->sortBy == 'Nama') {
+            if ($request->roleUserType == 'semua') {
                 return $this->dao->sortByNamaAllUser();
-            }else{
+            } else {
                 return $this->dao->sortByNama($request->roleUserType);
             }
         }
 
-        if($request->sortBy == 'Email'){
-            if($request->roleUserType == 'semua'){
+        if ($request->sortBy == 'Email') {
+            if ($request->roleUserType == 'semua') {
                 return $this->dao->sortByEmailAllUser();
-            }else{
+            } else {
                 return $this->dao->sortByEmail($request->roleUserType);
             }
         }
 
-        if($request->sortBy == 'Jumlah Partisipasi'){
-            if($request->roleUserType == 'semua'){
+        if ($request->sortBy == 'Jumlah Partisipasi') {
+            if ($request->roleUserType == 'semua') {
                 return $this->dao->listUserByAll();
-            }else{
+            } else {
                 return $this->dao->listUserByRole($request->roleUserType);
             }
         }
-  }
+    }
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
     public function adminSearchDonation($request)
     {
@@ -602,31 +602,33 @@ class AdminService
         }
         return $this->dao->searchTransactionWithStatusByDonationTitle(REJECTED_TRANSACTION, $keyword);
     }
-  
+
     public function searchUser($request)
     {
-        if ($request->roleUserType == 'semua'){
+        if ($request->roleUserType == 'semua') {
             return $this->dao->searchUserAll($request->keyword);
         }
 
-        if ($request->roleUserType == 'participant'){
+        if ($request->roleUserType == 'participant') {
             return $this->dao->searchUserParticipant($request->keyword);
         }
 
-        if ($request->roleUserType == 'campaigner'){
+        if ($request->roleUserType == 'campaigner') {
             return $this->dao->searchUserCampaigner($request->keyword);
         }
 
-        if ($request->roleUserType == 'pengajuan'){
+        if ($request->roleUserType == 'pengajuan') {
             return $this->dao->searchUserPengajuan($request->keyword);
         }
     }
 
-    public function getUserInfo($id){
+    public function getUserInfo($id)
+    {
         return $this->dao->getUserInfo($id);
     }
 
-    public function getEventsUser($id){
+    public function getEventsUser($id)
+    {
         $donations = $this->dao->getUserParticipateDonation($id);
         $petitions = $this->dao->getUserParticipatePetition($id);
         $events = collect();
@@ -637,14 +639,16 @@ class AdminService
         return $events;
     }
 
-    public function countEventMade($id){
+    public function countEventMade($id)
+    {
         $donationCount = $this->dao->countDonationMade($id);
         $petitionCount = $this->dao->countPetitionMade($id);
 
         return $donationCount + $petitionCount;
     }
 
-    public function test(){
+    public function test()
+    {
         $val = 13;
         return $val;
     }

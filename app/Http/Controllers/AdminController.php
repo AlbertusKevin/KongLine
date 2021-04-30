@@ -258,7 +258,7 @@ class AdminController extends Controller
     public function getEventParticipate(Request $request)
     {
         //dd($request);
-        $event = $this->admin_service->getEventUser($request->id);
+        $event = $this->admin_service->getEventsUser($request->id);
         return json_encode($event);
     }
 }
