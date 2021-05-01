@@ -186,6 +186,7 @@ class EventController extends Controller
         $user = $this->eventService->showProfile();
         $navbar = EventService::getNavbar($user);
 
+
         return view('donation.donation', compact('donations', 'categories', 'user', 'navbar'));
     }
 
@@ -365,5 +366,19 @@ class EventController extends Controller
     public function sortDonation(Request $request)
     {
         return $this->eventService->sortDonation($request);
+    }
+
+    public function editDonation($id)
+    {
+        $user = $this->eventService->showProfile();
+        $donation = $this->eventService->getADonation($id);
+        $listCategory = $this->eventService->listCategory();
+        $listBank = $this->eventService->listBank();
+        $detailAllocation = $this->eventService->getDetailAllocation($id);
+        return view('donation.donationEdit', compact('user', 'donation', 'listCategory', 'listBank', 'detailAllocation'));
+    }
+
+    public function updateDonation(Request $request, $id)
+    {
     }
 }

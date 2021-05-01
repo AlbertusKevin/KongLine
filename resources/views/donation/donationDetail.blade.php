@@ -71,6 +71,11 @@
                                                     <h5>{{ $message['header'] }}</h5>
                                                     <small>{{ $message['content'] }}</small>
                                                 </div>
+                                                @if ($donation->status == NOT_CONFIRMED || $donation->status == REJECTED)
+                                                    <small><a href="/donation/edit/{{ $donation->id }}">Klik untuk
+                                                            mengubah data
+                                                            donasi</a></small>
+                                                @endif
                                             </div>
                                         @endif
                                     @endif

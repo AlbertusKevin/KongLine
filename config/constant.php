@@ -12,6 +12,7 @@ define("FINISHED", 2);
 define("CLOSED", 3);
 define("CANCELED", 4);
 define("REJECTED", 5);
+define("PROCEEDED", 6);
 
 // Status User
 define("DELETED", 0);

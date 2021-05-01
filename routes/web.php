@@ -97,6 +97,8 @@ Route::post('/donation/create', [EventController::class, 'storeDonation']);
 //* --- menampilkan donasi ---
 Route::get('/donation', [EventController::class, 'listDonation']);
 Route::get('/donation/{id}', [EventController::class, 'getADonation']);
+Route::get('/donation/edit/{id}', [EventController::class, 'editDonation']);
+Route::put('/donation/{id}', [EventController::class, 'updateDonation']);
 
 //* --- partisipasi dalam donasi ---
 Route::get('/donation/donate/{id}', [EventController::class, 'formDonate']);
@@ -127,7 +129,7 @@ Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middlewar
 //! Users
 Route::get('/admin/listUser', [AdminController::class, 'getAll'])->middleware('admin');
 Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
-Route::get('/admin/listUser/sort', [AdminController::class, 'sortListUser']);//Sort List User
+Route::get('/admin/listUser/sort', [AdminController::class, 'sortListUser']); //Sort List User
 Route::get('/admin/listUser/search', [AdminController::class, 'searchUser']);
 Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
 Route::get('/admin/user/{id}', [AdminController::class, 'getUserInfo'])->middleware('admin');

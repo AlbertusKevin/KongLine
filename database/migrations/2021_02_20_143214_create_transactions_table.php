@@ -34,6 +34,10 @@ class CreateTransactionsTable extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
+            $table->foreign('status')
+                ->references('id')
+                ->on('transaction_status')
+                ->onDelete('cascade');
         });
     }
 

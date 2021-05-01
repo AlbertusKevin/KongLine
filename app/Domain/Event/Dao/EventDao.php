@@ -575,12 +575,20 @@ class EventDao
             ->first();
     }
 
+    public function getDetailAllocation($id)
+    {
+        return DetailAllocation::where('idDonation', $id)->get();
+    }
+
     public function getParticipatedDonation($idEvent)
     {
         return ParticipateDonation::selectRaw('participate_donation.*,transaction.*, users.name as name, users.photoProfile as photoProfile')
-            ->where('participate_donation.idDonation', $idEvent)
             ->join('users', 'participate_donation.idParticipant', 'users.id')
-            ->join('transaction', 'participate_donation.idDonation', 'transaction.idDonation')
+            ->join('transaction', function ($join) {
+                $join->on('transaction.idParticipant', 'participate_donation.idParticipant')
+                    ->on('transaction.idDonation', 'participate_donation.idDonation');
+            })
+            ->where('participate_donation.idDonation', $idEvent)
             // ->where('transaction.status', 1)
             ->get();
     }

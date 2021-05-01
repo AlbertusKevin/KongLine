@@ -781,6 +781,11 @@ class EventService
         return $this->dao->getADonation($id);
     }
 
+    public function getDetailAllocation($id)
+    {
+        return $this->dao->getDetailAllocation($id);
+    }
+
     public function getParticipatedDonation($id)
     {
         return $this->dao->getParticipatedDonation($id);
