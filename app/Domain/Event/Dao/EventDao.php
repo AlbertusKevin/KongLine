@@ -466,6 +466,24 @@ class EventDao
         ]);
     }
 
+    //! Menyimpan data event petisi yang dibuat oleh campaigner
+    public function updatePetition($petition, $id)
+    {
+        Petition::where('id', $id)->update([
+            'idCampaigner' => $petition->getIdCampaigner(),
+            'title' => $petition->getTitle(),
+            'photo' => $petition->getPhoto(),
+            'category' => $petition->getCategory(),
+            'purpose' => $petition->getPurpose(),
+            'deadline' => $petition->getDeadline(),
+            'status' => $petition->getStatus(),
+            'created_at' => $petition->getCreatedAt(),
+            'signedCollected' => $petition->getSignedCollected(),
+            'signedTarget' => $petition->getSignedTarget(),
+            'targetPerson' => $petition->getTargetPerson()
+        ]);
+    }
+
     //! Menyimpan data participant yang berpartisipasi pada petisi tertentu
     public function signPetition($petition)
     {
@@ -834,6 +852,31 @@ class EventDao
             'bank' => $donation->getBank(),
             'created_at' => $donation->getCreatedAt()
         ]);
+    }
+
+    public function updateDonation($donation, $id)
+    {
+        Donation::where('id', $id)->update([
+            'category' => $donation->getCategory(),
+            'deadline' => $donation->getDeadline(),
+            'idCampaigner' => $donation->getIdCampaigner(),
+            'photo' => $donation->getPhoto(),
+            'purpose' => $donation->getPurpose(),
+            'status' => $donation->getStatus(),
+            'title' => $donation->getTitle(),
+            'totalDonatur' => $donation->getTotalDonatur(),
+            'assistedSubject' => $donation->getAssistedSubject(),
+            'donationCollected' => $donation->getDonationCollected(),
+            'donationTarget' => $donation->getDonationTarget(),
+            'accountNumber' => $donation->getAccountNumber(),
+            'bank' => $donation->getBank(),
+            'created_at' => $donation->getCreatedAt()
+        ]);
+    }
+
+    public function deleteAllocationDetail($id)
+    {
+        DetailAllocation::where('idDonation', $id)->delete();
     }
 
     public function storeDetailAllocation($allocationDetail)

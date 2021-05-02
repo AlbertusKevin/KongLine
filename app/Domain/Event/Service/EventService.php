@@ -646,6 +646,21 @@ class EventService
         $this->dao->storePetition($petition);
     }
 
+    //! Menyimpan data petisi ke database
+    public function updatePetition($petition, $id, $empty)
+    {
+        if (!$empty) {
+            $pathImage = $this->uploadImage(
+                $petition->getPhoto(),
+                "petition"
+            );
+
+            $petition->setPhoto($pathImage);
+        }
+
+        $this->dao->updatePetition($petition, $id);
+    }
+
     //! Memeriksa apakah participant sudah pernah berpartisipasi pada event petisi tertentu
     public function checkParticipated($idEvent, $user, $typeEvent)
     {
@@ -977,6 +992,20 @@ class EventService
         $pathPhoto = $this->uploadImage($donation->getPhoto(), 'images/donation');
         $donation->setPhoto($pathPhoto);
         $this->dao->storeDonationCreated($donation);
+    }
+
+    public function updateDonation($donation, $id, $empty)
+    {
+        if (!$empty) {
+            $pathPhoto = $this->uploadImage($donation->getPhoto(), 'images/donation');
+            $donation->setPhoto($pathPhoto);
+        }
+        $this->dao->updateDonation($donation, $id);
+    }
+
+    public function deleteAllocationDetail($id)
+    {
+        $this->dao->deleteAllocationDetail($id);
     }
 
     public function storeDetailAllocation($allocationDetail)
