@@ -67,5 +67,7 @@ define("KONFIRMASI", 'konfirmasi');
 define("GAGAL", 'gagal');
 
 // Status Transaction
+define("NOT_UPLOADED", 0);
 define("CONFIRMED_TRANSACTION", 1);
-define("REJECTED_TRANSACTION", 2);
+define("NOT_CONFIRMED_TRANSACTION", 2);
+define("REJECTED_TRANSACTION", 3);

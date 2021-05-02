@@ -254,7 +254,6 @@ class EventController extends Controller
         $allStatusZero = $this->eventService->checkStatusIsZero($participatedDonation);
         $navbar = EventService::getNavbar($user);
 
-        // dd($userTransactionStatus);
         return view(
             'donation.donationDetail',
             compact(
@@ -403,6 +402,38 @@ class EventController extends Controller
         }
 
         return redirect('/donation')->with(['type' => "success", 'message' => 'Event Anda sudah didaftarkan. Tunggu konfirmasi dari admin.']);
+    }
+
+    public function editDonate($id)
+    {
+        $user = $this->eventService->showProfile();
+        $donation = $this->eventService->getADonation($id);
+        $transaction = $this->eventService->getAUserTransaction($user->id, $id);
+
+        return view('donation.donateEdit', compact('user', 'donation', 'transaction'));
+    }
+
+    public function updateDonate(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'repaymentPicture' => 'image'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            return redirect('/donation/donate/edit/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
+        };
+
+        if (!empty($request->file('repaymentPicture'))) {
+            $this->eventService->confirmationPictureDonation($request->file('repaymentPicture'), $id);
+        }
+
+        return redirect('/donation/' . $id)->with(['type' => "success", 'message' => 'Konfirmasi pembayaran akan segera diproses']);
     }
 
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik

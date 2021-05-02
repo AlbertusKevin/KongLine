@@ -28,7 +28,7 @@
                                                         <button type="button" class="btn btn-danger donate-button" disabled>
                                                             Donasikan
                                                         </button>
-                                                        <small>Login untuk ikut berdonasi</small>
+                                                        <small>Login sebagai participant untuk ikut berdonasi</small>
                                                         <p class="mt-2">
                                                             {{ ceil((strtotime($donation->deadline) - time()) / (60 * 60 * 24)) }}
                                                             Hari Lagi!</p>
@@ -42,20 +42,30 @@
                                                 </div>
                                             @else
                                                 <div class="col-md-6">
-                                                    @if ($userTransactionStatus == WAITING)
+                                                    @if ($userTransactionStatus == NOT_CONFIRMED_TRANSACTION)
                                                         <div class="alert alert-info alert-donated">
-                                                            Konfirmasi Pembayaran Sedang diproses.
+                                                            Konfirmasi Pembayaran Sedang diproses. <a
+                                                                href="/donation/donate/edit/{{ $donation->id }}">Klik
+                                                                untuk
+                                                                ubah data transaksi.</a>
                                                         </div>
-                                                    @elseif ($userTransactionStatus == FINISHED)
+                                                    @elseif ($userTransactionStatus == CONFIRMED_TRANSACTION)
                                                         <div class="alert alert-info alert-donated">
                                                             Terima kasih telah berdonasi.
                                                         </div>
-                                                    @else
+                                                    @elseif ($userTransactionStatus == NOT_UPLOADED)
                                                         <div class="alert alert-info alert-donated">
                                                             <p>Upload konfirmasi Anda</p>
                                                             <small><a
                                                                     href="/donation/confirm_donate/{{ $donation->id }}">konfirmasi
                                                                     pembayaran</a></small>
+                                                        </div>
+                                                    @else
+                                                        <div class="alert alert-info alert-donated">
+                                                            Konfirmasi Pembayaran Anda ditolak. <a
+                                                                href="/donation/donate/edit/{{ $donation->id }}">Klik
+                                                                untuk
+                                                                ubah data transaksi.</a>
                                                         </div>
                                                     @endif
                                                     <span

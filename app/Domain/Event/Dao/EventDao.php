@@ -643,6 +643,7 @@ class EventDao
     public function confirmationPictureDonation($file, $id)
     {
         Transaction::where('idDonation', $id)->update([
+            'status' => NOT_CONFIRMED_TRANSACTION,
             'repaymentPicture' => $file
         ]);
     }

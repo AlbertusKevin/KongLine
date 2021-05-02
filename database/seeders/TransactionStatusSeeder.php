@@ -17,7 +17,7 @@ class TransactionStatusSeeder extends Seeder
         DB::table('transaction_status')->insert(
             [
                 'id' => 0,
-                'description' => 'waiting'
+                'description' => 'not uploaded'
             ]
         );
         DB::table('transaction_status')->insert(
@@ -29,6 +29,12 @@ class TransactionStatusSeeder extends Seeder
         DB::table('transaction_status')->insert(
             [
                 'id' => 2,
+                'description' => 'waiting'
+            ]
+        );
+        DB::table('transaction_status')->insert(
+            [
+                'id' => 3,
                 'description' => 'rejected'
             ]
         );

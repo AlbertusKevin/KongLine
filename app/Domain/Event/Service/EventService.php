@@ -836,15 +836,18 @@ class EventService
 
             if ($participate->idParticipant == $id) {
                 if ($participate->status == 1) {
-                    return FINISHED;
+                    return CONFIRMED_TRANSACTION;
+                }
+                if ($participate->status == 2) {
+                    return NOT_CONFIRMED_TRANSACTION;
                 }
                 if (!empty($participate->repaymentPicture) && $participate->status == 0) {
-                    return WAITING;
+                    return NOT_UPLOADED;
                 }
             }
         }
 
-        return NOT_CONFIRMED;
+        return REJECTED_TRANSACTION;
     }
 
     public function checkStatusIsZero($participatedDonation)

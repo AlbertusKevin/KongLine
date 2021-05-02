@@ -107,6 +107,9 @@ Route::put('/donation/{id}', [EventController::class, 'updateDonation']);
 Route::get('/donation/donate/{id}', [EventController::class, 'formDonate']);
 Route::post('/donation/donate/{id}', [EventController::class, 'postDonate']);
 
+Route::patch('/donation/donate/{id}', [EventController::class, 'updateDonate']);
+Route::get('/donation/donate/edit/{id}', [EventController::class, 'editDonate']);
+
 //* --- konfirmasi pembayaran donasi ---
 Route::get('/donation/confirm_donate/{id}', [EventController::class, 'formConfirm']);
 Route::patch('/donation/confirm_donate/{id}', [EventController::class, 'postConfirm']);
