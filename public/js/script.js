@@ -694,7 +694,7 @@ $(".sort-select-donation").on("click", function (e) {
 
         adminSortListDonation(sortBy, category, typeDonation);
     } else {
-        sortListDonation(sortBy, category, typeDonation);
+        sortListDonation(sortBy, category);
     }
 });
 
@@ -819,7 +819,9 @@ const viewUserParticipantRole = (user) => {
                 ${changeDateFormat(user.created_at)}
             </td>
             <td>
-                <a href = "/admin/user/${user.id}" class = "link-user"> ${user.name}</a>
+                <a href = "/admin/user/${user.id}" class = "link-user"> ${
+        user.name
+    }</a>
             </td>
             <td>
                 ${user.email}
@@ -843,7 +845,9 @@ const viewUserCampaignerRole = (user) => {
                 ${changeDateFormat(user.created_at)}
             </td>
             <td>
-                <a href = "/admin/user/${user.id}" class = "link-user"> ${user.name}</a>
+                <a href = "/admin/user/${user.id}" class = "link-user"> ${
+        user.name
+    }</a>
             </td>
             <td>
                 ${user.email}
@@ -867,7 +871,9 @@ const viewUserGuestRole = (user) => {
                 ${changeDateFormat(user.created_at)}
             </td>
             <td>
-                <a href = "/admin/user/${user.id}" class = "link-user"> ${user.name}</a>
+                <a href = "/admin/user/${user.id}" class = "link-user"> ${
+        user.name
+    }</a>
             </td>
             <td>
                 ${user.email}
@@ -1044,16 +1050,16 @@ $("#search-transaction").on("keyup", function () {
 
 // Trigger Tombol Sort, get Perintah
 $(".sort-list-user").on("click", function (e) {
-    e.preventDefault();//To Cancel the event
+    e.preventDefault(); //To Cancel the event
     let sortBy = $(this).html();
     $("#sort-by").val(sortBy);
 
     $(".sort-list-user").removeClass("btn-sort");
     $(this).addClass("btn-sort");
-    
+
     $(".sort-list-user").removeClass("font-weight-bold");
     $(this).addClass("font-weight-bold");
-    
+
     let roleUserType = roleTypeUser($(".btn-role").html());
 
     console.log("Sort By : ", sortBy);
@@ -1065,27 +1071,33 @@ $(".sort-list-user").on("click", function (e) {
 const sortListUser = (sortBy, roleUserType) => {
     $.ajax({
         url: "/admin/listUser/sort",
-        data: {sortBy,roleUserType},
+        data: { sortBy, roleUserType },
         dataType: "json",
         success: (data) => {
             console.log(data);
             let html = "";
-            if(data[1].length != 0){
+            if (data[1].length != 0) {
                 const pengguna = data[0];
                 const countEvent = data[1];
-                
-                for(let i = 0; i < pengguna.length; i++){
-                    if(pengguna[i].role == "participant"){
-                        html += viewUserParticipantRole(pengguna[i],countEvent[i]);
-                    }else if (pengguna[i].role == "campaigner"){
-                        html += viewUserCampaignerRole(pengguna[i], countEvent[i]);
-                    }else if (pengguna[i].role == "guest"){
+
+                for (let i = 0; i < pengguna.length; i++) {
+                    if (pengguna[i].role == "participant") {
+                        html += viewUserParticipantRole(
+                            pengguna[i],
+                            countEvent[i]
+                        );
+                    } else if (pengguna[i].role == "campaigner") {
+                        html += viewUserCampaignerRole(
+                            pengguna[i],
+                            countEvent[i]
+                        );
+                    } else if (pengguna[i].role == "guest") {
                         html += viewUserGuestRole(pengguna[i], countEvent[i]);
                     }
                 }
 
                 $("#user-list-role").html(html);
-            } else{
+            } else {
                 html += viewUserByRoleIsEmpty(roleUserType);
                 $("#user-list-role").html(html);
             }
@@ -1093,36 +1105,35 @@ const sortListUser = (sortBy, roleUserType) => {
     });
 };
 
-$("#search-user").on("keyup", function (){
+$("#search-user").on("keyup", function () {
     let keyword = $(this).val();
-    let roleUserType =  roleTypeUser($(".btn-role").html());
+    let roleUserType = roleTypeUser($(".btn-role").html());
 
     // console.log("Keyword : ", keyword, "Role User : ", roleUserType);
 
-
     $.ajax({
         url: "/admin/listUser/search",
-        data: {keyword, roleUserType},
+        data: { keyword, roleUserType },
         dataType: "json",
         success: (data) => {
             // console.log(data);
             let html = "";
-            if(data.length != 0){
+            if (data.length != 0) {
                 data.forEach((user) => {
-                    if (user.role == 'participant'){
+                    if (user.role == "participant") {
                         html += viewUserParticipantRole(user);
-                    }else if(user.role == 'campaigner'){
+                    } else if (user.role == "campaigner") {
                         html += viewUserCampaignerRole(user);
-                    }else if(user.role == 'guest'){
+                    } else if (user.role == "guest") {
                         html += viewUserGuestRole(user);
                     }
                 });
                 $("#user-list-role").html(html);
-            }else{
+            } else {
                 html += viewUserByRoleIsEmpty();
                 $("#user-list-role").html(html);
             }
-        }
+        },
     });
 });
 
@@ -1136,10 +1147,8 @@ $(".diikuti").on("click", function (e) {
     $(".dibuat").removeClass("btn-light");
 
     const queryString = window.location.pathname;
-    console.log(queryString);
 
-    const id = queryString.substring(12,);
-    console.log(id);
+    const id = queryString.substring(12);
 
     $.ajax({
         url: "/admin/user/diikuti",
@@ -1151,8 +1160,7 @@ $(".diikuti").on("click", function (e) {
     });
 });
 
-$(".dibuat").on("click", function (e){
-
+$(".dibuat").on("click", function (e) {
     $(this).removeClass("btn-light");
     $(this).addClass("btn-primary");
 

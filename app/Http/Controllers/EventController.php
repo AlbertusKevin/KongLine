@@ -176,6 +176,55 @@ class EventController extends Controller
         return redirect('/petition')->with(['type' => "success", 'message' => 'Petisi Anda telah didaftarkan. Tunggu konfirmasi dari admin.']);
     }
 
+    //! Menampilkan halaman form untuk update petisi
+    public function editPetition($id)
+    {
+        $user = $this->eventService->showProfile();
+        $listCategory = $this->eventService->listCategory();
+        $petition = $this->eventService->showPetition($id);
+
+        return view('petition.petitionEdit', compact('user', 'listCategory', 'petition'));
+    }
+
+    public function updatePetition(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'category' => 'required',
+            'photo' => 'image',
+            'signedTarget' => 'required|numeric',
+            'deadline' => 'date|required',
+            'purpose' => 'required|min:300',
+            'targetPerson' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            return redirect('/petition/edit/' . $id)->withInput()->with(['type' => "error", 'message' => 'Gagal Memperbarui petisi' . $messageError]);
+        };
+
+        $user = $this->eventService->showProfile();
+        $oldPetition = $this->eventService->showPetition($id);
+        $file = $oldPetition->photo;
+        $empty = true;
+
+        // jika file ingin diperbarui
+        if (!empty($request->file())) {
+            $file = $request->file('photo');
+            $empty = false;
+        }
+
+        $petition = new Model\Petition($user->id, $request->title, $file, $request->category, $request->purpose, $request->deadline, 0, $oldPetition->created_at, $request->signedTarget, 0, $request->targetPerson);
+        $this->eventService->updatePetition($petition, $id, $empty);
+
+        return redirect('/petition/edit/' . $id)->with(['type' => "success", 'message' => 'Petisi Anda berhasil diperbarui.']);
+    }
+
     //* =========================================================================================
     //* ----------------------------------- Controller Donasi -----------------------------------
     //* =========================================================================================
@@ -185,6 +234,7 @@ class EventController extends Controller
         $categories = $this->eventService->listCategory();
         $user = $this->eventService->showProfile();
         $navbar = EventService::getNavbar($user);
+
 
         return view('donation.donation', compact('donations', 'categories', 'user', 'navbar'));
     }
@@ -204,7 +254,6 @@ class EventController extends Controller
         $allStatusZero = $this->eventService->checkStatusIsZero($participatedDonation);
         $navbar = EventService::getNavbar($user);
 
-        // dd($userTransactionStatus);
         return view(
             'donation.donationDetail',
             compact(
@@ -355,6 +404,38 @@ class EventController extends Controller
         return redirect('/donation')->with(['type' => "success", 'message' => 'Event Anda sudah didaftarkan. Tunggu konfirmasi dari admin.']);
     }
 
+    public function editDonate($id)
+    {
+        $user = $this->eventService->showProfile();
+        $donation = $this->eventService->getADonation($id);
+        $transaction = $this->eventService->getAUserTransaction($user->id, $id);
+
+        return view('donation.donateEdit', compact('user', 'donation', 'transaction'));
+    }
+
+    public function updateDonate(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'repaymentPicture' => 'image'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            return redirect('/donation/donate/edit/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
+        };
+
+        if (!empty($request->file('repaymentPicture'))) {
+            $this->eventService->confirmationPictureDonation($request->file('repaymentPicture'), $id);
+        }
+
+        return redirect('/donation/' . $id)->with(['type' => "success", 'message' => 'Konfirmasi pembayaran akan segera diproses']);
+    }
+
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
     public function searchDonation(Request $request)
     {
@@ -365,5 +446,81 @@ class EventController extends Controller
     public function sortDonation(Request $request)
     {
         return $this->eventService->sortDonation($request);
+    }
+
+    public function editDonation($id)
+    {
+        $user = $this->eventService->showProfile();
+        $donation = $this->eventService->getADonation($id);
+        $listCategory = $this->eventService->listCategory();
+        $listBank = $this->eventService->listBank();
+        $detailAllocation = $this->eventService->getDetailAllocation($id);
+        return view('donation.donationEdit', compact('user', 'donation', 'listCategory', 'listBank', 'detailAllocation'));
+    }
+
+    public function updateDonation(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'purpose' => 'required|min:150',
+            'category' => 'required',
+            'donationTarget' => 'required|numeric',
+            'deadline' => 'required',
+            'assistedSubject' => 'required',
+            'bank' => 'required',
+            'accountNumber' => 'required|numeric',
+            'nominal' => 'required',
+            'nominal.*' => 'numeric',
+            'allocationFor' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            return redirect('/donation/edit/' . $id)->with(['type' => "error", 'message' => $messageError])->withInput();
+        };
+
+        $user = $this->eventService->showProfile();
+        $oldDonation = $this->eventService->getADonation($id);
+        $file = $oldDonation->photo;
+        $empty = true;
+
+        // jika file ingin diperbarui
+        if (!empty($request->file())) {
+            $file = $request->file('photo');
+            $empty = false;
+        }
+
+        $donation = new Model\Donation(
+            $user->id,
+            $request->title,
+            $file,
+            $request->category,
+            $request->purpose,
+            $request->deadline,
+            0,
+            $oldDonation->created_at,
+            0,
+            $request->donationTarget,
+            0,
+            $request->assistedSubject,
+            $request->bank,
+            $request->accountNumber
+        );
+        // update data donasi
+        $this->eventService->updateDonation($donation, $id, $empty);
+        // hapus detail allocation yang id-nya $id
+        $this->eventService->deleteAllocationDetail($id);
+        // insert detail allocation yang baru
+        for ($i = 0; $i < count($request->nominal); $i++) {
+            $allocationDetail = new Model\DetailAllocation($id, $request->allocationFor[$i], $request->nominal[$i]);
+            $this->eventService->storeDetailAllocation($allocationDetail);
+        }
+
+        return redirect('/donation/edit/' . $id)->with(['type' => "success", 'message' => 'Event Anda berhasil diperbarui.']);
     }
 }

@@ -646,6 +646,21 @@ class EventService
         $this->dao->storePetition($petition);
     }
 
+    //! Menyimpan data petisi ke database
+    public function updatePetition($petition, $id, $empty)
+    {
+        if (!$empty) {
+            $pathImage = $this->uploadImage(
+                $petition->getPhoto(),
+                "petition"
+            );
+
+            $petition->setPhoto($pathImage);
+        }
+
+        $this->dao->updatePetition($petition, $id);
+    }
+
     //! Memeriksa apakah participant sudah pernah berpartisipasi pada event petisi tertentu
     public function checkParticipated($idEvent, $user, $typeEvent)
     {
@@ -781,6 +796,11 @@ class EventService
         return $this->dao->getADonation($id);
     }
 
+    public function getDetailAllocation($id)
+    {
+        return $this->dao->getDetailAllocation($id);
+    }
+
     public function getParticipatedDonation($id)
     {
         return $this->dao->getParticipatedDonation($id);
@@ -809,22 +829,20 @@ class EventService
     public function checkUserTransactionStatus($participatedDonation, $id)
     {
         foreach ($participatedDonation as $participate) {
-            // dd($participate);
-            // if ($participate->status == 1 && $participate->idParticipant == $id) {
-            //     return true;
-            // }
-
             if ($participate->idParticipant == $id) {
                 if ($participate->status == 1) {
-                    return FINISHED;
+                    return CONFIRMED_TRANSACTION;
+                }
+                if ($participate->status == 2) {
+                    return NOT_CONFIRMED_TRANSACTION;
                 }
                 if (!empty($participate->repaymentPicture) && $participate->status == 0) {
-                    return WAITING;
+                    return NOT_UPLOADED;
                 }
             }
         }
 
-        return NOT_CONFIRMED;
+        return REJECTED_TRANSACTION;
     }
 
     public function checkStatusIsZero($participatedDonation)
@@ -972,6 +990,20 @@ class EventService
         $pathPhoto = $this->uploadImage($donation->getPhoto(), 'images/donation');
         $donation->setPhoto($pathPhoto);
         $this->dao->storeDonationCreated($donation);
+    }
+
+    public function updateDonation($donation, $id, $empty)
+    {
+        if (!$empty) {
+            $pathPhoto = $this->uploadImage($donation->getPhoto(), 'images/donation');
+            $donation->setPhoto($pathPhoto);
+        }
+        $this->dao->updateDonation($donation, $id);
+    }
+
+    public function deleteAllocationDetail($id)
+    {
+        $this->dao->deleteAllocationDetail($id);
     }
 
     public function storeDetailAllocation($allocationDetail)

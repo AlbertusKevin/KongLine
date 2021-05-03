@@ -107,6 +107,11 @@
                                             Admin</a>
                                     </div>
                                 </div>
+                                @if ($petition->status == NOT_CONFIRMED || $petition->status == REJECTED)
+                                    <small>
+                                        <a href="/petition/edit/{{ $petition->id }}">Perbarui Data Petisi</a>
+                                    </small>
+                                @endif
                             </div>
                         </div>
                     @else

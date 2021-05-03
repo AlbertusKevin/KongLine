@@ -50,5 +50,11 @@ class EventStatusSeeder extends Seeder
                 'description' => 'rejected'
             ]
         );
+        DB::table('event_status')->insert(
+            [
+                'id' => 6,
+                'description' => 'proceeded'
+            ]
+        );
     }
 }
