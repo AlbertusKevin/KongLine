@@ -634,8 +634,6 @@ class AdminService
         $events = collect();
         $events->push($donations);
         $events->push($petitions);
-        //dd($events);
-
         return $events;
     }
 

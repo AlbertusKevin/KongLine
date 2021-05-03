@@ -1147,10 +1147,8 @@ $(".diikuti").on("click", function (e) {
     $(".dibuat").removeClass("btn-light");
 
     const queryString = window.location.pathname;
-    console.log(queryString);
 
     const id = queryString.substring(12);
-    console.log(id);
 
     $.ajax({
         url: "/admin/user/diikuti",

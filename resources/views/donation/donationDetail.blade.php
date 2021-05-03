@@ -234,7 +234,7 @@
         <div id="donatur">
             <ul class="list-group">
                 @foreach ($participatedDonation as $donatur)
-                    @if ($donatur->status != 0)
+                    @if ($donatur->status == 1)
                         <li class="list-group-item">
                             @if ($donatur->annonymous_comment == 1)
                                 <img src="{{ DEFAULT_PROFILE }}" alt="Photo Profile" class="donatur-photo">
@@ -251,7 +251,7 @@
         </div>
         <div id="comment">
             @foreach ($participatedDonation as $donatur)
-                @if ($donatur->comment != null && $donatur->status != 0)
+                @if ($donatur->comment != null && $donatur->status == 1)
                     @if ($donatur->annonymous_comment == 1)
                         <div class="card mb-4">
                             <div class=" row no-gutters">

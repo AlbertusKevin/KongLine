@@ -95,9 +95,13 @@
                                 <tr>
                                     <td>Status :</td>
                                     @if ($transaction->status == 0)
+                                        <td>Belum upload</td>
+                                    @elseif ($transaction->status == 1)
+                                        <td>Sudah Dikirim</td>
+                                    @elseif ($transaction->status == 2)
                                         <td>Pending</td>
                                     @else
-                                        <td>Sudah Dikirim</td>
+                                        <td>Ditolak</td>
                                     @endif
                                 </tr>
                                 <tr>

@@ -43,14 +43,12 @@
                     </div>
                 </div>
                 <div class="text-center mt-5">
-                    <button href="/petition" type="button" class="btn btn-primary petition-type rounded-pill">Semua</button>
-                    <button href="/petition" type="button"
-                        class="btn btn-light petition-type rounded-pill ml-3">Berlangsung</button>
-                    <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">Telah
+                    <button type="button" class="btn btn-primary petition-type rounded-pill">Semua</button>
+                    <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Berlangsung</button>
+                    <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Telah
                         Menang</button>
-                    <button href="/petition" type="button"
-                        class="btn btn-light petition-type rounded-pill ml-3">Dibatalkan</button>
-                    <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">
+                    <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Dibatalkan</button>
+                    <button type="button" class="btn btn-light petition-type rounded-pill ml-3">
                         Belum Valid</button>
                 </div>
             </div>

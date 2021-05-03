@@ -134,12 +134,12 @@ Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middlewar
 
 //! Users
 Route::get('/admin/listUser', [AdminController::class, 'getAll'])->middleware('admin');
-Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole']);
-Route::get('/admin/listUser/sort', [AdminController::class, 'sortListUser']); //Sort List User
-Route::get('/admin/listUser/search', [AdminController::class, 'searchUser']);
-Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate']);
+Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole'])->middleware('admin');
+Route::get('/admin/listUser/sort', [AdminController::class, 'sortListUser'])->middleware('admin'); //Sort List User
+Route::get('/admin/listUser/search', [AdminController::class, 'searchUser'])->middleware('admin');
+Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate'])->middleware('admin');
 Route::get('/admin/user/{id}', [AdminController::class, 'getUserInfo'])->middleware('admin');
-Route::get('/admin/user/diikuti', [AdminController::class, 'getEventPaticipate']);
+Route::get('/admin/user/diikuti', [AdminController::class, 'getEventParticipate'])->middleware('admin');
 Route::get('/admin/user/dibuat', [AdminController::class, 'getUserInfo'])->middleware('admin');
 
 //! Petition
@@ -163,7 +163,7 @@ Route::patch('/admin/donation/close/{id}', [AdminController::class, 'closeDonati
 //* -------- ajax -----------
 Route::get('/admin/donation/sort', [AdminController::class, 'adminSortDonation'])->middleware('admin');
 Route::get('/admin/donation/search', [AdminController::class, 'adminSearchDonation'])->middleware('admin');
-Route::get('/admin/donation/type', [AdminController::class, 'donationType']);
+Route::get('/admin/donation/type', [AdminController::class, 'donationType'])->middleware('admin');
 
-Route::get('/admin/transaction/type', [AdminController::class, 'transactionType']);
-Route::get('/admin/transaction/search', [AdminController::class, 'searchTransaction']);
+Route::get('/admin/transaction/type', [AdminController::class, 'transactionType'])->middleware('admin');
+Route::get('/admin/transaction/search', [AdminController::class, 'searchTransaction'])->middleware('admin');

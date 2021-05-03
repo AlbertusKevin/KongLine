@@ -829,11 +829,6 @@ class EventService
     public function checkUserTransactionStatus($participatedDonation, $id)
     {
         foreach ($participatedDonation as $participate) {
-            // dd($participate);
-            // if ($participate->status == 1 && $participate->idParticipant == $id) {
-            //     return true;
-            // }
-
             if ($participate->idParticipant == $id) {
                 if ($participate->status == 1) {
                     return CONFIRMED_TRANSACTION;

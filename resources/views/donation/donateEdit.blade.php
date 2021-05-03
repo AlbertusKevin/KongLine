@@ -95,9 +95,13 @@
                                 <tr>
                                     <td>Status :</td>
                                     @if ($transaction->status == 0)
+                                        <td>Belum Ada Upload</td>
+                                    @elseif ($transaction->status == 1)
+                                        <td>Sudah Diterima</td>
+                                    @elseif($transaction->status == 2)
                                         <td>Pending</td>
-                                    @else
-                                        <td>Sudah Dikirim</td>
+                                    @elseif($transaction->status == 3)
+                                        <td>Ditolak</td>
                                     @endif
                                 </tr>
                                 <tr>
@@ -118,32 +122,5 @@
                 </div>
             </div>
         </div>
-
-        {{-- <div class="row w-75 ml-auto mr-auto mt-4">
-                <div class="col-md-12">
-                    <div class="modal-content">
-                        <div class="modal-body p-4">
-                            <h5 class="font-weight-bold">Tuliskan dukungan/doa</h5>
-                            <div class="form-group">
-                                <textarea class="form-control" id="comment" rows="3" name="comment"></textarea>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="annonymousComment"
-                                    name="annonymousComment">
-                                <label class="form-check-label" for="annonymousComment">
-                                    Donasi sebagai anonymus
-                                </label>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row w-75 ml-auto mr-auto mt-4">
-                <div class="col-md-12">
-                    <button class="btn btn-danger btn-donate" type="submit">Konfirmasi Pembayaran</button>
-                </div>
-            </div>
-        </form> --}}
     </div>
 @endsection
