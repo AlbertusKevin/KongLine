@@ -11295,3 +11295,11 @@ a.link-user:hover{
   font-weight: bold;
   color: #187BCD;
 }
+
+
+.horizontal-scroll{
+  flex-wrap: nowrap;
+  max-height: auto;
+  overflow-x: scroll;
+  display: flex;
+}

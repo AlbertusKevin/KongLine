@@ -362,7 +362,16 @@ class AdminService
                 return $this->dao->listUserByRole($request->roleUserType);
             }
         }
-    }
+
+        if($request->sortBy == 'Role'){
+            if($request->roleUserType == 'semua'){
+                return $this->dao->sortByRoleAll();
+            }else{
+                return $this->dao->sortByRoleSpecific($request->roleUserType);
+            }
+        }
+  }
+
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
     public function adminSearchDonation($request)
     {
@@ -645,9 +654,24 @@ class AdminService
         return $donationCount + $petitionCount;
     }
 
-    public function test()
-    {
-        $val = 13;
-        return $val;
+    public function getEventsMade($id){
+        $donations = $this->dao->getUserMadeDonation($id);
+        $petitions = $this->dao->getUserMadePetition($id);
+        $events = collect();
+        $events->push($donations);
+        $events->push($petitions);
+        //dd($events);
+
+        return $events;
     }
+
+
+    public function acceptUserToCampaigner($id){
+        return $this->dao->acceptUserToCampaigner($id, ACTIVE, CAMPAIGNER);
+    }
+    
+    public function rejectUserToCampaigner($id){
+        return $this->dao->rejectUserToCampaigner($id, ACTIVE, PARTICIPANT);
+    }
+
 }

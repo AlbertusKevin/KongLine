@@ -1,6 +1,7 @@
 const baseURL = "http://localhost:8000";
 
 const getNowURL = () => window.location.href.split("/")[3];
+
 // fungsi umum
 const checkTypePetition = (type) => {
     if (type.includes("Berlangsung")) {
@@ -862,6 +863,30 @@ const viewUserCampaignerRole = (user) => {
     `;
 };
 
+const viewUserPengajuan = (user) => {
+    console.log("role : " + user.role);
+    // console.log("tanggal : " + user.created_at);
+    return /*html*/ `
+        <tr>
+            <td class="text-center">
+                ${changeDateFormat(user.created_at)}
+            </td>
+            <td>
+                <a href = "/admin/user/${user.id}" class = "link-user"> ${user.name}</a>
+            </td>
+            <td>
+                ${user.email}
+            </td>
+            <td>
+                ${user.countEvent}
+            </td>
+            <td class="text-left">
+                    <span class="badge badge-warning p-2">${user.role}</span>
+            </td>
+        </tr>
+    `;
+};
+
 const viewUserGuestRole = (user) => {
     console.log("role : " + user.role);
     // console.log("tanggal : " + user.created_at);
@@ -938,7 +963,7 @@ $(".role-type").on("click", function () {
                 const countParticipated = data[1];
 
                 for (let i = 0; i < user.length; i++) {
-                    if (user[i].role == "participant") {
+                    if (user[i].role == "participant" && user[i].status != 3) {
                         html += viewUserParticipantRole(
                             user[i],
                             countParticipated[i]
@@ -953,7 +978,11 @@ $(".role-type").on("click", function () {
                             user[i],
                             countParticipated[i]
                         );
-                    } else {
+                    } else if (user[i].role == "participant" && user[i].status == 3){
+                        html += viewUserPengajuan(
+                            user[i],
+                            countParticipated[i]
+                        );
                     }
                 }
 
@@ -1079,20 +1108,16 @@ const sortListUser = (sortBy, roleUserType) => {
             if (data[1].length != 0) {
                 const pengguna = data[0];
                 const countEvent = data[1];
-
-                for (let i = 0; i < pengguna.length; i++) {
-                    if (pengguna[i].role == "participant") {
-                        html += viewUserParticipantRole(
-                            pengguna[i],
-                            countEvent[i]
-                        );
-                    } else if (pengguna[i].role == "campaigner") {
-                        html += viewUserCampaignerRole(
-                            pengguna[i],
-                            countEvent[i]
-                        );
-                    } else if (pengguna[i].role == "guest") {
+                
+                for(let i = 0; i < pengguna.length; i++){
+                    if(pengguna[i].role == "participant" && pengguna[i].status != 3){
+                        html += viewUserParticipantRole(pengguna[i],countEvent[i]);
+                    }else if (pengguna[i].role == "campaigner"){
+                        html += viewUserCampaignerRole(pengguna[i], countEvent[i]);
+                    }else if (pengguna[i].role == "guest"){
                         html += viewUserGuestRole(pengguna[i], countEvent[i]);
+                    }else if(pengguna[i].role == "participant" && pengguna[i].status == 3){
+                        html += viewUserPengajuan(pengguna[i], countEvent[i]);
                     }
                 }
 
@@ -1116,16 +1141,20 @@ $("#search-user").on("keyup", function () {
         data: { keyword, roleUserType },
         dataType: "json",
         success: (data) => {
-            // console.log(data);
+            console.log(data);
             let html = "";
             if (data.length != 0) {
                 data.forEach((user) => {
-                    if (user.role == "participant") {
+
+                    if (user.role == 'participant' && user.status != 3){
+
                         html += viewUserParticipantRole(user);
                     } else if (user.role == "campaigner") {
                         html += viewUserCampaignerRole(user);
                     } else if (user.role == "guest") {
                         html += viewUserGuestRole(user);
+                    }else if(user.role == 'participant' && user.status == 3){
+                        html += viewUserPengajuan(user);
                     }
                 });
                 $("#user-list-role").html(html);
@@ -1150,12 +1179,29 @@ $(".diikuti").on("click", function (e) {
 
     const id = queryString.substring(12);
 
+    var status = "DONATION";
+
     $.ajax({
-        url: "/admin/user/diikuti",
-        data: { id },
+        url: "/admin/user/diikuti/" + id,
         dataType: "json",
         success: (data) => {
-            console.log(data);
+            let html = "";
+            // console.log(data);
+            data.forEach(function(events){
+                if(status == "DONATION"){
+                    events.forEach(function(event){
+                        // console.log(event);
+                        html += makeDonationCardView(event);
+                    });
+                }else if(status == "PETITION"){
+                    events.forEach(function(event){
+                        // console.log(event);
+                        html += makePetitionCardView(event);
+                    });
+                }
+                status = "PETITION";
+            });
+            $(".event").html(html);
         },
     });
 });
@@ -1166,4 +1212,106 @@ $(".dibuat").on("click", function (e) {
 
     $(".diikuti").removeClass("btn-primary");
     $(".diikuti").removeClass("btn-light");
+
+    const queryString = window.location.pathname;
+    console.log(queryString);
+
+    const id = queryString.substring(12,);
+    console.log(id);
+
+    var status = "DONATION";
+
+    $.ajax({
+        url: "/admin/user/dibuat/" + id,
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            console.log(data);
+            data.forEach(function(events){
+                if(status == "DONATION"){
+                    events.forEach(function(event){
+                        // console.log(event);
+                        html += makeDonationCardView(event);
+                    });
+                }else if(status == "PETITION"){
+                    events.forEach(function(event){
+                        // console.log(event);
+                        html += makePetitionCardView(event);
+                    });
+                }
+                status = "PETITION";
+            });
+            $(".event").html(html);
+        },
+    });
 });
+
+const makeDonationCardView = (event) =>{
+    return `
+        <div class="m-2">
+            <div class="card" style="width: 18rem; position:relative;">
+                <img src="/${event.photo}" class="card-img-top" alt="...">
+                <p class="time-left">Donation</p>
+                <div class="card-body">
+                    <h5 class="card-title">${event.title}</h5>
+                    <p class="card-text">${event.name}</p>
+                    <a href="/donation/${event.id} class="btn btn-primary">Kunjungi event</a>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+const makePetitionCardView = (event) =>{
+    return `
+        <div class="m-2">
+            <div class="card" style="width: 18rem; position:relative;">
+                <img src="/${event.photo}" class="card-img-top" alt="...">
+                <p class="time-left-white">Petition</p>
+                <div class="card-body">
+                    <h5 class="card-title">${event.title}</h5>
+                    <p class="card-text">${event.name}</p>
+                    <a href="/petition/${event.id} class="btn btn-primary">Kunjungi event</a>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// $(".terimaPengajuan").on("click", function (){
+
+//     const queryString = window.location.pathname;
+//     console.log(queryString);
+
+//     const id = queryString.substring(12,);
+//     console.log(id);
+
+//     const name = $(".name").html();
+//     console.log(name);
+
+
+//     $.ajax({
+//         url: "/admin/user/terimaPengajuan/" + id,
+//         dataType: "json",
+//         success: (data) => {
+            
+//         },
+//     });
+// });
+
+// $(".tolakPengajuan").on("click", function (){
+
+//     const queryString = window.location.pathname;
+//     console.log(queryString);
+
+//     const id = queryString.substring(12,);
+//     console.log(id);
+
+//     $.ajax({
+//         url: "/admin/user/tolakPengajuan/" + id,
+//         dataType: "json",
+//         success: (data) => {
+//         },
+//     });
+// });
+

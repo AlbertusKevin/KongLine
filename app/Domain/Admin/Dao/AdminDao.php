@@ -67,7 +67,7 @@ class AdminDao
 
     public function listUserByPengajuan()
     {
-        return User::where('status', '==', 3)->get();
+        return User::where('status',3)->get();
     }
 
     public function sortByTanggalDibuat($role)
@@ -101,6 +101,15 @@ class AdminDao
     public function sortByEmailAllUser()
     {
         return User::orderBy('email', 'asc')->get();
+    }
+
+    public function sortByRoleAll(){
+        return User::orderBy('role', 'asc')->get();
+    }
+
+    public function sortByRoleSpecific($role){
+        return User::where('role', $role)
+            ->orderBy('role', 'asc')->get();
     }
 
     public function getListDonationLimit()
@@ -504,6 +513,54 @@ class AdminDao
     public function getPetitionById($id)
     {
         return Petition::find($id);
+    }
+
+    public function getUserMadeDonation($id){
+        $donations = Donation::join('users','users.id','donation.idCampaigner')
+                        ->join('category','category.id','donation.category')
+                        ->where('donation.idCampaigner', $id)
+                        ->select('donation.id','category.description','donation.photo','donation.title','users.name')
+                        ->get();
+        return $donations;
+
+                    /*SQL Syntax :
+                            SELECT 'donation.id','donation.category','donation.photo','donation.title','users.name' 
+                            FROM `Donation` 
+                            JOIN(`users`)
+                            ON `users.id` = `donation.idCampaigner'
+                            JOIN(`category`)
+                            ON `categry.id` = `donation.category`
+                            WHERE('donation.idCampaigner' = $id);
+                        */ 
+    
+    }
+
+    public function getUserMadePetition($id){
+        $petitions = Petition::join('users','users.id','petition.idCampaigner')
+                        ->join('category','category.id','petition.category')
+                        ->where('petition.idCampaigner', $id)
+                        ->select('petition.id','category.description','petition.photo','petition.title','users.name')
+                        ->get();
+        
+        return $petitions;
+    }
+
+    public function acceptUserToCampaigner($id, $status, $role){
+        $user = User::where('id', $id)->first();
+        
+        $user->status = $status;
+        $user->role = $role;
+
+        $user->save();
+    }
+    
+    public function rejectUserToCampaigner($id, $status, $role){
+        $user = User::where('id', $id)->first();
+        
+        $user->status = $status;
+        $user->role = $role;
+
+        $user->save();
     }
 
     public function getDonationById($id)

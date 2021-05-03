@@ -23,6 +23,7 @@
                 <a class="dropdown-item sort-list-user">Nama</a>
                 <a class="dropdown-item sort-list-user">Email</a>
                 <a class="dropdown-item sort-list-user">Jumlah Partisipasi</a>
+                <a class="dropdown-item sort-list-user">Role</a>
             </div>
         </div>
         
@@ -67,10 +68,12 @@
                             <td class="text-left">
                                 @if ($users[$i]->role == 'guest')
                                     <span class="badge badge-dark p-2">{{ $users[$i]->role }}</span>
-                                @elseif ($users[$i]->role == 'participant')
+                                @elseif ($users[$i]->role == 'participant' && $users[$i]->status != 3)
                                     <span class="badge badge-primary p-2">{{ $users[$i]->role }}</span>
                                 @elseif ($users[$i]->role == 'campaigner')
                                     <span class="badge badge-success p-2">{{ $users[$i]->role }}</span>
+                                @elseif ($users[$i]->role == 'participant' && $users[$i]->status == 3)
+                                    <span class="badge badge-warning p-2">{{ $users[$i]->role }}</span>
                                 @endif
                             </td>
                             </tr>
