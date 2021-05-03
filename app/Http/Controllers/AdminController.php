@@ -82,8 +82,10 @@ class AdminController extends Controller
         //ubah status dari 0 menjadi 1
         $this->admin_service->acceptPetition($id);
         //todo: send email
-        // $message = "Event yang kamu ajukan telah disetujui.";
-        // $this->admin_service->sendEmail($id, $message);
+        $view = "auth.eventConfirmEmail";
+        $message = "Event Disetujui";
+        $this->admin_service->sendEmailPetition($id, $view, $message);
+
         return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Event petisi telah berhasil dikonfirmasi.']);
     }
 
@@ -92,8 +94,10 @@ class AdminController extends Controller
         //ubah status dari 0 menjadi 5
         $this->admin_service->rejectPetition($id);
         //todo: send email
-        // $message = $request->rejectEvent;
-        // $this->admin_service->sendEmail($id, $message);
+        $view = "auth.eventRejectEmail";
+        $message = "Event Ditolak.";
+        $this->admin_service->sendEmailPetition($id, $view, $message);
+
         return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Penolakan Event petisi berhasil.']);
     }
 
@@ -102,8 +106,10 @@ class AdminController extends Controller
         //ubah status dari 0 menjadi 3
         $this->admin_service->closePetition($id);
         //todo: send email
-        // $message = $request->closeEvent;
-        // $this->admin_service->sendEmail($id, $message);
+        $view = "auth.eventCloseEmail";
+        $message = "Event Ditutup";
+        $this->admin_service->sendEmailPetition($id, $view, $message);
+
         return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Penutupan Event petisi berhasil.']);
     }
 
@@ -162,8 +168,10 @@ class AdminController extends Controller
         //ubah status dari 0 menjadi 1
         $this->admin_service->acceptDonation($id);
         //todo: send email
-        // $message = "Event yang kamu ajukan telah disetujui.";
-        // $this->admin_service->sendEmail($id, $message);
+        $view = "auth.eventConfirmEmail";
+        $message = "Event Disetujui.";
+        $this->admin_service->sendEmailDonation($id, $view, $message);
+
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Donasi telah berhasil dikonfirmasi']);
     }
 
@@ -172,8 +180,10 @@ class AdminController extends Controller
         //ubah status dari 0 menjadi 5
         $this->admin_service->rejectDonation($id);
         //todo: send email
-        // $message = $request->rejectEvent;
-        // $this->admin_service->sendEmail($id, $message);
+        $view = "auth.eventRejectEmail";
+        $message = "Event Ditolak";
+        $this->admin_service->sendEmailDonation($id, $view, $message);
+
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penolakan donasi telah berhasil.']);
     }
 
@@ -182,8 +192,10 @@ class AdminController extends Controller
         //ubah status dari 0 menjadi 3
         $this->admin_service->closeDonation($id);
         //todo: send email
-        // $message = $request->closeEvent;
-        // $this->admin_service->sendEmail($id, $message);
+        $view = "auth.eventCloseEmail";
+        $message = "Event Ditutup.";
+        $this->admin_service->sendEmailDonation($id, $view, $message);
+
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penutupan event donasi telah berhasil.']);
     }
 
@@ -196,8 +208,9 @@ class AdminController extends Controller
         $this->admin_service->updateCalculationAfterConfirmDonate($transaction);
         $this->admin_service->confirmTransaction($id);
         //todo: send email
-        // $message = "Transaksi donasi Anda selesai diproses. Terimakasih telah berpartisipasi.";
-        // $this->admin_service->sendEmail($id, $message);
+        $view = "auth.trxConfirmEmail";
+        $message = "Transaksi donasi Anda selesai diproses";
+        $this->admin_service->sendEmailDonation($id, $view, $message);
         return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Transaksi telah berhasil disetujui.']);
     }
 
@@ -206,17 +219,19 @@ class AdminController extends Controller
         //ubah status dari 0 menjadi 5
         $this->admin_service->rejectTransaction($id);
         //todo: send email
-        // $message = $request->rejectTransaction;
-        // $this->admin_service->sendEmail($id, $message);
+        $view = "auth.trxRejectEmail";
+        $message = "Transaksi donasi Anda ditolak";
+        $this->admin_service->sendEmailDonation($id, $view, $message);
         return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Penolakan transaksi telah selesai.']);
     }
-  public function sortListUser(Request $request)
+
+    public function sortListUser(Request $request)
     {
         $users =  $this->admin_service->sortListUser($request);
         $eventCount = $this->admin_service->countEventParticipate($users);
         $combine = [];
-        $sortCountEvent = 
-        $combine[] = $users;
+        $sortCountEvent =
+            $combine[] = $users;
         $combine[] = $eventCount;
 
         return json_encode($combine);
@@ -229,6 +244,7 @@ class AdminController extends Controller
 
     public function getUserInfo($id)
     {
+
         $user = $this->admin_service->getUserInfo($id);
         $events = $this->admin_service->getEventsUser($id);
         $eventMade = $this->admin_service->countEventMade($id);
@@ -237,7 +253,7 @@ class AdminController extends Controller
         $countPetition = $events[1]->count();
         $countTotal = $countDonation + $countPetition;
         // dd($countTotal);
-        return view('admin.userAdmin', compact('user','events', 'countTotal', 'eventMade'));
+        return view('admin.userAdmin', compact('user', 'events', 'countTotal', 'eventMade'));
     }
 
     public function getEventParticipate(Request $request, $id)
@@ -260,5 +276,12 @@ class AdminController extends Controller
 
         $this->admin_service->rejectUserToCampaigner($id);
         return redirect("/admin/user/$id")->with(["type" => 'fail', 'message' => 'User ditolak upgrade ke campaigner']);
+    }
+  
+    public function getEventParticipate(Request $request)
+    {
+        // dd($request);
+        $event = $this->admin_service->getEventsUser($request->id);
+        return json_encode($event);
     }
 }

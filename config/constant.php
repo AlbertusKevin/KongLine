@@ -12,6 +12,7 @@ define("FINISHED", 2);
 define("CLOSED", 3);
 define("CANCELED", 4);
 define("REJECTED", 5);
+define("PROCEEDED", 6);
 
 // Status User
 define("DELETED", 0);
@@ -66,5 +67,7 @@ define("KONFIRMASI", 'konfirmasi');
 define("GAGAL", 'gagal');
 
 // Status Transaction
+define("NOT_UPLOADED", 0);
 define("CONFIRMED_TRANSACTION", 1);
-define("REJECTED_TRANSACTION", 2);
+define("NOT_CONFIRMED_TRANSACTION", 2);
+define("REJECTED_TRANSACTION", 3);

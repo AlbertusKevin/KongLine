@@ -22,7 +22,7 @@ class TransactionSeeder extends Seeder
                 'accountNumber' => '209708591042',
                 'nominal' => 10000,
                 'repaymentPicture' => 'images/buktitrf.jpg',
-                'status' => 1,
+                'status' => 2,
                 'annonymous_donate' => 0,
                 'created_at' => Carbon::now()->format('Y-m-d')
             ]

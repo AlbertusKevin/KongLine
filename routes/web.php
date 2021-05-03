@@ -76,6 +76,9 @@ Route::get('/petition/create', [EventController::class, 'createPetition']);
 Route::post('/petition/create', [EventController::class, 'storePetition']);
 Route::get('/petition/{id}', [EventController::class, 'showPetition']);
 
+Route::get('/petition/edit/{id}', [EventController::class, 'editPetition']);
+Route::put('/petition/{id}', [EventController::class, 'updatePetition']);
+
 Route::get('/petition/comments/{id}', [EventController::class, 'commentPetition']);
 
 Route::get('/petition/progress/{id}', [EventController::class, 'progressPetition']);
@@ -97,10 +100,15 @@ Route::post('/donation/create', [EventController::class, 'storeDonation']);
 //* --- menampilkan donasi ---
 Route::get('/donation', [EventController::class, 'listDonation']);
 Route::get('/donation/{id}', [EventController::class, 'getADonation']);
+Route::get('/donation/edit/{id}', [EventController::class, 'editDonation']);
+Route::put('/donation/{id}', [EventController::class, 'updateDonation']);
 
 //* --- partisipasi dalam donasi ---
 Route::get('/donation/donate/{id}', [EventController::class, 'formDonate']);
 Route::post('/donation/donate/{id}', [EventController::class, 'postDonate']);
+
+Route::patch('/donation/donate/{id}', [EventController::class, 'updateDonate']);
+Route::get('/donation/donate/edit/{id}', [EventController::class, 'editDonate']);
 
 //* --- konfirmasi pembayaran donasi ---
 Route::get('/donation/confirm_donate/{id}', [EventController::class, 'formConfirm']);
@@ -110,13 +118,16 @@ Route::patch('/donation/confirm_donate/{id}', [EventController::class, 'postConf
 //! Route Communication
 //? =========================
 Route::get('/inbox', [ServiceController::class, 'index'])->name('inbox');
-Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show');
+Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show')->middleware('admin');
 
 //? =========================
 //! Route Forum
 //? =========================
 Route::get('/forum', [ForumController::class, 'index'])->name('forum');
 Route::get('/forum/{id}', [ForumController::class, 'comment'])->name('forum.comment');
+Route::get('/forumerror', [ForumController::class, 'error']);
+Route::get('/inputforum', [ForumController::class, 'inputforum'])->middleware(['admin', 'campaigner']);
+Route::post('/input', [ForumController::class, 'input']);
 
 //? =========================
 //! Route Admin
@@ -127,6 +138,7 @@ Route::get('/admin', [AdminController::class, 'home'])->name('admin')->middlewar
 //! Users
 Route::get('/admin/listUser', [AdminController::class, 'getAll'])->middleware('admin');
 Route::get('/admin/listUser/role', [AdminController::class, 'listUserByRole'])->middleware('admin');
+
 Route::get('/admin/listUser/sort', [AdminController::class, 'sortListUser'])->middleware('admin');//Sort List User
 Route::get('/admin/listUser/search', [AdminController::class, 'searchUser'])->middleware('admin');
 Route::get('/admin/listUser/countEvent', [AdminController::class, 'countEventParticipate'])->middleware('admin');
@@ -134,7 +146,6 @@ Route::get('/admin/user/{id}', [AdminController::class, 'getUserInfo'])->middlew
 Route::get('/admin/user/diikuti/{id}', [AdminController::class, 'getEventParticipate'])->middleware('admin');
 Route::get('/admin/user/dibuat/{id}', [AdminController::class, 'getEventMade'])->middleware('admin');
 Route::patch('/admin/user/terimaPengajuan/{id}', [AdminController::class, 'acceptUserToCampaigner'])->middleware('admin');
-Route::patch('/admin/user/tolakPengajuan/{id}', [AdminController::class, 'rejectUserToCampaigner'])->middleware('admin');
 
 //! Petition
 Route::get('/admin/petition', [AdminController::class, 'getListPetition'])->middleware('admin');
@@ -157,7 +168,7 @@ Route::patch('/admin/donation/close/{id}', [AdminController::class, 'closeDonati
 //* -------- ajax -----------
 Route::get('/admin/donation/sort', [AdminController::class, 'adminSortDonation'])->middleware('admin');
 Route::get('/admin/donation/search', [AdminController::class, 'adminSearchDonation'])->middleware('admin');
-Route::get('/admin/donation/type', [AdminController::class, 'donationType']);
+Route::get('/admin/donation/type', [AdminController::class, 'donationType'])->middleware('admin');
 
-Route::get('/admin/transaction/type', [AdminController::class, 'transactionType']);
-Route::get('/admin/transaction/search', [AdminController::class, 'searchTransaction']);
+Route::get('/admin/transaction/type', [AdminController::class, 'transactionType'])->middleware('admin');
+Route::get('/admin/transaction/search', [AdminController::class, 'searchTransaction'])->middleware('admin');

@@ -78,8 +78,8 @@
                             hari lagi
                         @else
                             Selesai
-                        @endif
-                        </p>
+            @endif
+            </p>
         </div>
         <div class="card-body">
             <h5 class="card-title title-donation"><a href="/donation/{{ $donation->id }}">{{ $donation->title }}</a>

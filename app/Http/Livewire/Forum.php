@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Domain\Communication\Service\CommunicationService;
 use Livewire\Component;
+use Carbon\Carbon;
 
 class Forum extends Component
 {
@@ -32,6 +33,7 @@ class Forum extends Component
         $like = $this->service->newLike();
         $like->idForum = $this->idForum;
         $like->idParticipant = auth()->id();
+        $like->created_at = Carbon::now();
         $this->service->saveLike($like);
     }
 

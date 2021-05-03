@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <form action="/donation/confirm_donate/{{ $donation->id }}" method="POST" enctype="multipart/form-data">
+        <form action="/donation/donate/{{ $donation->id }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             <div class="row w-75 ml-auto mr-auto mt-4">
@@ -63,7 +63,7 @@
                                         (jpg, png)</label>
                                 </div>
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="submit">Upload</button>
+                                    <button class="btn btn-outline-secondary" type="submit">Update</button>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                 <div class="col-md-12">
                     <div class="modal-content">
                         <div class="modal-body p-4 text-center">
-                            <img src="{{ DEFAULT_FILE_PREVIEW }}" alt="file preview" class="img-preview">
+                            <img src="/{{ $transaction->repaymentPicture }}" alt="file preview" class="img-preview">
                         </div>
                     </div>
                 </div>
@@ -95,12 +95,12 @@
                                 <tr>
                                     <td>Status :</td>
                                     @if ($transaction->status == 0)
-                                        <td>Belum upload</td>
+                                        <td>Belum Ada Upload</td>
                                     @elseif ($transaction->status == 1)
-                                        <td>Sudah Dikirim</td>
-                                    @elseif ($transaction->status == 2)
+                                        <td>Sudah Diterima</td>
+                                    @elseif($transaction->status == 2)
                                         <td>Pending</td>
-                                    @else
+                                    @elseif($transaction->status == 3)
                                         <td>Ditolak</td>
                                     @endif
                                 </tr>
@@ -122,32 +122,5 @@
                 </div>
             </div>
         </div>
-
-        {{-- <div class="row w-75 ml-auto mr-auto mt-4">
-                <div class="col-md-12">
-                    <div class="modal-content">
-                        <div class="modal-body p-4">
-                            <h5 class="font-weight-bold">Tuliskan dukungan/doa</h5>
-                            <div class="form-group">
-                                <textarea class="form-control" id="comment" rows="3" name="comment"></textarea>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="annonymousComment"
-                                    name="annonymousComment">
-                                <label class="form-check-label" for="annonymousComment">
-                                    Donasi sebagai anonymus
-                                </label>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row w-75 ml-auto mr-auto mt-4">
-                <div class="col-md-12">
-                    <button class="btn btn-danger btn-donate" type="submit">Konfirmasi Pembayaran</button>
-                </div>
-            </div>
-        </form> --}}
     </div>
 @endsection

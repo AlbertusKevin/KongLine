@@ -10,14 +10,14 @@ class Petition extends Model
     // konfigurasi ORM
     use HasFactory;
     protected $table = 'petition';
-    protected $guarded = ['id'];
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     // Relasi
-    public function participatepetition()
-    {
-        return $this->hasMany(ParticipatePetition::class ,'id','idPetition');
-    }
+    // public function participatepetition()
+    // {
+    //     return $this->hasMany(ParticipatePetition::class ,'id','idPetition');
+    // }
 
     public function updatenews()
     {
@@ -26,7 +26,7 @@ class Petition extends Model
 
     public function users()
     {
-        return $this->belongsTo(User::class, 'idCampaigner', 'id');
+        return $this->belongsTo(User::class, 'idCampaigner');
     }
 
 }

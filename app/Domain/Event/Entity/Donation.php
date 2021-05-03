@@ -28,4 +28,9 @@ class Donation extends Model
     {
         return $this->belongsTo(User::class, 'idCampaigner', 'id');
     }
+
+    public function transactions()
+    {
+        return $this->belongsTo(User::class, 'id', 'idDonation');
+    }
 }

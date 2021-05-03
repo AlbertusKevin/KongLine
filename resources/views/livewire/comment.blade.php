@@ -1,5 +1,5 @@
 <center>
-    <div class="col-md-8" style="text-align: left">
+    <div class="col-md-8" style="text-align: left; margin-top: 20px;">
         <div class="card HeadChatAdmin">
             <div class="card-header">
                 {{ $forum->user->name }}
@@ -20,8 +20,10 @@
                 @endif
             </div>
             <div class="card-footer">
+                @if(Auth::check())
                 <form wire:submit.prevent="SendComment">
                     <div class="row">
+                        
                         <div class="col-md-8">
                             <input wire:model="comment" class="form-control input shadow-none FieldMessage d-inline-block" placeholder="Type a message" required>
                         </div>
@@ -31,6 +33,12 @@
                         </div>
                     </div>
                 </form>
+                @else
+                <center>
+                <a class="btn btn-primary" href="/login" role="button" style="padding: 1% 23% 1% 23%;">Login</a>
+                <a class="btn btn-primary" href="/register" role="button" style="padding: 1% 20% 1% 20%;">Register</a>
+                </center>
+                @endif
             </div>
         </div>
     </div>
