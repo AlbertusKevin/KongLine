@@ -38,6 +38,7 @@
                     <a class="nav-link" href="{{ url('/admin/listUser') }}">User</a>
                     <a class="nav-link" href="{{ url('/admin/donation') }}">Donasi</a>
                     <a class="nav-link" href="{{ url('/admin/petition') }}">Petisi</a>
+                    <a class="nav-link" href="{{ url('/forum') }}">Forum</a>
                     <div class="dropdown m-2 mr-2">
                         <div data-toggle="dropdown">
                             <img src="/img/profile.png">

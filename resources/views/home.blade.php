@@ -1,6 +1,7 @@
 @extends('layout.app')
 
 @section('content')
+<script src="{{ URL::asset('js/plus.js') }}"></script>
     @include('layout.message')
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -103,21 +104,6 @@
         @endif
         <!-- <div class="card" style="width: 18rem;"> -->
         <!-- </div> -->
-
-
-
-        <script>
-            function openChat() {
-                document.getElementById("myChat").style.display = "block";
-                document.getElementById("btnclosechat").style.display = "block";
-            }
-
-            function closeChat() {
-                document.getElementById("myChat").style.display = "none";
-                document.getElementById("btnclosechat").style.display = "none";
-            }
-
-        </script>
 
     </section>
 
