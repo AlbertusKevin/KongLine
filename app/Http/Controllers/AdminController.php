@@ -256,32 +256,27 @@ class AdminController extends Controller
         return view('admin.userAdmin', compact('user', 'events', 'countTotal', 'eventMade'));
     }
 
-    public function getEventParticipate(Request $request, $id)
-    {   
+    public function getEventParticipate($id)
+    {
         return $this->admin_service->getEventsUser($id);
     }
 
-    public function getEventMade(Request $request, $id)
-    {   
+    public function getEventMade($id)
+    {
         return $this->admin_service->getEventsMade($id);
     }
 
-    public function acceptUserToCampaigner($id){
+    public function acceptUserToCampaigner($id)
+    {
 
         $this->admin_service->acceptUserToCampaigner($id);
         return redirect("/admin/user/$id")->with(["type" => 'success', 'message' => 'User berhasil upgrade ke campaigner']);
     }
 
-    public function rejectUserToCampaigner($id){
+    public function rejectUserToCampaigner($id)
+    {
 
         $this->admin_service->rejectUserToCampaigner($id);
         return redirect("/admin/user/$id")->with(["type" => 'fail', 'message' => 'User ditolak upgrade ke campaigner']);
-    }
-  
-    public function getEventParticipate(Request $request)
-    {
-        // dd($request);
-        $event = $this->admin_service->getEventsUser($request->id);
-        return json_encode($event);
     }
 }
