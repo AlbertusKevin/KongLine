@@ -204,10 +204,10 @@
                             @if ($status == DONATION)
                                 <div class="m-2">
                                     <div class="card" style="width: 18rem;">
-                                        <img src="/{{$singleEvent->photo}}" class="card-img-top" alt="...">
+                                        <img src="/{{$singleEvent->photo}}" class="card-img-top event-profile" alt="...">
                                         <p class="time-left">Donation</p>
                                         <div class="card-body">
-                                            <h5 class="card-title">{{$singleEvent->title}}</h5>
+                                            <h5 class="card-title event-text">{{$singleEvent->title}}</h5>
                                             <p class="card-text">{{$singleEvent->name}}</p>
                                             <a href="/donation/{{$singleEvent->id}}" class="btn btn-primary">Kunjungi event</a>
                                         </div>
@@ -216,10 +216,10 @@
                             @elseif ($status == PETITION)
                                     <div class="m-2">
                                         <div class="card" style="width: 18rem;">
-                                            <img src="/{{$singleEvent->photo}}" class="card-img-top" alt="...">
+                                            <img src="/{{$singleEvent->photo}}" class="card-img-top event-profile" alt="...">
                                             <p class="time-left-white">Petition</p>
                                             <div class="card-body">
-                                                <h5 class="card-title">{{$singleEvent->title}}</h5>
+                                                <h5 class="card-title event-text">{{$singleEvent->title}}</h5>
                                                 <p class="card-text">{{$singleEvent->name}}</p>
                                                 <a href="/petition/{{$singleEvent->id}}" class="btn btn-primary">Kunjungi event</a>
                                             </div>

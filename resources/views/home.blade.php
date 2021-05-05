@@ -78,12 +78,12 @@
         <div class="row">
             @foreach ($petisi as $p)
                 <div class="col-md-4">
-                    <div class="card m-2" style="padding: 0; ">
+                    <div class="card m-2 h-100" style="padding: 0; ">
                         <div style="position:relative;">
-                            <img src="{{ $p->photo }}" class="card-img-top" alt="petition picture">
+                            <img src="{{ $p->photo }}" class="card-img-top profile" alt="petition picture">
                             <p class="donate-count">{{ $p->signedCollected }} Partisipan</p>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body card-text">
                             <p class="card-text">{{ $p->title }}</p>
                             <h5 class="card-title">{{ $p->users->name }}</h5>
                             <a href="/petition/{{ $p->id }}" class=" w-100 btn btn-primary"> Detail </a>
