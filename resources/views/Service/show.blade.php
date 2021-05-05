@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends($navbar)
 
 @section('content')
     <div class="container-fluid">

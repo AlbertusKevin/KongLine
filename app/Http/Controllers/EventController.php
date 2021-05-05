@@ -27,7 +27,7 @@ class EventController extends Controller
         $user = $this->eventService->showProfile();
         $listCategory = $this->eventService->listCategory();
         $petitionList = $this->eventService->indexPetition();
-        $navbar = EventService::getNavbar($user);
+        $navbar = EventService::getNavbar();
 
         return view('petition.petition', compact('petitionList', 'user', 'listCategory', 'navbar'));
     }
@@ -62,7 +62,7 @@ class EventController extends Controller
         $petition = $this->eventService->showPetition($idEvent);
         $isParticipated = $this->eventService->checkParticipated($idEvent, $user, PETITION);
         $message = $this->eventService->messageOfEvent($petition->status);
-        $navbar = EventService::getNavbar($user);
+        $navbar = EventService::getNavbar();
 
         return view('petition.petitionDetail', compact('petition', 'user', 'isParticipated', 'message', 'navbar'));
     }
@@ -73,9 +73,9 @@ class EventController extends Controller
         $user = $this->eventService->showProfile();
         $petition = $this->eventService->showPetition($idEvent);
         $comments = $this->eventService->commentsPetition($idEvent);
-        $navbar = EventService::getNavbar($user);
+        $navbar = EventService::getNavbar();
 
-        return view('petition.petitionComment', compact('petition', 'comments', 'navbar'));
+        return view('petition.petitionComment', compact('petition', 'comments', 'navbar', 'user'));
     }
 
     //! Menampilkan seluruh berita perkembangan petisi tertentu sesuai ID Petisi
@@ -84,7 +84,7 @@ class EventController extends Controller
         $petition = $this->eventService->showPetition($idEvent);
         $news = $this->eventService->newsPetition($idEvent);
         $user = $this->eventService->showProfile();
-        $navbar = EventService::getNavbar($user);
+        $navbar = EventService::getNavbar();
 
         return view('petition.petitionProgress', compact('petition', 'news', 'user', 'navbar'));
     }
@@ -233,7 +233,7 @@ class EventController extends Controller
         $donations = $this->eventService->getListDonation();
         $categories = $this->eventService->listCategory();
         $user = $this->eventService->showProfile();
-        $navbar = EventService::getNavbar($user);
+        $navbar = EventService::getNavbar();
 
 
         return view('donation.donation', compact('donations', 'categories', 'user', 'navbar'));
@@ -252,7 +252,7 @@ class EventController extends Controller
         // pengecekan, apakah donasi di event ini sudah dikonfirmasi pembayaran oleh user
         $userTransactionStatus = $this->eventService->checkUserTransactionStatus($participatedDonation, $user->id);
         $allStatusZero = $this->eventService->checkStatusIsZero($participatedDonation);
-        $navbar = EventService::getNavbar($user);
+        $navbar = EventService::getNavbar();
 
         return view(
             'donation.donationDetail',

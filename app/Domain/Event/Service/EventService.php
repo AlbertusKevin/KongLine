@@ -102,9 +102,9 @@ class EventService
         return $this->dao->listBank();
     }
 
-    public static function getNavbar($user)
+    public static function getNavbar()
     {
-        if ($user->role != ADMIN) {
+        if (Auth::user()->role != ADMIN) {
             return 'layout.app';
         }
 
@@ -127,6 +127,11 @@ class EventService
             return [
                 'header' => 'Sudah Ditutup',
                 'content' => 'Event ini telah ditutup oleh penyelenggara / admin.'
+            ];
+        } else if ($status == REJECTED) {
+            return [
+                'header' => 'Ditolak',
+                'content' => 'Pengajuan untuk menyelenggarakan event ini ditolak. Silahkan cek email untuk pesan.'
             ];
         }
 
@@ -686,8 +691,14 @@ class EventService
 
     public function getDonationLimit()
     {
-        $result = $this->dao->getListDonationLimit();
-        return $result;
+        $listDonation = $this->dao->getListDonationLimit();
+        $list = [];
+
+        foreach ($listDonation as $donation) {
+            $list[] = $this->checkValidDate($donation);
+        }
+
+        return $list;
     }
 
     public function getPetitionLimit()
