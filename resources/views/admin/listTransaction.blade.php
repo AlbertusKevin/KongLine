@@ -43,19 +43,25 @@
                                 <td>{{ $transaction->title }}</td>
                                 <td>{{ $transaction->name }}</td>
                                 <td>Rp. {{ number_format($transaction->nominal, 2, ',', '.') }}</td>
+
                                 @if ($transaction->status == 0)
                                     <td>
-                                        <p class="badge badge-info">Perlu Konfirmasi</p>
+                                        <p class="badge badge-warning">Belum Upload</p>
                                     </td>
-                                @elseif($transaction->status == 1)
+                                @elseif ($transaction->status == 1)
                                     <td>
                                         <p class="badge badge-success">Dikonfirmasi</p>
+                                    </td>
+                                @elseif ($transaction->status == 2)
+                                    <td>
+                                        <p class="badge badge-info">Perlu Konfirmasi</p>
                                     </td>
                                 @else
                                     <td>
                                         <p class="badge badge-danger">Ditolak</p>
                                     </td>
                                 @endif
+
                                 <td><a href="/admin/donation/transaction/{{ $transaction->id }}" type="button"
                                         class="btn btn-primary">detail</a></td>
                             </tr>

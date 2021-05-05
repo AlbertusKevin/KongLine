@@ -20,9 +20,13 @@
                                 <tr>
                                     <td>Status :</td>
                                     @if ($transaction->status == 0)
+                                        <td>Belum upload</td>
+                                    @elseif ($transaction->status == 1)
+                                        <td>Sudah Dikirim</td>
+                                    @elseif ($transaction->status == 2)
                                         <td>Pending</td>
                                     @else
-                                        <td>Sudah Dikirim</td>
+                                        <td>Ditolak</td>
                                     @endif
                                 </tr>
                                 <tr>
@@ -52,7 +56,7 @@
                 </div>
             </div>
         </div>
-        @if ($transaction->status == 0)
+        @if ($transaction->status == 2 || $transaction->status == 3)
             <div class="row w-35 ml-auto mr-auto mt-4 text-center">
                 <div class="col-md-12">
                     <form action="/admin/donation/transaction/confirm/{{ $transaction->id }}" method="post">

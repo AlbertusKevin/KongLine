@@ -201,13 +201,14 @@ class AdminController extends Controller
 
     public function confirmTransaction($id)
     {
-        //ambil id user dan id donasi
-        $transaction = $this->admin_service->getAUserTransaction($id);
 
-        //ubah status dari 0 menjadi 5, ubah data perhitungan
-        $this->admin_service->updateCalculationAfterConfirmDonate($transaction);
-        $this->admin_service->confirmTransaction($id);
-        //todo: send email
+        // //ambil id user dan id donasi
+        // $transaction = $this->admin_service->getAUserTransaction($id);
+
+        // //ubah status dari 0 menjadi 5, ubah data perhitungan
+        // $this->admin_service->updateCalculationAfterConfirmDonate($transaction);
+        // $this->admin_service->confirmTransaction($id);
+        // //todo: send email
         $view = "auth.trxConfirmEmail";
         $message = "Transaksi donasi Anda selesai diproses";
         $this->admin_service->sendEmailDonation($id, $view, $message);
