@@ -67,13 +67,11 @@ class ProfileController extends Controller
                 $messageError = $message;
             }
 
-            Alert::error('Validasi Error', [$messageError]);
-            return redirect('/profile/campaigner');
+            return redirect('/profile')->with(['type' => "error", 'message' => $messageError]);
         };
 
         $this->event_service->updateCampaigner($request, $user);
-        Alert::success('Berhasil', "Nomor rekening Anda sudah diupdate.");
-        return redirect('/profile/campaigner');
+        return redirect('/profile')->with(['type' => "success", 'message' => "Permintaan Anda akan diproses. Tunggu konfirmasi dari admin."]);
     }
 
     public function dataCampaigner()

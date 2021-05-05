@@ -1,7 +1,7 @@
-@extends('layout.app')
+@extends($navbar)
 
 @section('content')
-<div class="container">
-    @livewire('comment', ['forum' => $forum])
-</div>
+    <div class="container">
+        @livewire('comment', ['forum' => $forum])
+    </div>
 @endsection

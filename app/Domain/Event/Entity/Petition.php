@@ -10,7 +10,7 @@ class Petition extends Model
     // konfigurasi ORM
     use HasFactory;
     protected $table = 'petition';
-    protected $primaryKey = 'id';
+    protected $guarded = ['id'];
     public $timestamps = false;
 
     // Relasi
@@ -28,5 +28,4 @@ class Petition extends Model
     {
         return $this->belongsTo(User::class, 'idCampaigner');
     }
-
 }

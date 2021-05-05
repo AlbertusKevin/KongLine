@@ -5,7 +5,6 @@
     <div class="jumbotron text-center" style="background-image: url('/{{ $user->backgroundPicture }}');">
         <img src="/{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
         <h3 class="display-4">{{ $user->name }}</h3>
-        <p class="lead">Pengguna sejak 5 Feb 2021</p>
         @if ($user->role == 'campaigner')
             <h1><span class="badge rounded-pill bg-primary text-white">Campaigner</span></h1>
         @endif
