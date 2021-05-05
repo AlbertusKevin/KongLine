@@ -27,6 +27,7 @@ class CreateDonationsTable extends Migration
             $table->bigInteger('donationCollected');
             $table->bigInteger('donationTarget');
             $table->string('accountNumber');
+            $table->longText('reason')->nullable();
             $table->tinyInteger('bank')->unsigned();
             $table->date('created_at');
         });

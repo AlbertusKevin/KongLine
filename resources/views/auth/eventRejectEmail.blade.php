@@ -21,13 +21,17 @@
                                         <tbody>
                                             <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                 <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                                                    Maaf! Event <b><i> {{ $event->title }} </b></i> tidak dapat dipublish oleh pihak YukBisaYuk. Klik 
+                                                    Maaf! Event <b><i> {{ $event->title }} </b></i> tidak dapat dipublish oleh pihak YukBisaYuk dengan alasan : 
+                                                    <mark><em> {{ $event->reason }} </em></mark> .
+                
+                                                    Klik 
                                                     @if( $event_chosen == "petisi" )
                                                         <a href="http://127.0.0.1:8000/petition/{{$event->id}}">
                                                     @else
                                                         <a href="http://127.0.0.1:8000/donation/{{$event->id}}">
                                                     @endif
-                                                     disini </a> untuk melihat alasan 
+                                                     disini </a> untuk melihat eventmu
+                                                    
                                                 </td>
                                             </tr>
                                             <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">

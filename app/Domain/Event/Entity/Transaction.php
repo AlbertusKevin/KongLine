@@ -10,4 +10,9 @@ class Transaction extends Model
     use HasFactory;
     protected $table = 'transaction';
     protected $fillable = ['idDonation', 'idParticipant', 'accountNumber', 'nominal', 'annonymous_donate', 'repaymentPicture', 'status'];
+
+    public function donations()
+    {
+        return $this->belongsTo(Donation::class, 'idDonation');
+    }
 }
