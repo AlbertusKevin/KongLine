@@ -60,7 +60,7 @@ class AdminDao
 
     public function listUserByRole($role)
     {
-        return User::where('role', $role)->get();
+        return User::where('role', $role)->where('role', '!=', GUEST)->get();
     }
 
     public function listUserByAll()
@@ -79,39 +79,43 @@ class AdminDao
     public function sortByTanggalDibuat($role)
     {
         return User::where('role', $role)
+            ->where('role', '!=', GUEST)
             ->orderBy('created_at', 'asc')->get();
     }
 
     public function sortByNama($role)
     {
         return User::where('role', $role)
+            ->where('role', '!=', GUEST)
             ->orderBy('name', 'asc')->get();
     }
 
     public function sortByEmail($role)
     {
         return User::where('role', $role)
+            ->where('role', '!=', GUEST)
             ->orderBy('email', 'asc')->get();
     }
 
     public function sortByTanggalDibuatAllUser()
     {
-        return User::orderBy('created_at', 'asc')->get();
+        return User::where('role', '!=', GUEST)->orderBy('created_at', 'asc')->get();
     }
 
     public function sortByNamaAllUser()
     {
-        return User::orderBy('name', 'asc')->get();
+        return User::where('role', '!=', GUEST)->orderBy('name', 'asc')->get();
     }
 
     public function sortByEmailAllUser()
     {
-        return User::orderBy('email', 'asc')->get();
+        return User::where('role', '!=', GUEST)
+            ->orderBy('email', 'asc')->get();
     }
 
     public function sortByRoleAll()
     {
-        return User::orderBy('role', 'asc')->get();
+        return User::where('role', '!=', GUEST)->orderBy('role', 'asc')->get();
     }
 
     public function sortByRoleSpecific($role)
@@ -321,15 +325,15 @@ class AdminDao
         Petition::where('id', $id)->update(['status' => $status]);
     }
 
-    public function changeReason($id , $event, $reason)
+    public function changeReason($id, $event, $reason)
     {
         if ($event == DONATION) {
             Donation::where('id', $id)->update(['reason' => $reason]);
-        } elseif ($event == PETITION){
+        } elseif ($event == PETITION) {
             Petition::where('id', $id)->update(['reason' => $reason]);
-        }else {
+        } else {
             Transaction::where('id', $id)->update(['reason' => $reason]);
-        } 
+        }
     }
 
 
@@ -435,7 +439,7 @@ class AdminDao
     //Mencari User sesuai keyword untuk tab SEMUA
     public function searchUserAll($keyword)
     {
-        return User::where('name', 'LIKE', '%' . $keyword . '%')->get();
+        return User::where('name', 'LIKE', '%' . $keyword . '%')->where('role', '!=', GUEST)->get();
     }
 
     //Mencari User sesuai keyword untuk tab PARTICIPANT
@@ -532,7 +536,7 @@ class AdminDao
         });
     }
 
-    
+
     public function sendEmailUser($user, $view, $subject)
     {
         Mail::send($view, ['user' => $user], function ($message) use ($user, $subject) {
@@ -625,5 +629,4 @@ class AdminDao
             $message->subject($subject);
         });
     }
-
 }

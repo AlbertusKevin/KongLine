@@ -186,7 +186,7 @@ class AdminController extends Controller
         $view = "auth.eventRejectEmail";
         $message = "Event Ditolak";
         $this->admin_service->sendEmailDonation($id, $view, $message);
-        
+
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penolakan donasi telah berhasil.']);
     }
 
@@ -283,12 +283,9 @@ class AdminController extends Controller
 
     public function rejectUserToCampaigner($id)
     {
-
         $view = "auth.userRejectEmail";
         $message = "Pengajuan Campaigner Ditolak";
         $this->admin_service->rejectUserToCampaigner($id, $view, $message);
         return redirect("/admin/user/$id")->with(["type" => 'fail', 'message' => 'User ditolak upgrade ke campaigner']);
-
     }
-    
 }
