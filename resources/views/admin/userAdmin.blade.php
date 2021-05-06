@@ -5,25 +5,27 @@
 @endsection
 @section('content')
     <div class="jumbotron text-center" style="background-image: url('/{{ $user->backgroundPicture }}');">
-        <img src="/{{ $user->photoProfile}}" alt="profile" class="profile-picture rounded-circle">
-        <h3 class="display-4 name">{{ $user->name}}</h3>
+        <img src="/{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
+        <h3 class="display-4 name">{{ $user->name }}</h3>
         {{-- <h6 class="userId={{$user->id}}">{{ $user->id }}</h6> --}}
         <p class="lead">{{ $user->email }}</p>
-        @if($user->dob == null)
+        @if ($user->dob == null)
             <p class="text-danger">Tidak ada data tanggal lahir.</p>
         @else
-            <p>{{ $user->dob}}</p>
+            <p>{{ $user->dob }}</p>
         @endif
         <button type="button" class="btn btn-success mb-2" disabled>{{ $user->role }}</button><br>
-        @if($user->status != 1)
+        @if ($user->status != 1)
             <span class="badge badge-warning p-2">Pengajuan</span><br>
-            <form id="confirm-pengajuan" action="/admin/user/terimaPengajuan/{{ $user->id }}" method="POST">
+            <form id="confirm-pengajuan" action="/admin/user/terimaPengajuan/{{ $user->id }}" method="POST"
+                style="display: inline-block">
                 @csrf
                 @method('patch')
-                <button type="submit" class="btn btn-primary my-4 mr-5 rounded-pill terimaPengajuan">Terima Pengajuan</button>
+                <button type="submit" class="btn btn-primary my-4 rounded-pill terimaPengajuan">Terima
+                    Pengajuan</button>
             </form>
 
-            <form action="/admin/user/tolakPengajuan/{{ $user->id }}" method="POST">
+            <form action="/admin/user/tolakPengajuan/{{ $user->id }}" method="POST" style="display: inline-block">
                 @csrf
                 @method('patch')
                 <button type="submit" class="btn btn-danger rounded-pill tolakPengajuan">Tolak Pengajuan</button>
@@ -67,7 +69,7 @@
                 <div class="col-sm-2">
                     Tentang Saya
                 </div>
-                @if($user->aboutMe == null)
+                @if ($user->aboutMe == null)
                     <div class="col-sm-10">
                         <p class="text-danger">Tidak ada data Tentang Saya.</p>
                     </div>
@@ -81,7 +83,7 @@
                 <div class="col-sm-2">
                     Kota
                 </div>
-                @if($user->city == null)
+                @if ($user->city == null)
                     <div class="col-sm-10">
                         <p class="text-danger">Tidak ada data Kota.</p>
                     </div>
@@ -95,7 +97,7 @@
                 <div class="col-sm-2">
                     Negara
                 </div>
-                @if($user->country == null)
+                @if ($user->country == null)
                     <div class="col-sm-10">
                         <p class="text-danger">Tidak ada data Negara.</p>
                     </div>
@@ -109,7 +111,7 @@
                 <div class="col-sm-2">
                     Alamat
                 </div>
-                @if($user->address == null)
+                @if ($user->address == null)
                     <div class="col-sm-10">
                         <p class="text-danger">Tidak ada data Alamat.</p>
                     </div>
@@ -123,7 +125,7 @@
                 <div class="col-sm-2">
                     Kode Pos
                 </div>
-                @if($user->zipCode == null)
+                @if ($user->zipCode == null)
                     <div class="col-sm-10">
                         <p class="text-danger">Tidak ada data Kode Pos.</p>
                     </div>
@@ -137,7 +139,7 @@
                 <div class="col-sm-2">
                     Nomor Telepon
                 </div>
-                @if($user->phoneNumber == null)
+                @if ($user->phoneNumber == null)
                     <div class="col-sm-10">
                         <p class="text-danger">Tidak ada data Nomor Telepon.</p>
                     </div>
@@ -147,7 +149,7 @@
                     </div>
                 @endif
             </div>
-            @if( $user->role == CAMPAIGNER || $user->status == WAITING)
+            @if ($user->role == CAMPAIGNER || $user->status == WAITING)
 
                 @if ($user->role == CAMPAIGNER)
                     <h3 class="mt-5">Campaigner</h3>
@@ -175,7 +177,7 @@
                         KTP
                     </div>
                     <div class="col-sm-10">
-                        <img src="/{{$user->ktpPicture}}" class="img-thumbnail" alt="tolak">
+                        <img src="/{{ $user->ktpPicture }}" class="img-thumbnail" alt="tolak">
                     </div>
                 </div>
             @endif
@@ -184,11 +186,13 @@
             <h3 class="mt-5">Event</h3>
             <div class="row">
                 <div class="col-md-auto">
-                    <button type="button" class="btn btn-primary mx-2 rounded-pill my-3 diikuti">Diikuti ({{ $countTotal }})</button>
+                    <button type="button" class="btn btn-primary mx-2 rounded-pill my-3 diikuti">Diikuti
+                        ({{ $countTotal }})</button>
                 </div>
                 <div class="col-md-auto">
-                    @if( $user->role == CAMPAIGNER)
-                        <button type="button" class="btn btn-light rounded-pill my-3 dibuat">Dibuat ({{ $eventMade }})</button>
+                    @if ($user->role == CAMPAIGNER)
+                        <button type="button" class="btn btn-light rounded-pill my-3 dibuat">Dibuat
+                            ({{ $eventMade }})</button>
                     @endif
                 </div>
             </div>
@@ -196,43 +200,45 @@
 
             <div class="row flex-nowrap event horizontal-scroll">
                 {{-- <div class="event"> --}}
-                    @php
-                        $status = DONATION;
-                    @endphp
-                    @foreach ($events as $event)
-                        @foreach ( $event as $singleEvent)
-                            @if ($status == DONATION)
-                                <div class="m-2">
-                                    <div class="card" style="width: 18rem;">
-                                        <img src="/{{$singleEvent->photo}}" class="card-img-top event-profile" alt="...">
-                                        <p class="time-left">Donation</p>
-                                        <div class="card-body">
-                                            <h5 class="card-title event-text">{{$singleEvent->title}}</h5>
-                                            <p class="card-text">{{$singleEvent->name}}</p>
-                                            <a href="/donation/{{$singleEvent->id}}" class="btn btn-primary">Kunjungi event</a>
-                                        </div>
+                @php
+                    $status = DONATION;
+                @endphp
+                @foreach ($events as $event)
+                    @foreach ($event as $singleEvent)
+                        @if ($status == DONATION)
+                            <div class="m-2">
+                                <div class="card" style="width: 18rem;">
+                                    <img src="/{{ $singleEvent->photo }}" class="card-img-top event-profile" alt="...">
+                                    <p class="time-left">Donation</p>
+                                    <div class="card-body">
+                                        <h5 class="card-title event-text">{{ $singleEvent->title }}</h5>
+                                        <p class="card-text">{{ $singleEvent->name }}</p>
+                                        <a href="/donation/{{ $singleEvent->id }}" class="btn btn-primary">Kunjungi
+                                            event</a>
                                     </div>
                                 </div>
-                            @elseif ($status == PETITION)
-                                    <div class="m-2">
-                                        <div class="card" style="width: 18rem;">
-                                            <img src="/{{$singleEvent->photo}}" class="card-img-top event-profile" alt="...">
-                                            <p class="time-left-white">Petition</p>
-                                            <div class="card-body">
-                                                <h5 class="card-title event-text">{{$singleEvent->title}}</h5>
-                                                <p class="card-text">{{$singleEvent->name}}</p>
-                                                <a href="/petition/{{$singleEvent->id}}" class="btn btn-primary">Kunjungi event</a>
-                                            </div>
-                                        </div>
+                            </div>
+                        @elseif ($status == PETITION)
+                            <div class="m-2">
+                                <div class="card" style="width: 18rem;">
+                                    <img src="/{{ $singleEvent->photo }}" class="card-img-top event-profile" alt="...">
+                                    <p class="time-left-white">Petition</p>
+                                    <div class="card-body">
+                                        <h5 class="card-title event-text">{{ $singleEvent->title }}</h5>
+                                        <p class="card-text">{{ $singleEvent->name }}</p>
+                                        <a href="/petition/{{ $singleEvent->id }}" class="btn btn-primary">Kunjungi
+                                            event</a>
                                     </div>
-                            @endif
-                        @endforeach 
-                            @if ($loop->remaining)
-                                @php
-                                $status = PETITION;
-                                @endphp
-                            @endif
+                                </div>
+                            </div>
+                        @endif
                     @endforeach
+                    @if ($loop->remaining)
+                        @php
+                            $status = PETITION;
+                        @endphp
+                    @endif
+                @endforeach
                 {{-- </div> --}}
             </div>
             {{-- </div> --}}
