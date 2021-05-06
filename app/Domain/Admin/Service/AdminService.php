@@ -361,9 +361,9 @@ class AdminService
 
         if ($request->sortBy == 'Jumlah Partisipasi') {
             if ($request->roleUserType == 'semua') {
-                return $this->dao->listUserByAll();
+                return $this->dao->sortByCountEventAll();
             } else {
-                return $this->dao->listUserByRole($request->roleUserType);
+                return $this->dao->sortByCountEvent($request->roleUserType);
             }
         }
 

@@ -236,8 +236,7 @@ class AdminController extends Controller
         $users =  $this->admin_service->sortListUser($request);
         $eventCount = $this->admin_service->countEventParticipate($users);
         $combine = [];
-        $sortCountEvent =
-            $combine[] = $users;
+        $combine[] = $users;
         $combine[] = $eventCount;
 
         return json_encode($combine);
