@@ -1082,6 +1082,7 @@ $(".sort-list-user").on("click", function (e) {
     e.preventDefault(); //To Cancel the event
     let sortBy = $(this).html();
     $("#sort-by").val(sortBy);
+    $("#sort-label").html(sortBy);
 
     $(".sort-list-user").removeClass("btn-sort");
     $(this).addClass("btn-sort");
