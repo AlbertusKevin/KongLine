@@ -896,7 +896,7 @@ const viewUserGuestRole = (user) => {
                 ${changeDateFormat(user.created_at)}
             </td>
             <td>
-                <a href = "/admin/user/${user.id}" class = "link-user"> ${
+                <a href = "/admin/user/${user.id}" class = "link-user" style = "color:black;"> ${
         user.name
     }</a>
             </td>
@@ -1082,6 +1082,7 @@ $(".sort-list-user").on("click", function (e) {
     e.preventDefault(); //To Cancel the event
     let sortBy = $(this).html();
     $("#sort-by").val(sortBy);
+    $("#sort-label").html(sortBy);
 
     $(".sort-list-user").removeClass("btn-sort");
     $(this).addClass("btn-sort");

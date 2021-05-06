@@ -15,6 +15,7 @@
             <p>{{ $user->dob }}</p>
         @endif
         <button type="button" class="btn btn-success mb-2" disabled>{{ $user->role }}</button><br>
+
         @if ($user->status != 1)
             <span class="badge badge-warning p-2">Pengajuan</span><br>
             <form id="confirm-pengajuan" action="/admin/user/terimaPengajuan/{{ $user->id }}" method="POST"

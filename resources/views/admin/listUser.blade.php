@@ -25,8 +25,10 @@
                 <a class="dropdown-item sort-list-user">Jumlah Partisipasi</a>
                 <a class="dropdown-item sort-list-user">Role</a>
             </div>
+            <br>
+            <small class="text-muted" id="sort-label">None</small>
         </div>
-        
+    </div>
     <div class="text-center my-5">
         <button href="/listUser" type="button" class="btn btn-primary role-type rounded-pill btn-role">Semua</button>
         <button href="/listUser" type="button" class="btn btn-light role-type rounded-pill ml-3">Participant</button>
@@ -56,7 +58,7 @@
                         {{ $changeDateFormat[$i] }}
                         </td>
                         <td>
-                            <a href = "/admin/user/{{ $users[$i]->id}}" class="link-user"> {{ $users[$i]->name}}</a>
+                            <a href = "/admin/user/{{ $users[$i]->id}}" class="link-user" style = "color:black;"> {{ $users[$i]->name}}</a>
                         </td>
                         <td>
                         {{ $users[$i]->email }}
