@@ -21,7 +21,7 @@
                                         <tbody>
                                             <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                 <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                                                    Maaf ! Transaksi donasi <b><i> {{ $event->title }} </b></i> sebesar {{ $event->transactions->nominal }} tidak berhasil disalurkan.  Klik  <a href="http://127.0.0.1:8000/donation/{{$event->id}}"> disini </a> untuk melihat alasan.
+                                                    Maaf ! Transaksi donasi <b><i> {{ $transaction->donations->title }} </b></i> sebesar {{ $transaction->nominal }} tidak berhasil disalurkan dengan alasan : <em> {{ $transaction->reason }}</em> .Klik  <a href="http://127.0.0.1:8000/donation/{{$transaction->donations->id}}"> disini </a> untuk melihat donasi.
                                                 </td>
                                             </tr>
                                             <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">

@@ -18,6 +18,11 @@ class AdminDao
         return User::where("id", "!=", GUEST_ID)->get();
     }
 
+    public function getUserById($id)
+    {
+        return User::find($id);
+    }
+
     public function getCountParticipant()
     {
         return User::where('role', 'participant')->count();
@@ -316,6 +321,19 @@ class AdminDao
         Petition::where('id', $id)->update(['status' => $status]);
     }
 
+    public function changeReason($id , $event, $reason)
+    {
+        if ($event == DONATION) {
+            Donation::where('id', $id)->update(['reason' => $reason]);
+        } elseif ($event == PETITION){
+            Petition::where('id', $id)->update(['reason' => $reason]);
+        }else {
+            Transaction::where('id', $id)->update(['reason' => $reason]);
+        } 
+    }
+
+
+
     public function getAllTransaction()
     {
         return Transaction::selectRaw('transaction.id, transaction.idParticipant, transaction.created_at, donation.title, users.name, transaction.nominal, transaction.status')
@@ -505,10 +523,20 @@ class AdminDao
     {
         return Petition::where('idCampaigner', $id)->count();
     }
+
     public function sendEmail($event, $view, $subject, $event_chosen)
     {
         Mail::send($view, ['event' => $event, 'event_chosen' => $event_chosen], function ($message) use ($event, $subject) {
             $message->to($event->users->email);
+            $message->subject($subject);
+        });
+    }
+
+    
+    public function sendEmailUser($user, $view, $subject)
+    {
+        Mail::send($view, ['user' => $user], function ($message) use ($user, $subject) {
+            $message->to($user->email);
             $message->subject($subject);
         });
     }
@@ -561,7 +589,7 @@ class AdminDao
 
     public function rejectUserToCampaigner($id, $status, $role)
     {
-        $user = User::where('id', $id)->first();
+        $user = User::find($id);
 
         $user->status = $status;
         $user->role = $role;
@@ -584,4 +612,18 @@ class AdminDao
         return User::where('role', $role)
             ->orderBy('countEvent', 'desc')->get();
     }
+
+    public function getTransactionById($id)
+    {
+        return Transaction::find($id);
+    }
+
+    public function sendEmailTrx($trx, $view, $subject)
+    {
+        Mail::send($view, ['transaction' => $trx], function ($message) use ($trx, $subject) {
+            $message->to($trx->donations->users->email);
+            $message->subject($subject);
+        });
+    }
+
 }

@@ -22,6 +22,7 @@ class CreateTransactionsTable extends Migration
             $table->string('repaymentPicture')->nullable();
             $table->tinyInteger('status')->unsigned();
             $table->boolean('annonymous_donate');
+            $table->longText('reason')->nullable();
             $table->timestamps();
         });
 

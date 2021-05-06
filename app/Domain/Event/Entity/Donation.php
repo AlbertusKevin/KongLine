@@ -31,6 +31,6 @@ class Donation extends Model
 
     public function transactions()
     {
-        return $this->belongsTo(User::class, 'id', 'idDonation');
+        return $this->hasMany(Transaction::class, 'idDonation', 'id');
     }
 }
