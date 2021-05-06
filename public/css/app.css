@@ -11278,12 +11278,8 @@ a.text-dark:focus {
   margin-left: 175px;
 }
 
-a.link-user:link{
+.link-user{
   color: black;
-}
-
-a.link-user:hover{
-  color: #3409dc;
 }
 
 .time-left-white{

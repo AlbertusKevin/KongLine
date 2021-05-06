@@ -573,4 +573,15 @@ class AdminDao
     {
         return Donation::find($id);
     }
+
+    public function sortByCountEventAll()
+    {
+        return User::orderBy('countEvent', 'desc')->get();
+    }
+
+    public function sortByCountEvent()
+    {
+        return User::where('role', $role)
+            ->orderBy('countEvent', 'desc')->get();
+    }
 }

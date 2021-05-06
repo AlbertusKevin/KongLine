@@ -896,7 +896,7 @@ const viewUserGuestRole = (user) => {
                 ${changeDateFormat(user.created_at)}
             </td>
             <td>
-                <a href = "/admin/user/${user.id}" class = "link-user"> ${
+                <a href = "/admin/user/${user.id}" class = "link-user" style = "color:black;"> ${
         user.name
     }</a>
             </td>

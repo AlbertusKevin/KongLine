@@ -15,19 +15,22 @@
             <p>{{ $user->dob}}</p>
         @endif
         <button type="button" class="btn btn-success mb-2" disabled>{{ $user->role }}</button><br>
+        
         @if($user->status != 1)
-            <span class="badge badge-warning p-2">Pengajuan</span><br>
-            <form id="confirm-pengajuan" action="/admin/user/terimaPengajuan/{{ $user->id }}" method="POST">
-                @csrf
-                @method('patch')
-                <button type="submit" class="btn btn-primary my-4 mr-5 rounded-pill terimaPengajuan">Terima Pengajuan</button>
-            </form>
-
-            <form action="/admin/user/tolakPengajuan/{{ $user->id }}" method="POST">
-                @csrf
-                @method('patch')
-                <button type="submit" class="btn btn-danger rounded-pill tolakPengajuan">Tolak Pengajuan</button>
-            </form>
+        <span class="badge badge-warning p-2 row my-2">Pengajuan</span><br>
+            <div class="row d-flex justify-content-center">
+                <form id="confirm-pengajuan" action="/admin/user/terimaPengajuan/{{ $user->id }}" method="POST">
+                    @csrf
+                    @method('patch')
+                    <button type="submit" class="btn btn-primary mr-3 rounded-pill terimaPengajuan">Terima Pengajuan</button>
+                </form>
+                
+                <form action="/admin/user/tolakPengajuan/{{ $user->id }}" method="POST">
+                    @csrf
+                    @method('patch')
+                    <button type="submit" class="btn btn-danger ml-3 rounded-pill tolakPengajuan">Tolak Pengajuan</button>
+                </form>
+            </div>
         @endif
     </div>
 

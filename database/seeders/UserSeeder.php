@@ -219,5 +219,27 @@ class UserSeeder extends Seeder
                 'created_at' => Carbon::create('2021', '03', '29'),
             ]
         );
+        DB::table('users')->insert(
+            [
+                'name' => 'Steve Rogers',
+                'email' => 'steverogers@gmail.com',
+                'password' => Hash::make('steverogers'),
+                'status' => 3,
+                'role' => 'participant',
+                'phoneNumber' => '081286549879',
+                'dob' => '1980-11-07',
+                'photoProfile' => 'images/profile/photo/Steve_Rogers.png',
+                'backgroundPicture' => 'images/profile/background/Black Galaxy PC Wallpaper.jpg',
+                'linkProfile' => 'steveRogers.com',
+                'aboutMe' => 'Cause i dont know what im gonna do if it doesnt',
+                'address' => 'Brooklyn no. 10',
+                'city' => 'Ciamis',
+                'country' => 'Indonesia',
+                'zipCode' => '49379',
+                'job' => 'Superhero',
+                'gender' => "male",
+                'created_at' => Carbon::now(),
+            ]
+        );
     }
 }
