@@ -6,6 +6,7 @@ use App\Domain\Admin\Dao\AdminDao;
 use Illuminate\Support\Carbon;
 use App\Domain\Event\Service\EventService;
 use App\Domain\Event\Dao\EventDao;
+use App\Domain\Event\Entity\Transaction;
 
 class AdminService
 {
@@ -31,9 +32,9 @@ class AdminService
     {
         $donation = $this->dao->getDonationById($id);
         $event = "donasi";
-
         $emailCampaigner = $this->dao->sendEmail($donation, $view, $subject, $event);
     }
+
 
     //Mengambil semua user yang ada di DB
     public function getAllUser()
@@ -146,14 +147,16 @@ class AdminService
         $this->dao->changeEventStatus($id, ACTIVE, PETITION);
     }
 
-    public function rejectPetition($id)
+    public function rejectPetition($id, $reason)
     {
         $this->dao->changeEventStatus($id, REJECTED, PETITION);
+        $this->dao->changeReason($id, PETITION, $reason);
     }
 
-    public function closePetition($id)
+    public function closePetition($id, $reason)
     {
         $this->dao->changeEventStatus($id, CLOSED, PETITION);
+        $this->dao->changeReason($id, PETITION, $reason);
     }
 
     public function allDonation()
@@ -534,14 +537,16 @@ class AdminService
         $this->dao->changeEventStatus($id, ACTIVE, DONATION);
     }
 
-    public function rejectDonation($id)
+    public function rejectDonation($id , $reason)
     {
         $this->dao->changeEventStatus($id, REJECTED, DONATION);
+        $this->dao->changeReason($id, DONATION, $reason);
     }
 
-    public function closeDonation($id)
+    public function closeDonation($id, $reason)
     {
         $this->dao->changeEventStatus($id, CLOSED, DONATION);
+        $this->dao->changeReason($id, DONATION, $reason);
     }
 
     public function updateCalculationAfterConfirmDonate($transaction)
@@ -570,9 +575,10 @@ class AdminService
         $this->dao->updateStatusTransaction($id, CONFIRMED_TRANSACTION);
     }
 
-    public function rejectTransaction($id)
+    public function rejectTransaction($id, $reason)
     {
         $this->dao->updateStatusTransaction($id, REJECTED_TRANSACTION);
+        $this->dao->changeReason($id, 'TRANSACTION', $reason);
     }
 
     public function getAllTransaction()
@@ -612,6 +618,14 @@ class AdminService
         }
         return $this->dao->searchTransactionWithStatusByDonationTitle(REJECTED_TRANSACTION, $keyword);
     }
+
+    
+    public function sendEmailTransaction($id, $view, $subject)
+    {
+        $trx = $this->dao->getTransactionById($id);
+        $emailCampaigner = $this->dao->sendEmailTrx($trx, $view, $subject);
+    }
+
 
     public function searchUser($request)
     {
@@ -668,13 +682,21 @@ class AdminService
     }
 
 
-    public function acceptUserToCampaigner($id)
+    public function acceptUserToCampaigner($id, $view, $subject)
     {
+        
+        $user = $this->dao->getUserById($id);
+        $emailUser = $this->dao->sendEmailUser($user, $view, $subject);
+
         return $this->dao->acceptUserToCampaigner($id, ACTIVE, CAMPAIGNER);
     }
 
-    public function rejectUserToCampaigner($id)
+    public function rejectUserToCampaigner($id, $view, $subject)
     {
+
+        $user = $this->dao->getUserById($id);
+        $emailUser = $this->dao->sendEmailUser($user, $view, $subject);
+
         return $this->dao->rejectUserToCampaigner($id, ACTIVE, PARTICIPANT);
     }
 }

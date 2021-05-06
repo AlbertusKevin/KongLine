@@ -12,7 +12,7 @@
                                 <td class="" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0; background-color: #187BCD; margin: 0; padding: 20px;"
                                     align="center" bgcolor="#71b6f9" valign="top">
                                     <a href="{{ url('/') }}" style="font-size:32px;color:#fff;text-decoration:none;"> Yuk Bisa Yuk</a> <br>
-                                    <span style="margin-top: 10px;display: block;"> Transaksi Donasi Dikonfirmasi </span>
+                                    <span style="margin-top: 10px;display: block;"> Pengajuan Campaigner Telah Disetujui </span>
                                 </td>
                             </tr>
                             <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
@@ -21,8 +21,7 @@
                                         <tbody>
                                             <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                 <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                                                    Transaksi donasi <b><i> {{ $transaction->donations->title }} </b></i> sebesar {{ $transaction->nominal }} sudah berhasil!  Klik  <a href="http://127.0.0.1:8000/donation/{{$transaction->donations->id}}"> disini </a> untuk melihat donasi. 
-                                                    Terimakasih sudah melakukan transaksi di YukBisaYuk.
+                                                    Selamat ! Pengajuan untuk menjadi campaigner sudah disetujui. Sekarang user {{ $user->name }} sudah menjadi campaigner dan dapat membuat event.
                                                 </td>
                                             </tr>
                                             <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">

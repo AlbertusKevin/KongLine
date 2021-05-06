@@ -25,6 +25,7 @@ class CreatePetitionsTable extends Migration
             $table->tinyInteger('category')->unsigned();
             $table->tinyInteger('status')->unsigned();
             $table->date('deadline');
+            $table->longText('reason')->nullable();;
             $table->date('created_at');
         });
 

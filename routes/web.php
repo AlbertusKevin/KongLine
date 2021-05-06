@@ -126,7 +126,7 @@ Route::get('/inbox/{id}', [ServiceController::class, 'show'])->name('inbox.show'
 Route::get('/forum', [ForumController::class, 'index'])->name('forum');
 Route::get('/forum/{id}', [ForumController::class, 'comment'])->name('forum.comment');
 Route::get('/forumerror', [ForumController::class, 'error']);
-Route::get('/inputforum', [ForumController::class, 'inputforum'])->middleware(['admin', 'campaigner']);
+Route::get('/inputforum', [ForumController::class, 'inputforum']);
 Route::post('/input', [ForumController::class, 'input']);
 
 //? =========================
@@ -146,6 +146,7 @@ Route::get('/admin/user/{id}', [AdminController::class, 'getUserInfo'])->middlew
 Route::get('/admin/user/diikuti/{id}', [AdminController::class, 'getEventParticipate'])->middleware('admin');
 Route::get('/admin/user/dibuat/{id}', [AdminController::class, 'getEventMade'])->middleware('admin');
 Route::patch('/admin/user/terimaPengajuan/{id}', [AdminController::class, 'acceptUserToCampaigner'])->middleware('admin');
+Route::patch('/admin/user/tolakPengajuan/{id}', [AdminController::class, 'rejectUserToCampaigner'])->middleware('admin');
 
 //! Petition
 Route::get('/admin/petition', [AdminController::class, 'getListPetition'])->middleware('admin');
