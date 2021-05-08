@@ -24,9 +24,9 @@ class CreatePetitionsTable extends Migration
             $table->integer('signedCollected');
             $table->tinyInteger('category')->unsigned();
             $table->tinyInteger('status')->unsigned();
-            $table->date('deadline');
+            $table->timestamp('deadline');
             $table->longText('reason')->nullable();;
-            $table->date('created_at');
+            $table->timestamps();
         });
 
         Schema::table('petition', function (Blueprint $table) {
