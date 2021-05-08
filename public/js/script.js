@@ -88,7 +88,9 @@ const changeTablePetition = (petition) => {
     return /*html*/ `
     <tr>
         <td>${petition.created_at}</td>
-        <td><a href="/petition/${petition.id}">${petition.title}</a></td>
+        <td><a href="/petition/${petition.id}" style = "color:black;">${
+        petition.title
+    }</a></td>
         <td>${getACategory(petition.category)}</td>
         <td>${petition.signedTarget}</td>
         <td>${petition.deadline}</td>
@@ -117,7 +119,9 @@ const changeTableDonation = (donation) => {
     return /*html*/ `
     <tr>
         <td>${donation.created_at}</td>
-        <td><a href="/donation/${donation.id}">${donation.title}</a></td>
+        <td><a href="/donation/${donation.id}" style = "color:black;">${
+        donation.title
+    }</a></td>
         <td>${donation.category}</td>
         <td>Rp. ${donation.donationTarget.toLocaleString("en")},00</td>
         <td>${donation.deadline}</td>
@@ -872,7 +876,9 @@ const viewUserPengajuan = (user) => {
                 ${changeDateFormat(user.created_at)}
             </td>
             <td>
-                <a href = "/admin/user/${user.id}" class = "link-user"> ${user.name}</a>
+                <a href = "/admin/user/${user.id}" class = "link-user"> ${
+        user.name
+    }</a>
             </td>
             <td>
                 ${user.email}
@@ -896,9 +902,9 @@ const viewUserGuestRole = (user) => {
                 ${changeDateFormat(user.created_at)}
             </td>
             <td>
-                <a href = "/admin/user/${user.id}" class = "link-user" style = "color:black;"> ${
-        user.name
-    }</a>
+                <a href = "/admin/user/${
+                    user.id
+                }" class = "link-user" style = "color:black;"> ${user.name}</a>
             </td>
             <td>
                 ${user.email}
@@ -978,7 +984,10 @@ $(".role-type").on("click", function () {
                             user[i],
                             countParticipated[i]
                         );
-                    } else if (user[i].role == "participant" && user[i].status == 3){
+                    } else if (
+                        user[i].role == "participant" &&
+                        user[i].status == 3
+                    ) {
                         html += viewUserPengajuan(
                             user[i],
                             countParticipated[i]
@@ -1109,15 +1118,27 @@ const sortListUser = (sortBy, roleUserType) => {
             if (data[1].length != 0) {
                 const pengguna = data[0];
                 const countEvent = data[1];
-                
-                for(let i = 0; i < pengguna.length; i++){
-                    if(pengguna[i].role == "participant" && pengguna[i].status != 3){
-                        html += viewUserParticipantRole(pengguna[i],countEvent[i]);
-                    }else if (pengguna[i].role == "campaigner"){
-                        html += viewUserCampaignerRole(pengguna[i], countEvent[i]);
-                    }else if (pengguna[i].role == "guest"){
+
+                for (let i = 0; i < pengguna.length; i++) {
+                    if (
+                        pengguna[i].role == "participant" &&
+                        pengguna[i].status != 3
+                    ) {
+                        html += viewUserParticipantRole(
+                            pengguna[i],
+                            countEvent[i]
+                        );
+                    } else if (pengguna[i].role == "campaigner") {
+                        html += viewUserCampaignerRole(
+                            pengguna[i],
+                            countEvent[i]
+                        );
+                    } else if (pengguna[i].role == "guest") {
                         html += viewUserGuestRole(pengguna[i], countEvent[i]);
-                    }else if(pengguna[i].role == "participant" && pengguna[i].status == 3){
+                    } else if (
+                        pengguna[i].role == "participant" &&
+                        pengguna[i].status == 3
+                    ) {
                         html += viewUserPengajuan(pengguna[i], countEvent[i]);
                     }
                 }
@@ -1146,15 +1167,13 @@ $("#search-user").on("keyup", function () {
             let html = "";
             if (data.length != 0) {
                 data.forEach((user) => {
-
-                    if (user.role == 'participant' && user.status != 3){
-
+                    if (user.role == "participant" && user.status != 3) {
                         html += viewUserParticipantRole(user);
                     } else if (user.role == "campaigner") {
                         html += viewUserCampaignerRole(user);
                     } else if (user.role == "guest") {
                         html += viewUserGuestRole(user);
-                    }else if(user.role == 'participant' && user.status == 3){
+                    } else if (user.role == "participant" && user.status == 3) {
                         html += viewUserPengajuan(user);
                     }
                 });
@@ -1188,14 +1207,14 @@ $(".diikuti").on("click", function (e) {
         success: (data) => {
             let html = "";
             // console.log(data);
-            data.forEach(function(events){
-                if(status == "DONATION"){
-                    events.forEach(function(event){
+            data.forEach(function (events) {
+                if (status == "DONATION") {
+                    events.forEach(function (event) {
                         // console.log(event);
                         html += makeDonationCardView(event);
                     });
-                }else if(status == "PETITION"){
-                    events.forEach(function(event){
+                } else if (status == "PETITION") {
+                    events.forEach(function (event) {
                         // console.log(event);
                         html += makePetitionCardView(event);
                     });
@@ -1217,7 +1236,7 @@ $(".dibuat").on("click", function (e) {
     const queryString = window.location.pathname;
     console.log(queryString);
 
-    const id = queryString.substring(12,);
+    const id = queryString.substring(12);
     console.log(id);
 
     var status = "DONATION";
@@ -1228,14 +1247,14 @@ $(".dibuat").on("click", function (e) {
         success: (data) => {
             let html = "";
             console.log(data);
-            data.forEach(function(events){
-                if(status == "DONATION"){
-                    events.forEach(function(event){
+            data.forEach(function (events) {
+                if (status == "DONATION") {
+                    events.forEach(function (event) {
                         // console.log(event);
                         html += makeDonationCardView(event);
                     });
-                }else if(status == "PETITION"){
-                    events.forEach(function(event){
+                } else if (status == "PETITION") {
+                    events.forEach(function (event) {
                         // console.log(event);
                         html += makePetitionCardView(event);
                     });
@@ -1247,7 +1266,7 @@ $(".dibuat").on("click", function (e) {
     });
 });
 
-const makeDonationCardView = (event) =>{
+const makeDonationCardView = (event) => {
     return `
         <div class="m-2">
             <div class="card" style="width: 18rem; position:relative;">
@@ -1263,7 +1282,7 @@ const makeDonationCardView = (event) =>{
     `;
 };
 
-const makePetitionCardView = (event) =>{
+const makePetitionCardView = (event) => {
     return `
         <div class="m-2">
             <div class="card" style="width: 18rem; position:relative;">
@@ -1290,12 +1309,11 @@ const makePetitionCardView = (event) =>{
 //     const name = $(".name").html();
 //     console.log(name);
 
-
 //     $.ajax({
 //         url: "/admin/user/terimaPengajuan/" + id,
 //         dataType: "json",
 //         success: (data) => {
-            
+
 //         },
 //     });
 // });
@@ -1315,4 +1333,3 @@ const makePetitionCardView = (event) =>{
 //         },
 //     });
 // });
-

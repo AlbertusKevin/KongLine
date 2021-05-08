@@ -24,11 +24,11 @@
                     <div class="sub">
                         <div class="participant">
                             <p class="text-12"> Participant: </p>
-                            <span class="text-bold"> {{ $participant }}</span>
+                            <h3 class="text-bold"> {{ $participant }}</h3>
                         </div>
                         <div class="campaigner">
                             <p class="text-12"> Campaigner: </p>
-                            <span class="text-bold"> {{ $campaigner }}</span>
+                            <h3 class="text-bold"> {{ $campaigner }}</h3>
                         </div>
                     </div>
                 </div>

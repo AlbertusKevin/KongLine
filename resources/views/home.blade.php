@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-<script src="{{ URL::asset('js/plus.js') }}"></script>
+    <script src="{{ URL::asset('js/plus.js') }}"></script>
     @include('layout.message')
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">

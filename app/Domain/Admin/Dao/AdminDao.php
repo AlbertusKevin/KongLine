@@ -611,7 +611,7 @@ class AdminDao
         return User::orderBy('countEvent', 'desc')->get();
     }
 
-    public function sortByCountEvent()
+    public function sortByCountEvent($role)
     {
         return User::where('role', $role)
             ->orderBy('countEvent', 'desc')->get();

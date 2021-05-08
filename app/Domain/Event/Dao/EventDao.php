@@ -648,6 +648,13 @@ class EventDao
         ]);
     }
 
+    public function changeStatusTransactionDonation($id)
+    {
+        Transaction::where('idDonation', $id)->update([
+            'status' => NOT_CONFIRMED_TRANSACTION
+        ]);
+    }
+
     public function getAUserTransaction($idUser, $idEvent)
     {
         return Transaction::where('idParticipant', $idUser)->where('idDonation', $idEvent)->first();

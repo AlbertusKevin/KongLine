@@ -73,7 +73,8 @@
                         @foreach ($donationList as $donation)
                             <tr>
                                 <td>{{ $donation->created_at }}</td>
-                                <td><a href="/donation/{{ $donation->id }}">{{ $donation->title }}</a></td>
+                                <td><a href="/donation/{{ $donation->id }}"
+                                        style="color:black;">{{ $donation->title }}</a></td>
                                 <td>{{ $donation->category }}</td>
                                 <td>Rp. {{ number_format($donation->donationTarget, 2, ',', '.') }}</td>
                                 <td>{{ $donation->deadline }}</td>

@@ -56,7 +56,7 @@
                 </div>
             </div>
         </div>
-        @if ($transaction->status == 2 || $transaction->status == 3)
+        @if ($transaction->status == NOT_CONFIRMED_TRANSACTION)
             <div class="row w-35 ml-auto mr-auto mt-4 text-center">
                 <div class="col-md-12">
                     <form action="/admin/donation/transaction/confirm/{{ $transaction->id }}" method="post">

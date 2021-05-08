@@ -104,7 +104,11 @@ class EventService
 
     public static function getNavbar()
     {
-        if (Auth::user()->role != ADMIN) {
+        if (Auth::check()) {
+            if (Auth::user()->role != ADMIN) {
+                return 'layout.app';
+            }
+        } else {
             return 'layout.app';
         }
 
@@ -870,6 +874,11 @@ class EventService
     {
         $pathRepaymentPicture = $this->uploadImage($picture, 'donation/bukti_transfer');
         $this->dao->confirmationPictureDonation($pathRepaymentPicture, $id);
+    }
+
+    public function updateTransactionDonation($id)
+    {
+        $this->dao->changeStatusTransactionDonation($id);
     }
 
     public function countProgressDonation($donation)

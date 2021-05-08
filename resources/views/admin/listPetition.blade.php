@@ -70,7 +70,8 @@
                         @foreach ($petitionList as $petition)
                             <tr>
                                 <td>{{ $petition->created_at }}</td>
-                                <td><a href="/petition/{{ $petition->id }}">{{ $petition->title }}</a></td>
+                                <td><a href="/petition/{{ $petition->id }}"
+                                        style="color:black;">{{ $petition->title }}</a></td>
                                 <td>{{ $petition->category }}</td>
                                 <td>{{ $petition->signedTarget }}</td>
                                 <td>{{ $petition->deadline }}</td>

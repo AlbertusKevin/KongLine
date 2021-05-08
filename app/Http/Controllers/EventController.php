@@ -431,6 +431,8 @@ class EventController extends Controller
 
         if (!empty($request->file('repaymentPicture'))) {
             $this->eventService->confirmationPictureDonation($request->file('repaymentPicture'), $id);
+        } else {
+            $this->eventService->updateTransactionDonation($id);
         }
 
         return redirect('/donation/' . $id)->with(['type' => "success", 'message' => 'Konfirmasi pembayaran akan segera diproses']);
