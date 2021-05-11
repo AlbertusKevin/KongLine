@@ -22,7 +22,7 @@ class HomeController extends Controller
         $petisi = $this->eventService->getPetitionLimit();
 
         $users = User::orderBy('id', 'DESC')->get();
-        $user = $this->eventService->showProfile();
+        $user = $this->eventService->getAProfile();
 
         if ($user->role == GUEST) {
             return view('home', compact('user', 'donasi', 'petisi'));

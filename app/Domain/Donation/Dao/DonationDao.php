@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Event\Dao;
+namespace App\Domain\Donation\Dao;
 
 use App\Domain\Event\Entity\Bank;
 use App\Domain\Event\Entity\Category;
@@ -51,7 +51,11 @@ class EventDao
         return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
     }
 
-
+    //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
+    public function verifyProfile($email, $phone)
+    {
+        return User::where('email', $email)->where('phoneNumber', $phone)->first();
+    }
 
     //! Menghitung total event yang sudah pernah diikuti user tertentu
     public function countDonationParticipatedByUser($idUser)

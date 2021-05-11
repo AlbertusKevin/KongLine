@@ -6,15 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
-use App\Domain\Event\Service\EventService;
+use App\Domain\Profile\Service\ProfileService;
 
 class AuthController extends Controller
 {
-    private $eventService;
+    private $profile_service;
 
     public function __construct()
     {
-        $this->eventService = new EventService();
+        $this->profile_service = new ProfileService();
     }
 
     public function postRegister(Request $request)
@@ -27,24 +27,14 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            // Alert::error("Gagal Mendaftar", "Sepertinya input ada yang kurang tepat.");
             return redirect('/register')
                 ->withInput()
                 ->withErrors($validator)
-                ->with(['type' => "error", 'message' => 'Sepertinya input ada yang kurang tepat.']);
+                ->with(['type' => "error", 'message' => 'Name minimal 4 karakter, password minimal 6, dan pastikan email belum pernah digunakan orang lain.']);
         }
 
-        $result = $this->eventService->authRegis($request);
-
-        if ($result) {
-            // Alert::success('Register Success', 'Please Login.');
-            return redirect('login')->with(['type' => "success", 'message' => 'Registrasi berhasil. Silahkan login.']);
-        }
-
-        // Alert::error('Register Gagal', 'Mohon cek kembali data Anda');
-        return redirect('/register')
-            ->withInput()
-            ->with(['type' => "error", 'message' => 'Register Gagal. Mohon cek kembali data Anda']);
+        $this->profile_service->authRegis($request);
+        return redirect('login')->with(['type' => "success", 'message' => 'Registrasi berhasil. Silahkan login.']);
     }
 
     public function getLogin()
@@ -68,10 +58,10 @@ class AuthController extends Controller
             return redirect('/login')
                 ->withInput()
                 ->withErrors($validator)
-                ->with(['type' => "error", 'message' => 'Login tidak berhasil. Input kurang tepat.']);
+                ->with(['type' => "error", 'message' => 'Login tidak berhasil. Pastikan input sudah tepat.']);
         };
 
-        $result = $this->eventService->authLogin($request);
+        $result = $this->profile_service->authLogin($request);
 
         if ($result) {
             if (auth()->user()->role == 'admin') {
@@ -81,7 +71,6 @@ class AuthController extends Controller
             }
         }
 
-        // Alert::error('Email atau password salah', 'Silahkan coba lagi');
         return redirect('/login')->with(['type' => "error", 'message' => 'Email atau password salah. Silahkan coba lagi']);;
     }
 
@@ -105,7 +94,7 @@ class AuthController extends Controller
         $view = 'auth.verify';
         $subject = 'Reset Password';
 
-        $this->eventService->authForgot($request, $view, $subject);
+        $this->profile_service->authForgot($request, $view, $subject);
 
         Alert::toast('Silahkan cek email Anda');
         return back();
@@ -118,7 +107,7 @@ class AuthController extends Controller
 
     public function postReset(Request $request)
     {
-        $result = $this->eventService->authReset($request);
+        $result = $this->profile_service->authReset($request);
 
         $validator = Validator::make($request->all(), [
             'password' => 'required|min:6|required_with:passwordConfirm|same:passwordConfirm',
