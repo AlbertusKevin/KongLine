@@ -1,8 +1,4 @@
-{{-- @if ($user->role != ADMIN) --}}
 @extends($navbar)
-{{-- @else
-    @extends('layout.adminNavbar')
-@endif --}}
 
 @section('title')
     Petition List
