@@ -50,5 +50,41 @@ class BankSeeder extends Seeder
                 'bank' => 'NISP'
             ]
         );
+        DB::table('bank')->insert(
+            [
+                'id' => 7,
+                'bank' => 'BUKOPIN'
+            ]
+        );
+        DB::table('bank')->insert(
+            [
+                'id' => 8,
+                'bank' => 'Arta Graha'
+            ]
+        );
+        DB::table('bank')->insert(
+            [
+                'id' => 9,
+                'bank' => 'Panin'
+            ]
+        );
+        DB::table('bank')->insert(
+            [
+                'id' => 10,
+                'bank' => 'Diamond'
+            ]
+        );
+        DB::table('bank')->insert(
+            [
+                'id' => 11,
+                'bank' => 'Citibank'
+            ]
+        );
+        DB::table('bank')->insert(
+            [
+                'id' => 12,
+                'bank' => 'Maybank'
+            ]
+        );
     }
 }

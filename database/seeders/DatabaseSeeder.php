@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Domain\Event\Entity\UpdateNews;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,22 +14,25 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            CategorySeeder::class,
             TransactionStatusSeeder::class,
-            BankSeeder::class,
             StatusUserSeeder::class,
-            UserSeeder::class,
-            ForumSeeder::class,
-            CommentForumSeeder::class,
             EventStatusSeeder::class,
+            CategorySeeder::class,
+            BankSeeder::class,
+            UserSeeder::class,
+
             DonationSeeder::class,
+            // DetailAllocationSeeder::class,
+            // ParticipateDonationSeeder::class,
+            // TransactionSeeder::class,
+
             PetitionSeeder::class,
-            DetailAllocationSeeder::class,
-            ForumLikeSeeder::class,
-            ParticipateDonationSeeder::class,
-            ParticipatePetitionSeeder::class,
-            TransactionSeeder::class,
-            UpdateNewsSeeder::class,
+            // ParticipatePetitionSeeder::class,
+            // UpdateNewsSeeder::class,
+
+            // ForumSeeder::class,
+            // CommentForumSeeder::class,
+            // ForumLikeSeeder::class,
         ]);
     }
 }

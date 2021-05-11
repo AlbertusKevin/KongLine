@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-md-8 mt-3">
                 <hr>
-                <img src="/{{ $petition->photo }}" class="image-detail-petition" alt="detail petisi">
+                <img src="{{ $petition->photo }}" class="image-detail-petition" alt="detail petisi">
                 <p class="mt-3 petition-detail-description">{{ $petition->purpose }}</p>
             </div>
             <div class="col-md-4">
@@ -72,7 +72,7 @@
                                 </h4>
                                 <p class="ml-4">Orang telah menendatangani Petisi ini !</p>
                                 <div class="row row-cols-2">
-                                    <div class="col-sm-4"><img src="/{{ $user->photoProfile }}" alt="petition profile"
+                                    <div class="col-sm-4"><img src="{{ $user->photoProfile }}" alt="petition profile"
                                             class="ml-4 img-thumbnail">
                                     </div>
                                     <div class="col-sm-8"><b>{{ $user->name }}</b>
