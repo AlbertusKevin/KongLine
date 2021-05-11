@@ -17,38 +17,38 @@ class ForumSeeder extends Seeder
     {
         DB::table('forum')->insert(
             [
-                'id' => 1,
-                'idParticipant' => 5,
-                'content' => 'Help the Cancer',
-                'title' => 'Cancer',
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'idParticipant' => 16,
+                'content' => 'I Have an event, but got rejected. I want to fix the detail about event and resubmit. How can it be done?',
+                'title' => 'How to edit my event?',
+                'created_at' => Carbon::now('+7:00'),
+                'updated_at' => Carbon::now('+7:00')
             ]
         );
         DB::table('forum')->insert(
             [
-                'id' => 2,
-                'idParticipant' => 5,
-                'content' => 'Help the Tumor',
-                'title' => 'Tumor',
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'idParticipant' => 15,
+                'content' => "I don't understand how to fill the detail allocation field when wanna to create donation. Can anyone help me?",
+                'title' => 'Detail Allocation',
+                'created_at' => Carbon::now('+7:00'),
+                'updated_at' => Carbon::now('+7:00')
             ]
         );
         DB::table('forum')->insert(
             [
-                'id' => 3,
                 'idParticipant' => 6,
-                'content' => 'Help from earthquake',
-                'title' => 'earthquake',
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'content' => 'If i participate a donation and i just finish to fill the form, how long the time needed to upload the transaction?',
+                'title' => 'Donate',
+                'created_at' => Carbon::now('+7:00'),
+                'updated_at' => Carbon::now('+7:00')
             ]
         );
         DB::table('forum')->insert(
             [
-                'id' => 4,
-                'idParticipant' => 7,
-                'content' => 'Help from tsunami',
-                'title' => 'Tsunami',
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'idParticipant' => 10,
+                'content' => 'What would be happen if an event of petition reach the deadline date, but the sign is not reach the target?',
+                'title' => 'Deadline An Event',
+                'created_at' => Carbon::now('+7:00'),
+                'updated_at' => Carbon::now('+7:00')
             ]
         );
     }

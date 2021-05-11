@@ -22,17 +22,17 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
 
             DonationSeeder::class,
-            // DetailAllocationSeeder::class,
-            // ParticipateDonationSeeder::class,
-            // TransactionSeeder::class,
+            DetailAllocationSeeder::class,
+            ParticipateDonationSeeder::class,
+            TransactionSeeder::class,
 
             PetitionSeeder::class,
-            // ParticipatePetitionSeeder::class,
-            // UpdateNewsSeeder::class,
+            ParticipatePetitionSeeder::class,
+            UpdateNewsSeeder::class,
 
-            // ForumSeeder::class,
-            // CommentForumSeeder::class,
-            // ForumLikeSeeder::class,
+            ForumSeeder::class,
+            CommentForumSeeder::class,
+            ForumLikeSeeder::class,
         ]);
     }
 }

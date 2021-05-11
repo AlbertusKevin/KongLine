@@ -17,7 +17,7 @@ class CreateParticipateDonationsTable extends Migration
             $table->foreignId('idDonation');
             $table->foreignId('idParticipant');
             $table->string('comment')->nullable();
-            $table->date('created_at');
+            $table->timestamp('created_at');
             $table->boolean('annonymous_comment');
         });
 

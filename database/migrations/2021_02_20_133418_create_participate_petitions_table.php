@@ -17,7 +17,7 @@ class CreateParticipatePetitionsTable extends Migration
             $table->foreignId('idPetition');
             $table->foreignId('idParticipant');
             $table->string('comment')->nullable();
-            $table->date('created_at');
+            $table->timestamp('created_at');
         });
 
         Schema::table('participate_petition', function (Blueprint $table) {
