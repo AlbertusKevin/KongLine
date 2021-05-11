@@ -28,7 +28,7 @@
     @include('sweetalert::alert')
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/admin"><img src="/images/app/logo.png" width="75px" alt="logo app"></a>
+            <a class="navbar-brand" href="/admin"><img src="/img/logo.png" width="75"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -42,7 +42,7 @@
                     <a class="nav-link" href="{{ url('/inbox') }}">Service</a>
                     <div class="dropdown m-2 mr-2">
                         <div data-toggle="dropdown">
-                            <img src="/images/app/icons/default-profile.png" width="30px">
+                            <img src="/img/profile.png">
                         </div>
                         <div class="dropdown-menu">
                             <a class="nav-link" href="{{ url('/logout') }}">Logout</a>

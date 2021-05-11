@@ -22,7 +22,7 @@ class AdminController extends Controller
         $users = $this->admin_service->getAllUser();
         $eventCount = $this->admin_service->countEventParticipate($users);
         $changeDateFormat = $this->admin_service->changeDateFormat();
-        return view('admin.user.listUser', compact('users', 'eventCount', 'changeDateFormat'));
+        return view('/admin/listUser', compact('users', 'eventCount', 'changeDateFormat'));
     }
 
     public function listUserByRole(Request $request)
@@ -74,7 +74,7 @@ class AdminController extends Controller
         $listCategory = $this->eventService->listCategory();
         $petitionList = $this->admin_service->allPetition();
         // dd($petitionList);
-        return view('admin.petition.listPetition', compact('listCategory', 'petitionList'));
+        return view('admin.listPetition', compact('listCategory', 'petitionList'));
     }
 
     public function acceptPetition($id)
@@ -123,13 +123,13 @@ class AdminController extends Controller
         $listCategory = $this->eventService->listCategory();
         $donationList = $this->admin_service->allDonation();
 
-        return view("admin.donation.listDonation", compact('listCategory', 'donationList'));
+        return view("admin.listDonation", compact('listCategory', 'donationList'));
     }
 
     public function getAllTransaction()
     {
         $transactions = $this->admin_service->getAllTransaction();
-        return view('admin.donation.listTransaction', compact('transactions'));
+        return view('admin.listTransaction', compact('transactions'));
     }
 
     public function transactionType(Request $request)
@@ -147,7 +147,7 @@ class AdminController extends Controller
 
         $transaction = $this->admin_service->getAUserTransaction($id);
         // dd($transaction);
-        return view('admin.donation.detailTransaction', compact('transaction'));
+        return view('admin.detailTransaction', compact('transaction'));
     }
 
     public function donationType(Request $request)
@@ -258,7 +258,7 @@ class AdminController extends Controller
         $countPetition = $events[1]->count();
         $countTotal = $countDonation + $countPetition;
         // dd($countTotal);
-        return view('admin.user.detailUser', compact('user', 'events', 'countTotal', 'eventMade'));
+        return view('admin.userAdmin', compact('user', 'events', 'countTotal', 'eventMade'));
     }
 
     public function getEventParticipate($id)

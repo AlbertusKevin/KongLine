@@ -57,19 +57,19 @@
 
         0%,
         100% {
-            background-image: url("images/app/pictures/auth-pages/bg1.jpg");
+            background-image: url(images/auth/bg1.jpg);
         }
 
         25% {
-            background-image: url("images/app/pictures/auth-pages/bg2.jpg");
+            background-image: url(images/auth/bg2.jpg);
         }
 
         50% {
-            background-image: url("images/app/pictures/auth-pages/bg3.jpg");
+            background-image: url(images/auth/bg3.jpg);
         }
 
         75% {
-            background-image: url("images/app/pictures/auth-pages/bg4.jpg");
+            background-image: url(images/auth/bg4.jpg);
         }
     }
 

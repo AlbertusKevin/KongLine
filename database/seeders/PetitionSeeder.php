@@ -15,350 +15,174 @@ class PetitionSeeder extends Seeder
      */
     public function run()
     {
-
-        //? ================================================================
-        //! ~~~~~~~~~~~~~~~~~~ Status: To Be Confirmed ~~~~~~~~~~~~~~~~~~~~~
-        //? ================================================================
-
-        // petition 1, ID = 1, status = 0, campaigner = 17, category = 3
         DB::table('petition')->insert(
             [
-                'title' => 'Petition Title One',
-                'photo' => '/images/petition/events/petition-1.png',
-                'status' => 0,
-                'category' => 3,
-                'idCampaigner' => 17,
+                'category' => 1,
+                'deadline' => Carbon::create('2021', '04', '01')->format("Y-m-d"),
+                'idCampaigner' => 13,
+                'photo' => 'images/petition/studentStudy.png',
+                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
+                
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
+                'status' => 1,
+                'title' => 'Turunkan KKM Nilai Matematika SMP Negri 01',
+                'targetPerson' => 'Siswa-siswi SMP Negri 01',
+                'signedCollected' => 68,
+                'signedTarget' => 90,
+                'created_at' => Carbon::now()->format('Y-m-d')
+            ]
+        );
+        DB::table('petition')->insert(
+            [
+                'category' => 9,
+                'deadline' => Carbon::create('2021', '04', '01')->format("Y-m-d"),
+                'idCampaigner' => 11,
+                'photo' => 'images/petition/uangJajan.jpeg',
+                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
+                
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
+                'status' => 1,
+                'title' => 'Naikan Uang Jajan Budi!',
+                'targetPerson' => 'Keluarga Budi',
+                'signedCollected' => 1,
+                'signedTarget' => 4,
+                'created_at' => Carbon::now()->format('Y-m-d')
+            ]
+        );
+        DB::table('petition')->insert(
+            [
+                'category' => 1,
+                'deadline' => Carbon::create('2021', '04', '20')->format("Y-m-d"),
+                'idCampaigner' => 12,
+                'photo' => 'images/petition/study.jpg',
+                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
+                
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
+                'status' => 1,
+                'title' => 'Hapus aplikasi SEB!',
+                'targetPerson' => 'Mahasiswa Mahasiswi',
+                'signedCollected' => 9002,
                 'signedTarget' => 10000,
-                'signedCollected' => 0,
-                'deadline' => Carbon::now('+07:00')->addDays(7)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 1',
+                'created_at' => Carbon::now()->format('Y-m-d')
             ]
         );
-
-        // petition 2, ID = 2, status = 0, campaigner = 18, category = 3
         DB::table('petition')->insert(
             [
-                'title' => 'Petition Title Two',
-                'photo' => '/images/petition/events/petition-2.jpg',
+                'category' => 11,
+                'deadline' => Carbon::create('2021', '04', '10')->format("Y-m-d"),
+                'idCampaigner' => 10,
+                'photo' => 'images/petition/petition2.jpg',
+                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
+                
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
                 'status' => 0,
-                'category' => 3,
-                'idCampaigner' => 18,
-                'signedTarget' => 20000,
-                'signedCollected' => 0,
-                'deadline' => Carbon::now('+07:00')->addDays(30)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 2',
+                'title' => 'Batalkan Pembebasan Lahan Kalimantan!',
+                'targetPerson' => 'Masyarakat Umum',
+                'signedCollected' => 1938,
+                'signedTarget' => 5000,
+                'created_at' => Carbon::create('2021', '03', '29')->format("Y-m-d"),
             ]
         );
-
-        // petition 3, ID = 3, status = 0, campaigner = 15, category = 3
         DB::table('petition')->insert(
             [
-                'title' => 'Petition Title Three',
-                'photo' => '/images/petition/events/petition-3.png',
+                'category' => 9,
+                'deadline' => Carbon::create('2021', '04', '20')->format("Y-m-d"),
+                'idCampaigner' => 10,
+                'photo' => 'images/petition/vaksin.jpeg',
+                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
+                
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
                 'status' => 0,
-                'category' => 3,
-                'idCampaigner' => 15,
-                'signedTarget' => 100000,
-                'signedCollected' => 0,
-                'deadline' => Carbon::now('+07:00')->addDays(30)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 3',
-            ]
-        );
-
-        // petition 4, ID = 4, status = 0, campaigner = 14, category = 1
-        DB::table('petition')->insert(
-            [
-                'title' => 'Petition Title Four',
-                'photo' => '/images/petition/events/petition-4.png',
-                'status' => 0,
-                'category' => 1,
-                'idCampaigner' => 14,
+                'title' => 'Percepat distribusi vaksin di NTT',
+                'targetPerson' => 'Masyarakat Umum',
+                'signedCollected' => 19325,
                 'signedTarget' => 50000,
-                'signedCollected' => 0,
-                'deadline' => Carbon::now('+07:00')->addDays(60)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 4',
+                'created_at' => Carbon::create('2021', '03', '29')->format("Y-m-d"),
             ]
         );
-
-        //? ================================================================
-        //! ~~~~~~~~~~~~~~~~~~~~~~~ Status: Active ~~~~~~~~~~~~~~~~~~~~~~~~~
-        //? ================================================================
-        // petition 5, ID = 5, status = 1, campaigner = 16, category = 1
         DB::table('petition')->insert(
             [
-                'title' => 'Petition Title Five',
-                'photo' => '/images/petition/events/petition-5.jpg',
-                'status' => 1,
-                'category' => 1,
-                'idCampaigner' => 16,
+                'category' => 15,
+                'deadline' => Carbon::create('2021', '03', '30')->format("Y-m-d"),
+                'idCampaigner' => 10,
+                'photo' => 'images/petition/tiktok.png',
+                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
+                
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
+                'status' => 2,
+                'title' => 'Izinkan undang-undang monetisasi dari aplikasi Tiktok',
+                'targetPerson' => 'Masyarakat Umum',
+                'signedCollected' => 60000,
                 'signedTarget' => 60000,
-                'signedCollected' => 5,
-                'deadline' => Carbon::now('+07:00')->addDays(30)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 5',
+                'created_at' => Carbon::create('2021', '03', '20')->format("Y-m-d"),
             ]
         );
-
-        // petition 6, ID = 6, status = 1, campaigner = 16, category = 5
         DB::table('petition')->insert(
             [
-                'title' => 'Petition Title Six',
-                'photo' => '/images/petition/events/petition-6.jpeg',
-                'status' => 1,
-                'category' => 5,
-                'idCampaigner' => 16,
-                'signedTarget' => 25000,
-                'signedCollected' => 10,
-                'deadline' => Carbon::now('+07:00')->addDays(2)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00')->subDays(28),
-                'updated_at' => Carbon::now('+7:00')->subDays(28),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 6',
-            ]
-        );
-
-        // petition 7, ID = 7, status = 1, campaigner = 15, category = 5
-        DB::table('petition')->insert(
-            [
-                'title' => 'Petition Title Seven',
-                'photo' => '/images/petition/events/petition-7.jpeg',
-                'status' => 1,
-                'category' => 5,
-                'idCampaigner' => 15,
-                'signedTarget' => 10,
-                'signedCollected' => 12,
-                'deadline' => Carbon::now('+07:00')->addDay()->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00')->subDays(29),
-                'updated_at' => Carbon::now('+7:00')->subDays(29),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 7',
-            ]
-        );
-
-        // petition 8, ID = 8, status = 1, campaigner = 17, category = 7
-        DB::table('petition')->insert(
-            [
-                'title' => 'Petition Title Eight',
-                'photo' => '/images/petition/events/petition-8.jpg',
-                'status' => 1,
-                'category' => 7,
-                'idCampaigner' => 17,
-                'signedTarget' => 25000,
-                'signedCollected' => 8,
-                'deadline' => Carbon::now('+07:00')->addDays(30)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 8',
-            ]
-        );
-
-        //? ================================================================
-        //! ~~~~~~~~~~~~~~~~~~~~~~ Status: Finished ~~~~~~~~~~~~~~~~~~~~~~~~
-        //? ================================================================
-        // petition 9, ID = 9, status = 2, campaigner = 18, category = 7
-        DB::table('petition')->insert(
-            [
-                'title' => 'Petition Title Nine',
-                'photo' => '/images/petition/events/petition-9.jpg',
+                'category' => 6,
+                'deadline' => Carbon::create('2021', '03', '28')->format("Y-m-d"),
+                'idCampaigner' => 12,
+                'photo' => 'images/petition/rebahan.jpg',
+                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
+                
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
                 'status' => 2,
-                'category' => 7,
-                'idCampaigner' => 18,
-                'signedTarget' => 10,
-                'signedCollected' => 8,
-                'deadline' => Carbon::now('+07:00')->subDays(16)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00')->subDays(46),
-                'updated_at' => Carbon::now('+7:00')->subDays(46),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 9',
+                'title' => 'Wajibkan mahasiswa untuk rebahan 1 jam setiap hari.',
+                'targetPerson' => 'Mahasiswa Mahasiswi',
+                'signedCollected' => 288,
+                'signedTarget' => 288,
+                'created_at' => Carbon::create('2021', '03', '25')->format("Y-m-d"),
             ]
         );
-
-        // petition 10, ID = 10, status = 2, campaigner = 14, category = 9
         DB::table('petition')->insert(
             [
-                'title' => 'Petition Title Ten',
-                'photo' => '/images/petition/events/petition-10.png',
-                'status' => 2,
-                'category' => 9,
-                'idCampaigner' => 14,
-                'signedTarget' => 10,
-                'signedCollected' => 14,
-                'deadline' => Carbon::now('+07:00')->subDays(2)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00')->subDays(32),
-                'updated_at' => Carbon::now('+7:00')->subDays(32),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 10',
-            ]
-        );
-
-        //? ================================================================
-        //! ~~~~~~~~~~~~~~~~~~~~~~~ Status: Closed ~~~~~~~~~~~~~~~~~~~~~~~~~
-        //? ================================================================
-        // petition 11, ID = 11, status = 3, campaigner = 14, category = 9
-        DB::table('petition')->insert(
-            [
-                'title' => 'Petition Title Eleven',
-                'photo' => '/images/petition/events/petition-11.jpg',
+                'category' => 16,
+                'deadline' => Carbon::create('2021', '03', '30')->format("Y-m-d"),
+                'idCampaigner' => 11,
+                'photo' => 'images/petition/bocahML.jpg',
+                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
+                
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
                 'status' => 3,
+                'title' => 'Larang Anak Dibawah 15 tahun memainkan Mobile Legends',
+                'targetPerson' => 'Masyarakat Umum',
+                'signedCollected' => 1000,
+                'signedTarget' => 1000,
+                'created_at' => Carbon::create('2021', '03', '22')->format("Y-m-d"),
+            ]
+        );
+        DB::table('petition')->insert(
+            [
                 'category' => 9,
-                'idCampaigner' => 14,
-                'signedTarget' => 12000,
-                'signedCollected' => 7,
-                'deadline' => Carbon::now('+07:00')->addDays(12)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00')->subDays(18),
-                'updated_at' => Carbon::now('+7:00')->subDays(18),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 11',
-            ]
-        );
-
-        // petition 12, ID = 12, status = 3, campaigner = 15, category = 11
-        DB::table('petition')->insert(
-            [
-                'title' => 'Petition Title Twelve',
-                'photo' => '/images/petition/events/petition-12.jpg',
+                'deadline' => Carbon::create('2021', '03', '28')->format("Y-m-d"),
+                'idCampaigner' => 13,
+                'photo' => 'images/petition/buburDiaduk.png',
+                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
+                
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
                 'status' => 3,
-                'category' => 11,
-                'idCampaigner' => 15,
-                'signedTarget' => 15000,
-                'signedCollected' => 6,
-                'deadline' => Carbon::now('+07:00')->addDays(8)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00')->subDays(22),
-                'updated_at' => Carbon::now('+7:00')->subDays(22),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 12',
+                'title' => 'Undang-undang larangan makan bubur diaduk.',
+                'targetPerson' => 'Masyarakat Umum',
+                'signedCollected' => 5000,
+                'signedTarget' => 5000,
+                'created_at' => Carbon::create('2021', '03', '25')->format("Y-m-d"),
             ]
         );
-
-        //? ================================================================
-        //! ~~~~~~~~~~~~~~~~~~~~~~ Status: Canceled ~~~~~~~~~~~~~~~~~~~~~~~~
-        //? ================================================================
-        // petition 13, ID = 13, status = 4, campaigner = 18, category = 11
         DB::table('petition')->insert(
             [
-                'title' => 'Petition Title Thirteen',
-                'photo' => '/images/petition/events/petition-13.jpg',
+                'category' => 16,
+                'deadline' => Carbon::create('2021', '03', '28')->format("Y-m-d"),
+                'idCampaigner' => 11,
+                'photo' => 'images/petition/jomblo.jpg',
+                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?
+                
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
                 'status' => 4,
-                'category' => 11,
-                'idCampaigner' => 18,
-                'signedTarget' => 20000,
-                'signedCollected' => 2,
-                'deadline' => Carbon::now('+07:00')->addDays(8)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00')->subDays(22),
-                'updated_at' => Carbon::now('+7:00')->subDays(22),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 13',
-            ]
-        );
-
-        // petition 14, ID = 14, status = 4, campaigner = 17, category = 13
-        DB::table('petition')->insert(
-            [
-                'title' => 'Petition Title Fourteen',
-                'photo' => '/images/petition/events/petition-14.jpg',
-                'status' => 4,
-                'category' => 13,
-                'idCampaigner' => 17,
-                'signedTarget' => 7500,
-                'signedCollected' => 5,
-                'deadline' => Carbon::now('+07:00')->addDays(8)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00')->subDays(22),
-                'updated_at' => Carbon::now('+7:00')->subDays(22),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 14',
-            ]
-        );
-
-        //? ================================================================
-        //! ~~~~~~~~~~~~~~~~~~~~~~ Status: Rejected ~~~~~~~~~~~~~~~~~~~~~~~~
-        //? ================================================================
-        // petition 15, ID = 15, status = 5, campaigner = 16, category = 13
-        DB::table('petition')->insert(
-            [
-                'title' => 'Petition Title Fifteen',
-                'photo' => '/images/petition/events/petition-15.jpg',
-                'status' => 5,
-                'category' => 13,
-                'idCampaigner' => 16,
-                'signedTarget' => 100000,
-                'signedCollected' => 0,
-                'deadline' => Carbon::now('+07:00')->addDays(30)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 15',
-            ]
-        );
-
-        // petition 16, ID = 16, status = 5, campaigner = 14, category = 15
-        DB::table('petition')->insert(
-            [
-                'title' => 'Petition Title Sixteen',
-                'photo' => '/images/petition/events/petition-16.jpg',
-                'status' => 5,
-                'category' => 15,
-                'idCampaigner' => 14,
-                'signedTarget' => 250000,
-                'signedCollected' => 0,
-                'deadline' => Carbon::now('+07:00')->addDays(30)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 16',
-            ]
-        );
-
-        //? ================================================================
-        //! ~~~~~~~~~~~~~~~~~~~~~ Status: Proceeded ~~~~~~~~~~~~~~~~~~~~~~~~
-        //? ================================================================
-        // petition 17, ID = 17, status = 6, campaigner = 15, category = 15
-        DB::table('petition')->insert(
-            [
-                'title' => 'Petition Title Seventeen',
-                'photo' => '/images/petition/events/petition-17.jpg',
-                'status' => 6,
-                'category' => 15,
-                'idCampaigner' => 15,
-                'signedTarget' => 10,
-                'signedCollected' => 5,
-                'deadline' => Carbon::now('+07:00')->subDays(30)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00')->subDays(60),
-                'updated_at' => Carbon::now('+7:00')->subDays(60),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 17',
-            ]
-        );
-
-        // petition 18, ID = 18, status = 6, campaigner = 14, category = 3
-        DB::table('petition')->insert(
-            [
-                'title' => 'Petition Title Eighteen',
-                'photo' => '/images/petition/events/petition-18.jpg',
-                'status' => 6,
-                'category' => 3,
-                'idCampaigner' => 14,
-                'signedTarget' => 8,
-                'signedCollected' => 9,
-                'deadline' => Carbon::now('+07:00')->subDays(20)->format('Y-m-d'),
-                'created_at' => Carbon::now('+7:00')->subDays(50),
-                'updated_at' => Carbon::now('+7:00')->subDays(50),
-                'purpose' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam? \n Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugiat, nobis inventore cupiditate porro a non fugit maxime possimus repellendus officiis iusto blanditiis deserunt asperiores quia quod nemo adipisci dicta exercitationem sequi doloribus cum ipsum! Tempore quis, id praesentium accusamus, ea aut expedita quo atque neque dolore optio eum sed aliquam. Dignissimos velit earum tempora in recusandae cupiditate eligendi, aliquam est obcaecati corrupti eos odio exercitationem iste totam ipsum sequi! Fuga iure repudiandae impedit, illum corporis alias. Explicabo modi voluptatibus ipsum nisi omnis vel saepe rerum unde repellat nam delectus velit ea cumque, aperiam facere enim! Corporis earum debitis aperiam?',
-                'targetPerson' => 'Target Petisi 18',
+                'title' => 'Larangan Berpacaran di malam minggu.',
+                'targetPerson' => 'Masyarakat Umum',
+                'signedCollected' => 400,
+                'signedTarget' => 2,
+                'created_at' => Carbon::create('2021', '03', '25')->format("Y-m-d"),
             ]
         );
     }

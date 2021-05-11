@@ -16,7 +16,7 @@ class CreateDonationsTable extends Migration
         Schema::create('donation', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('category')->unsigned();
-            $table->timestamp('deadline');
+            $table->date('deadline');
             $table->foreignId('idCampaigner');
             $table->string('photo');
             $table->longText('purpose');
@@ -29,7 +29,7 @@ class CreateDonationsTable extends Migration
             $table->string('accountNumber');
             $table->longText('reason')->nullable();
             $table->tinyInteger('bank')->unsigned();
-            $table->timestamps();
+            $table->date('created_at');
         });
 
         Schema::table('donation', function (Blueprint $table) {

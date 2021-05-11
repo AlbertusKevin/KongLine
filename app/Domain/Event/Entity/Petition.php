@@ -11,6 +11,7 @@ class Petition extends Model
     use HasFactory;
     protected $table = 'petition';
     protected $guarded = ['id'];
+    public $timestamps = false;
 
     // Relasi
     // public function participatepetition()

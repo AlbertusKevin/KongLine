@@ -20,7 +20,7 @@ class CreateUpdateNewsTable extends Migration
             $table->string('title');
             $table->longText('content');
             $table->string('link')->nullable();
-            $table->timestamps();
+            $table->date('created_at');
         });
 
         Schema::table('update_news', function (Blueprint $table) {

@@ -41,7 +41,7 @@
                     <div class="modal-body">
                         <div class="row text-center">
                             <div class="col-md-3">
-                                <img src="{{ $donation->photo }}" class="card-img-top detail-donate-photo">
+                                <img src="/{{ $donation->photo }}" class="card-img-top detail-donate-photo">
                             </div>
                             <div class="col-md-9 pt-4">
                                 <h3 class="font-weight-bold title-donation-detail">

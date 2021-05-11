@@ -739,7 +739,7 @@ class EventService
         $data->email = $request->email;
         $data->status = ACTIVE;
         $data->role = PARTICIPANT;
-        $data->photoProfile = "images/profile/photo/default.png";
+        $data->photoProfile = "images/profile/photo/default.svg";
 
         if ($request->password) {
             $data->password = Hash::make($request->password);
