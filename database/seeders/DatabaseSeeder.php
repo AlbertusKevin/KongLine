@@ -20,17 +20,20 @@ class DatabaseSeeder extends Seeder
             BankSeeder::class,
             StatusUserSeeder::class,
             UserSeeder::class,
+            EventStatusSeeder::class,
+          
+            DonationSeeder::class,
+            DetailAllocationSeeder::class,
+            ParticipateDonationSeeder::class,
+            TransactionSeeder::class,
+
+            PetitionSeeder::class,
+            ParticipatePetitionSeeder::class,
+            UpdateNewsSeeder::class,
+
             ForumSeeder::class,
             CommentForumSeeder::class,
-            EventStatusSeeder::class,
-            DonationSeeder::class,
-            PetitionSeeder::class,
-            DetailAllocationSeeder::class,
             ForumLikeSeeder::class,
-            ParticipateDonationSeeder::class,
-            ParticipatePetitionSeeder::class,
-            TransactionSeeder::class,
-            UpdateNewsSeeder::class,
         ]);
     }
 }

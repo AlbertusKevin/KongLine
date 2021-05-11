@@ -19,42 +19,49 @@ class ForumLikeSeeder extends Seeder
             [
                 'idForum' => 1,
                 'idParticipant' => 5,
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'created_at' => Carbon::now('+7:00')
             ]
         );
         DB::table('forum_like')->insert(
             [
                 'idForum' => 1,
                 'idParticipant' => 6,
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'created_at' => Carbon::now('+7:00')
             ]
         );
         DB::table('forum_like')->insert(
             [
                 'idForum' => 2,
-                'idParticipant' => 5,
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'idParticipant' => 7,
+                'created_at' => Carbon::now('+7:00')
             ]
         );
         DB::table('forum_like')->insert(
             [
-                'idForum' => 2,
+                'idForum' => 3,
                 'idParticipant' => 10,
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'created_at' => Carbon::now('+7:00')
             ]
         );
         DB::table('forum_like')->insert(
             [
-                'idForum' => 1,
-                'idParticipant' => 9,
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'idForum' => 4,
+                'idParticipant' => 4,
+                'created_at' => Carbon::now('+7:00')
             ]
         );
         DB::table('forum_like')->insert(
             [
-                'idForum' => 2,
-                'idParticipant' => 8,
-                'created_at' => Carbon::now()->format('Y-m-d')
+                'idForum' => 4,
+                'idParticipant' => 6,
+                'created_at' => Carbon::now('+7:00')
+            ]
+        );
+        DB::table('forum_like')->insert(
+            [
+                'idForum' => 4,
+                'idParticipant' => 12,
+                'created_at' => Carbon::now('+7:00')
             ]
         );
     }
