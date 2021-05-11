@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Event\Dao;
+namespace App\Domain\Petition\Dao;
 
 use App\Domain\Event\Entity\Bank;
 use App\Domain\Event\Entity\Category;
@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 
-class EventDao
+class PetitionDao
 {
     //! Mengambil data kategori event yang ada
     public function getAllCategoriesEvent()
@@ -51,7 +51,11 @@ class EventDao
         return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
     }
 
-
+    //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
+    public function verifyProfile($email, $phone)
+    {
+        return User::where('email', $email)->where('phoneNumber', $phone)->first();
+    }
 
     //! Menghitung total event yang sudah pernah diikuti user tertentu
     public function countDonationParticipatedByUser($idUser)

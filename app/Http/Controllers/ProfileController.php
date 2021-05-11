@@ -4,41 +4,42 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Domain\Event\Service\EventService;
+use App\Domain\Profile\Service\ProfileService;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfileController extends Controller
 {
-    private $event_service;
+    private $profile_service;
 
     public function __construct()
     {
-        $this->event_service = new EventService();
+        $this->profile_service = new ProfileService();
     }
 
     public function edit()
     {
-        $user = $this->event_service->showProfile();
+        $user = $this->profile_service->getAProfile();
         return view('profile.profile', compact('user'));
     }
 
     public function update(Request $request)
     {
-        $user = $this->event_service->showProfile();
-        $this->event_service->updateProfile($request, $user->id);
+        $user = $this->profile_service->getAProfile();
+        $this->profile_service->updateProfile($request, $user->id);
         return redirect('/profile');
     }
 
     public function delete()
     {
-        $user = $this->event_service->showProfile();
-        $this->event_service->deleteAccount($user->id);
+        $user = $this->profile_service->getAProfile();
+        $this->profile_service->deleteAccount($user->id);
         return redirect('logout');
     }
 
     public function editCampaigner()
     {
-        $user = $this->event_service->showProfile();
+        $user = $this->profile_service->getAProfile();
         if ($user->role == CAMPAIGNER) {
             return redirect('/campaigner');
         }
@@ -47,7 +48,7 @@ class ProfileController extends Controller
 
     public function updateCampaigner(Request $request)
     {
-        $user = $this->event_service->showProfile();
+        $user = $this->profile_service->getAProfile();
 
         if ($user->role == CAMPAIGNER) {
             $validator = Validator::make($request->all(), [
@@ -70,13 +71,13 @@ class ProfileController extends Controller
             return redirect('/profile')->with(['type' => "error", 'message' => $messageError]);
         };
 
-        $this->event_service->updateCampaigner($request, $user);
+        $this->profile_service->updateCampaigner($request, $user);
         return redirect('/profile')->with(['type' => "success", 'message' => "Permintaan Anda akan diproses. Tunggu konfirmasi dari admin."]);
     }
 
     public function dataCampaigner()
     {
-        $user = $this->event_service->showProfile();
+        $user = $this->profile_service->getAProfile();
         return view('profile.detailCampaigner', compact('user'));
     }
 
@@ -102,7 +103,7 @@ class ProfileController extends Controller
             return redirect('/change');
         };
 
-        $change = $this->event_service->changePassword($request);
+        $change = $this->profile_service->changePassword($request);
 
         if ($change == 'failed_verification') {
             Alert::error('Validasi Error', "Password baru dengan password verifikasi tidak sesuai.");

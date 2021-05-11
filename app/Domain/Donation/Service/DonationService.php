@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Event\Service;
+namespace App\Domain\Donation\Service;
 
 use App\Domain\Event\Dao\EventDao;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +19,57 @@ class EventService
         $this->dao = new EventDao();
     }
 
+    //* =========================================================================================
+    //* ------------------------------------- Service Umum --------------------------------------
+    //* =========================================================================================
+    //! Mengambil data user tertentu yang sedang mengakses aplikasi. 
+    //! Jika tidak ada, maka dikembalikan akun guest (NULLOBJECT PATTERN)
+    public function getAProfile()
+    {
+        if (Auth::check()) {
+            return Auth::user();
+        }
+
+        return $this->dao->getAProfile(GUEST_ID);
+    }
+
+    public function getACampaigner($id)
+    {
+        return $this->dao->getAProfile($id);
+    }
+
+    private function updateCalculatedCount($idEvent, $idUser, $typeEvent)
+    {
+        // Update Count dari jumlah ttd petisi
+        if ($typeEvent == PETITION) {
+            $count = $this->dao->calculatedSignDonation($idEvent, PETITION);
+            $this->dao->updateCalculatedSign($idEvent, $count);
+        }
+
+        // Update jumlah event yang diikuti user
+        $countParticipatedDonation = $this->dao->countDonationParticipatedByUser($idUser);
+        $countParticipatedPetition = $this->dao->countPetitionParticipatedByUser($idUser);
+        $totalEvent = $countParticipatedDonation + $countParticipatedPetition;
+
+        $this->dao->updateCountEventParticipatedByUser($idUser, $totalEvent);
+    }
+
+    //! Mengupload gambar dan mengembalikan path dari gambar yang diupload
+    private function uploadImage($img, $folder)
+    {
+        $pictName = $img->getClientOriginalName();
+        //ambil ekstensi file
+        $pictName = explode('.', $pictName);
+        //buat nama baru yang unique
+        $pictName = uniqid() . '.' . end($pictName); //7dsf83hd.jpg
+        //upload file ke folder yang disediakan
+        $targetUploadDesc = "images/" . $folder . "/";
+
+        $img->move($targetUploadDesc, $pictName);
+
+        return $targetUploadDesc . "" . $pictName;   //membuat file path yang akan digunakan sebagai src html
+    }
+
     public function getACategory($id)
     {
         return $this->dao->getACategory($id);
@@ -27,7 +78,7 @@ class EventService
     //! Mengembalikan kategori event petisi atau donasi yang dipilih
     public function categorySelect($request)
     {
-        $listCategory = $this->listCategory();
+        $listCategory = $this->getAllCategoriesEvent();
 
         foreach ($listCategory as $cat) {
             if ($request->category == $cat->description) {
@@ -38,11 +89,59 @@ class EventService
     }
 
     //! Mengambil data seluruh kategori event petisi atau donasi yang ada
-    public function listCategory()
+    public function getAllCategoriesEvent()
     {
-        return $this->dao->listCategory();
+        return $this->dao->getAllCategoriesEvent();
     }
 
+    //! Mengambil nama bank yang bisa digunakan untuk transfer
+    public function listBank()
+    {
+        return $this->dao->listBank();
+    }
+
+    public static function getNavbar()
+    {
+        if (Auth::check()) {
+            if (Auth::user()->role != ADMIN) {
+                return 'layout.app';
+            }
+        } else {
+            return 'layout.app';
+        }
+
+        return 'layout.adminNavbar';
+    }
+
+    public function messageOfEvent($status)
+    {
+        if ($status == NOT_CONFIRMED) {
+            return [
+                'header' => 'Menunggu Konfirmasi',
+                'content' => 'Event ini sudah didaftarkan. Tunggu konfirmasi dari pihak admin.'
+            ];
+        } else if ($status == FINISHED) {
+            return [
+                'header' => 'Telah Selesai',
+                'content' => 'Event ini sudah selesai. Tidak menerima tanggapan lagi.'
+            ];
+        } else if ($status == CLOSED) {
+            return [
+                'header' => 'Sudah Ditutup',
+                'content' => 'Event ini telah ditutup oleh penyelenggara / admin.'
+            ];
+        } else if ($status == REJECTED) {
+            return [
+                'header' => 'Ditolak',
+                'content' => 'Pengajuan untuk menyelenggarakan event ini ditolak. Silahkan cek email untuk pesan.'
+            ];
+        }
+
+        return [
+            'header' => 'Dibatalkan',
+            'content' => 'Event ini dibatalkan oleh penyelenggara.'
+        ];
+    }
     //* =========================================================================================
     //* ----------------------------------- Service Profile -------------------------------------
     //* =========================================================================================
@@ -611,7 +710,16 @@ class EventService
     }
 
     //! Mengecek verifikasi data diri yang diberikan sebelum membuat event
+    public function verifyProfile($email, $phone)
+    {
+        $campaigner = $this->dao->verifyProfile($email, $phone);
 
+        if (empty($campaigner)) {
+            return false;
+        }
+
+        return true;
+    }
 
     //* =========================================================================================
     //* ------------------------------------- Service Auth --------------------------------------

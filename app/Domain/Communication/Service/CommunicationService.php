@@ -2,7 +2,7 @@
 
 namespace App\Domain\Communication\Service;
 
-use App\Domain\Admin\Entity\CommentForum;
+use App\Domain\Communication\Entity\CommentForum;
 use App\Domain\Communication\Dao\CommunicationDao;
 use App\Domain\Communication\Entity\ForumLike;
 use App\Domain\Communication\Entity\Service;
@@ -86,5 +86,4 @@ class CommunicationService
     {
         return $this->dao->newComment();
     }
-
 }
