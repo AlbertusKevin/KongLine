@@ -4,7 +4,7 @@
     @include('layout.message')
     <div class="container">
         <div class="row mt-5">
-            <div class="col-md-0 ml-3"><img src="/images/app/icons/change-password.png" alt="change password"></div>
+            <div class="col-md-0 ml-3"><img src="/img/changePassword.png" alt="change password"></div>
             <div class="col-md ml-3">
                 <h3>Ubah Sandi</h3>
             </div>

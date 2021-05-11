@@ -10,4 +10,5 @@ class UpdateNews extends Model
     use HasFactory;
     protected $table = 'update_news';
     protected $guarded = ['id'];
+    public $timestamps = false;
 }

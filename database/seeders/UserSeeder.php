@@ -16,389 +16,232 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        //? ================================================================
-        //! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Guest ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        //? ================================================================
-        // Guest, ID = 1
         DB::table('users')->insert(
             [
-                'name' => GUEST,
+                'name' => 'Guest',
                 'email' => '',
                 'password' => '',
-                'status' => ACTIVE,
-                'role' => GUEST,
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
+                'status' => 1,
+                'role' => 'guest',
+                'photoProfile' => 'images/profile/photo/default.png',
+                'created_at' => Carbon::now(),
             ]
         );
-
-        //? ================================================================
-        //! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Admin ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        //? ================================================================
-
-        // Admin 1, ID = 2
         DB::table('users')->insert(
             [
-                'name' => 'First Administrator',
-                'email' => 'admin_1@gmail.com',
-                'password' => Hash::make('admin1'),
-                'status' => ACTIVE,
-                'role' => ADMIN,
+                'name' => 'Admin',
+                'email' => 'admin1@gmail.com',
+                'password' => Hash::make('adminadmin'),
+                'status' => 1,
+                'role' => 'admin',
                 'phoneNumber' => '081286549876',
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'aboutMe' => 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestiae, sit?',
-                'address' => 'Jl. Soekarno Hatta 253',
-                'city' => 'Bandung',
+                'dob' => '1995-10-07',
+                'photoProfile' => 'images/profile/photo/default.png',
+                'backgroundPicture' => 'images/profile/background/Black Galaxy PC Wallpaper.jpg',
+                'linkProfile' => 'admin.com',
+                'aboutMe' => 'Loren Ipsum Loren Ipsum',
+                'address' => 'Jalanin aja dulu no. 10',
+                'city' => 'Pekanbaru',
                 'country' => 'Indonesia',
-                'zipCode' => '40255',
+                'zipCode' => '49328',
+                'job' => 'admin',
                 'gender' => "male",
+                'ktpPicture' => 'images/profile/KTP/KTP.jpg',
                 'nik' => '0123456789012345',
-                'accountNumber' => ACCOUNT,
-                'dob' => Carbon::create("1995", "10", "07"),
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
+                'accountNumber' => '777865954',
+                'created_at' => Carbon::now(),
             ]
         );
-
-        // Admin 2, ID = 3
         DB::table('users')->insert(
             [
-                'name' => 'Second Administrator',
-                'email' => 'admin_2@gmail.com',
-                'password' => Hash::make('admin2'),
-                'status' => ACTIVE,
-                'role' => ADMIN,
-                'phoneNumber' => '0834555778890',
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'aboutMe' => 'Lorem ipsum dolor sit amet.',
-                'address' => 'Jl. Otista no. 35',
+                'name' => 'AdminAlbert',
+                'email' => 'adminAlbert@gmail.com',
+                'password' => Hash::make('adminalbert'),
+                'status' => 1,
+                'role' => 'admin',
+                'phoneNumber' => '081286549886',
+                'dob' => '2000-10-07',
+                'photoProfile' => 'images/profile/photo/FotoAlbertus1.png',
+                'backgroundPicture' => 'images/profile/background/Black Galaxy PC Wallpaper.jpg',
+                'linkProfile' => 'adminAlbert.com',
+                'aboutMe' => 'Aku Cinta Machine Learning',
+                'address' => 'Aku mau tapi dia engga no. 10',
                 'city' => 'Bandung',
                 'country' => 'Indonesia',
-                'zipCode' => '40228',
-                'gender' => "female",
-                'nik' => '1122330987654321',
-                'accountNumber' => ACCOUNT,
-                'dob' => Carbon::create("1990", "10", "17"),
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-            ]
-        );
-
-        //? ================================================================
-        //! ~~~~~~~~~~~~~~~~~~~~~~~~~ Participant ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        //? ================================================================
-        //todo: seeder -> 'countEvent' => 0,
-
-        //participant 1, ID = 4
-        DB::table('users')->insert(
-            [
-                'name' => 'Albertus Kevin',
-                'email' => 'vinalbertus@gmail.com',
-                'password' => Hash::make('Albertus Kevin'),
-                'status' => ACTIVE,
-                'role' => PARTICIPANT,
-                'phoneNumber' => '089709871234',
-                'dob' => Carbon::create("2000", "10", "07"),
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'linkProfile' => 'https://albertuskevin.github.io',
-                'aboutMe' => 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum, delectus!',
-                'address' => 'Jl. Jend. Sudirman 98',
-                'city' => 'Jakarta',
-                'country' => 'Indonesia',
-                'zipCode' => '40995',
-                'job' => 'Web Developer',
+                'zipCode' => '49328',
+                'job' => 'admin',
                 'gender' => "male",
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
+                'ktpPicture' => 'images/profile/KTP/KTP.jpg',
+                'nik' => '0123456789012398',
+                'accountNumber' => '777865955',
+                'created_at' => Carbon::now(),
             ]
         );
-
-        //participant 2, ID = 5
         DB::table('users')->insert(
             [
-                'name' => 'Participant Kedua',
-                'email' => 'participant_2@gmail.com',
-                'password' => Hash::make('Participant Kedua'),
-                'status' => ACTIVE,
-                'role' => PARTICIPANT,
-                'dob' => Carbon::create("2000", "10", "07"),
-                'photoProfile' => 'images/profile/photo/participant-2.jpg',
-                'backgroundPicture' => 'images/profile/background/cover-part-2.jpg',
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-            ]
-        );
-
-        //participant 3, ID = 6
-        DB::table('users')->insert(
-            [
-                'name' => 'Participant Ketiga',
-                'email' => 'participant_3@gmail.com',
-                'password' => Hash::make('Participant Ketiga'),
-                'status' => ACTIVE,
-                'role' => PARTICIPANT,
-                'dob' => Carbon::create("2004", "03", "27"),
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-            ]
-        );
-
-        //participant 4, ID = 7
-        DB::table('users')->insert(
-            [
-                'name' => 'Participant Keempat',
-                'email' => 'participant_4@gmail.com',
-                'password' => Hash::make('Participant Keempat'),
-                'status' => ACTIVE,
-                'role' => PARTICIPANT,
-                'dob' => Carbon::create("1990", "05", "08"),
-                'photoProfile' => 'images/profile/photo/participant-4.jpg',
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-            ]
-        );
-
-        //participant 5, ID = 8
-        DB::table('users')->insert(
-            [
-                'name' => 'Participant Kelima',
-                'email' => 'participant_5@gmail.com',
-                'password' => Hash::make('Participant Kelima'),
-                'status' => ACTIVE,
-                'role' => PARTICIPANT,
-                'dob' => Carbon::create("1980", "01", "28"),
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-            ]
-        );
-
-        //participant 6, ID = 9
-        DB::table('users')->insert(
-            [
-                'name' => 'Participant Keenam',
-                'email' => 'participant_6@gmail.com',
-                'password' => Hash::make('Participant Keenam'),
-                'status' => ACTIVE,
-                'role' => PARTICIPANT,
-                'dob' => Carbon::create("1987", "02", "08"),
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-            ]
-        );
-
-        //participant 7, ID = 10
-        DB::table('users')->insert(
-            [
-                'name' => 'Participant Ketujuh',
-                'email' => 'participant_7@gmail.com',
-                'password' => Hash::make('Participant Ketujuh'),
-                'status' => ACTIVE,
-                'role' => PARTICIPANT,
-                'dob' => Carbon::create("1992", "11", "18"),
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-            ]
-        );
-
-        //participant 8, ID = 11
-        DB::table('users')->insert(
-            [
-                'name' => 'Participant Kedelapan',
-                'email' => 'participant_8@gmail.com',
-                'password' => Hash::make('Participant Kedelapan'),
-                'status' => ACTIVE,
-                'role' => PARTICIPANT,
-                'dob' => Carbon::create("1982", "06", "18"),
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-            ]
-        );
-
-        //participant 9, ID = 12
-        DB::table('users')->insert(
-            [
-                'name' => 'Participant Kesembilan',
-                'email' => 'participant_9@gmail.com',
-                'password' => Hash::make('Participant Kesembilan'),
-                'status' => ACTIVE,
-                'role' => PARTICIPANT,
-                'dob' => Carbon::create("1994", "09", "25"),
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-            ]
-        );
-
-        //participant 10, ID = 13
-        DB::table('users')->insert(
-            [
-                'name' => 'Participant Kesepuluh',
-                'email' => 'participant_10@gmail.com',
-                'password' => Hash::make('Participant Kesepuluh'),
-                'status' => ACTIVE,
-                'role' => PARTICIPANT,
-                'dob' => Carbon::create("2005", "10", "15"),
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-            ]
-        );
-
-        //? ================================================================
-        //! ~~~~~~~~~~~~~~~~~~~~~~~~~~ Campaigner ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        //? ================================================================
-        //todo: seeder -> 'countEvent' => 0,
-
-        // campaigner 1, ID = 14
-        DB::table('users')->insert(
-            [
-                'name' => 'Vern Campaigner',
-                'email' => 'albertusk.vr46@gmail.com',
-                'password' => Hash::make('Vern Campaigner'),
-                'status' => ACTIVE,
-                'role' => CAMPAIGNER,
-                'phoneNumber' => '089766766281',
-                'dob' => Carbon::create("2000", "04", "30"),
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'aboutMe' => 'Lorem ipsum dolor sit amet consectetur elit. Dicta, cupiditate at voluptate quod itaque atque. Lorem, ipsum.',
-                'address' => 'Jl. Lengkong Besar no. 24',
+                'name' => 'Participant',
+                'email' => 'participant@gmail.com',
+                'password' => Hash::make('participant'),
+                'status' => 1,
+                'role' => 'participant',
+                'phoneNumber' => '081286549867',
+                'dob' => '1997-11-07',
+                'photoProfile' => 'images/profile/photo/default.png',
+                'backgroundPicture' => 'images/profile/background/Black Galaxy PC Wallpaper.jpg',
+                'linkProfile' => 'participant.com',
+                'aboutMe' => 'Kalau aku chat kamu ada yang marah ga?',
+                'address' => 'Buaya Darat no. 10',
                 'city' => 'Bandung',
                 'country' => 'Indonesia',
-                'zipCode' => '40220',
-                'job' => 'Mahasiswa',
-                'gender' => "female",
-                'ktpPicture' => 'images/verification/ktp/campaigner-4.jpg',
-                'nik' => '9999111133332222',
-                'accountNumber' => '67467839279',
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-            ]
-        );
-
-        // campaigner 2, ID = 15
-        DB::table('users')->insert(
-            [
-                'name' => 'Campaigner Kedua',
-                'email' => 'campaigner_2@gmail.com',
-                'password' => Hash::make('Campaigner Kedua'),
-                'status' => ACTIVE,
-                'role' => CAMPAIGNER,
-                'phoneNumber' => '08765897231',
-                'dob' => Carbon::create("1995", "08", "30"),
-                'photoProfile' => 'images/profile/photo/campaigner-2.png',
-                'backgroundPicture' => 'images/profile/background/cover-camp-2.jpg',
-                'aboutMe' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, praesentium eaque cupiditate at voluptate quod itaque atque.',
-                'address' => 'Jl. Kebayoran Baru 23',
-                'city' => 'Jakarta',
-                'country' => 'Indonesia',
-                'zipCode' => '48880',
-                'job' => 'Dokter Gigi',
-                'gender' => "female",
-                'ktpPicture' => 'images/verification/ktp/campaigner-2.jpg',
-                'nik' => '4444222211113333',
-                'accountNumber' => '0987573683',
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
-            ]
-        );
-
-        // campaigner 3, ID = 16
-        DB::table('users')->insert(
-            [
-                'name' => 'Campaigner Ketiga',
-                'email' => 'campaigner_3@gmail.com',
-                'password' => Hash::make('Campaigner Ketiga'),
-                'status' => ACTIVE,
-                'role' => CAMPAIGNER,
-                'phoneNumber' => '089272981657',
-                'dob' => Carbon::create("1980", "12", "20"),
-                'photoProfile' => 'images/profile/photo/campaigner-3.jpg',
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'aboutMe' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, praesentium eaque cupiditate at voluptate quod itaque atque. Lorem, ipsum.',
-                'address' => 'Jl. Kebayoran Lama no. 4',
-                'city' => 'Jakarta',
-                'country' => 'Indonesia',
-                'zipCode' => '43380',
-                'job' => 'Dosen',
+                'zipCode' => '49328',
+                'job' => 'admin',
                 'gender' => "male",
-                'ktpPicture' => 'images/verification/ktp/campaigner-3.png',
-                'nik' => '2222444433331111',
-                'accountNumber' => '98569268123',
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
+                'created_at' => Carbon::now(),
+            ]
+        );
+        DB::table('users')->insert(
+            [
+                'name' => 'Tony Stark',
+                'email' => 'tonystark@gmail.com',
+                'password' => Hash::make('tonystark'),
+                'status' => 1,
+                'role' => 'participant',
+                'countEvent' => 5,
+                'photoProfile' => 'images/profile/photo/tonystark.jpg',
+                'created_at' => Carbon::create('2021', '03', '23'),
             ]
         );
 
-        // campaigner 4, ID = 17
         DB::table('users')->insert(
             [
-                'name' => 'Campaigner Keempat',
-                'email' => 'campaigner_4@gmail.com',
-                'password' => Hash::make('Campaigner Keempat'),
-                'status' => ACTIVE,
-                'role' => CAMPAIGNER,
-                'phoneNumber' => '087283878798',
-                'dob' => Carbon::create("2000", "11", "25"),
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'aboutMe' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, praesentium eaque cupiditate at voluptate quod itaque atque. Possimus, eaque fuga!',
-                'address' => 'Jl. Ponti 23',
-                'city' => 'Pontianak',
-                'country' => 'Indonesia',
-                'zipCode' => '49808',
-                'job' => 'Kasir',
-                'gender' => "female",
-                'ktpPicture' => 'images/verification/ktp/campaigner-1.jpg',
-                'nik' => '1111222233334444',
+                'name' => 'Wanda Maximoff',
+                'email' => 'wanda@gmail.com',
+                'password' => Hash::make('wanda'),
+                'status' => 1,
+                'role' => 'participant',
+                'countEvent' => 2,
+                'photoProfile' => 'images/profile/photo/wanda.jpg',
+                'created_at' => Carbon::create('2021', '03', '30'),
+            ]
+        );
+        DB::table('users')->insert(
+            [
+                'name' => 'hizkia',
+                'email' => 'hizkia@gmail.com',
+                'password' => Hash::make('hizkia'),
+                'status' => 1,
+                'role' => 'participant',
+                'countEvent' => 3,
+                'photoProfile' => 'images/profile/photo/hizkia.jpg',
+                'created_at' => Carbon::create('2021', '03', '20'),
+            ]
+        );
+        DB::table('users')->insert(
+            [
+                'name' => 'Mikhael',
+                'email' => 'mikhael@gmail.com',
+                'password' => Hash::make('mikhael'),
+                'status' => 1,
+                'role' => 'participant',
+                'countEvent' => 1,
+                'photoProfile' => 'images/profile/photo/mikhael.jpg',
+                'created_at' => Carbon::now(),
+            ]
+        );
+        DB::table('users')->insert(
+            [
+                'name' => 'yaoming',
+                'email' => 'yaoming@gmail.com',
+                'password' => Hash::make('yaoming'),
+                'status' => 1,
+                'role' => 'participant',
+                'countEvent' => 4,
+                'photoProfile' => 'images/profile/photo/yaoming.png',
+                'created_at' => Carbon::create('2021', '03', '25'),
+            ]
+        );
+        DB::table('users')->insert(
+            [
+                'name' => 'Campaigner',
+                'email' => 'campaigner@gmail.com',
+                'password' => Hash::make('campaigner'),
+                'status' => 1,
+                'role' => 'campaigner',
+                'ktpPicture' => 'images/profile/KTP/ktp011.jpg',
+                'nik' => '111222333444555',
                 'accountNumber' => '1234567890',
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
+                'photoProfile' => 'images/profile/photo/default.png',
+                'created_at' => Carbon::create('2021', '03', '23'),
             ]
         );
-
-        // campaigner 5, ID = 18
         DB::table('users')->insert(
             [
-                'name' => 'Campaigner Kelima',
-                'email' => 'campaigner_5@gmail.com',
-                'password' => Hash::make('Campaigner Kelima'),
-                'status' => ACTIVE,
-                'role' => CAMPAIGNER,
-                'phoneNumber' => '084877772231',
-                'dob' => Carbon::create("1997", "10", "20"),
-                'photoProfile' => DEFAULT_PROFILE,
-                'backgroundPicture' => DEFAULT_COVER_PROFILE,
-                'aboutMe' => 'Lorem ipsum dolor sit amet consectetur elit. Dicta, cupiditate at voluptate quod itaque atque. Lorem, ipsum.',
-                'address' => 'Jl. Asia Afrika no. 34',
-                'city' => 'Bandung',
+                'name' => 'Cristiano',
+                'email' => 'cristiano@gmail.com',
+                'password' => Hash::make('cristiano'),
+                'status' => 1,
+                'role' => 'campaigner',
+                'ktpPicture' => 'images/profile/KTP/cristianoKtp.JPG',
+                'nik' => '111222333444542',
+                'accountNumber' => '1404514045',
+                'countEvent' => 3,
+                'photoProfile' => 'images/profile/photo/Cristiano.jpg',
+                'created_at' => Carbon::now(),
+            ]
+        );
+        DB::table('users')->insert(
+            [
+                'name' => 'Motomoto',
+                'email' => 'motomoto@gmail.com',
+                'password' => Hash::make('motomoto'),
+                'status' => 1,
+                'role' => 'campaigner',
+                'ktpPicture' => 'images/profile/KTP/motomotoKTP.jpg',
+                'nik' => '111222333444938',
+                'accountNumber' => '0987654321',
+                'countEvent' => 1,
+                'photoProfile' => 'images/profile/photo/motomoto.jpg',
+                'created_at' => Carbon::now(),
+            ]
+        );
+        DB::table('users')->insert(
+            [
+                'name' => 'Gargantuar Zombie',
+                'email' => 'gargantuar@gmail.com',
+                'password' => Hash::make('gargantuar'),
+                'status' => 1,
+                'role' => 'campaigner',
+                'ktpPicture' => 'images/profile/KTP/gargantuarZombie.jpg',
+                'nik' => '111222333444939',
+                'accountNumber' => '0987654354',
+                'countEvent' => 3,
+                'photoProfile' => 'images/profile/photo/gargantuar.png',
+                'created_at' => Carbon::create('2021', '03', '29'),
+            ]
+        );
+        DB::table('users')->insert(
+            [
+                'name' => 'Steve Rogers',
+                'email' => 'steverogers@gmail.com',
+                'password' => Hash::make('steverogers'),
+                'status' => 3,
+                'role' => 'participant',
+                'phoneNumber' => '081286549879',
+                'dob' => '1980-11-07',
+                'photoProfile' => 'images/profile/photo/Steve_Rogers.png',
+                'backgroundPicture' => 'images/profile/background/Black Galaxy PC Wallpaper.jpg',
+                'linkProfile' => 'steveRogers.com',
+                'aboutMe' => 'Cause i dont know what im gonna do if it doesnt',
+                'address' => 'Brooklyn no. 10',
+                'city' => 'Ciamis',
                 'country' => 'Indonesia',
-                'zipCode' => '40230',
-                'job' => 'Polisi',
+                'zipCode' => '49379',
+                'job' => 'Superhero',
                 'gender' => "male",
-                'ktpPicture' => 'images/verification/ktp/campaigner-5.jpg',
-                'nik' => '8888222266665555',
-                'accountNumber' => '276640273048',
-                'created_at' => Carbon::now('+7:00'),
-                'updated_at' => Carbon::now('+7:00'),
+                'ktpPicture' => 'images/profile/KTP/KTP.jpg',
+                'nik' => '111222333444789',
+                'accountNumber' => '0987654310',
+                'created_at' => Carbon::now(),
             ]
         );
     }
