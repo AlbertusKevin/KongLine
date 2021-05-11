@@ -12,7 +12,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <img src="/{{ $donation->photo }}" class="card-img-top detail-donation-photo"
+                                <img src="{{ $donation->photo }}" class="card-img-top detail-donation-photo"
                                     height="300px">
                             </div>
                             <div class="col-md-9">
@@ -240,7 +240,7 @@
                                 <img src="{{ DEFAULT_PROFILE }}" alt="Photo Profile" class="donatur-photo">
                                 <span class="ml-3"> Annonymous </span>
                             @else
-                                <img src="/{{ $donatur->photoProfile }}" alt="{{ $donatur->name }} Profile"
+                                <img src="{{ $donatur->photoProfile }}" alt="{{ $donatur->name }} Profile"
                                     class="donatur-photo">
                                 <span class="ml-3"> {{ $donatur->name }} </span>
                             @endif
@@ -271,7 +271,7 @@
                         <div class="card mb-4">
                             <div class=" row no-gutters">
                                 <div class="col-md-2 offset-md-2 text-center p-3">
-                                    <img src="/{{ $donatur->photoProfile }}" class="img-thumbnail rounded-circle"
+                                    <img src="{{ $donatur->photoProfile }}" class="img-thumbnail rounded-circle"
                                         alt="Participant's Image Profile">
                                 </div>
                                 <div class="col-md-8">

@@ -14,7 +14,8 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-0 ml-3"><img src="/img/profile2.png" alt="profile 2"></div>
+            <div class="col-md-0 ml-3"><img src="/images/app/icons/profile-preference.png" alt="profile-preferences-icon">
+            </div>
             <div class="col-md ml-3">
                 <h3>Profile dan Preferensi</h3>
             </div>
@@ -43,7 +44,7 @@
             @endif
         </div>
         <div class="row mt-5">
-            <div class="col-md-0 ml-3"><img src="/img/edit.png" alt="profile 2"></div>
+            <div class="col-md-0 ml-3"><img src="/images/app/icons/profile-edit.png" alt="profile-edit-icon"></div>
             <div class="col-md ml-3">
                 <h3>Edit Profile</h3>
             </div>

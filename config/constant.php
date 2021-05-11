@@ -2,7 +2,8 @@
 //constant data
 define("ACCOUNT", "1702272081");
 define("DEFAULT_PROFILE", "/images/profile/photo/default.png");
-define("DEFAULT_FILE_PREVIEW", "/images/folder.png");
+define("DEFAULT_COVER_PROFILE", "/images/profile/background/default-cover-profile.png");
+define("DEFAULT_FILE_PREVIEW", "/images/app/pictures/default-file.png");
 define("GUEST_ID", 1);
 
 // Status Event

@@ -28,7 +28,7 @@
     @include('sweetalert::alert')
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/"><img src="/img/logo.png" width="75"></a>
+            <a class="navbar-brand" href="/"><img src="/images/app/logo.png" width="75px" alt="logo app"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -44,7 +44,7 @@
                         @endif
                         <div class="dropdown m-2 mr-2">
                             <div data-toggle="dropdown">
-                                <img src="/img/profile.png">
+                                <img src="/images/app/icons/default-profile.png" width="30px">
                             </div>
                             <div class="dropdown-menu">
                                 <a class="nav-link" href="{{ url('/profile') }}">Edit Profile</a>
@@ -68,11 +68,11 @@
     <footer class="mt-5 pt-5">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-12 col-sm-5">
-                    <img src="/img/footer.png" width=170>
+                <div class="col-sm-2 offset-md-2">
+                    <img src="/images/app/footer.png" width="170px" alt="footer-logo">
                 </div>
 
-                <div class="col-12 col-sm-3">
+                <div class="col-sm-3">
                     <ul>
                         <li class="pb-2 font-weight-bold" style="list-style:none;color:#03254C;">Tentang Campaign.Org
                         </li>
