@@ -4,8 +4,7 @@
     @include('layout.message')
     <div class="container">
         <div class="row mt-5">
-            <div class="col-md-0 ml-3"><img src="/images/app/icons/campaigner-profile.png" alt="icon profile campaigner">
-            </div>
+            <div class="col-md-0 ml-3"><img src="/img/campaignerProfile.png" alt="profile 2"></div>
             <div class="col-md ml-3">
                 <h3>Data Campaigner</h3>
             </div>

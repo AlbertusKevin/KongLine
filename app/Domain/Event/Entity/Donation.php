@@ -10,6 +10,7 @@ class Donation extends Model
     // Konfigurasi ORM
     use HasFactory;
     protected $table = 'donation';
+    public $timestamps = false;
     protected $guarded = ['id'];
 
     // Relasi
@@ -20,7 +21,7 @@ class Donation extends Model
 
     public function participatedonation()
     {
-        return $this->hasMany(ParticipateDonation::class, 'id', 'idDonation');
+        return $this->hasMany(ParticipateDonation::class, 'id','idDonation');
     }
 
     public function users()

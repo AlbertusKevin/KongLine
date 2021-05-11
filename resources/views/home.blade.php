@@ -11,13 +11,13 @@
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="/images/app/pictures/donation-pages/donation1.png" class="d-block w-100" alt="img 1">
+                <img src="img/donation1.png" class="d-block w-100" alt="img 1">
             </div>
             <div class="carousel-item">
-                <img src="/images/app/pictures/donation-pages/donation2.png" class="d-block w-100" alt="img 2">
+                <img src="img/donation2.png" class="d-block w-100" alt="img 2">
             </div>
             <div class="carousel-item">
-                <img src="/images/app/pictures/donation-pages/donation3.png" class="d-block w-100" alt="img 3">
+                <img src="img/donation3.png" class="d-block w-100" alt="img 3">
             </div>
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
