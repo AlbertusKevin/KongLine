@@ -292,7 +292,7 @@ button.btn-new-petition{
 }
 
 .jumbotron-donation{
-  background-image: url('/images/app/pictures/donation-pages/donation-home.png');
+  background-image: url('/img/donationHome.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0, -250px;
