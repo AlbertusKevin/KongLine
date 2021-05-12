@@ -2,8 +2,6 @@
 
 namespace App\Domain\Petition\Dao;
 
-
-use App\Domain\Donation\Entity\ParticipateDonation;
 use App\Domain\Petition\Entity\ParticipatePetition;
 use App\Domain\Petition\Entity\Petition;
 use App\Domain\Petition\Entity\UpdateNews;

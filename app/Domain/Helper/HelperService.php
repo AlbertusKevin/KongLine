@@ -99,10 +99,16 @@ class HelperService
     public static function checkParticipated($idEvent, $idParticipant, $typeEvent)
     {
         if ($typeEvent == PETITION) {
-            return ParticipatePetition::where('idParticipant', $idParticipant)->where('idPetition', $idEvent)->first();
+            $participated = ParticipatePetition::where('idParticipant', $idParticipant)->where('idPetition', $idEvent)->first();
+        } else {
+            $participated = ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
         }
 
-        return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
+        if (empty($participated)) {
+            return false;
+        }
+
+        return true;
     }
 
     public static function checkAnnonym($checked)

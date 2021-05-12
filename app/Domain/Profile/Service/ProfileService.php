@@ -2,12 +2,9 @@
 
 namespace App\Domain\Profile\Service;
 
-use App\Domain\Event\Dao\EventDao;
 use App\Domain\Helper\HelperService;
 use Illuminate\Support\Facades\Auth;
-use App\Domain\Event\Entity\ParticipatePetition;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
 use App\Domain\Profile\Entity\User;
 use App\Domain\Profile\Dao\ProfileDao;
 use Illuminate\Support\Str;

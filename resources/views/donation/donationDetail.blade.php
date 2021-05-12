@@ -22,9 +22,10 @@
                                 <div class="row mt-3">
                                     @if ($donation->status == ACTIVE)
                                         @if ($user->role != ADMIN)
-                                            @if ($isParticipated)
+                                            @if (!$isParticipated)
                                                 <div class="col-md-6">
                                                     @if ($user->role == GUEST || $user->role == ADMIN)
+
                                                         <button type="button" class="btn btn-danger donate-button" disabled>
                                                             Donasikan
                                                         </button>

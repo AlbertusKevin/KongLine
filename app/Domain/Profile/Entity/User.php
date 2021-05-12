@@ -2,7 +2,7 @@
 
 namespace App\Domain\Profile\Entity;
 
-use App\Domain\Admin\Entity\CommentForum;
+use App\Domain\Communication\Entity\CommentForum;
 use App\Domain\Communication\Entity\Forum;
 use App\Domain\Communication\Entity\ForumLike;
 use App\Domain\Communication\Entity\Service;
