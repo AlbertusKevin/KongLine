@@ -2,16 +2,11 @@
 
 namespace App\Domain\Petition\Service;
 
-use App\Domain\Event\Dao\EventDao;
-use Illuminate\Support\Facades\Auth;
 use App\Domain\Petition\Model;
-use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
-use App\Domain\Event\Entity\User;
 use App\Domain\Helper\HelperService;
 use App\Domain\Petition\Dao\PetitionDao;
 use App\Domain\Profile\Service\ProfileService;
-use Illuminate\Support\Str;
 
 class PetitionService
 {
@@ -24,20 +19,14 @@ class PetitionService
         $this->profile_service = new ProfileService();
     }
 
-    private function updateCalculatedCount($idEvent, $idUser, $typeEvent)
+    private function updateCalculatedSignPetition($idEvent, $idUser)
     {
-        // Update Count dari jumlah ttd petisi
-        if ($typeEvent == PETITION) {
-            $count = $this->petition_dao->calculatedSignDonation($idEvent, PETITION);
-            $this->petition_dao->updateCalculatedSign($idEvent, $count);
-        }
+        $count = $this->petition_dao->calculatedSignDonation($idEvent, PETITION);
+        $this->petition_dao->updateCalculatedSign($idEvent, $count);
 
-        // Update jumlah event yang diikuti user
-        $countParticipatedDonation = $this->petition_dao->countDonationParticipatedByUser($idUser);
-        $countParticipatedPetition = $this->petition_dao->countPetitionParticipatedByUser($idUser);
-        $totalEvent = $countParticipatedDonation + $countParticipatedPetition;
-
-        $this->petition_dao->updateCountEventParticipatedByUser($idUser, $totalEvent);
+        // Update jumlah event yang diikuti user\
+        $totalEvent = HelperService::countTotalEventParticipatedByUser($idUser);
+        $this->profile_service->updateCountEventParticipatedByUser($idUser, $totalEvent);
     }
 
     //! Menampilkan seluruh petisi yang sedang berlangsung
@@ -480,7 +469,7 @@ class PetitionService
         $petition = new Model\ParticipatePetition($idEvent, $user->id, $request->petitionComment, Carbon::now()->format('Y-m-d'));
 
         $this->petition_dao->signPetition($petition, $idEvent, $user);
-        $this->updateCalculatedCount($idEvent, $user->id, PETITION);
+        $this->updateCalculatedSignPetition($idEvent, $user->id);
     }
 
     //! Menyimpan data petisi ke database
@@ -514,7 +503,7 @@ class PetitionService
     public function checkParticipated($idEvent, $user, $typeEvent)
     {
         if ($user->role != GUEST || $user->role != ADMIN) {
-            $isInList = $this->petition_dao->checkParticipated($idEvent, $user->id, $typeEvent);
+            $isInList = HelperService::checkParticipated($idEvent, $user->id, $typeEvent);
             // Cek apakah list hasil query kosong atau tidak. 
             // Jika true, artinya user belum pernah berpartisipasi di event itu
             return empty($isInList);
@@ -523,19 +512,8 @@ class PetitionService
         return false;
     }
 
-    //! Memeriksa donasi dalam mode anonim atau tidak
-    public function checkAnnonym($checked)
-    {
-        if ($checked == 'on') {
-            return 1;
-        }
-
-        return 0;
-    }
-
     public function getPetitionLimit()
     {
-        $result = $this->petition_dao->indexPetitionLimit();
-        return $result;
+        return $this->petition_dao->indexPetitionLimit();
     }
 }

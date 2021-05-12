@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
-use App\Domain\Event\Service\EventService;
+use App\Domain\Profile\Service\ProfileService;
 
 class AdminMiddleware
 {
@@ -18,7 +18,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $eventService = new EventService();
+        $eventService = new ProfileService();
         $user = $eventService->getAProfile();
 
         if ($user->role == 'admin') {

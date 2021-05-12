@@ -2,20 +2,20 @@
 
 namespace App\Domain\Controlling\Dao;
 
-use App\Domain\Event\Entity\Donation;
-use App\Domain\Event\Entity\User;
-use App\Domain\Event\Entity\ParticipateDonation;
-use App\Domain\Event\Entity\ParticipatePetition;
-use App\Domain\Event\Entity\Petition;
-use App\Domain\Event\Entity\Transaction;
-use Illuminate\Support\Facades\DB;
+use App\Domain\Donation\Entity\Donation;
+use App\Domain\Petition\Entity\Petition;
+use App\Domain\Profile\Entity\User;
+
+use App\Domain\Donation\Entity\ParticipateDonation;
+use App\Domain\Petition\Entity\ParticipatePetition;
+use App\Domain\Donation\Entity\Transaction;
 use Illuminate\Support\Facades\Mail;
 
-class AdminDao
+class ControllingDao
 {
     public function getAllUser()
     {
-        return User::where("id", "!=", GUEST_ID)->get();
+        return User::where("id", "!=", GUEST_ID)->where("role", "!=", ADMIN)->get();
     }
 
     public function getUserById($id)
@@ -58,7 +58,7 @@ class AdminDao
         return ParticipateDonation::where('idParticipant', $id)->count();
     }
 
-    public function listUserByRole($role)
+    public function getUsersByRole($role)
     {
         return User::where('role', $role)->where('role', '!=', GUEST)->get();
     }

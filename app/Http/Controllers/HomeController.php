@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use \App\Domain\Event\Entity\User;
+use \App\Domain\Profile\Entity\User;
 use \App\Domain\Communication\Entity\Service;
-use App\Domain\Event\Service\EventService;
-use Illuminate\Support\Facades\Auth;
+use App\Domain\Helper\HelperService;
+use App\Domain\Profile\Service\ProfileService;
 
 class HomeController extends Controller
 {
-    private $eventService;
+    private $profile_service;
 
     public function __construct()
     {
-        $this->eventService = new EventService();
+        $this->profile_service = new ProfileService();
     }
 
     public function index()
     {
-        $donasi = $this->eventService->getDonationLimit();
-        $petisi = $this->eventService->getPetitionLimit();
+        // stub
+        $donasi = HelperService::getDonationLimit();
+        $petisi = HelperService::getPetitionLimit();
 
         $users = User::orderBy('id', 'DESC')->get();
-        $user = $this->eventService->getAProfile();
+        $user = $this->profile_service->getAProfile();
 
         if ($user->role == GUEST) {
             return view('home', compact('user', 'donasi', 'petisi'));

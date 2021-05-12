@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use \App\Domain\Event\Entity\User;
+use \App\Domain\Profile\Entity\User;
 use \App\Domain\Communication\Entity\Service;
-use App\Domain\Event\Service\EventService;
 use Illuminate\Support\Facades\Auth;
+use App\Domain\Helper\HelperService;
 
 class ServiceController extends Controller
 {
@@ -13,7 +13,7 @@ class ServiceController extends Controller
     public function index()
     {
         $users = User::orderBy('id', 'DESC')->get();
-        $navbar = EventService::getNavbar();
+        $navbar = HelperService::getNavbar();
 
         if (Auth::user()->role == 'admin') {
             $messages = Service::where('user_id', auth()->id())->orWhere('receiver', auth()->id())->orderBy('id', 'DESC')->get();
@@ -44,7 +44,7 @@ class ServiceController extends Controller
             $messages = Service::where('user_id', $sender)->orWhere('receiver', $sender)->orderBy('id', 'DESC')->get();
         }
 
-        $navbar = EventService::getNavbar();
+        $navbar = HelperService::getNavbar();
 
         return view('service/show', [
             'users' => $users,
@@ -56,7 +56,7 @@ class ServiceController extends Controller
 
     public function getRender($user, $admin)
     {
-        $navbar = EventService::getNavbar();
+        $navbar = HelperService::getNavbar();
 
         return view('livewire.message', [
             'users' => $user,

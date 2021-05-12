@@ -3,67 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Domain\Admin\Service\AdminService;
-use App\Domain\Event\Service\EventService;
+use App\Domain\Controlling\Service\ControllingService;
+use App\Domain\Helper\HelperService;
+use App\Domain\Profile\Service\ProfileService;
 
 class ControllingController extends Controller
 {
     private $controlling_service;
-    private $event_service;
+    private $profile_service;
 
     public function __construct()
     {
-        $this->controlling_service = new AdminService();
-        $this->event_service = new EventService();
+        $this->controlling_service = new ControllingService();
+        $this->profile_service = new ProfileService();
     }
-
-    public function getAll()
-    {
-        $users = $this->controlling_service->getAllUser();
-        $eventCount = $this->controlling_service->countEventParticipate($users);
-        $changeDateFormat = $this->controlling_service->changeDateFormat();
-        return view('/admin/listUser', compact('users', 'eventCount', 'changeDateFormat'));
-    }
-
-    public function listUserByRole(Request $request)
-    {
-        $users = $this->controlling_service->listUserByRole($request);
-        $eventCount = $this->controlling_service->countEventParticipate($users);
-        $combine = [];
-        $combine[] = $users;
-        $combine[] = $eventCount;
-
-        return json_encode($combine);
-    }
-
-    public function countEventParticipate(Request $request)
-    {
-        return $this->controlling_service->countEventParticipate($request);
-    }
-
     public function home()
     {
-        $users = $this->controlling_service->countUser();
-        $participant =  $this->controlling_service->countParticipant();
-        $campaigner  = $this->controlling_service->countCampaigner();
-        $campaigner_waiting  = $this->controlling_service->countWaitingCampaigner();
-        $donasi_waiting = $this->controlling_service->countWaitingDonation();
-        $petisi_waiting = $this->controlling_service->countWaitingPetition();
-        $donations = $this->controlling_service->getDonationLimit();
-        $petitions = $this->controlling_service->getPetitionLimit();
-        $date = $this->controlling_service->getDate();
-
-        return view('admin.home', [
-            'users' => $users,
-            'participant' => $participant,
-            'campaigner' => $campaigner,
-            'waiting_campaigner' => $campaigner_waiting,
-            'waiting_donation' => $donasi_waiting,
-            'waiting_petition' => $petisi_waiting,
-            'donations' => $donations,
-            'petitions' => $petitions,
-            'date' => $date,
-        ]);
+        $dashboard_data = $this->controlling_service->getAdminDashboardData();
+        return view('admin.home', compact('dashboard_data'));
     }
 
     //? ========================================
@@ -71,9 +28,8 @@ class ControllingController extends Controller
     //? ========================================
     public function getListPetition()
     {
-        $listCategory = $this->event_service->getAllCategoriesEvent();
+        $listCategory = HelperService::getAllCategoriesEvent();
         $petitionList = $this->controlling_service->allPetition();
-        // dd($petitionList);
         return view('admin.listPetition', compact('listCategory', 'petitionList'));
     }
 
@@ -206,10 +162,10 @@ class ControllingController extends Controller
     public function confirmTransaction($id)
     {
 
-        // //ambil id user dan id donasi
+        //ambil id user dan id donasi
         $transaction = $this->controlling_service->getAUserTransaction($id);
 
-        // //ubah status dari 0 menjadi 5, ubah data perhitungan
+        //ubah status dari 0 menjadi 5, ubah data perhitungan
         $this->controlling_service->updateCalculationAfterConfirmDonate($transaction);
         $this->controlling_service->confirmTransaction($id);
         // //todo: send email
@@ -231,6 +187,9 @@ class ControllingController extends Controller
         return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Penolakan transaksi telah selesai.']);
     }
 
+    //? ========================================
+    //! ~~~~~~~~~~~~~~~~~ Users ~~~~~~~~~~~~~~~~
+    //? ========================================
     public function sortListUser(Request $request)
     {
         $users =  $this->controlling_service->sortListUser($request);
@@ -287,5 +246,29 @@ class ControllingController extends Controller
         $message = "Pengajuan Campaigner Ditolak";
         $this->controlling_service->rejectUserToCampaigner($id, $view, $message);
         return redirect("/admin/user/$id")->with(["type" => 'fail', 'message' => 'User ditolak upgrade ke campaigner']);
+    }
+
+    public function getAllUsers()
+    {
+        $users = $this->controlling_service->getAllUser();
+        $eventCount = $this->controlling_service->countEventParticipate($users);
+        $changeDateFormat = $this->controlling_service->changeDateFormat();
+        return view('/admin/listUser', compact('users', 'eventCount', 'changeDateFormat'));
+    }
+
+    public function getUsersByRole(Request $request)
+    {
+        $users = $this->controlling_service->getUsersByRole($request);
+        $eventCount = $this->controlling_service->countEventParticipate($users);
+        $combine = [];
+        $combine[] = $users;
+        $combine[] = $eventCount;
+
+        return json_encode($combine);
+    }
+
+    public function countEventParticipate(Request $request)
+    {
+        return $this->controlling_service->countEventParticipate($request);
     }
 }

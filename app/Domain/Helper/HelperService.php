@@ -4,12 +4,10 @@ namespace App\Domain\Helper;
 
 use Illuminate\Support\Facades\Auth;
 use App\Domain\Event\Entity\Category;
-use App\Domain\Event\Entity\ParticipatePetition;
-use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
-use App\Domain\Event\Entity\User;
-use App\Domain\Profile\Dao\ProfileDao;
-use Illuminate\Support\Str;
+use App\Domain\Petition\Entity\ParticipatePetition;
+use App\Domain\Donation\Entity\ParticipateDonation;
+use App\Domain\Donation\Entity\Donation;
+use App\Domain\Petition\Entity\Petition;
 
 class HelperService
 {
@@ -96,5 +94,44 @@ class HelperService
             }
         }
         return 0;
+    }
+
+    public static function checkParticipated($idEvent, $idParticipant, $typeEvent)
+    {
+        if ($typeEvent == PETITION) {
+            return ParticipatePetition::where('idParticipant', $idParticipant)->where('idPetition', $idEvent)->first();
+        }
+
+        return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
+    }
+
+    public static function checkAnnonym($checked)
+    {
+        if ($checked == 'on') {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    public static function countTotalEventParticipatedByUser($idUser)
+    {
+        $donation = ParticipateDonation::where('idParticipant', $idUser)->count();
+        $petition = ParticipatePetition::where('idParticipant', $idUser)->count();
+        return $donation + $petition;
+    }
+
+    // stub
+    public static function getDonationLimit()
+    {
+        return Donation::selectRaw('donation.*, users.name as name')
+            ->where('donation.status', ACTIVE)
+            ->join('users', 'donation.idCampaigner', 'users.id')
+            ->take(3)
+            ->get();
+    }
+    public static function getPetitionLimit()
+    {
+        return Petition::where('status', ACTIVE)->take(3)->get();
     }
 }

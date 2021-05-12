@@ -2,23 +2,37 @@
 
 namespace App\Domain\Controlling\Service;
 
-use App\Domain\Admin\Dao\AdminDao;
+use App\Domain\Controlling\Dao\ControllingDao;
+use App\Domain\Profile\Service\ProfileService;
 use Illuminate\Support\Carbon;
-use App\Domain\Event\Service\EventService;
-use App\Domain\Event\Dao\EventDao;
-use App\Domain\Event\Entity\Transaction;
 
-class AdminService
+class ControllingService
 {
     private $dao;
-    private $eventService;
-    private $eventDao;
+    private $profile_service;
 
     public function __construct()
     {
-        $this->dao = new AdminDao();
-        $this->eventService = new EventService();
-        $this->eventDao = new EventDao();
+        $this->dao = new ControllingDao();
+        $this->profile_service = new ProfileService();
+    }
+
+    public function getAdminDashboardData()
+    {
+        $dashboard_data = [];
+
+        $dashboard_data["user_count"] = $this->dao->getAllUser()->count();
+        $dashboard_data["participant_count"] = $this->dao->getCountParticipant();
+        $dashboard_data["campaigner_count"] = $this->dao->getCountCampaigner();
+        $dashboard_data["waiting_campaigner"] = $this->dao->getCountWaitingCampaigner();
+        $dashboard_data["waiting_donation"] = $this->dao->getCountWaitingDonation();
+        $dashboard_data["waiting_petition"] = $this->dao->getCountWaitingPetition();
+        $dashboard_data["list_donation_limited"] = $this->dao->getListDonationLimit();
+        $dashboard_data["list_petition_limited"] = $this->dao->getListPetitionLimit();
+        $dashboard_data["date"] = date('d F Y', strtotime(Carbon::now('+7:00')->format('d-m-Y')));
+        $dashboard_data['admin'] = $this->profile_service->getAProfile();
+
+        return $dashboard_data;
     }
 
     public function sendEmailPetition($id, $view, $subject)
@@ -78,63 +92,17 @@ class AdminService
         return $tanggal;
     }
 
-    public function listUserByRole($request)
+    public function getUsersByRole($request)
     {
         $roleType = $request->roleType;
 
         if ($roleType == PARTICIPANT or $roleType == CAMPAIGNER) {
-            return $this->dao->listUserByRole($roleType);
+            return $this->dao->getUsersByRole($roleType);
         } elseif ($roleType == PENGAJUAN) {
             return $this->dao->listUserByPengajuan();
         } elseif ($roleType == SEMUA) {
             return $this->dao->listUserByAll();
         }
-    }
-
-    public function countUser()
-    {
-        $user = $this->dao->getAllUser();
-        return $user->count();
-    }
-
-    public function countParticipant()
-    {
-        return $this->dao->getCountParticipant();
-    }
-
-    public function countCampaigner()
-    {
-        return $this->dao->getCountCampaigner();
-    }
-
-    public function countWaitingCampaigner()
-    {
-        return $this->dao->getCountWaitingCampaigner();
-    }
-
-    public function countWaitingPetition()
-    {
-        return $this->dao->getCountWaitingPetition();
-    }
-
-    public function countWaitingDonation()
-    {
-        return $this->dao->getCountWaitingDonation();
-    }
-
-    public function getDonationLimit()
-    {
-        return $this->dao->getListDonationLimit();
-    }
-
-    public function getPetitionLimit()
-    {
-        return $this->dao->getListPetitionLimit();
-    }
-
-    public function getDate()
-    {
-        return Carbon::now()->format('d-m-Y');
     }
 
     public function allPetition()
@@ -332,7 +300,7 @@ class AdminService
     public function sortlistUser($request)
     {
         if ($request->sortBy == 'None') {
-            return $this->listUserByRole($request->roleUserType);
+            return $this->getUsersByRole($request->roleUserType);
         }
 
         if ($request->sortBy == 'Tanggal dibuat') {

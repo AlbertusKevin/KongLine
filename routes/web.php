@@ -100,7 +100,7 @@ Route::get('/donation/create', [DonationController::class, 'createView']);
 Route::post('/donation/create', [DonationController::class, 'storeDonation']);
 
 //* --- menampilkan donasi ---
-Route::get('/donation', [DonationController::class, 'listDonation']);
+Route::get('/donation', [DonationController::class, 'getAllDonation']);
 Route::get('/donation/{id}', [DonationController::class, 'getADonation']);
 Route::get('/donation/edit/{id}', [DonationController::class, 'editDonation']);
 Route::put('/donation/{id}', [DonationController::class, 'updateDonation']);
@@ -138,8 +138,8 @@ Route::post('/input', [ForumController::class, 'input']);
 Route::get('/admin', [ControllingController::class, 'home'])->name('admin')->middleware('admin');
 
 //! Users
-Route::get('/admin/listUser', [ControllingController::class, 'getAll'])->middleware('admin');
-Route::get('/admin/listUser/role', [ControllingController::class, 'listUserByRole'])->middleware('admin');
+Route::get('/admin/listUser', [ControllingController::class, 'getAllUsers'])->middleware('admin');
+Route::get('/admin/listUser/role', [ControllingController::class, 'getUsersByRole'])->middleware('admin');
 
 Route::get('/admin/listUser/sort', [ControllingController::class, 'sortListUser'])->middleware('admin'); //Sort List User
 Route::get('/admin/listUser/search', [ControllingController::class, 'searchUser'])->middleware('admin');

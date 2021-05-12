@@ -88,6 +88,11 @@ class ProfileService
         return true;
     }
 
+    public function updateCountEventParticipatedByUser($idUser, $totalEvent)
+    {
+        $this->profile_dao->updateCountEventParticipatedByUser($idUser, $totalEvent);
+    }
+
     //* =========================================================================================
     //* ------------------------------------- Service Auth --------------------------------------
     //* =========================================================================================

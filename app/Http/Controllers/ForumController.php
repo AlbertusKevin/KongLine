@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domain\Communication\Entity\Forum;
 use App\Domain\Communication\Service\CommunicationService;
-use App\Domain\Event\Service\EventService;
+use App\Domain\Helper\HelperService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -21,7 +21,7 @@ class ForumController extends Controller
     public function index()
     {
         $forum = $this->service->findAllForum();
-        $navbar = EventService::getNavbar();
+        $navbar = HelperService::getNavbar();
 
         return view('forum.forum', [
             'forum' => $forum,
@@ -32,7 +32,7 @@ class ForumController extends Controller
     public function comment($id)
     {
         $forum = $this->service->findForumbyId($id);
-        $navbar = EventService::getNavbar();
+        $navbar = HelperService::getNavbar();
         return view('forum.comment', [
             'forum' => $forum,
             'navbar' => $navbar,
@@ -48,7 +48,7 @@ class ForumController extends Controller
 
     public function inputforum()
     {
-        $navbar = EventService::getNavbar();
+        $navbar = HelperService::getNavbar();
         return view('forum.inputforum', compact('navbar'));
     }
 
