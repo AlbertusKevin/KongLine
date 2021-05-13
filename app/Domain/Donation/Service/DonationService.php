@@ -24,30 +24,32 @@ class DonationService
         return $this->donation_dao->listBank();
     }
 
-    public function getDonationLimit()
+    public function getThreeActiveDonation()
     {
-        $listDonation = $this->donation_dao->getListDonationLimit();
-        $list = [];
+        $listDonation = $this->donation_dao->getListDonation();
+        $listValidDate = [];
+        $listThreeDonationActive = [];
 
         foreach ($listDonation as $donation) {
-            $list[] = $this->checkValidDate($donation);
+            $listValidDate[] = $this->checkValidDate($donation);
         }
 
-        return $list;
+        for ($i = 0; $i < 3; $i++) {
+            $listThreeDonationActive[$i] = $listValidDate[$i];
+        }
+
+        return $listThreeDonationActive;
     }
 
     public function checkValidDate($donation)
     {
-        $time = Carbon::now()->format("Y-m-d");
+        $time = Carbon::now('+7:00')->format("Y-m-d");
 
-        // dd("Deadline: " . strtotime($donation->deadline) . " | Today: " . strtotime($time) . " | Selisih: " . (strtotime($donation->deadline) - strtotime($time)));
         if (strtotime($donation->deadline) - strtotime($time) <= 0) {
-            $this->donation_dao->updateStatusEvent($donation->id, FINISHED);
-        } else {
-            return $donation;
+            return $this->donation_dao->updateStatusEvent($donation->id, FINISHED);
         }
 
-        return;
+        return $donation;
     }
 
     public function getListDonation()

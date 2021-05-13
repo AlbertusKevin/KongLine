@@ -118,7 +118,7 @@
                 <div class="modal-body">
                     <h5 class="modal-title mb-3 font-weight-bold text-center" id="verification-petition">Verifikasi Data
                         Diri Anda</h5>
-                    <form action="/petition/create/verification" method="post">
+                    <form action="/event/create/verification" method="post">
                         @csrf
                         <div class="form-group">
                             <input type="email" class="form-control" id="email" placeholder="Email">
@@ -127,7 +127,7 @@
                             <input type="text" class="form-control" id="phone" placeholder="No Telp">
                         </div>
                         <div class="form-group text-right">
-                            <button type="button" class="btn btn-primary verification-create-petition">Verifikasi</button>
+                            <button type="button" class="btn btn-primary verification-create">Verifikasi</button>
                             <button type="button" class="btn btn-secondary close-dismiss"
                                 data-dismiss="modal">Close</button>
                         </div>

@@ -18,6 +18,11 @@ class ProfileService
         $this->profile_dao = new ProfileDao();
     }
 
+    public function getUsers()
+    {
+        return $this->profile_dao->getUsers();
+    }
+
     // Ambil data user, jika login, return data yang sebenarnya, jika tidak, return guest
     public function getAProfile()
     {
@@ -73,18 +78,6 @@ class ProfileService
         return 'failed_password';
     }
 
-    //! Mengecek verifikasi data diri yang diberikan sebelum membuat event
-    public function verifyProfile($email, $phone)
-    {
-        $campaigner = $this->profile_dao->verifyProfile($email, $phone);
-
-        if (empty($campaigner)) {
-            return false;
-        }
-
-        return true;
-    }
-
     public function updateCountEventParticipatedByUser($idUser, $totalEvent)
     {
         $this->profile_dao->updateCountEventParticipatedByUser($idUser, $totalEvent);
@@ -114,7 +107,7 @@ class ProfileService
         return $this->profile_dao->register($user);
     }
 
-    public function authForgot($request, $view, $subject)
+    public function authForgotPassword($request, $view, $subject)
     {
         $token = Str::random(64);
 

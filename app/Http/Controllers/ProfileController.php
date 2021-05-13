@@ -17,36 +17,28 @@ class ProfileController extends Controller
         $this->profile_service = new ProfileService();
     }
 
-    public function edit()
+    // Detail dan Update User General Data
+    public function getViewDetailAnUser()
     {
         $user = $this->profile_service->getAProfile();
         return view('profile.profile', compact('user'));
     }
 
-    public function update(Request $request)
+    public function updateAnUserData(Request $request)
     {
         $user = $this->profile_service->getAProfile();
         $this->profile_service->updateProfile($request, $user->id);
         return redirect('/profile');
     }
 
-    public function delete()
+    // Update data campaigner, upgrade ke campaigner, atau edit pengajuan campaigner
+    public function detailDataCampaigner()
     {
         $user = $this->profile_service->getAProfile();
-        $this->profile_service->deleteAccount($user->id);
-        return redirect('logout');
+        return view('profile.detailCampaigner', compact('user'));
     }
 
-    public function editCampaigner()
-    {
-        $user = $this->profile_service->getAProfile();
-        if ($user->role == CAMPAIGNER) {
-            return redirect('/campaigner');
-        }
-        return view('profile.updateCampaigner', compact('user'));
-    }
-
-    public function updateCampaigner(Request $request)
+    public function processDataCampaigner(Request $request)
     {
         $user = $this->profile_service->getAProfile();
 
@@ -75,13 +67,8 @@ class ProfileController extends Controller
         return redirect('/profile')->with(['type' => "success", 'message' => "Permintaan Anda akan diproses. Tunggu konfirmasi dari admin."]);
     }
 
-    public function dataCampaigner()
-    {
-        $user = $this->profile_service->getAProfile();
-        return view('profile.detailCampaigner', compact('user'));
-    }
-
-    public function viewChangePassword()
+    // Update password
+    public function getViewChangePassword()
     {
         return view('profile.changePassword');
     }
@@ -99,23 +86,27 @@ class ProfileController extends Controller
             foreach ($validator->errors()->all() as $message) {
                 $messageError = $message;
             }
-            Alert::error('Validasi Error', [$messageError]);
-            return redirect('/change');
+            return redirect('/change')->with(['type' => 'error', 'message' => $messageError]);
         };
 
         $change = $this->profile_service->changePassword($request);
 
         if ($change == 'failed_verification') {
-            Alert::error('Validasi Error', "Password baru dengan password verifikasi tidak sesuai.");
-            return redirect('/change');
+            return redirect('/change')->with(['type' => 'error', 'message' => "Password baru dengan password verifikasi tidak sesuai."]);
         }
 
         if ($change == 'failed_password') {
-            Alert::error('Password Tidak Cocok', 'Sandi saat ini tidak sesuai dengan pasword lama');
-            return redirect('/change');
+            return redirect('/change')->with(['type' => 'error', 'message' => "Sandi saat ini tidak sesuai dengan pasword lama."]);
         }
 
-        Alert::success('Berhasil', "Password telah diganti. Silahkan login ulang.");
-        return redirect('/logout');
+        return redirect('/logout')->with(['type' => 'success', 'message' => "Password telah diganti. Silahkan login ulang."]);
+    }
+
+    // Hapus Akun
+    public function deleteAnUserAccount()
+    {
+        $user = $this->profile_service->getAProfile();
+        $this->profile_service->deleteAccount($user->id);
+        return redirect('logout');
     }
 }

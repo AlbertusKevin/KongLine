@@ -29,6 +29,11 @@ class PetitionService
         $this->profile_service->updateCountEventParticipatedByUser($idUser, $totalEvent);
     }
 
+    public function getPetitionLimit()
+    {
+        return $this->petition_dao->getAllActivePetition()->take(3);
+    }
+
     //! Menampilkan seluruh petisi yang sedang berlangsung
     public function getAllActivePetition()
     {
@@ -36,16 +41,16 @@ class PetitionService
     }
 
     //! {{-- lewat ajax --}} Menampilkan daftar petisi berdasarkan tipe (berlangsung, telah menang, dll)
-    public function listPetitionType($request)
+    public function getListPetitionByStatus($request)
     {
         $user = $this->profile_service->getAProfile();
 
         if ($request->typePetition == BERLANGSUNG) {
-            return $this->petition_dao->listPetitionType(ACTIVE);
+            return $this->petition_dao->getListPetitionByStatus(ACTIVE);
         }
 
         if ($request->typePetition == MENANG) {
-            return $this->petition_dao->listPetitionType(FINISHED);
+            return $this->petition_dao->getListPetitionByStatus(FINISHED);
         }
 
         if ($request->typePetition == PARTISIPASI) {
@@ -53,11 +58,11 @@ class PetitionService
         }
 
         if ($request->typePetition == DIBATALKAN) {
-            return $this->petition_dao->listPetitionType(CANCELED);
+            return $this->petition_dao->getListPetitionByStatus(CANCELED);
         }
 
         if ($request->typePetition == BELUM_VALID) {
-            return $this->petition_dao->listPetitionType(NOT_CONFIRMED);
+            return $this->petition_dao->getListPetitionByStatus(NOT_CONFIRMED);
         }
 
         if ($request->typePetition == SEMUA) {
@@ -252,7 +257,7 @@ class PetitionService
 
         //jika tidak sort dan tidak pilih category
         if ($request->sortBy == NONE && $category == 0) {
-            return $this->listPetitionType($request);
+            return $this->getListPetitionByStatus($request);
         }
 
         if ($request->typePetition == BERLANGSUNG) {
@@ -510,10 +515,5 @@ class PetitionService
         }
 
         return false;
-    }
-
-    public function getPetitionLimit()
-    {
-        return $this->petition_dao->indexPetitionLimit();
     }
 }

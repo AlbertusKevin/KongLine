@@ -18,8 +18,8 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $eventService = new ProfileService();
-        $user = $eventService->getAProfile();
+        $profile_service = new ProfileService();
+        $user = $profile_service->getAProfile();
 
         if ($user->role == 'admin') {
             return $next($request);

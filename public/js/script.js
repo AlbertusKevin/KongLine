@@ -454,13 +454,13 @@ $("#check-privacy-policy").on("click", function () {
     }
 });
 
-$(".verification-create-petition").on("click", function () {
+$(".verification-create").on("click", function () {
     const email = $("#email").val();
     const phone = $("#phone").val();
     const _token = $(this).parent().prev().prev().prev().val();
 
     $.ajax({
-        url: "/petition/create/verification",
+        url: "/event/create/verification",
         method: "post",
         data: { email, phone, _token },
         dataType: "json",

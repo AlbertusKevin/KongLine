@@ -27,6 +27,11 @@ class ProfileDao
         return User::where('id', $id)->first();
     }
 
+    public function getUsers()
+    {
+        return User::orderBy('id', 'DESC')->get();
+    }
+
     //! Memproses update data profile
     public function updateProfile($request, $id, $pathProfile, $pathBackground)
     {
@@ -72,12 +77,6 @@ class ProfileDao
         User::where('id', $user->id)->update([
             'password' => $password
         ]);
-    }
-
-    //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
-    public function verifyProfile($email, $phone)
-    {
-        return User::where('email', $email)->where('phoneNumber', $phone)->first();
     }
 
     //* =========================================================================================

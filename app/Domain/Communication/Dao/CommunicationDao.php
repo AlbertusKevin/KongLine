@@ -18,7 +18,10 @@ class CommunicationDao
 
     public function getMessageReceiver($id)
     {
-        return Service::where('user_id', $id)->orWhere('receiver', $id)->orderBy('id', 'DESC')->get();
+        return Service::where('user_id', $id)
+            ->orWhere('receiver', $id)
+            ->orderBy('id', 'DESC')
+            ->get();
     }
 
     public function getUserbyId($user_id)

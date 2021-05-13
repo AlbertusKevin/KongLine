@@ -261,7 +261,7 @@ class PetitionDao
     }
 
     //! Menampilkan daftar petisi berdasarkan tipe event (berlangsung, menang, dll)
-    public function listPetitionType($status)
+    public function getListPetitionByStatus($status)
     {
         return Petition::where('status', $status)->get();
     }
@@ -284,11 +284,6 @@ class PetitionDao
     public function getAllActivePetition()
     {
         return Petition::where('status', ACTIVE)->get();
-    }
-
-    public function indexPetitionLimit()
-    {
-        return Petition::where('status', ACTIVE)->take(3)->get();
     }
 
     //! Menampilkan detail petisi tertentu berdasarkan ID

@@ -31,113 +31,11 @@ class HelperService
     public static function getNavbar()
     {
         if (Auth::check()) {
-            if (Auth::user()->role != ADMIN) {
-                return 'layout.app';
-            }
-        } else {
-            return 'layout.app';
-        }
-
-        return 'layout.adminNavbar';
-    }
-
-    // Memberi pesan terkait status event tertentu
-    public static function messageOfEvent($status)
-    {
-        if ($status == NOT_CONFIRMED) {
-            return [
-                'header' => 'Menunggu Konfirmasi',
-                'content' => 'Event ini sudah didaftarkan. Tunggu konfirmasi dari pihak admin.'
-            ];
-        } else if ($status == FINISHED) {
-            return [
-                'header' => 'Telah Selesai',
-                'content' => 'Event ini sudah selesai. Tidak menerima tanggapan lagi.'
-            ];
-        } else if ($status == CLOSED) {
-            return [
-                'header' => 'Sudah Ditutup',
-                'content' => 'Event ini telah ditutup oleh penyelenggara / admin.'
-            ];
-        } else if ($status == REJECTED) {
-            return [
-                'header' => 'Ditolak',
-                'content' => 'Pengajuan untuk menyelenggarakan event ini ditolak. Silahkan cek email untuk pesan.'
-            ];
-        }
-
-        return [
-            'header' => 'Dibatalkan',
-            'content' => 'Event ini dibatalkan oleh penyelenggara.'
-        ];
-    }
-
-    public static function getACategory($id)
-    {
-        return Category::where('id', $id)->first();
-    }
-
-    //! Mengambil data seluruh kategori event petisi atau donasi yang ada
-    public static function getAllCategoriesEvent()
-    {
-        return Category::all();
-    }
-
-    //! Mengembalikan kategori event petisi atau donasi yang dipilih
-    public static function categorySelect($request)
-    {
-        $listCategory = Category::all();
-
-        foreach ($listCategory as $cat) {
-            if ($request->category == $cat->description) {
-                return $cat->id;
+            if (Auth::user()->role == ADMIN) {
+                return 'layout.adminNavbar';
             }
         }
-        return 0;
-    }
 
-    public static function checkParticipated($idEvent, $idParticipant, $typeEvent)
-    {
-        if ($typeEvent == PETITION) {
-            $participated = ParticipatePetition::where('idParticipant', $idParticipant)->where('idPetition', $idEvent)->first();
-        } else {
-            $participated = ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
-        }
-
-        if (empty($participated)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static function checkAnnonym($checked)
-    {
-        if ($checked == 'on') {
-            return 1;
-        }
-
-        return 0;
-    }
-
-    public static function countTotalEventParticipatedByUser($idUser)
-    {
-        $donation = ParticipateDonation::where('idParticipant', $idUser)->count();
-        $petition = ParticipatePetition::where('idParticipant', $idUser)->count();
-        return $donation + $petition;
-    }
-
-    // stub
-    public static function getDonationLimit()
-    {
-        return Donation::selectRaw('donation.*, users.name as name')
-            ->where('donation.status', ACTIVE)
-            ->join('users', 'donation.idCampaigner', 'users.id')
-            ->take(3)
-            ->get();
-    }
-    public static function getPetitionLimit()
-    {
-        return Petition::where('status', ACTIVE)->take(3)->get();
+        return 'layout.app';
     }
 }

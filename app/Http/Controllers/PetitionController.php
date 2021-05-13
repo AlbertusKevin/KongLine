@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domain\Petition\Model;
 use Illuminate\Http\Request;
+use App\Domain\Event\Service\EventService;
 use App\Domain\Petition\Service\PetitionService;
 use App\Domain\Profile\Service\ProfileService;
 use App\Domain\Helper\HelperService;
@@ -14,42 +15,37 @@ class PetitionController extends Controller
 {
     private $petition_service;
     private $profile_service;
+    private $event_service;
 
     public function __construct()
     {
-        $this->petition_service = new PetitionService;
-        $this->profile_service = new ProfileService;
+        $this->petition_service = new PetitionService();
+        $this->profile_service = new ProfileService();
+        $this->event_service = new EventService();
     }
 
     //! Menampilkan seluruh petisi yang sedang berlangsung
     public function getAllActivePetition(Request $request)
     {
         $user = $this->profile_service->getAProfile();
-        $listCategory = HelperService::getAllCategoriesEvent();
+        $listCategory = $this->event_service->getAllCategoriesEvent();
         $petitionList = $this->petition_service->getAllActivePetition();
         $navbar = HelperService::getNavbar();
 
         return view('petition.petition', compact('petitionList', 'user', 'listCategory', 'navbar'));
     }
 
-    //! {{-- lewat ajax --}} Menampilkan daftar petisi berdasarkan tipe (berlangsung, telah menang, dll)
-    public function listPetitionType(Request $request)
+    //! Request dengan ajax menampilkan petisi berdasarkan sort, search, type, dan category
+    public function getListPetitionByStatus(Request $request)
     {
-        return $this->petition_service->listPetitionType($request);
+        return $this->petition_service->getListPetitionByStatus($request);
     }
 
-    public function getAllCategory()
-    {
-        return HelperService::getAllCategoriesEvent();
-    }
-
-    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
     public function searchPetition(Request $request)
     {
         return $this->petition_service->searchPetition($request);
     }
 
-    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
     public function sortPetition(Request $request)
     {
         return $this->petition_service->sortPetition($request);
@@ -61,7 +57,7 @@ class PetitionController extends Controller
         $user = $this->profile_service->getAProfile();
         $petition = $this->petition_service->showPetition($idEvent);
         $isParticipated = $this->petition_service->checkParticipated($idEvent, $user, PETITION);
-        $message = HelperService::messageOfEvent($petition->status);
+        $message = $this->event_service->messageOfEvent($petition->status);
         $navbar = HelperService::getNavbar();
 
         return view('petition.petitionDetail', compact('petition', 'user', 'isParticipated', 'message', 'navbar'));
@@ -123,30 +119,14 @@ class PetitionController extends Controller
         return redirect("/petition/" . $idEvent)->with(['type' => "success", 'message' => 'Berhasil Menandatangai petisi ini. Terimakasih ikut berpartisipasi!']);
     }
 
-    //! Menampilkan halaman form untuk membuat petisi
+    //! Create event petisi
     public function createPetition()
     {
         $user = $this->profile_service->getAProfile();
-        $listCategory = HelperService::getAllCategoriesEvent();
+        $listCategory = $this->event_service->getAllCategoriesEvent();
         return view('petition.petitionCreate', compact('user', 'listCategory'));
     }
 
-    //! Mengecek verifikasi data diri yang diberikan sebelum membuat event
-    public function verifyProfile(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'phone' => 'numeric|nullable'
-        ]);
-
-        if ($validator->fails()) {
-            return json_encode("Validation Error");
-        };
-
-        return json_encode($this->profile_service->verifyProfile($request->email, $request->phone));
-    }
-
-    //! Menyimpan data petisi ke database
     public function storePetition(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -176,11 +156,11 @@ class PetitionController extends Controller
         return redirect('/petition')->with(['type' => "success", 'message' => 'Petisi Anda telah didaftarkan. Tunggu konfirmasi dari admin.']);
     }
 
-    //! Menampilkan halaman form untuk update petisi
+    //! Update detail data suatu petisi
     public function editPetition($id)
     {
         $user = $this->profile_service->getAProfile();
-        $listCategory = HelperService::getAllCategoriesEvent();
+        $listCategory = $this->event_service->getAllCategoriesEvent();
         $petition = $this->petition_service->showPetition($id);
 
         return view('petition.petitionEdit', compact('user', 'listCategory', 'petition'));

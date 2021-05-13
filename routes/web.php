@@ -33,45 +33,47 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 //? =========================
 //! Route Profile
 //? =========================
-Route::get('/profile', [ProfileController::class, 'edit']);
-Route::put('/profile', [ProfileController::class, 'update']);
+Route::get('/profile', [ProfileController::class, 'getViewDetailAnUser']);
+Route::put('/profile', [ProfileController::class, 'updateAnUserData']);
 
-Route::get('/delete', [ProfileController::class, 'delete']);
+Route::get('/delete', [ProfileController::class, 'deleteAnUserAccount']);
 
-Route::get('/profile/campaigner', [ProfileController::class, 'editCampaigner']);
-Route::put('/profile/campaigner', [ProfileController::class, 'updateCampaigner']);
+Route::get('/profile/campaigner', [ProfileController::class, 'detailDataCampaigner']);
+Route::put('/profile/campaigner', [ProfileController::class, 'processDataCampaigner']);
 
-Route::get('/campaigner', [ProfileController::class, 'dataCampaigner']);
-
-Route::get('/change', [ProfileController::class, 'viewChangePassword']);
+Route::get('/change', [ProfileController::class, 'getViewChangePassword']);
 Route::put('/change', [ProfileController::class, 'changePassword']);
 
 //? =========================
 //! Route Auth
 //? =========================
-Route::get('/login', [AuthController::class, 'getLogin'])->name('login')->middleware('guest');
-Route::post('/login', [AuthController::class, 'postLogin'])->name('postLogin');
+Route::get('/login', [AuthController::class, 'getViewLogin'])->name('login')->middleware('guest');
+Route::post('/login', [AuthController::class, 'postDataLogin'])->name('postLogin');
 
-Route::get('/register', [AuthController::class, 'getRegister'])->name('register')->middleware('guest');
-Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
+Route::get('/register', [AuthController::class, 'getViewRegister'])->name('register')->middleware('guest');
+Route::post('/register', [AuthController::class, 'postDataRegister'])->name('postRegister');
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/forgot', [AuthController::class, 'getForgot']);
-Route::post('/forgot', [AuthController::class, 'postForgot'])->name('forgot');
+Route::get('/forgot', [AuthController::class, 'getViewForgotPassword']);
+Route::post('/forgot', [AuthController::class, 'postDataForgotPassword'])->name('forgot');
 
-Route::get('/reset/{email}/{token}', [AuthController::class, 'getReset']);
-Route::post('/reset', [AuthController::class, 'postReset'])->name('reset');
+Route::get('/reset/{email}/{token}', [AuthController::class, 'getViewResetPassword']);
+Route::post('/reset', [AuthController::class, 'postResetPassword'])->name('reset');
+
+//? =========================
+//! Route Event Umum
+//? =========================
+Route::get('/category', [EventController::class, 'getAllCategoriesEvent']);
+Route::post('/event/create/verification', [EventController::class, 'verifyProfileCreateEvent']);
 
 //? =========================
 //! Route Petition
 //? =========================
 //* --- pemanggilan ajax ---
-Route::get('/category', [PetitionController::class, 'getAllCategory']);
-Route::get('/petition/type', [PetitionController::class, 'listPetitionType']);
+Route::get('/petition/type', [PetitionController::class, 'getListPetitionByStatus']);
 Route::get('/petition/search', [PetitionController::class, 'searchPetition']);
 Route::get('/petition/sort', [PetitionController::class, 'sortPetition']);
-Route::post('/petition/create/verification', [PetitionController::class, 'verifyProfile']);
 
 Route::get('/petition', [PetitionController::class, 'getAllActivePetition']);
 Route::get('/petition/create', [PetitionController::class, 'createPetition']);
