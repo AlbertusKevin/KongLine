@@ -6,8 +6,6 @@ use App\Domain\Profile\Entity\User;
 use App\Domain\Event\Entity\Category;
 use App\Domain\Donation\Entity\ParticipateDonation;
 use App\Domain\Petition\Entity\ParticipatePetition;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Mail;
 
 class EventDao
 {
@@ -34,15 +32,5 @@ class EventDao
         }
 
         return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
-    }
-
-    public function countParticipatedDonationByUser($idUser)
-    {
-        return ParticipateDonation::where('idParticipant', $idUser)->count();
-    }
-
-    public function countParticipatedPetitionByUser($idUser)
-    {
-        return ParticipatePetition::where('idParticipant', $idUser)->count();
     }
 }

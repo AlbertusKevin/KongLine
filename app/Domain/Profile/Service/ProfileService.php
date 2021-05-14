@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Domain\Profile\Entity\User;
 use App\Domain\Profile\Dao\ProfileDao;
+use App\Domain\Event\Service\EventService;
 use Illuminate\Support\Str;
 
 class ProfileService
@@ -16,6 +17,7 @@ class ProfileService
     public function __construct()
     {
         $this->profile_dao = new ProfileDao();
+        $this->event_service = new EventService();
     }
 
     public function getUsers()
@@ -31,11 +33,6 @@ class ProfileService
         }
 
         return $this->profile_dao->getAProfile(GUEST_ID);
-    }
-
-    public function getACampaigner($id)
-    {
-        return $this->profile_dao->getAProfile($id);
     }
 
     // Memproses update profile
@@ -63,7 +60,6 @@ class ProfileService
 
     public function changePassword($request)
     {
-
         $user = $this->getAProfile();
 
         if (Hash::check($request->old_password, $user->password)) {
@@ -78,8 +74,12 @@ class ProfileService
         return 'failed_password';
     }
 
-    public function updateCountEventParticipatedByUser($idUser, $totalEvent)
+    public function updateCountEventParticipatedByUser($idUser)
     {
+        $donation = $this->profile_dao->countParticipatedDonationByUser($idUser);
+        $petition = $this->profile_dao->countParticipatedPetitionByUser($idUser);
+
+        $totalEvent = (int)$donation + (int)$petition;
         $this->profile_dao->updateCountEventParticipatedByUser($idUser, $totalEvent);
     }
 
@@ -112,7 +112,7 @@ class ProfileService
         $token = Str::random(64);
 
         $resultReset = $this->profile_dao->reset($token, $request);
-        $resultMail = $this->profile_dao->mail($token, $request, $view, $subject);
+        $resultMail = $this->profile_dao->mailForgotPassword($token, $request, $view, $subject);
 
         if ($resultReset && $resultMail) {
             return true;

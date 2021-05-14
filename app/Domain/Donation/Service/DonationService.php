@@ -270,13 +270,13 @@ class DonationService
         $this->donation_dao->storeDonationCreated($donation);
     }
 
-    public function updateDonation($donation, $id, $empty)
+    public function updateEventDonation($donation, $id, $empty)
     {
         if (!$empty) {
             $pathPhoto = HelperService::uploadImage($donation->getPhoto(), 'images/donation');
             $donation->setPhoto($pathPhoto);
         }
-        $this->donation_dao->updateDonation($donation, $id);
+        $this->donation_dao->updateEventDonation($donation, $id);
     }
 
     public function deleteAllocationDetail($id)

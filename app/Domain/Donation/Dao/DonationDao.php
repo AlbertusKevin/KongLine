@@ -304,7 +304,7 @@ class DonationDao
         ]);
     }
 
-    public function updateDonation($donation, $id)
+    public function updateEventDonation($donation, $id)
     {
         Donation::where('id', $id)->update([
             'category' => $donation->getCategory(),

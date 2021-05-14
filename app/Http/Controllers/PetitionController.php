@@ -25,11 +25,11 @@ class PetitionController extends Controller
     }
 
     //! Menampilkan seluruh petisi yang sedang berlangsung
-    public function getAllActivePetition(Request $request)
+    public function getActivePetition(Request $request)
     {
         $user = $this->profile_service->getAProfile();
         $listCategory = $this->event_service->getAllCategoriesEvent();
-        $petitionList = $this->petition_service->getAllActivePetition();
+        $petitionList = $this->petition_service->getActivePetition();
         $navbar = HelperService::getNavbar();
 
         return view('petition.petition', compact('petitionList', 'user', 'listCategory', 'navbar'));
@@ -52,11 +52,11 @@ class PetitionController extends Controller
     }
 
     //! Menampilkan detail petisi sesuai ID Petisi
-    public function showPetition(Request $request, $idEvent)
+    public function getDetailPetition(Request $request, $idEvent)
     {
         $user = $this->profile_service->getAProfile();
-        $petition = $this->petition_service->showPetition($idEvent);
-        $isParticipated = $this->petition_service->checkParticipated($idEvent, $user, PETITION);
+        $petition = $this->petition_service->getDetailPetition($idEvent);
+        $isParticipated = $this->event_service->checkParticipated($idEvent, $user->id, PETITION);
         $message = $this->event_service->messageOfEvent($petition->status);
         $navbar = HelperService::getNavbar();
 
@@ -64,21 +64,21 @@ class PetitionController extends Controller
     }
 
     //! Menampilkan seluruh komentar pada petisi tertentu sesuai ID Petisi
-    public function commentPetition($idEvent)
+    public function getCommentsCertainPetition($idEvent)
     {
         $user = $this->profile_service->getAProfile();
-        $petition = $this->petition_service->showPetition($idEvent);
-        $comments = $this->petition_service->commentsPetition($idEvent);
+        $petition = $this->petition_service->getDetailPetition($idEvent);
+        $comments = $this->petition_service->getCommentsCertainPetition($idEvent);
         $navbar = HelperService::getNavbar();
 
         return view('petition.petitionComment', compact('petition', 'comments', 'navbar', 'user'));
     }
 
     //! Menampilkan seluruh berita perkembangan petisi tertentu sesuai ID Petisi
-    public function progressPetition($idEvent)
+    public function getProgressCertainPetition($idEvent)
     {
-        $petition = $this->petition_service->showPetition($idEvent);
-        $news = $this->petition_service->newsPetition($idEvent);
+        $petition = $this->petition_service->getDetailPetition($idEvent);
+        $news = $this->petition_service->getProgressCertainPetition($idEvent);
         $user = $this->profile_service->getAProfile();
         $navbar = HelperService::getNavbar();
 
@@ -86,7 +86,7 @@ class PetitionController extends Controller
     }
 
     //! Menyimpan perkembangan berita terbaru yang diinput oleh pengguna pada petisi tertentu
-    public function storeProgressPetition(Request $request, $idEvent)
+    public function saveProgressPetition(Request $request, $idEvent)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
@@ -105,29 +105,29 @@ class PetitionController extends Controller
         };
 
         $updateNews = new Model\UpdateNews($idEvent, $request->title, $request->content, $request->link, $request->file('image'), Carbon::now()->format('Y-m-d'));
-        $this->petition_service->storeProgressPetition($updateNews);
+        $this->petition_service->saveProgressPetition($updateNews);
 
         return redirect('/petition/progress/' . $idEvent)->with(['type' => "success", 'message' => 'Perkembangan terbaru dari petisi ini berhasil ditambahkan!']);
     }
 
     //! Memproses tandatangan peserta pada petisi tertentu
-    public function signPetition(Request $request, $idEvent)
+    public function signedThePetition(Request $request, $idEvent)
     {
         $user = $this->profile_service->getAProfile();
-        $this->petition_service->signPetition($request, $idEvent, $user);
+        $this->petition_service->signedThePetition($request, $idEvent, $user);
 
         return redirect("/petition/" . $idEvent)->with(['type' => "success", 'message' => 'Berhasil Menandatangai petisi ini. Terimakasih ikut berpartisipasi!']);
     }
 
     //! Create event petisi
-    public function createPetition()
+    public function getViewCreatePetition()
     {
         $user = $this->profile_service->getAProfile();
         $listCategory = $this->event_service->getAllCategoriesEvent();
         return view('petition.petitionCreate', compact('user', 'listCategory'));
     }
 
-    public function storePetition(Request $request)
+    public function saveDataEventPetition(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
@@ -151,17 +151,17 @@ class PetitionController extends Controller
 
         $user = $this->profile_service->getAProfile();
         $petition = new Model\Petition($user->id, $request->title, $request->file('photo'), $request->category, $request->purpose, $request->deadline, 0, Carbon::now()->format('Y-m-d'), $request->signedTarget, 0, $request->targetPerson);
-        $this->petition_service->storePetition($petition);
+        $this->petition_service->saveDataEventPetition($petition);
 
         return redirect('/petition')->with(['type' => "success", 'message' => 'Petisi Anda telah didaftarkan. Tunggu konfirmasi dari admin.']);
     }
 
     //! Update detail data suatu petisi
-    public function editPetition($id)
+    public function getViewEditPetition($id)
     {
         $user = $this->profile_service->getAProfile();
         $listCategory = $this->event_service->getAllCategoriesEvent();
-        $petition = $this->petition_service->showPetition($id);
+        $petition = $this->petition_service->getDetailPetition($id);
 
         return view('petition.petitionEdit', compact('user', 'listCategory', 'petition'));
     }
@@ -189,7 +189,7 @@ class PetitionController extends Controller
         };
 
         $user = $this->profile_service->getAProfile();
-        $oldPetition = $this->petition_service->showPetition($id);
+        $oldPetition = $this->petition_service->getDetailPetition($id);
         $file = $oldPetition->photo;
         $empty = true;
 

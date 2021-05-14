@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Domain\Controlling\Service\ControllingService;
+use App\Domain\Event\Service\EventService;
 use App\Domain\Helper\HelperService;
 use App\Domain\Profile\Service\ProfileService;
 
@@ -11,11 +12,13 @@ class ControllingController extends Controller
 {
     private $controlling_service;
     private $profile_service;
+    private $event_service;
 
     public function __construct()
     {
         $this->controlling_service = new ControllingService();
         $this->profile_service = new ProfileService();
+        $this->event_service = new EventService();
     }
     public function home()
     {
@@ -26,17 +29,19 @@ class ControllingController extends Controller
     //? ========================================
     //! ~~~~~~~~~~~~~~~~ Petisi ~~~~~~~~~~~~~~~~
     //? ========================================
-    public function getListPetition()
+    public function getAllPetition()
     {
-        $listCategory = HelperService::getAllCategoriesEvent();
+        $listCategory = $this->event_service->getAllCategoriesEvent();
         $petitionList = $this->controlling_service->allPetition();
         return view('admin.listPetition', compact('listCategory', 'petitionList'));
     }
 
     public function acceptPetition($id)
     {
-        //ubah status dari 0 menjadi 1
+        //ubah status event petisi
         $this->controlling_service->acceptPetition($id);
+
+        // kirim pemberitahuan kepada campaigner
         //todo: send email
         $view = "auth.eventConfirmEmail";
         $message = "Event Disetujui";
@@ -88,16 +93,6 @@ class ControllingController extends Controller
         return view('admin.listTransaction', compact('transactions'));
     }
 
-    public function transactionType(Request $request)
-    {
-        return $this->controlling_service->transactionType($request->typeTransaction);
-    }
-
-    public function searchTransaction(Request $request)
-    {
-        return $this->controlling_service->searchTransaction($request->typeTransaction, $request->keyword);
-    }
-
     public function getATransaction($id)
     {
 
@@ -106,19 +101,32 @@ class ControllingController extends Controller
         return view('admin.detailTransaction', compact('transaction'));
     }
 
-    public function donationType(Request $request)
+    public function confirmTransaction($id)
     {
-        return $this->controlling_service->donationType($request->typeDonation);
+
+        //ambil id user dan id donasi
+        $transaction = $this->controlling_service->getAUserTransaction($id);
+
+        //ubah status dari 0 menjadi 5, ubah data perhitungan
+        $this->controlling_service->updateCalculationAfterConfirmDonate($transaction);
+        $this->controlling_service->confirmTransaction($id);
+        // //todo: send email
+        $view = "auth.trxConfirmEmail";
+        $message = "Transaksi donasi Anda selesai diproses";
+        $this->controlling_service->sendEmailTransaction($id, $view, $message);
+        return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Transaksi telah berhasil disetujui.']);
     }
 
-    public function adminSortDonation(Request $request)
+    public function rejectTransaction(Request $request, $id)
     {
-        return $this->controlling_service->adminSortDonation($request);
-    }
-
-    public function adminSearchDonation(Request $request)
-    {
-        return $this->controlling_service->adminSearchDonation($request);
+        $reason = $request->rejectTransaction;
+        //ubah status dari 0 menjadi 5
+        $this->controlling_service->rejectTransaction($id, $reason);
+        //todo: send email
+        $view = "auth.trxRejectEmail";
+        $message = "Transaksi donasi Anda ditolak";
+        $this->controlling_service->sendEmailTransaction($id, $view, $message);
+        return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Penolakan transaksi telah selesai.']);
     }
 
     public function acceptDonation($id)
@@ -159,51 +167,40 @@ class ControllingController extends Controller
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penutupan event donasi telah berhasil.']);
     }
 
-    public function confirmTransaction($id)
+    public function adminSortDonation(Request $request)
     {
-
-        //ambil id user dan id donasi
-        $transaction = $this->controlling_service->getAUserTransaction($id);
-
-        //ubah status dari 0 menjadi 5, ubah data perhitungan
-        $this->controlling_service->updateCalculationAfterConfirmDonate($transaction);
-        $this->controlling_service->confirmTransaction($id);
-        // //todo: send email
-        $view = "auth.trxConfirmEmail";
-        $message = "Transaksi donasi Anda selesai diproses";
-        $this->controlling_service->sendEmailTransaction($id, $view, $message);
-        return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Transaksi telah berhasil disetujui.']);
+        return $this->controlling_service->adminSortDonation($request);
     }
 
-    public function rejectTransaction(Request $request, $id)
+    public function adminSearchDonation(Request $request)
     {
-        $reason = $request->rejectTransaction;
-        //ubah status dari 0 menjadi 5
-        $this->controlling_service->rejectTransaction($id, $reason);
-        //todo: send email
-        $view = "auth.trxRejectEmail";
-        $message = "Transaksi donasi Anda ditolak";
-        $this->controlling_service->sendEmailTransaction($id, $view, $message);
-        return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Penolakan transaksi telah selesai.']);
+        return $this->controlling_service->adminSearchDonation($request);
+    }
+
+    public function donationType(Request $request)
+    {
+        return $this->controlling_service->donationType($request->typeDonation);
+    }
+
+    public function transactionType(Request $request)
+    {
+        return $this->controlling_service->transactionType($request->typeTransaction);
+    }
+
+    public function searchTransaction(Request $request)
+    {
+        return $this->controlling_service->searchTransaction($request->typeTransaction, $request->keyword);
     }
 
     //? ========================================
     //! ~~~~~~~~~~~~~~~~~ Users ~~~~~~~~~~~~~~~~
     //? ========================================
-    public function sortListUser(Request $request)
+    public function getAllUsers()
     {
-        $users =  $this->controlling_service->sortListUser($request);
+        $users = $this->controlling_service->getAllUser();
         $eventCount = $this->controlling_service->countEventParticipate($users);
-        $combine = [];
-        $combine[] = $users;
-        $combine[] = $eventCount;
-
-        return json_encode($combine);
-    }
-
-    public function searchUser(Request $request)
-    {
-        return $this->controlling_service->searchUser($request);
+        $changeDateFormat = $this->controlling_service->changeDateFormat();
+        return view('/admin/listUser', compact('users', 'eventCount', 'changeDateFormat'));
     }
 
     public function getUserInfo($id)
@@ -218,16 +215,6 @@ class ControllingController extends Controller
         $countTotal = $countDonation + $countPetition;
         // dd($countTotal);
         return view('admin.userAdmin', compact('user', 'events', 'countTotal', 'eventMade'));
-    }
-
-    public function getEventParticipate($id)
-    {
-        return $this->controlling_service->getEventsUser($id);
-    }
-
-    public function getEventMade($id)
-    {
-        return $this->controlling_service->getEventsMade($id);
     }
 
     public function acceptUserToCampaigner($id)
@@ -248,14 +235,7 @@ class ControllingController extends Controller
         return redirect("/admin/user/$id")->with(["type" => 'fail', 'message' => 'User ditolak upgrade ke campaigner']);
     }
 
-    public function getAllUsers()
-    {
-        $users = $this->controlling_service->getAllUser();
-        $eventCount = $this->controlling_service->countEventParticipate($users);
-        $changeDateFormat = $this->controlling_service->changeDateFormat();
-        return view('/admin/listUser', compact('users', 'eventCount', 'changeDateFormat'));
-    }
-
+    //! Request melalui ajax
     public function getUsersByRole(Request $request)
     {
         $users = $this->controlling_service->getUsersByRole($request);
@@ -265,6 +245,32 @@ class ControllingController extends Controller
         $combine[] = $eventCount;
 
         return json_encode($combine);
+    }
+
+    public function sortListUser(Request $request)
+    {
+        $users =  $this->controlling_service->sortListUser($request);
+        $eventCount = $this->controlling_service->countEventParticipate($users);
+        $combine = [];
+        $combine[] = $users;
+        $combine[] = $eventCount;
+
+        return json_encode($combine);
+    }
+
+    public function searchUser(Request $request)
+    {
+        return $this->controlling_service->searchUser($request);
+    }
+
+    public function getEventParticipate($id)
+    {
+        return $this->controlling_service->getEventsUser($id);
+    }
+
+    public function getEventMade($id)
+    {
+        return $this->controlling_service->getEventsMade($id);
     }
 
     public function countEventParticipate(Request $request)

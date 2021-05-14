@@ -65,13 +65,6 @@ class EventService
         return true;
     }
 
-    public function countTotalEventParticipatedByUser($idUser)
-    {
-        $donation = $this->event_dao->countParticipatedDonationByUser($idUser);
-        $petition = $this->event_dao->countParticipatedPetitionByUser($idUser);
-        return $donation + $petition;
-    }
-
     // Memberi pesan terkait status event tertentu
     public function messageOfEvent($status)
     {

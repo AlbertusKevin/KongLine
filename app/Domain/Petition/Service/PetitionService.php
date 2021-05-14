@@ -7,40 +7,33 @@ use Carbon\Carbon;
 use App\Domain\Helper\HelperService;
 use App\Domain\Petition\Dao\PetitionDao;
 use App\Domain\Profile\Service\ProfileService;
+use App\Domain\Event\Service\EventService;
 
 class PetitionService
 {
     private $petition_dao;
     private $profile_service;
+    private $event_service;
 
     public function __construct()
     {
         $this->petition_dao = new PetitionDao();
         $this->profile_service = new ProfileService();
+        $this->event_service = new EventService();
     }
 
-    private function updateCalculatedSignPetition($idEvent, $idUser)
+    public function getAllPetition()
     {
-        $count = $this->petition_dao->calculatedSignDonation($idEvent, PETITION);
-        $this->petition_dao->updateCalculatedSign($idEvent, $count);
-
-        // Update jumlah event yang diikuti user\
-        $totalEvent = HelperService::countTotalEventParticipatedByUser($idUser);
-        $this->profile_service->updateCountEventParticipatedByUser($idUser, $totalEvent);
-    }
-
-    public function getPetitionLimit()
-    {
-        return $this->petition_dao->getAllActivePetition()->take(3);
+        return $this->petition_dao->getAllPetition();
     }
 
     //! Menampilkan seluruh petisi yang sedang berlangsung
-    public function getAllActivePetition()
+    public function getActivePetition()
     {
-        return $this->petition_dao->getAllActivePetition();
+        return $this->petition_dao->getActivePetition();
     }
 
-    //! {{-- lewat ajax --}} Menampilkan daftar petisi berdasarkan tipe (berlangsung, telah menang, dll)
+    //! {{-- lewat ajax --}} 
     public function getListPetitionByStatus($request)
     {
         $user = $this->profile_service->getAProfile();
@@ -66,17 +59,16 @@ class PetitionService
         }
 
         if ($request->typePetition == SEMUA) {
-            return $this->petition_dao->allPetition();
+            return $this->petition_dao->getAllPetition();
         }
 
         return $this->petition_dao->listPetitionByMe($user->id);
     }
 
-    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
     public function searchPetition($request)
     {
         $userId = $this->profile_service->getAProfile()->id;
-        $category = HelperService::categorySelect($request);
+        $category = $this->event_service->categorySelect($request);
         $sortBy = $request->sortBy;
 
         if ($request->typePetition == BERLANGSUNG) {
@@ -249,10 +241,9 @@ class PetitionService
         }
     }
 
-    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
     public function sortPetition($request)
     {
-        $category = HelperService::categorySelect($request);
+        $category = $this->event_service->categorySelect($request);
         $userId = $this->profile_service->getAProfile()->id;
 
         //jika tidak sort dan tidak pilih category
@@ -443,42 +434,49 @@ class PetitionService
     }
 
     //! Menampilkan detail petisi sesuai ID Petisi
-    public function showPetition($id)
+    public function getDetailPetition($id)
     {
-        return $this->petition_dao->showPetition($id);
+        return $this->petition_dao->getDetailPetition($id);
     }
 
     //! Menampilkan seluruh komentar pada petisi tertentu sesuai ID Petisi
-    public function commentsPetition($id)
+    public function getCommentsCertainPetition($id)
     {
-        return $this->petition_dao->commentsPetition($id);
+        return $this->petition_dao->getCommentsCertainPetition($id);
     }
 
     //! Menampilkan seluruh berita perkembangan petisi tertentu sesuai ID Petisi
-    public function newsPetition($id)
+    public function getProgressCertainPetition($id)
     {
-        return $this->petition_dao->newsPetition($id);
+        return $this->petition_dao->getProgressCertainPetition($id);
     }
 
     //! Menyimpan perkembangan berita terbaru yang diinput oleh pengguna pada petisi tertentu
-    public function storeProgressPetition($updateNews)
+    public function saveProgressPetition($updateNews)
     {
         $pathImage = HelperService::uploadImage($updateNews->getImage(), "petition/update_news");
         $updateNews->setImage($pathImage);
-        $this->petition_dao->storeProgressPetition($updateNews);
+        $this->petition_dao->saveProgressPetition($updateNews);
     }
 
     //! Memproses tandatangan peserta pada petisi tertentu
-    public function signPetition($request, $idEvent, $user)
+    public function signedThePetition($request, $idEvent, $user)
     {
         $petition = new Model\ParticipatePetition($idEvent, $user->id, $request->petitionComment, Carbon::now()->format('Y-m-d'));
 
-        $this->petition_dao->signPetition($petition, $idEvent, $user);
-        $this->updateCalculatedSignPetition($idEvent, $user->id);
+        // input data participant yang tanda tangan
+        $this->petition_dao->signedThePetition($petition, $idEvent, $user);
+
+        // update jumlah tandatangan petisi
+        $count = $this->petition_dao->getCalculatedSignedPetition($idEvent);
+        $this->petition_dao->updateCalculatedSign($idEvent, $count);
+
+        // update jumlah partisipasi event yang diikuti user
+        $this->profile_service->updateCountEventParticipatedByUser($user->id);
     }
 
     //! Menyimpan data petisi ke database
-    public function storePetition($petition)
+    public function saveDataEventPetition($petition)
     {
         $pathImage = HelperService::uploadImage(
             $petition->getPhoto(),
@@ -486,10 +484,10 @@ class PetitionService
         );
 
         $petition->setPhoto($pathImage);
-        $this->petition_dao->storePetition($petition);
+        $this->petition_dao->saveDataEventPetition($petition);
     }
 
-    //! Menyimpan data petisi ke database
+    //! Mengubah data petisi
     public function updatePetition($petition, $id, $empty)
     {
         if (!$empty) {
@@ -502,18 +500,5 @@ class PetitionService
         }
 
         $this->petition_dao->updatePetition($petition, $id);
-    }
-
-    //! Memeriksa apakah participant sudah pernah berpartisipasi pada event petisi tertentu
-    public function checkParticipated($idEvent, $user, $typeEvent)
-    {
-        if ($user->role != GUEST || $user->role != ADMIN) {
-            $isInList = HelperService::checkParticipated($idEvent, $user->id, $typeEvent);
-            // Cek apakah list hasil query kosong atau tidak. 
-            // Jika true, artinya user belum pernah berpartisipasi di event itu
-            return empty($isInList);
-        }
-
-        return false;
     }
 }

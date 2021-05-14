@@ -3,11 +3,7 @@
 namespace App\Domain\Helper;
 
 use Illuminate\Support\Facades\Auth;
-use App\Domain\Event\Entity\Category;
-use App\Domain\Petition\Entity\ParticipatePetition;
-use App\Domain\Donation\Entity\ParticipateDonation;
-use App\Domain\Donation\Entity\Donation;
-use App\Domain\Petition\Entity\Petition;
+use Illuminate\Support\Facades\Mail;
 
 class HelperService
 {

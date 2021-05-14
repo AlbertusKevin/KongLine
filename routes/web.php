@@ -75,20 +75,20 @@ Route::get('/petition/type', [PetitionController::class, 'getListPetitionByStatu
 Route::get('/petition/search', [PetitionController::class, 'searchPetition']);
 Route::get('/petition/sort', [PetitionController::class, 'sortPetition']);
 
-Route::get('/petition', [PetitionController::class, 'getAllActivePetition']);
-Route::get('/petition/create', [PetitionController::class, 'createPetition']);
-Route::post('/petition/create', [PetitionController::class, 'storePetition']);
-Route::get('/petition/{id}', [PetitionController::class, 'showPetition']);
+Route::get('/petition', [PetitionController::class, 'getActivePetition']);
+Route::get('/petition/create', [PetitionController::class, 'getViewCreatePetition']);
+Route::post('/petition/create', [PetitionController::class, 'saveDataEventPetition']);
+Route::get('/petition/{id}', [PetitionController::class, 'getDetailPetition']);
 
-Route::get('/petition/edit/{id}', [PetitionController::class, 'editPetition']);
+Route::get('/petition/edit/{id}', [PetitionController::class, 'getViewEditPetition']);
 Route::put('/petition/{id}', [PetitionController::class, 'updatePetition']);
 
-Route::get('/petition/comments/{id}', [PetitionController::class, 'commentPetition']);
+Route::get('/petition/comments/{id}', [PetitionController::class, 'getCommentsCertainPetition']);
 
-Route::get('/petition/progress/{id}', [PetitionController::class, 'progressPetition']);
-Route::post('/petition/progress/{id}', [PetitionController::class, 'storeProgressPetition']);
+Route::get('/petition/progress/{id}', [PetitionController::class, 'getProgressCertainPetition']);
+Route::post('/petition/progress/{id}', [PetitionController::class, 'saveProgressPetition']);
 
-Route::post('/petition/{id}', [PetitionController::class, 'signPetition']);
+Route::post('/petition/{id}', [PetitionController::class, 'signedThePetition']);
 
 //? =========================
 //! Route Donation
@@ -98,25 +98,25 @@ Route::get('/donation/search', [DonationController::class, 'searchDonation']);
 Route::get('/donation/sort', [DonationController::class, 'sortDonation']);
 
 //* --- buat donasi ---
-Route::get('/donation/create', [DonationController::class, 'createView']);
-Route::post('/donation/create', [DonationController::class, 'storeDonation']);
+Route::get('/donation/create', [DonationController::class, 'getViewCreateDonation']);
+Route::post('/donation/create', [DonationController::class, 'saveEventDonation']);
 
 //* --- menampilkan donasi ---
 Route::get('/donation', [DonationController::class, 'getAllDonation']);
 Route::get('/donation/{id}', [DonationController::class, 'getADonation']);
-Route::get('/donation/edit/{id}', [DonationController::class, 'editDonation']);
-Route::put('/donation/{id}', [DonationController::class, 'updateDonation']);
+Route::get('/donation/edit/{id}', [DonationController::class, 'getViewEditDonation']);
+Route::put('/donation/{id}', [DonationController::class, 'updateEventDonation']);
 
 //* --- partisipasi dalam donasi ---
-Route::get('/donation/donate/{id}', [DonationController::class, 'formDonate']);
+Route::get('/donation/donate/{id}', [DonationController::class, 'getDonateForm'])->middleware();
 Route::post('/donation/donate/{id}', [DonationController::class, 'postDonate']);
 
 Route::patch('/donation/donate/{id}', [DonationController::class, 'updateDonate']);
-Route::get('/donation/donate/edit/{id}', [DonationController::class, 'editDonate']);
+Route::get('/donation/donate/edit/{id}', [DonationController::class, 'getViewEditDonate']);
 
 //* --- konfirmasi pembayaran donasi ---
-Route::get('/donation/confirm_donate/{id}', [DonationController::class, 'formConfirm']);
-Route::patch('/donation/confirm_donate/{id}', [DonationController::class, 'postConfirm']);
+Route::get('/donation/confirm_donate/{id}', [DonationController::class, 'formPaymentConfirm']);
+Route::patch('/donation/confirm_donate/{id}', [DonationController::class, 'postPaymentConfirm']);
 
 //? =========================
 //! Route Communication
@@ -136,29 +136,30 @@ Route::post('/input', [ForumController::class, 'input']);
 //? =========================
 //! Route Admin
 //? =========================
-
 Route::get('/admin', [ControllingController::class, 'home'])->name('admin')->middleware('admin');
 
 //! Users
 Route::get('/admin/listUser', [ControllingController::class, 'getAllUsers'])->middleware('admin');
-Route::get('/admin/listUser/role', [ControllingController::class, 'getUsersByRole'])->middleware('admin');
 
-Route::get('/admin/listUser/sort', [ControllingController::class, 'sortListUser'])->middleware('admin'); //Sort List User
+//* -------- ajax -----------
+Route::get('/admin/listUser/role', [ControllingController::class, 'getUsersByRole'])->middleware('admin');
+Route::get('/admin/listUser/sort', [ControllingController::class, 'sortListUser'])->middleware('admin');
 Route::get('/admin/listUser/search', [ControllingController::class, 'searchUser'])->middleware('admin');
-Route::get('/admin/listUser/countEvent', [ControllingController::class, 'countEventParticipate'])->middleware('admin');
-Route::get('/admin/user/{id}', [ControllingController::class, 'getUserInfo'])->middleware('admin');
 Route::get('/admin/user/diikuti/{id}', [ControllingController::class, 'getEventParticipate'])->middleware('admin');
 Route::get('/admin/user/dibuat/{id}', [ControllingController::class, 'getEventMade'])->middleware('admin');
+Route::get('/admin/listUser/countEvent', [ControllingController::class, 'countEventParticipate'])->middleware('admin');
+
+Route::get('/admin/user/{id}', [ControllingController::class, 'getUserInfo'])->middleware('admin');
 Route::patch('/admin/user/terimaPengajuan/{id}', [ControllingController::class, 'acceptUserToCampaigner'])->middleware('admin');
 Route::patch('/admin/user/tolakPengajuan/{id}', [ControllingController::class, 'rejectUserToCampaigner'])->middleware('admin');
 
 //! Petition
-Route::get('/admin/petition', [ControllingController::class, 'getListPetition'])->middleware('admin');
+Route::get('/admin/petition', [ControllingController::class, 'getAllPetition'])->middleware('admin');
 Route::patch('/admin/petition/accept/{id}', [ControllingController::class, 'acceptPetition'])->middleware('admin');
 Route::patch('/admin/petition/reject/{id}', [ControllingController::class, 'rejectPetition'])->middleware('admin');
 Route::patch('/admin/petition/close/{id}', [ControllingController::class, 'closePetition'])->middleware('admin');
 
-//! Donation
+//! Donation dan Transaction
 Route::get('/admin/donation', [ControllingController::class, 'getListDonation'])->middleware('admin');
 Route::get('/admin/donation/transaction', [ControllingController::class, 'getAllTransaction'])->middleware('admin');
 Route::get('/admin/donation/transaction/{idEvent}', [ControllingController::class, 'getATransaction'])->middleware('admin');

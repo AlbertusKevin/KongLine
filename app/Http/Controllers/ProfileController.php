@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Domain\Event\Service\EventService;
 use App\Domain\Profile\Service\ProfileService;
 use Illuminate\Support\Facades\Validator;
-use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfileController extends Controller
 {

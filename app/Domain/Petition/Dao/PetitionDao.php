@@ -5,13 +5,11 @@ namespace App\Domain\Petition\Dao;
 use App\Domain\Petition\Entity\ParticipatePetition;
 use App\Domain\Petition\Entity\Petition;
 use App\Domain\Petition\Entity\UpdateNews;
-use App\Domain\Profile\Entity\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Mail;
 
 class PetitionDao
 {
-    public function allPetition()
+    public function getAllPetition()
     {
         return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
             ->join('category', 'petition.category', 'category.id')
@@ -19,10 +17,109 @@ class PetitionDao
             ->get();
     }
 
-    public function listPetition()
+    //! Menampilkan seluruh daftar petisi yang sedang aktif
+    public function getActivePetition()
     {
-        return Petition::all();
+        return Petition::where('status', ACTIVE)->get();
     }
+
+    //! Menampilkan detail petisi tertentu berdasarkan ID
+    public function getDetailPetition($id)
+    {
+        return Petition::where('id', $id)->first();
+    }
+
+    //! Menampilkan komentar yang ada pada petisi tertentu berdasarkan ID
+    public function getCommentsCertainPetition($id)
+    {
+        return ParticipatePetition::where('idPetition', $id)
+            ->join('users', 'participate_petition.idParticipant', '=', 'users.id')
+            ->get();
+    }
+
+    //! Menampilkan berita perkembangan yang ada pada petisi tertentu berdasarkan ID
+    public function getProgressCertainPetition($id)
+    {
+        return UpdateNews::where('idPetition', $id)->get();
+    }
+
+    //! Menyimpan data berita perkembangan yang dibuat oleh campaigner
+    public function saveProgressPetition($updateNews)
+    {
+        UpdateNews::create([
+            'idPetition' => $updateNews->getIdPetition(),
+            'image' => $updateNews->getImage(),
+            'title' => $updateNews->getTitle(),
+            'content' => $updateNews->getContent(),
+            'link' => $updateNews->getLink(),
+            'created_at' => $updateNews->getCreatedAt()
+        ]);
+    }
+
+    //! Menyimpan data event petisi yang dibuat oleh campaigner
+    public function saveDataEventPetition($petition)
+    {
+        Petition::create([
+            'idCampaigner' => $petition->getIdCampaigner(),
+            'title' => $petition->getTitle(),
+            'photo' => $petition->getPhoto(),
+            'category' => $petition->getCategory(),
+            'purpose' => $petition->getPurpose(),
+            'deadline' => $petition->getDeadline(),
+            'status' => $petition->getStatus(),
+            'created_at' => $petition->getCreatedAt(),
+            'signedCollected' => $petition->getSignedCollected(),
+            'signedTarget' => $petition->getSignedTarget(),
+            'targetPerson' => $petition->getTargetPerson()
+        ]);
+    }
+
+    //! Menyimpan data event petisi yang dibuat oleh campaigner
+    public function updatePetition($petition, $id)
+    {
+        Petition::where('id', $id)->update([
+            'idCampaigner' => $petition->getIdCampaigner(),
+            'title' => $petition->getTitle(),
+            'photo' => $petition->getPhoto(),
+            'category' => $petition->getCategory(),
+            'purpose' => $petition->getPurpose(),
+            'deadline' => $petition->getDeadline(),
+            'status' => $petition->getStatus(),
+            'created_at' => $petition->getCreatedAt(),
+            'signedCollected' => $petition->getSignedCollected(),
+            'signedTarget' => $petition->getSignedTarget(),
+            'targetPerson' => $petition->getTargetPerson()
+        ]);
+    }
+
+    //! Menyimpan data participant yang berpartisipasi pada petisi tertentu
+    public function signedThePetition($petition)
+    {
+        return ParticipatePetition::create([
+            'idPetition' => $petition->idPetition,
+            'idParticipant' => $petition->idParticipant,
+            'comment' => $petition->comment,
+            'created_at' => Carbon::now()->format('Y-m-d')
+        ]);
+    }
+
+    //! Mengambil jumlah total tandatangan petisi tertentu saat itu
+    public function getCalculatedSignedPetition($idEvent)
+    {
+        return ParticipatePetition::where('idPetition', $idEvent)->count();
+    }
+
+    //! Update jumlah tandatangan petisi tertentu
+    public function updateCalculatedSign($idEvent, $count)
+    {
+        return Petition::where('id', $idEvent)->update([
+            'signedCollected' => $count
+        ]);
+    }
+
+    //*
+    //* Search, Sort, dan By Category
+    //*
 
     //! Mencari petisi sesuai dengan
     //! status (berdasarkan tipe petisi) dan keyword tertentu
@@ -278,117 +375,5 @@ class PetitionDao
     public function listPetitionByMe($idCampaigner)
     {
         return Petition::where('idCampaigner', $idCampaigner)->get();
-    }
-
-    //! Menampilkan seluruh daftar petisi yang sedang aktif
-    public function getAllActivePetition()
-    {
-        return Petition::where('status', ACTIVE)->get();
-    }
-
-    //! Menampilkan detail petisi tertentu berdasarkan ID
-    public function showPetition($id)
-    {
-        return Petition::where('id', $id)->first();
-    }
-
-    //! Menampilkan komentar yang ada pada petisi tertentu berdasarkan ID
-    public function commentsPetition($id)
-    {
-        return ParticipatePetition::where('idPetition', $id)
-            ->join('users', 'participate_petition.idParticipant', '=', 'users.id')
-            ->get();
-    }
-
-    //! Menampilkan berita perkembangan yang ada pada petisi tertentu berdasarkan ID
-    public function newsPetition($id)
-    {
-        return UpdateNews::where('idPetition', $id)->get();
-    }
-
-    //! Menyimpan data berita perkembangan yang dibuat oleh campaigner
-    public function storeProgressPetition($updateNews)
-    {
-        UpdateNews::create([
-            'idPetition' => $updateNews->getIdPetition(),
-            'image' => $updateNews->getImage(),
-            'title' => $updateNews->getTitle(),
-            'content' => $updateNews->getContent(),
-            'link' => $updateNews->getLink(),
-            'created_at' => $updateNews->getCreatedAt()
-        ]);
-    }
-
-    //! Menyimpan data event petisi yang dibuat oleh campaigner
-    public function storePetition($petition)
-    {
-        Petition::create([
-            'idCampaigner' => $petition->getIdCampaigner(),
-            'title' => $petition->getTitle(),
-            'photo' => $petition->getPhoto(),
-            'category' => $petition->getCategory(),
-            'purpose' => $petition->getPurpose(),
-            'deadline' => $petition->getDeadline(),
-            'status' => $petition->getStatus(),
-            'created_at' => $petition->getCreatedAt(),
-            'signedCollected' => $petition->getSignedCollected(),
-            'signedTarget' => $petition->getSignedTarget(),
-            'targetPerson' => $petition->getTargetPerson()
-        ]);
-    }
-
-    //! Menyimpan data event petisi yang dibuat oleh campaigner
-    public function updatePetition($petition, $id)
-    {
-        Petition::where('id', $id)->update([
-            'idCampaigner' => $petition->getIdCampaigner(),
-            'title' => $petition->getTitle(),
-            'photo' => $petition->getPhoto(),
-            'category' => $petition->getCategory(),
-            'purpose' => $petition->getPurpose(),
-            'deadline' => $petition->getDeadline(),
-            'status' => $petition->getStatus(),
-            'created_at' => $petition->getCreatedAt(),
-            'signedCollected' => $petition->getSignedCollected(),
-            'signedTarget' => $petition->getSignedTarget(),
-            'targetPerson' => $petition->getTargetPerson()
-        ]);
-    }
-
-    //! Menyimpan data participant yang berpartisipasi pada petisi tertentu
-    public function signPetition($petition)
-    {
-        return ParticipatePetition::create([
-            'idPetition' => $petition->idPetition,
-            'idParticipant' => $petition->idParticipant,
-            'comment' => $petition->comment,
-            'created_at' => Carbon::now()->format('Y-m-d')
-        ]);
-    }
-
-    //! Mengambil jumlah total tandatangan petisi tertentu saat itu
-    public function calculatedSignDonation($idEvent, $typeEvent)
-    {
-        if ($typeEvent == PETITION) {
-            return ParticipatePetition::where('idPetition', $idEvent)->count();
-        }
-
-        // return ParticipatePetition::where('idPetition', $idEvent)->count();
-    }
-
-    //! Update jumlah tandatangan petisi tertentu
-    public function updateCalculatedSign($idEvent, $count)
-    {
-        return Petition::where('id', $idEvent)->update([
-            'signedCollected' => $count
-        ]);
-    }
-
-    public function mail($token, $request, $view, $subject)
-    {
-        Mail::send($view, ['token' => $token, 'email' => $request->email], function ($message) use ($request, $subject) {
-            $message->to($request->email);
-            $message->subject($subject);
-        });
     }
 }

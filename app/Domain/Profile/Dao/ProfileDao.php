@@ -3,6 +3,8 @@
 namespace App\Domain\Profile\Dao;
 
 use App\Domain\Profile\Entity\User;
+use App\Domain\Petition\Entity\ParticipatePetition;
+use App\Domain\Donation\Entity\Transaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -61,7 +63,7 @@ class ProfileDao
             'accountNumber' => $request->rekening,
             'nik' => $request->nik,
             'ktpPicture' => $pathKTP,
-            'status' => 3
+            'status' => WAITING
         ]);
     }
 
@@ -79,6 +81,17 @@ class ProfileDao
         ]);
     }
 
+    public function countParticipatedDonationByUser($idUser)
+    {
+        return Transaction::where('idParticipant', $idUser)
+            ->where('status', CONFIRMED_TRANSACTION)
+            ->count();
+    }
+
+    public function countParticipatedPetitionByUser($idUser)
+    {
+        return ParticipatePetition::where('idParticipant', $idUser)->count();
+    }
     //* =========================================================================================
     //* --------------------------------------- DAO Auth ----------------------------------------
     //* =========================================================================================
@@ -98,16 +111,8 @@ class ProfileDao
     public function reset($token, $request)
     {
         return DB::table('password_resets')->insert(
-            ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]
+            ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now('+7:00')]
         );
-    }
-
-    public function mail($token, $request, $view, $subject)
-    {
-        Mail::send($view, ['token' => $token, 'email' => $request->email], function ($message) use ($request, $subject) {
-            $message->to($request->email);
-            $message->subject($subject);
-        });
     }
 
     public function getPasswordReset($request)
@@ -126,5 +131,13 @@ class ProfileDao
     public function deleteToken($request)
     {
         DB::table('password_resets')->where(['email' => $request->email])->delete();
+    }
+
+    public function  mailForgotPassword($token, $request, $view, $subject)
+    {
+        Mail::send($view, ['token' => $token, 'email' => $request->email], function ($message) use ($request, $subject) {
+            $message->to($request->email);
+            $message->subject($subject);
+        });
     }
 }

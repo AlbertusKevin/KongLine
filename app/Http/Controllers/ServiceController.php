@@ -53,15 +53,4 @@ class ServiceController extends Controller
             'navbar' => $navbar
         ]);
     }
-
-    public function getRender($user, $admin)
-    {
-        $navbar = HelperService::getNavbar();
-
-        return view('livewire.message', [
-            'users' => $user,
-            'admin' => $admin,
-            'navbar' => $navbar
-        ]);
-    }
 }
