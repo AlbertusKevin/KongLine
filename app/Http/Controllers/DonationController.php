@@ -48,18 +48,12 @@ class DonationController extends Controller
 
     public function getADonation($id)
     {
-        $donation = $this->donation_service->getADonation($id); // detail donasi mencakup siapa pembuat event itu
+        $donation = $this->donation_service->getCompleteInformationADonation($id);
         $user = $this->profile_service->getAProfile();
-        $progress = $this->donation_service->countProgressDonation($donation); // untuk progress bar
-        $participatedDonation = $this->donation_service->getParticipatedDonation($id); // untuk tab donatur dan comment
-        $alocationBudget = $this->donation_service->getABudgetingDonation($id); // untuk tab alokasi dana
-        // pengecekan, apakah donasi di event ini sudah dikonfirmasi pembayaran oleh user
-        $userTransactionStatus = $this->donation_service->checkUserTransactionStatus($participatedDonation, $user->id);
-        $allStatusZero = $this->donation_service->checkStatusIsZero($participatedDonation);
-
-        $category = $this->event_service->getACategory($donation->category); // untuk menampilkan kategori
-        $isParticipated = $this->event_service->checkParticipated($id, $user, DONATION); // untuk pengecekan apakah pernah donasi atau tidak
-        $message = $this->event_service->messageOfEvent($donation->status); // Menampilkan pesan status sebuah event
+        $userTransactionStatus = $this->donation_service->checkAnUserTransactionStatus($donation['participated'], $user->id);
+        // cek apakah user ini pernah berpartisipasi di event ini
+        $isParticipated = $this->event_service->checkParticipated($id, $user, DONATION);
+        $message = $this->event_service->messageOfEvent($donation['detail']->status);
         $navbar = HelperService::getNavbar();
 
         return view(
@@ -67,14 +61,9 @@ class DonationController extends Controller
             compact(
                 'donation',
                 'user',
-                'progress',
-                'category',
-                'participatedDonation',
-                'alocationBudget',
                 'isParticipated',
-                'message',
                 'userTransactionStatus',
-                'allStatusZero',
+                'message',
                 'navbar'
             )
         );
@@ -85,7 +74,7 @@ class DonationController extends Controller
     {
         $user = $this->profile_service->getAProfile();
         $listCategory = $this->event_service->getAllCategoriesEvent();
-        $listBank = $this->donation_service->listBank();
+        $listBank = $this->donation_service->getListOfBank();
 
         return view('donation.donationCreate', compact('user', 'listCategory', 'listBank'));
     }
@@ -153,7 +142,7 @@ class DonationController extends Controller
         $user = $this->profile_service->getAProfile();
         $donation = $this->donation_service->getADonation($id);
         $listCategory = $this->event_service->getAllCategoriesEvent();
-        $listBank = $this->donation_service->listBank();
+        $listBank = $this->donation_service->getListOfBank();
         $detailAllocation = $this->donation_service->getDetailAllocation($id);
         return view('donation.donationEdit', compact('user', 'donation', 'listCategory', 'listBank', 'detailAllocation'));
     }

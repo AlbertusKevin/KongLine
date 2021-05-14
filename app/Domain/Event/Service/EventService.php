@@ -2,20 +2,15 @@
 
 namespace App\Domain\Event\Service;
 
-use App\Domain\Profile\Entity\User;
-use App\Domain\Profile\Service\ProfileService;
 use App\Domain\Event\Dao\EventDao;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Mail;
 
 class EventService
 {
-    private $profile_service;
     private $event_dao;
 
     public function __construct()
     {
-        $this->profile_service = new ProfileService();
         $this->event_dao = new EventDao();
     }
 
@@ -65,6 +60,26 @@ class EventService
         return true;
     }
 
+    public function checkAnnonym($checked)
+    {
+        if ($checked == 'on') {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    public function checkValidDate($event, $typeEvent)
+    {
+        $time = Carbon::now('+7:00')->format("Y-m-d");
+
+        if (strtotime($event->deadline) - strtotime($time) <= 0) {
+            return $this->event_dao->updateStatusEvent($event->id, FINISHED, $typeEvent);
+        }
+
+        return $event;
+    }
+
     // Memberi pesan terkait status event tertentu
     public function messageOfEvent($status)
     {
@@ -94,14 +109,5 @@ class EventService
             'header' => 'Dibatalkan',
             'content' => 'Event ini dibatalkan oleh penyelenggara.'
         ];
-    }
-
-    public function checkAnnonym($checked)
-    {
-        if ($checked == 'on') {
-            return 1;
-        }
-
-        return 0;
     }
 }

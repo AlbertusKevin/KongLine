@@ -5,19 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Domain\Controlling\Service\ControllingService;
 use App\Domain\Event\Service\EventService;
-use App\Domain\Helper\HelperService;
-use App\Domain\Profile\Service\ProfileService;
 
 class ControllingController extends Controller
 {
     private $controlling_service;
-    private $profile_service;
     private $event_service;
 
     public function __construct()
     {
         $this->controlling_service = new ControllingService();
-        $this->profile_service = new ProfileService();
         $this->event_service = new EventService();
     }
     public function home()

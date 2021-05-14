@@ -450,7 +450,7 @@ class ControllingDao
             ->get();
     }
 
-    ////Mencari User sesuai keyword untuk tab PENGAJUAN
+    //Mencari User sesuai keyword untuk tab PENGAJUAN
     public function searchUserPengajuan($keyword)
     {
         return User::where('status', '=', 3)
@@ -485,16 +485,6 @@ class ControllingDao
             ->select('donation.id', 'category.description', 'donation.photo', 'donation.title', 'users.name')
             ->get();
 
-        /*SQL Syntax :
-                            SELECT 'donation.id','donation.category','donation.photo','donation.title','users.name' 
-                            FROM `Donation` 
-                            JOIN(`participate_donation`) 
-                            ON `participate_donation.id` = `donation.id`
-                            JOIN(`users`)
-                            ON `users.id` = `donation.idCampaigner'
-                            WHERE('participate_donation.idParticipant' = $id);
-                        */
-
         return $donations;
     }
 
@@ -508,16 +498,6 @@ class ControllingDao
             ->get();
 
         return $petitions;
-    }
-
-    public function countDonationMade($id)
-    {
-        return Donation::where('idCampaigner', $id)->count();
-    }
-
-    public function countPetitionMade($id)
-    {
-        return Petition::where('idCampaigner', $id)->count();
     }
 
     public function sendEmail($event, $view, $subject, $event_chosen)
@@ -542,6 +522,16 @@ class ControllingDao
         return Petition::find($id);
     }
 
+    public function countDonationMade($id)
+    {
+        return Donation::where('idCampaigner', $id)->count();
+    }
+
+    public function countPetitionMade($id)
+    {
+        return Petition::where('idCampaigner', $id)->count();
+    }
+
     public function getUserMadeDonation($id)
     {
         $donations = Donation::join('users', 'users.id', 'donation.idCampaigner')
@@ -550,16 +540,6 @@ class ControllingDao
             ->select('donation.id', 'category.description', 'donation.photo', 'donation.title', 'users.name')
             ->get();
         return $donations;
-
-        /*SQL Syntax :
-                            SELECT 'donation.id','donation.category','donation.photo','donation.title','users.name' 
-                            FROM `Donation` 
-                            JOIN(`users`)
-                            ON `users.id` = `donation.idCampaigner'
-                            JOIN(`category`)
-                            ON `categry.id` = `donation.category`
-                            WHERE('donation.idCampaigner' = $id);
-                        */
     }
 
     public function getUserMadePetition($id)

@@ -12,7 +12,7 @@ class DonationDao
 {
 
     //! Mengambil nama bank yang bisa digunakan untuk transfer
-    public function listBank()
+    public function getListOfBank()
     {
         return Bank::all();
     }
@@ -29,9 +29,10 @@ class DonationDao
     //! Mengambil seluruh donasi dengan status aktif / sedang berlangsung
     public function getADonation($id)
     {
-        return Donation::selectRaw('donation.*, users.name as name')
+        return Donation::selectRaw('donation.*, users.name as name, category.description as category_description')
             ->where('donation.id', $id)
             ->join('users', 'donation.idCampaigner', 'users.id')
+            ->join('category', 'category.id', 'donation.category')
             ->first();
     }
 
@@ -49,7 +50,6 @@ class DonationDao
                     ->on('transaction.idDonation', 'participate_donation.idDonation');
             })
             ->where('participate_donation.idDonation', $idEvent)
-            // ->where('transaction.status', 1)
             ->get();
     }
 
@@ -341,12 +341,5 @@ class DonationDao
     public function getLastIdDonation()
     {
         return Donation::orderBy('id', 'desc')->take(1)->first();
-    }
-
-    public function updateStatusEvent($id, $status)
-    {
-        Donation::where('id', $id)->update([
-            'status' => $status
-        ]);
     }
 }

@@ -5,23 +5,38 @@ namespace App\Domain\Donation\Service;
 use App\Domain\Donation\Dao\DonationDao;
 use App\Domain\Helper\HelperService;
 use App\Domain\Profile\Service\ProfileService;
+use App\Domain\Event\Service\EventService;
 use Carbon\Carbon;
 
 class DonationService
 {
     private $donation_dao;
     private $profile_service;
+    private $event_service;
 
     public function __construct()
     {
         $this->profile_service = new ProfileService();
+        $this->event_service = new EventService();
         $this->donation_dao = new DonationDao();
     }
 
     //! Mengambil nama bank yang bisa digunakan untuk transfer
-    public function listBank()
+    public function getListOfBank()
     {
-        return $this->donation_dao->listBank();
+        return $this->donation_dao->getListOfBank();
+    }
+
+    public function getListDonation()
+    {
+        $listDonation = $this->donation_dao->getListDonation();
+        $list = [];
+
+        foreach ($listDonation as $donation) {
+            $list[] = $this->event_service->checkValidDate($donation, DONATION);
+        }
+
+        return $list;
     }
 
     public function getThreeActiveDonation()
@@ -31,7 +46,7 @@ class DonationService
         $listThreeDonationActive = [];
 
         foreach ($listDonation as $donation) {
-            $listValidDate[] = $this->checkValidDate($donation);
+            $listValidDate[] = $this->event_service->checkValidDate($donation, DONATION);
         }
 
         for ($i = 0; $i < 3; $i++) {
@@ -41,27 +56,22 @@ class DonationService
         return $listThreeDonationActive;
     }
 
-    public function checkValidDate($donation)
+    public function getCompleteInformationADonation($id)
     {
-        $time = Carbon::now('+7:00')->format("Y-m-d");
+        $info_donation = [];
 
-        if (strtotime($donation->deadline) - strtotime($time) <= 0) {
-            return $this->donation_dao->updateStatusEvent($donation->id, FINISHED);
-        }
+        // detail donasi mencakup pembuat event tersebut
+        $info_donation['detail'] = $this->getADonation($id);
+        // progres pengumpulan dana
+        $info_donation['progress'] = ($info_donation['detail']->donationCollected / $info_donation['detail']->donationTarget) * 100;; // untuk progress bar
+        // siapa saja yang sudah ikut berdonasi dan sudah konfirmasi pembayaran
+        $info_donation['participated'] =  $this->donation_dao->getParticipatedDonation($id); // untuk tab donatur dan comment
+        // rincian alokasi dana dari hasil donasi
+        $info_donation['budgetAlloc'] = $this->donation_dao->getABudgetingDonation($id);
+        // cek apakah semua yang ada di tabel partisipasi belum mengkonfirmasi pembayaran
+        $info_donation['isAllTransactionNotConfirmed'] = $this->isAllTransactionNotConfirmed($info_donation['participated']);
 
-        return $donation;
-    }
-
-    public function getListDonation()
-    {
-        $listDonation = $this->donation_dao->getListDonation();
-        $list = [];
-
-        foreach ($listDonation as $donation) {
-            $list[] = $this->checkValidDate($donation);
-        }
-
-        return $list;
+        return $info_donation;
     }
 
     public function getADonation($id)
@@ -69,37 +79,31 @@ class DonationService
         return $this->donation_dao->getADonation($id);
     }
 
+    // Mengambil detail sebuah donasi, termasuk list donatur, comment, dan detail alokasi dana
     public function getDetailAllocation($id)
     {
         return $this->donation_dao->getDetailAllocation($id);
     }
 
-    public function getParticipatedDonation($id)
-    {
-        return $this->donation_dao->getParticipatedDonation($id);
-    }
-
-    public function getABudgetingDonation($id)
-    {
-        return $this->donation_dao->getABudgetingDonation($id);
-    }
-
+    // Menyimpan data partisipasi donasi user tertentu
     public function postDonate($participateDonation)
     {
         $this->donation_dao->postDonate($participateDonation);
     }
 
+    // mengkonfirmasi pembayaran donasi
     public function postTransaction($transaction)
     {
         $this->donation_dao->postTransaction($transaction);
     }
 
+    // mengambil detail transaksi user tertentu
     public function getAUserTransaction($idUser, $idEvent)
     {
         return $this->donation_dao->getAUserTransaction($idUser, $idEvent);
     }
 
-    public function checkUserTransactionStatus($participatedDonation, $id)
+    public function checkAnUserTransactionStatus($participatedDonation, $id)
     {
         foreach ($participatedDonation as $participate) {
             if ($participate->idParticipant == $id) {
@@ -109,19 +113,22 @@ class DonationService
                 if ($participate->status == 2) {
                     return NOT_CONFIRMED_TRANSACTION;
                 }
+                if ($participate->status == 3) {
+                    return REJECTED_TRANSACTION;
+                }
                 if (!empty($participate->repaymentPicture) && $participate->status == 0) {
                     return NOT_UPLOADED;
                 }
             }
         }
 
-        return REJECTED_TRANSACTION;
+        return false;
     }
 
-    public function checkStatusIsZero($participatedDonation)
+    public function isAllTransactionNotConfirmed($participatedDonation)
     {
-        foreach ($participatedDonation as $comment) {
-            if ($comment->status == 1) {
+        foreach ($participatedDonation as $donate) {
+            if ($donate->status == 1) {
                 return false;
             }
         }
@@ -139,18 +146,13 @@ class DonationService
         $this->donation_dao->changeStatusTransactionDonation($id);
     }
 
-    public function countProgressDonation($donation)
-    {
-        return ($donation->donationCollected / $donation->donationTarget) * 100;
-    }
-
     //! {{-- lewat ajax --}} Mencari donasi sesuai urutan dan kategori yang dipilih
     public function searchDonation($request)
     {
         $this->getListDonation();
 
         $userId = $this->profile_service->getAProfile()->id;
-        $category = HelperService::categorySelect($request);
+        $category = $this->event_service->categorySelect($request);
         $sortBy = $request->sortBy;
 
         // search biasa tanpa kategori dan sorting tertentu
@@ -212,7 +214,7 @@ class DonationService
     {
         $this->getListDonation();
 
-        $category = HelperService::categorySelect($request);
+        $category = $this->event_service->categorySelect($request);
         $userId = $this->profile_service->getAProfile()->id;
 
         //jika tidak sort dan tidak pilih category

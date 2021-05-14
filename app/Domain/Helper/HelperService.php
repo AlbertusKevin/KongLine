@@ -3,7 +3,6 @@
 namespace App\Domain\Helper;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
 class HelperService
 {

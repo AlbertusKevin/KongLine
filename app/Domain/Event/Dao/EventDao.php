@@ -6,6 +6,8 @@ use App\Domain\Profile\Entity\User;
 use App\Domain\Event\Entity\Category;
 use App\Domain\Donation\Entity\ParticipateDonation;
 use App\Domain\Petition\Entity\ParticipatePetition;
+use App\Domain\Petition\Entity\Petition;
+use App\Domain\Donation\Entity\Donation;
 
 class EventDao
 {
@@ -32,5 +34,18 @@ class EventDao
         }
 
         return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
+    }
+
+    public function updateStatusEvent($id, $status, $typeEvent)
+    {
+        if ($typeEvent == DONATION) {
+            Donation::where('id', $id)->update([
+                'status' => $status
+            ]);
+        }
+
+        Petition::where('id', $id)->update([
+            'status' => $status
+        ]);
     }
 }

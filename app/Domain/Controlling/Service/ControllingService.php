@@ -3,7 +3,6 @@
 namespace App\Domain\Controlling\Service;
 
 use App\Domain\Controlling\Dao\ControllingDao;
-use App\Domain\Event\Service\EventService;
 use App\Domain\Petition\Service\PetitionService;
 use App\Domain\Profile\Service\ProfileService;
 use Illuminate\Support\Carbon;
@@ -39,21 +38,9 @@ class ControllingService
         return $dashboard_data;
     }
 
-    public function sendEmailPetition($id, $view, $subject)
-    {
-        $petition = $this->controlling_dao->getPetitionById($id);
-        $event = "petisi";
-        $emailCampaigner = $this->controlling_dao->sendEmail($petition, $view, $subject, $event);
-    }
-
-    public function sendEmailDonation($id, $view, $subject)
-    {
-        $donation = $this->controlling_dao->getDonationById($id);
-        $event = "donasi";
-        $emailCampaigner = $this->controlling_dao->sendEmail($donation, $view, $subject, $event);
-    }
-
-
+    //? ========================================
+    //! ~~~~~~~~~~~~~~~~~ Users ~~~~~~~~~~~~~~~~
+    //? ========================================
     //Mengambil semua user yang ada di DB
     public function getAllUser()
     {
@@ -109,28 +96,128 @@ class ControllingService
         }
     }
 
-    public function allPetition()
+    public function sortlistUser($request)
     {
-        return $this->petition_service->getAllPetition();
+        if ($request->sortBy == 'None') {
+            return $this->getUsersByRole($request->roleUserType);
+        }
+
+        if ($request->sortBy == 'Tanggal dibuat') {
+            if ($request->roleUserType == 'semua') {
+                return $this->controlling_dao->sortByTanggalDibuatAllUser();
+            } else {
+                return $this->controlling_dao->sortByTanggalDibuat($request->roleUserType);
+            }
+        }
+
+        if ($request->sortBy == 'Nama') {
+            if ($request->roleUserType == 'semua') {
+                return $this->controlling_dao->sortByNamaAllUser();
+            } else {
+                return $this->controlling_dao->sortByNama($request->roleUserType);
+            }
+        }
+
+        if ($request->sortBy == 'Email') {
+            if ($request->roleUserType == 'semua') {
+                return $this->controlling_dao->sortByEmailAllUser();
+            } else {
+                return $this->controlling_dao->sortByEmail($request->roleUserType);
+            }
+        }
+
+        if ($request->sortBy == 'Jumlah Partisipasi') {
+            if ($request->roleUserType == 'semua') {
+                return $this->controlling_dao->sortByCountEventAll();
+            } else {
+                return $this->controlling_dao->sortByCountEvent($request->roleUserType);
+            }
+        }
+
+        if ($request->sortBy == 'Role') {
+            if ($request->roleUserType == 'semua') {
+                return $this->controlling_dao->sortByRoleAll();
+            } else {
+                return $this->controlling_dao->sortByRoleSpecific($request->roleUserType);
+            }
+        }
     }
 
-    public function acceptPetition($id)
+    public function searchUser($request)
     {
-        $this->controlling_dao->changeEventStatus($id, ACTIVE, PETITION);
+        if ($request->roleUserType == 'semua') {
+            return $this->controlling_dao->searchUserAll($request->keyword);
+        }
+
+        if ($request->roleUserType == 'participant') {
+            return $this->controlling_dao->searchUserParticipant($request->keyword);
+        }
+
+        if ($request->roleUserType == 'campaigner') {
+            return $this->controlling_dao->searchUserCampaigner($request->keyword);
+        }
+
+        if ($request->roleUserType == 'pengajuan') {
+            return $this->controlling_dao->searchUserPengajuan($request->keyword);
+        }
     }
 
-    public function rejectPetition($id, $reason)
+    public function getUserInfo($id)
     {
-        $this->controlling_dao->changeEventStatus($id, REJECTED, PETITION);
-        $this->controlling_dao->changeReason($id, PETITION, $reason);
+        return $this->controlling_dao->getUserInfo($id);
     }
 
-    public function closePetition($id, $reason)
+    public function getEventsUser($id)
     {
-        $this->controlling_dao->changeEventStatus($id, CLOSED, PETITION);
-        $this->controlling_dao->changeReason($id, PETITION, $reason);
+        $donations = $this->controlling_dao->getUserParticipateDonation($id);
+        $petitions = $this->controlling_dao->getUserParticipatePetition($id);
+        $events = collect();
+        $events->push($donations);
+        $events->push($petitions);
+        return $events;
     }
 
+    public function countEventMade($id)
+    {
+        $donationCount = $this->controlling_dao->countDonationMade($id);
+        $petitionCount = $this->controlling_dao->countPetitionMade($id);
+
+        return $donationCount + $petitionCount;
+    }
+
+    public function getEventsMade($id)
+    {
+        $donations = $this->controlling_dao->getUserMadeDonation($id);
+        $petitions = $this->controlling_dao->getUserMadePetition($id);
+        $events = collect();
+        $events->push($donations);
+        $events->push($petitions);
+        //dd($events);
+
+        return $events;
+    }
+
+
+    public function acceptUserToCampaigner($id, $view, $subject)
+    {
+
+        $user = $this->controlling_dao->getUserById($id);
+        $emailUser = $this->controlling_dao->sendEmailUser($user, $view, $subject);
+
+        return $this->controlling_dao->acceptUserToCampaigner($id, ACTIVE, CAMPAIGNER);
+    }
+
+    public function rejectUserToCampaigner($id, $view, $subject)
+    {
+
+        $user = $this->controlling_dao->getUserById($id);
+        $emailUser = $this->controlling_dao->sendEmailUser($user, $view, $subject);
+
+        return $this->controlling_dao->rejectUserToCampaigner($id, ACTIVE, PARTICIPANT);
+    }
+    //? ========================================
+    //! ~~~~~~~~~~~~~~~~ Donasi ~~~~~~~~~~~~~~~~
+    //? ========================================
     public function allDonation()
     {
         return $this->controlling_dao->allDonation();
@@ -297,53 +384,6 @@ class ControllingService
             // Jika hanya pilih berdasarkan category
             if ($request->sortBy == NONE) {
                 return $this->controlling_dao->allStatusDonationByCategory($category);
-            }
-        }
-    }
-
-    public function sortlistUser($request)
-    {
-        if ($request->sortBy == 'None') {
-            return $this->getUsersByRole($request->roleUserType);
-        }
-
-        if ($request->sortBy == 'Tanggal dibuat') {
-            if ($request->roleUserType == 'semua') {
-                return $this->controlling_dao->sortByTanggalDibuatAllUser();
-            } else {
-                return $this->controlling_dao->sortByTanggalDibuat($request->roleUserType);
-            }
-        }
-
-        if ($request->sortBy == 'Nama') {
-            if ($request->roleUserType == 'semua') {
-                return $this->controlling_dao->sortByNamaAllUser();
-            } else {
-                return $this->controlling_dao->sortByNama($request->roleUserType);
-            }
-        }
-
-        if ($request->sortBy == 'Email') {
-            if ($request->roleUserType == 'semua') {
-                return $this->controlling_dao->sortByEmailAllUser();
-            } else {
-                return $this->controlling_dao->sortByEmail($request->roleUserType);
-            }
-        }
-
-        if ($request->sortBy == 'Jumlah Partisipasi') {
-            if ($request->roleUserType == 'semua') {
-                return $this->controlling_dao->sortByCountEventAll();
-            } else {
-                return $this->controlling_dao->sortByCountEvent($request->roleUserType);
-            }
-        }
-
-        if ($request->sortBy == 'Role') {
-            if ($request->roleUserType == 'semua') {
-                return $this->controlling_dao->sortByRoleAll();
-            } else {
-                return $this->controlling_dao->sortByRoleSpecific($request->roleUserType);
             }
         }
     }
@@ -521,6 +561,10 @@ class ControllingService
         $this->controlling_dao->changeReason($id, DONATION, $reason);
     }
 
+    //? ========================================
+    //! ~~~~~~~~~~~~~ Transaction ~~~~~~~~~~~~~~
+    //? ========================================
+
     public function updateCalculationAfterConfirmDonate($transaction)
     {
         // ubah jumlah event yang diikuti untuk user tertentu
@@ -591,84 +635,51 @@ class ControllingService
         return $this->controlling_dao->searchTransactionWithStatusByDonationTitle(REJECTED_TRANSACTION, $keyword);
     }
 
+    //? ========================================
+    //! ~~~~~~~~~~~~~~~~ Petisi ~~~~~~~~~~~~~~~~
+    //? ========================================
+    public function allPetition()
+    {
+        return $this->petition_service->getAllPetition();
+    }
+
+    public function acceptPetition($id)
+    {
+        $this->controlling_dao->changeEventStatus($id, ACTIVE, PETITION);
+    }
+
+    public function rejectPetition($id, $reason)
+    {
+        $this->controlling_dao->changeEventStatus($id, REJECTED, PETITION);
+        $this->controlling_dao->changeReason($id, PETITION, $reason);
+    }
+
+    public function closePetition($id, $reason)
+    {
+        $this->controlling_dao->changeEventStatus($id, CLOSED, PETITION);
+        $this->controlling_dao->changeReason($id, PETITION, $reason);
+    }
+
+
+
+    //todo: refactor
+    public function sendEmailPetition($id, $view, $subject)
+    {
+        $petition = $this->controlling_dao->getPetitionById($id);
+        $event = "petisi";
+        $this->controlling_dao->sendEmail($petition, $view, $subject, $event);
+    }
+
+    public function sendEmailDonation($id, $view, $subject)
+    {
+        $donation = $this->controlling_dao->getDonationById($id);
+        $event = "donasi";
+        $this->controlling_dao->sendEmail($donation, $view, $subject, $event);
+    }
 
     public function sendEmailTransaction($id, $view, $subject)
     {
         $trx = $this->controlling_dao->getTransactionById($id);
         $emailCampaigner = $this->controlling_dao->sendEmailTrx($trx, $view, $subject);
-    }
-
-
-    public function searchUser($request)
-    {
-        if ($request->roleUserType == 'semua') {
-            return $this->controlling_dao->searchUserAll($request->keyword);
-        }
-
-        if ($request->roleUserType == 'participant') {
-            return $this->controlling_dao->searchUserParticipant($request->keyword);
-        }
-
-        if ($request->roleUserType == 'campaigner') {
-            return $this->controlling_dao->searchUserCampaigner($request->keyword);
-        }
-
-        if ($request->roleUserType == 'pengajuan') {
-            return $this->controlling_dao->searchUserPengajuan($request->keyword);
-        }
-    }
-
-    public function getUserInfo($id)
-    {
-        return $this->controlling_dao->getUserInfo($id);
-    }
-
-    public function getEventsUser($id)
-    {
-        $donations = $this->controlling_dao->getUserParticipateDonation($id);
-        $petitions = $this->controlling_dao->getUserParticipatePetition($id);
-        $events = collect();
-        $events->push($donations);
-        $events->push($petitions);
-        return $events;
-    }
-
-    public function countEventMade($id)
-    {
-        $donationCount = $this->controlling_dao->countDonationMade($id);
-        $petitionCount = $this->controlling_dao->countPetitionMade($id);
-
-        return $donationCount + $petitionCount;
-    }
-
-    public function getEventsMade($id)
-    {
-        $donations = $this->controlling_dao->getUserMadeDonation($id);
-        $petitions = $this->controlling_dao->getUserMadePetition($id);
-        $events = collect();
-        $events->push($donations);
-        $events->push($petitions);
-        //dd($events);
-
-        return $events;
-    }
-
-
-    public function acceptUserToCampaigner($id, $view, $subject)
-    {
-
-        $user = $this->controlling_dao->getUserById($id);
-        $emailUser = $this->controlling_dao->sendEmailUser($user, $view, $subject);
-
-        return $this->controlling_dao->acceptUserToCampaigner($id, ACTIVE, CAMPAIGNER);
-    }
-
-    public function rejectUserToCampaigner($id, $view, $subject)
-    {
-
-        $user = $this->controlling_dao->getUserById($id);
-        $emailUser = $this->controlling_dao->sendEmailUser($user, $view, $subject);
-
-        return $this->controlling_dao->rejectUserToCampaigner($id, ACTIVE, PARTICIPANT);
     }
 }
