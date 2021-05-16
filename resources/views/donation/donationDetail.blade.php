@@ -25,11 +25,9 @@
                                             @if (!$isParticipated)
                                                 <div class="col-md-6">
                                                     @if ($user->role == GUEST || $user->role == ADMIN)
-
-                                                        <button type="button" class="btn btn-danger donate-button" disabled>
-                                                            Donasikan
-                                                        </button>
-                                                        <small>Login sebagai participant untuk ikut berdonasi</small>
+                                                        <small class="badge badge-info">
+                                                            Login sebagai peserta untuk ikut berdonasi
+                                                        </small>
                                                         <p class="mt-2">
                                                             {{ ceil((strtotime($donation['detail']->deadline) - time()) / (60 * 60 * 24)) }}
                                                             Hari Lagi!</p>
@@ -229,7 +227,7 @@
                     @foreach ($donation['budgetAlloc'] as $budget)
                         <tr>
                             <td>{{ $budget->description }}</td>
-                            <td>{{ $budget->nominal }}</td>
+                            <td>Rp. {{ number_format($budget->nominal, 2, ',', '.') }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -240,14 +238,24 @@
                 @foreach ($donation['participated'] as $donatur)
                     @if ($donatur->status == 1)
                         <li class="list-group-item">
-                            @if ($donatur->annonymous_comment == 1)
-                                <img src="{{ DEFAULT_PROFILE }}" alt="Photo Profile" class="donatur-photo">
-                                <span class="ml-3"> Annonymous </span>
-                            @else
-                                <img src="{{ $donatur->photoProfile }}" alt="{{ $donatur->name }} Profile"
-                                    class="donatur-photo">
-                                <span class="ml-3"> {{ $donatur->name }} </span>
-                            @endif
+                            <div class="row text-left">
+                                @if ($donatur->annonymous_comment == 1)
+                                    <div class="col-md-2 offset-md-2">
+                                        <img src="{{ DEFAULT_PROFILE }}" alt="Photo Profile" class="donatur-photo">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <span class="ml-3"> Annonymous </span>
+                                    </div>
+                                @else
+                                    <div class="col-md-2 offset-md-2">
+                                        <img src="{{ $donatur->photoProfile }}" alt="{{ $donatur->name }} Profile"
+                                            class="donatur-photo rounded-circle">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <span class="ml-3"> {{ $donatur->name }} </span>
+                                    </div>
+                                @endif
+                            </div>
                         </li>
                     @endif
                 @endforeach
