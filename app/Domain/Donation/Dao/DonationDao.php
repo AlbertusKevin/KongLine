@@ -17,8 +17,16 @@ class DonationDao
         return Bank::all();
     }
 
+    public function getAllDonation()
+    {
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
+            ->get();
+    }
+
     //! Mengambil seluruh donasi dengan status aktif / sedang berlangsung
-    public function getListDonation()
+    public function getListActiveDonation()
     {
         return Donation::selectRaw('donation.*, users.name as name')
             ->where('donation.status', ACTIVE)
@@ -99,7 +107,9 @@ class DonationDao
 
     public function getAUserTransaction($idUser, $idEvent)
     {
-        return Transaction::where('idParticipant', $idUser)->where('idDonation', $idEvent)->first();
+        return Transaction::where('idParticipant', $idUser)
+            ->where('idDonation', $idEvent)
+            ->first();
     }
 
     //! Mencari Donasi sesuai dengan 

@@ -3,15 +3,21 @@
 namespace App\Domain\Event\Service;
 
 use App\Domain\Event\Dao\EventDao;
+use App\Domain\Petition\Dao\PetitionDao;
+use App\Domain\Donation\Dao\DonationDao;
 use Carbon\Carbon;
 
 class EventService
 {
     private $event_dao;
+    private $donation_dao;
+    private $petition_dao;
 
     public function __construct()
     {
         $this->event_dao = new EventDao();
+        $this->donation_dao = new DonationDao();
+        $this->petition_dao = new PetitionDao();
     }
 
     //! Mengecek verifikasi data diri yang diberikan sebelum membuat event
@@ -74,10 +80,8 @@ class EventService
         $time = Carbon::now('+7:00')->format("Y-m-d");
 
         if (strtotime($event->deadline) - strtotime($time) <= 0) {
-            return $this->event_dao->updateStatusEvent($event->id, FINISHED, $typeEvent);
+            $this->event_dao->updateStatusEvent($event->id, FINISHED, $typeEvent);
         }
-
-        return $event;
     }
 
     // Memberi pesan terkait status event tertentu

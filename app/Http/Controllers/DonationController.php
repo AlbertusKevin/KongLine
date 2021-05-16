@@ -36,9 +36,10 @@ class DonationController extends Controller
         return $this->donation_service->sortDonation($request);
     }
 
-    public function getAllDonation()
+    public function getListActiveDonation()
     {
-        $donations = $this->donation_service->getListDonation();
+        $this->donation_service->updateDeadlineStatusDonation();
+        $donations = $this->donation_service->getListActiveDonation();
         $user = $this->profile_service->getAProfile();
         $categories = $this->event_service->getAllCategoriesEvent();
         $navbar = HelperService::getNavbar();

@@ -3,21 +3,21 @@
 namespace App\Domain\Controlling\Service;
 
 use App\Domain\Controlling\Dao\ControllingDao;
-use App\Domain\Petition\Service\PetitionService;
 use App\Domain\Profile\Service\ProfileService;
+use App\Domain\Donation\Service\DonationService;
 use Illuminate\Support\Carbon;
 
 class ControllingService
 {
     private $controlling_dao;
     private $profile_service;
-    private $petition_service;
+    private $donation_service;
 
     public function __construct()
     {
         $this->controlling_dao = new ControllingDao();
         $this->profile_service = new ProfileService();
-        $this->petition_service = new PetitionService();
+        $this->donation_service = new DonationService();
     }
 
     public function getAdminDashboardData()
@@ -45,7 +45,6 @@ class ControllingService
     public function getAllUser()
     {
         $users = $this->controlling_dao->getAllUser();
-        $eventCount = $this->countEventParticipate($users);
         return $users;
     }
 
@@ -59,7 +58,6 @@ class ControllingService
 
             $countPetition = $this->controlling_dao->getCountParticipatePetition($user->id);
             $countDonation = $this->controlling_dao->getCountParticipateDonation($user->id);
-
             $total = $countDonation + $countPetition;
             $this->controlling_dao->updateUserCountEvent($user->id, $total);
             array_push($totalCount, $user->id, $total);
@@ -202,7 +200,7 @@ class ControllingService
     {
 
         $user = $this->controlling_dao->getUserById($id);
-        $emailUser = $this->controlling_dao->sendEmailUser($user, $view, $subject);
+        $this->controlling_dao->sendEmailUser($user, $view, $subject);
 
         return $this->controlling_dao->acceptUserToCampaigner($id, ACTIVE, CAMPAIGNER);
     }
@@ -211,23 +209,18 @@ class ControllingService
     {
 
         $user = $this->controlling_dao->getUserById($id);
-        $emailUser = $this->controlling_dao->sendEmailUser($user, $view, $subject);
+        $this->controlling_dao->sendEmailUser($user, $view, $subject);
 
         return $this->controlling_dao->rejectUserToCampaigner($id, ACTIVE, PARTICIPANT);
     }
     //? ========================================
     //! ~~~~~~~~~~~~~~~~ Donasi ~~~~~~~~~~~~~~~~
     //? ========================================
-    public function allDonation()
-    {
-        return $this->controlling_dao->allDonation();
-    }
-
-    //! {{-- lewat ajax --}} Menampilkan daftar donasi berdasarkan tipe (berlangsung, telah menang, dll)
+    //! {{-- lewat ajax --}}
     public function donationType($typeDonation)
     {
         if ($typeDonation == SEMUA) {
-            return $this->controlling_dao->allDonation();
+            return $this->donation_service->getAllDonation();
         }
 
         if ($typeDonation == BERLANGSUNG) {
@@ -245,7 +238,7 @@ class ControllingService
         return $this->controlling_dao->selectDonation(NOT_CONFIRMED);
     }
 
-    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
+    //! {{-- lewat ajax --}}
     public function adminSortDonation($request)
     {
         $category = $this->eventService->categorySelect($request);
@@ -388,7 +381,6 @@ class ControllingService
         }
     }
 
-    //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai keyword yang diketik
     public function adminSearchDonation($request)
     {
         $category = $this->eventService->categorySelect($request);
@@ -564,26 +556,24 @@ class ControllingService
     //? ========================================
     //! ~~~~~~~~~~~~~ Transaction ~~~~~~~~~~~~~~
     //? ========================================
+    public function updateCalculationDonation($transaction)
+    {
+        /// ubah jumlah donatur
+        $totalDonatur = $this->controlling_dao->countDonatur($transaction->idDonation);
+        $this->controlling_dao->updateTotalDonatur($transaction->idDonation, $totalDonatur);
+
+        // ubah jumlah donasi yang terkumpul
+        $oldNominal = $this->controlling_dao->getDonationCollected($transaction->idDonation)->donationCollected;
+        $total = (int)$oldNominal + (int)$transaction->nominal;
+        $this->controlling_dao->updateDonationCollected($transaction->idDonation, $total);
+    }
 
     public function updateCalculationAfterConfirmDonate($transaction)
     {
         // ubah jumlah event yang diikuti untuk user tertentu
-        $petitionParticipated = $this->eventDao->countPetitionParticipatedByUser($transaction->idParticipant);
-        $donationParticipated = $this->eventDao->countDonationParticipatedByUser($transaction->idParticipant);
-        $totalEventParticipated = (int)$petitionParticipated + (int)$donationParticipated;
-        $this->eventDao->updateCountEventParticipatedByUser($transaction->idParticipant, $totalEventParticipated);
-
-        // ubah total donatur untuk event yang diikuti
-        $totalDonatur = $this->controlling_dao->countDonatur($transaction->idDonation);
-        $this->controlling_dao->updateTotalDonatur($transaction->idDonation, $totalDonatur);
-
-        // ubah jumlah yang terkumpul
-        // ambil jumlah donasi saat ini
-        $oldNominal = $this->controlling_dao->getDonationCollected($transaction->idDonation)->donationCollected;
-        // jumlahkan
-        $total = (int)$oldNominal + (int)$transaction->nominal;
-        // update db
-        $this->controlling_dao->updateDonationCollected($transaction->idDonation, $total);
+        $this->profile_service->updateCountEventParticipatedByUser($transaction->idParticipant);
+        // ubah total donatur dan jumlah donasi yang terkumpul untuk event yang diikuti
+        $this->updateCalculationDonation($transaction);
     }
 
     public function confirmTransaction($id)
@@ -607,7 +597,7 @@ class ControllingService
         return $this->controlling_dao->getAUserTransaction($id);
     }
 
-    //! {{-- lewat ajax --}} Menampilkan daftar transaksi berdasarkan status
+    //! {{-- lewat ajax --}}
     public function transactionType($typeTransaction)
     {
 
@@ -621,7 +611,6 @@ class ControllingService
         return $this->controlling_dao->selectTransaction(REJECTED_TRANSACTION);
     }
 
-    //! {{-- lewat ajax --}} Menampilkan pencarian transaksi berdasarkan judul donasi
     public function searchTransaction($typeTransaction, $keyword)
     {
 
@@ -638,10 +627,6 @@ class ControllingService
     //? ========================================
     //! ~~~~~~~~~~~~~~~~ Petisi ~~~~~~~~~~~~~~~~
     //? ========================================
-    public function allPetition()
-    {
-        return $this->petition_service->getAllPetition();
-    }
 
     public function acceptPetition($id)
     {
@@ -666,8 +651,7 @@ class ControllingService
     public function sendEmailPetition($id, $view, $subject)
     {
         $petition = $this->controlling_dao->getPetitionById($id);
-        $event = "petisi";
-        $this->controlling_dao->sendEmail($petition, $view, $subject, $event);
+        $this->controlling_dao->sendEmail($petition, $view, $subject, PETITION);
     }
 
     public function sendEmailDonation($id, $view, $subject)

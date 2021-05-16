@@ -416,26 +416,13 @@ const emptyTableTransaction = () => {
 //untuk active link sesuai page yang diklik
 $(".nav-link").ready(function () {
     let url = getNowURL();
+    console.log(url);
 
-    if (url == "petition") {
-        $(".nav-link").each(function () {
-            if ($(this).html() == "Petisi") {
-                $(this).addClass("active");
-            }
-        });
-    } else if (url == "donation") {
-        $(".nav-link").each(function () {
-            if ($(this).html() == "Donasi") {
-                $(this).addClass("active");
-            }
-        });
-    } else if (url == "forum") {
-        $(".nav-link").each(function () {
-            if ($(this).html() == "Forum") {
-                $(this).addClass("active");
-            }
-        });
-    }
+    $(".nav-link").each(function () {
+        if ($(this).html().toLowerCase() == url) {
+            $(this).addClass("active");
+        }
+    });
 });
 
 $("#check-terms-agreement").on("click", function () {

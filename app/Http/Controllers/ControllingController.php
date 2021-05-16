@@ -4,18 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Domain\Controlling\Service\ControllingService;
+use App\Domain\Donation\Service\DonationService;
 use App\Domain\Event\Service\EventService;
+use App\Domain\Petition\Service\PetitionService;
 
 class ControllingController extends Controller
 {
     private $controlling_service;
     private $event_service;
+    private $petition_service;
+    private $donation_service;
 
     public function __construct()
     {
         $this->controlling_service = new ControllingService();
         $this->event_service = new EventService();
+        $this->petition_service = new PetitionService();
+        $this->donation_service = new DonationService();
     }
+
     public function home()
     {
         $dashboard_data = $this->controlling_service->getAdminDashboardData();
@@ -28,7 +35,7 @@ class ControllingController extends Controller
     public function getAllPetition()
     {
         $listCategory = $this->event_service->getAllCategoriesEvent();
-        $petitionList = $this->controlling_service->allPetition();
+        $petitionList = $this->petition_service->getAllPetition();
         return view('admin.listPetition', compact('listCategory', 'petitionList'));
     }
 
@@ -49,11 +56,13 @@ class ControllingController extends Controller
     public function rejectPetition(Request $request, $id)
     {
         $reason = $request->rejectEvent;
+
         //ubah status dari 0 menjadi 5
         $this->controlling_service->rejectPetition($id, $reason);
+
         //todo: send email
         $view = "auth.eventRejectEmail";
-        $message = "Event Ditolak.";
+        $message = "Event Ditolak. " . $reason;
         $this->controlling_service->sendEmailPetition($id, $view, $message);
 
         return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Penolakan Event petisi berhasil.']);
@@ -62,11 +71,13 @@ class ControllingController extends Controller
     public function closePetition(Request $request, $id)
     {
         $reason = $request->closeEvent;
+
         //ubah status dari 0 menjadi 3
         $this->controlling_service->closePetition($id, $reason);
+
         //todo: send email
         $view = "auth.eventCloseEmail";
-        $message = "Event Ditutup";
+        $message = "Event Ditutup. " . $reason;
         $this->controlling_service->sendEmailPetition($id, $view, $message);
 
         return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Penutupan Event petisi berhasil.']);
@@ -78,57 +89,16 @@ class ControllingController extends Controller
     public function getListDonation()
     {
         $listCategory = $this->event_service->getAllCategoriesEvent();
-        $donationList = $this->controlling_service->allDonation();
+        $donationList = $this->donation_service->getAllDonation();
 
         return view("admin.listDonation", compact('listCategory', 'donationList'));
-    }
-
-    public function getAllTransaction()
-    {
-        $transactions = $this->controlling_service->getAllTransaction();
-        return view('admin.listTransaction', compact('transactions'));
-    }
-
-    public function getATransaction($id)
-    {
-
-        $transaction = $this->controlling_service->getAUserTransaction($id);
-        // dd($transaction);
-        return view('admin.detailTransaction', compact('transaction'));
-    }
-
-    public function confirmTransaction($id)
-    {
-
-        //ambil id user dan id donasi
-        $transaction = $this->controlling_service->getAUserTransaction($id);
-
-        //ubah status dari 0 menjadi 5, ubah data perhitungan
-        $this->controlling_service->updateCalculationAfterConfirmDonate($transaction);
-        $this->controlling_service->confirmTransaction($id);
-        // //todo: send email
-        $view = "auth.trxConfirmEmail";
-        $message = "Transaksi donasi Anda selesai diproses";
-        $this->controlling_service->sendEmailTransaction($id, $view, $message);
-        return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Transaksi telah berhasil disetujui.']);
-    }
-
-    public function rejectTransaction(Request $request, $id)
-    {
-        $reason = $request->rejectTransaction;
-        //ubah status dari 0 menjadi 5
-        $this->controlling_service->rejectTransaction($id, $reason);
-        //todo: send email
-        $view = "auth.trxRejectEmail";
-        $message = "Transaksi donasi Anda ditolak";
-        $this->controlling_service->sendEmailTransaction($id, $view, $message);
-        return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Penolakan transaksi telah selesai.']);
     }
 
     public function acceptDonation($id)
     {
         //ubah status dari 0 menjadi 1
         $this->controlling_service->acceptDonation($id);
+
         //todo: send email
         $view = "auth.eventConfirmEmail";
         $message = "Event Disetujui.";
@@ -140,11 +110,12 @@ class ControllingController extends Controller
     public function rejectDonation(Request $request, $id)
     {
         $reason = $request->rejectEvent;
+
         //ubah status dari 0 menjadi 5
         $this->controlling_service->rejectDonation($id, $reason);
         //todo: send email
         $view = "auth.eventRejectEmail";
-        $message = "Event Ditolak";
+        $message = "Event Ditolak. " . $reason;
         $this->controlling_service->sendEmailDonation($id, $view, $message);
 
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penolakan donasi telah berhasil.']);
@@ -153,11 +124,13 @@ class ControllingController extends Controller
     public function closeDonation(Request $request, $id)
     {
         $reason = $request->closeEvent;
+
         //ubah status dari 0 menjadi 3
         $this->controlling_service->closeDonation($id, $reason);
+
         //todo: send email
         $view = "auth.eventCloseEmail";
-        $message = "Event Ditutup.";
+        $message = "Event Ditutup. " . $reason;
         $this->controlling_service->sendEmailDonation($id, $view, $message);
 
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penutupan event donasi telah berhasil.']);
@@ -176,6 +149,52 @@ class ControllingController extends Controller
     public function donationType(Request $request)
     {
         return $this->controlling_service->donationType($request->typeDonation);
+    }
+
+    //? ========================================
+    //! ~~~~~~~~~~~~~ Transaction ~~~~~~~~~~~~~~
+    //? ========================================
+    public function getAllTransaction()
+    {
+        $transactions = $this->controlling_service->getAllTransaction();
+        return view('admin.listTransaction', compact('transactions'));
+    }
+
+    public function getATransaction($id)
+    {
+        $transaction = $this->controlling_service->getAUserTransaction($id);
+        // dd($transaction);
+        return view('admin.detailTransaction', compact('transaction'));
+    }
+
+    public function confirmTransaction($id)
+    {
+        //ambil id user dan id donasi
+        $transaction = $this->controlling_service->getAUserTransaction($id);
+
+        //ubah status dari 0 menjadi 1, ubah data perhitungan
+        $this->controlling_service->confirmTransaction($id);
+        $this->controlling_service->updateCalculationAfterConfirmDonate($transaction);
+
+        // //todo: send email
+        $view = "auth.trxConfirmEmail";
+        $message = "Transaksi donasi Anda selesai diproses";
+        $this->controlling_service->sendEmailTransaction($id, $view, $message);
+        return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Transaksi telah berhasil disetujui.']);
+    }
+
+    public function rejectTransaction(Request $request, $id)
+    {
+        $reason = $request->rejectTransaction;
+
+        //ubah status dari 0 menjadi 3
+        $this->controlling_service->rejectTransaction($id, $reason);
+
+        //todo: send email
+        $view = "auth.trxRejectEmail";
+        $message = "Transaksi donasi Anda ditolak. " . $reason;
+        $this->controlling_service->sendEmailTransaction($id, $view, $message);
+        return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Penolakan transaksi telah selesai.']);
     }
 
     public function transactionType(Request $request)
@@ -209,7 +228,6 @@ class ControllingController extends Controller
         $countDonation = $events[0]->count();
         $countPetition = $events[1]->count();
         $countTotal = $countDonation + $countPetition;
-        // dd($countTotal);
         return view('admin.userAdmin', compact('user', 'events', 'countTotal', 'eventMade'));
     }
 

@@ -28,13 +28,15 @@
     @include('sweetalert::alert')
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/admin"><img src="/images/app/logo.png" width="75px" alt="logo app"></a>
+            <a class="navbar-brand" href="{{ url('/admin') }}"><img src="/images/app/logo.png" width="75px"
+                    alt="logo app"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end mr-5 pr-5" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
+                    <a class="nav-link" href="{{ url('/admin') }}">Dashboard</a>
                     <a class="nav-link" href="{{ url('/admin/listUser') }}">User</a>
                     <a class="nav-link" href="{{ url('/admin/donation') }}">Donasi</a>
                     <a class="nav-link" href="{{ url('/admin/petition') }}">Petisi</a>

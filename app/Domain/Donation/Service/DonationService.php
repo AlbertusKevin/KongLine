@@ -27,37 +27,35 @@ class DonationService
         return $this->donation_dao->getListOfBank();
     }
 
-    public function getListDonation()
+    public function updateDeadlineStatusDonation()
     {
-        $listDonation = $this->donation_dao->getListDonation();
-        $list = [];
+        // ambil donasi yang aktif
+        $activeDonation = $this->donation_dao->getListActiveDonation();
 
-        foreach ($listDonation as $donation) {
-            $list[] = $this->event_service->checkValidDate($donation, DONATION);
+        // update jika donasi ada yang sudah deadline
+        foreach ($activeDonation as $donation) {
+            $this->event_service->checkValidDate($donation, DONATION);
         }
-
-        return $list;
     }
 
-    public function getThreeActiveDonation()
+    public function getAllDonation()
     {
-        $listDonation = $this->donation_dao->getListDonation();
-        $listValidDate = [];
-        $listThreeDonationActive = [];
+        $this->updateDeadlineStatusDonation();
+        // ambil semua status donasi
+        $listDonation = $this->donation_dao->getAllDonation();
+        return $listDonation;
+    }
 
-        foreach ($listDonation as $donation) {
-            $listValidDate[] = $this->event_service->checkValidDate($donation, DONATION);
-        }
-
-        for ($i = 0; $i < 3; $i++) {
-            $listThreeDonationActive[$i] = $listValidDate[$i];
-        }
-
-        return $listThreeDonationActive;
+    public function getListActiveDonation()
+    {
+        // ambil list donasi hasil update status dari tanggal deadline
+        $listActiveDonation = $this->donation_dao->getListActiveDonation();
+        return $listActiveDonation;
     }
 
     public function getCompleteInformationADonation($id)
     {
+        $this->updateDeadlineStatusDonation();
         $info_donation = [];
 
         // detail donasi mencakup pembuat event tersebut
@@ -149,8 +147,6 @@ class DonationService
     //! {{-- lewat ajax --}} Mencari donasi sesuai urutan dan kategori yang dipilih
     public function searchDonation($request)
     {
-        $this->getListDonation();
-
         $userId = $this->profile_service->getAProfile()->id;
         $category = $this->event_service->categorySelect($request);
         $sortBy = $request->sortBy;
@@ -212,14 +208,12 @@ class DonationService
     //! {{-- lewat ajax --}} Menampilkan daftar petisi sesuai urutan dan kategori yang dipilih
     public function sortDonation($request)
     {
-        $this->getListDonation();
-
         $category = $this->event_service->categorySelect($request);
         $userId = $this->profile_service->getAProfile()->id;
 
         //jika tidak sort dan tidak pilih category
         if ($request->sortBy == NONE && $category == 0) {
-            return $this->getListDonation();
+            return $this->getListActiveDonation();
         }
 
         // Jika sort dipilih
