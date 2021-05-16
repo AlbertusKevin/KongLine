@@ -35,8 +35,9 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end mr-5 pr-5" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link" href="{{ url('/donation') }}">Donasi</a>
-                    <a class="nav-link" href="{{ url('/petition') }}">Petisi</a>
+                    <a class="nav-link" href="{{ url('/') }}">Home</a>
+                    <a class="nav-link" href="{{ url('/donation') }}">Donation</a>
+                    <a class="nav-link" href="{{ url('/petition') }}">Petition</a>
                     <a class="nav-link" href="{{ url('/forum') }}">Forum</a>
                     @if (Auth::check())
                         @if (auth()->user()->role == 'admin')

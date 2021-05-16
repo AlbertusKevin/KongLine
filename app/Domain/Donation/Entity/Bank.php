@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Event\Entity;
+namespace App\Domain\Donation\Entity;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

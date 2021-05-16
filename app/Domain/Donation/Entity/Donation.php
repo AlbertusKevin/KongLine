@@ -4,6 +4,7 @@ namespace App\Domain\Donation\Entity;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Domain\Profile\Entity\User;
 
 class Donation extends Model
 {

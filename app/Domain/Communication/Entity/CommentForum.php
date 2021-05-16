@@ -3,7 +3,7 @@
 namespace App\Domain\Communication\Entity;
 
 use App\Domain\Communication\Entity\Forum;
-use App\Domain\Event\Entity\User;
+use App\Domain\Profile\Entity\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

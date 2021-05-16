@@ -18,9 +18,11 @@
         <form action="/profile/campaigner" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            @if ($user->status == 3 && $user->role == 'participant')
+            @if ($user->status == 3 || $user->role == PARTICIPANT)
                 <div class="form-group">
-                    <img src="/{{ $user->ktpPicture }}" alt="KTP" class="img-thumbnail" width="300px"><br><br>
+                    @if ($user->status == 3)
+                        <img src="/{{ $user->ktpPicture }}" alt="KTP" class="img-thumbnail" width="300px"><br><br>
+                    @endif
                     <label for="KTP_picture">Foto KTP</label>
                     <input type="file" class="form-control" name="KTP_picture" id="KTP_picture">
                 </div>
@@ -28,7 +30,7 @@
 
             <div class="form-group mt-2">
                 <label for="nik">NIK</label>
-                @if ($user->role == 'campaigner')
+                @if ($user->role == CAMPAIGNER)
                     <input type="text" class="form-control" id="nik" name="nik" value="{{ $user->nik }}" disabled>
                 @else
                     <input type="text" class="form-control" id="nik" name="nik" value="{{ $user->nik }}">

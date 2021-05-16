@@ -2,34 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use \App\Domain\Event\Entity\User;
-use \App\Domain\Communication\Entity\Service;
-use App\Domain\Event\Service\EventService;
-use Illuminate\Support\Facades\Auth;
+use App\Domain\Communication\Service\CommunicationService;
+use App\Domain\Donation\Service\DonationService;
+use App\Domain\Petition\Service\PetitionService;
+use App\Domain\Profile\Service\ProfileService;
 
 class HomeController extends Controller
 {
-    private $eventService;
+    private $profile_service;
+    private $comm_service;
+    private $donation_service;
+    private $petition_service;
 
     public function __construct()
     {
-        $this->eventService = new EventService();
+        $this->profile_service = new ProfileService();
+        $this->donation_service = new DonationService();
+        $this->petition_service = new PetitionService();
+        $this->comm_service = new CommunicationService();
     }
 
     public function index()
     {
-        $donasi = $this->eventService->getDonationLimit();
-        $petisi = $this->eventService->getPetitionLimit();
+        $this->donation_service->updateDeadlineStatusDonation();
+        $donasi = $this->donation_service->getListActiveDonation()->take(3);
+        $petisi = $this->petition_service->getActivePetition()->take(3);
 
-        $users = User::orderBy('id', 'DESC')->get();
-        $user = $this->eventService->getAProfile();
+        $users = $this->profile_service->getUsers();
+        $user = $this->profile_service->getAProfile();
 
         if ($user->role == GUEST) {
             return view('home', compact('user', 'donasi', 'petisi'));
         }
 
         if ($user->role == ADMIN) {
-            $messages = Service::where('user_id', auth()->id())->orWhere('receiver', auth()->id())->orderBy('id', 'DESC')->get();
+            $messages = $this->comm_service->getContactMessages($user);
         }
 
         return view('home', [

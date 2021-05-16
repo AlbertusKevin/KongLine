@@ -5,7 +5,7 @@ namespace App\Domain\Communication\Dao;
 use App\Domain\Communication\Entity\CommentForum;
 use App\Domain\Communication\Entity\Forum;
 use App\Domain\Communication\Entity\ForumLike;
-use App\Domain\Event\Entity\User;
+use App\Domain\Profile\Entity\User;
 use App\Domain\Communication\Entity\Service;
 
 class CommunicationDao
@@ -18,7 +18,10 @@ class CommunicationDao
 
     public function getMessageReceiver($id)
     {
-        return Service::where('user_id', $id)->orWhere('receiver', $id)->orderBy('id', 'DESC')->get();
+        return Service::where('user_id', $id)
+            ->orWhere('receiver', $id)
+            ->orderBy('id', 'DESC')
+            ->get();
     }
 
     public function getUserbyId($user_id)

@@ -159,7 +159,7 @@ class UserSeeder extends Seeder
                 'status' => ACTIVE,
                 'role' => PARTICIPANT,
                 'dob' => Carbon::create("1990", "05", "08"),
-                'photoProfile' => 'images/profile/photo/participant-4.jpg',
+                'photoProfile' => '/images/profile/photo/participant-4.jpg',
                 'backgroundPicture' => DEFAULT_COVER_PROFILE,
                 'created_at' => Carbon::now('+7:00'),
                 'updated_at' => Carbon::now('+7:00'),

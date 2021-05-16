@@ -2,594 +2,45 @@
 
 namespace App\Domain\Donation\Dao;
 
-use App\Domain\Event\Entity\Bank;
-use App\Domain\Event\Entity\Category;
-use App\Domain\Event\Entity\DetailAllocation;
-use App\Domain\Event\Entity\Donation;
-use App\Domain\Event\Entity\EventStatus;
-use App\Domain\Event\Entity\Forum;
-use App\Domain\Event\Entity\ForumLike;
-use App\Domain\Event\Entity\ParticipateDonation;
-use App\Domain\Event\Entity\ParticipatePetition;
-use App\Domain\Event\Entity\Petition;
-use App\Domain\Event\Entity\Service;
-use App\Domain\Event\Entity\Transaction;
-use App\Domain\Event\Entity\UpdateNews;
-use App\Domain\Event\Entity\User;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Hash;
+use App\Domain\Donation\Entity\Bank;
+use App\Domain\Donation\Entity\DetailAllocation;
+use App\Domain\Donation\Entity\Donation;
+use App\Domain\Donation\Entity\ParticipateDonation;
+use App\Domain\Donation\Entity\Transaction;
 
-class EventDao
+class DonationDao
 {
-    //! Mengambil data kategori event yang ada
-    public function getAllCategoriesEvent()
-    {
-        return Category::all();
-    }
 
     //! Mengambil nama bank yang bisa digunakan untuk transfer
-    public function listBank()
+    public function getListOfBank()
     {
         return Bank::all();
     }
 
-    public function getACategory($id)
+    public function getAllDonation()
     {
-        return Category::where('id', $id)->first();
-    }
-
-    //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
-    public function checkParticipated($idEvent, $idParticipant, $typeEvent)
-    {
-        if ($typeEvent == PETITION) {
-            return ParticipatePetition::where('idParticipant', $idParticipant)->where('idPetition', $idEvent)->first();
-        }
-
-        return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
-    }
-
-    //! Memeriksa apakah participant pernah berpartisipasi pada event tertentu
-    public function verifyProfile($email, $phone)
-    {
-        return User::where('email', $email)->where('phoneNumber', $phone)->first();
-    }
-
-    //! Menghitung total event yang sudah pernah diikuti user tertentu
-    public function countDonationParticipatedByUser($idUser)
-    {
-        return ParticipateDonation::where('idParticipant', $idUser)->count();
-    }
-
-    //! Menghitung total event yang sudah pernah diikuti user tertentu
-    public function countPetitionParticipatedByUser($idUser)
-    {
-        return ParticipatePetition::where('idParticipant', $idUser)->count();
-    }
-
-    public function updateCountEventParticipatedByUser($idUser, $count)
-    {
-        User::where('id', $idUser)->update([
-            'countEvent' => $count
-        ]);
-    }
-
-    //* =========================================================================================
-    //* ------------------------------------- DAO Profile ---------------------------------------
-    //* =========================================================================================
-    //! Mengambil data user berdasarkan id
-    public function getAProfile($id)
-    {
-        return User::where('id', $id)->first();
-    }
-
-    //! Memproses update data profile
-    public function updateProfile($request, $id, $pathProfile, $pathBackground)
-    {
-        User::where('id', $id)->update([
-            'name' => $request->name,
-            'aboutMe' => $request->aboutMe,
-            'city' => $request->city,
-            'linkProfile' => $request->linkProfile,
-            'address' => $request->address,
-            'zipCode' => $request->zipCode,
-            'phoneNumber' => $request->phoneNumber,
-            'photoProfile' => $pathProfile,
-            'backgroundPicture' => $pathBackground
-        ]);
-    }
-
-    public function deleteAccount($id)
-    {
-        User::where('id', $id)->update([
-            'status' => DELETED
-        ]);
-    }
-
-    public function updateToCampaigner($request, $id, $pathKTP)
-    {
-        User::where('id', $id)->update([
-            'accountNumber' => $request->rekening,
-            'nik' => $request->nik,
-            'ktpPicture' => $pathKTP,
-            'status' => 3
-        ]);
-    }
-
-    public function updateAccountNumber($request, $id)
-    {
-        User::where('id', $id)->update([
-            'accountNumber' => $request->rekening
-        ]);
-    }
-
-    public function changePassword($user, $password)
-    {
-        User::where('id', $user->id)->update([
-            'password' => $password
-        ]);
-    }
-
-    //* =========================================================================================
-    //* -------------------------------------- DAO Petisi ---------------------------------------
-    //* =========================================================================================
-    public function allPetition()
-    {
-        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
-            ->join('category', 'petition.category', 'category.id')
-            ->join('event_status', 'petition.status', 'event_status.id')
+        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
+            ->join('category', 'donation.category', 'category.id')
+            ->join('event_status', 'donation.status', 'event_status.id')
             ->get();
     }
 
-    public function listPetition()
-    {
-        return Petition::all();
-    }
-
-    //! Mencari petisi sesuai dengan
-    //! status (berdasarkan tipe petisi) dan keyword tertentu
-    public function searchPetition($status, $keyword)
-    {
-        return Petition::where('status', $status)
-            ->where('title', 'LIKE', '%' . $keyword . '%')
-            ->get();
-    }
-
-    //! Mencari petisi yang dibuat oleh campaigner sesuai dengan
-    //! keyword tertentu
-    public function searchPetitionByMe($idCampaigner, $keyword)
-    {
-        return Petition::where('idCampaigner', $idCampaigner)
-            ->where('title', 'LIKE', '%' . $keyword . '%')
-            ->get();
-    }
-
-    //! Mencari petisi yang dibuat oleh campaigner sesuai dengan
-    //! keyword, sorting desc, dan kategori tertentu
-    public function searchPetitionByMeCategorySort($idCampaigner, $keyword, $category, $table)
-    {
-        return Petition::where('idCampaigner', $idCampaigner)
-            ->where('category', $category)
-            ->where('title', 'LIKE', '%' . $keyword . '%')
-            ->orderByDesc($table)
-            ->get();
-    }
-
-    //! Mencari petisi yang dibuat oleh campaigner sesuai dengan
-    //! keyword dan kategori tertentu
-    public function searchPetitionByMeCategory($idCampaigner, $keyword, $category)
-    {
-        return Petition::where('idCampaigner', $idCampaigner)
-            ->where('category', $category)
-            ->where('title', 'LIKE', '%' . $keyword . '%')
-            ->get();
-    }
-
-    //! Mencari petisi yang dibuat oleh campaigner
-    //! sesuai dengan keyword dan sorting desc tertentu
-    public function searchPetitionByMeSort($idCampaigner, $keyword, $table)
-    {
-        return Petition::where('idCampaigner', $idCampaigner)
-            ->where('title', 'LIKE', '%' . $keyword . '%')
-            ->orderByDesc($table)
-            ->get();
-    }
-
-    //! Mencari petisi yang pernah diikuti oleh participant sesuai dengan
-    //! keyword tertentu
-    public function searchPetitionParticipated($idParticipant, $keyword)
-    {
-        return ParticipatePetition::where('idParticipant', $idParticipant)
-            ->join('petition', 'participate_petition.idPetition', '=', 'petition.id')
-            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
-            ->get();
-    }
-
-    //! Mencari petisi yang pernah diikuti oleh participant sesuai dengan
-    //! keyword, sorting desc, dan kategori tertentu
-    public function searchPetitionParticipatedCategorySort($idParticipant, $keyword, $category, $table)
-    {
-        return ParticipatePetition::where('idParticipant', $idParticipant)
-            ->join('petition', 'participate_petition.idPetition', '=', 'petition.id')
-            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
-            ->where('petition.category', $category)
-            ->orderByDesc('petition.' . $table)
-            ->get();
-    }
-
-    //! Mencari petisi yang pernah diikuti oleh participant sesuai dengan
-    //! keyword dan sorting desc tertentu
-    public function searchPetitionParticipatedSortBy($idParticipant, $keyword, $table)
-    {
-        return ParticipatePetition::where('idParticipant', $idParticipant)
-            ->join('petition', 'participate_petition.idPetition', '=', 'petition.id')
-            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
-            ->orderByDesc('petition.' . $table)
-            ->get();
-    }
-
-    //! Mencari petisi yang pernah diikuti oleh participant sesuai dengan
-    //! keyword dan kategori tertentu
-    public function searchPetitionParticipatedCategory($idParticipant, $keyword, $category)
-    {
-        return ParticipatePetition::where('idParticipant', $idParticipant)
-            ->join('petition', 'participate_petition.idPetition', '=', 'petition.id')
-            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
-            ->where('petition.category', $category)
-            ->get();
-    }
-
-    //! Mencari petisi sesuai dengan
-    //! keyword, sorting desc, dan kategori tertentu
-    public function searchPetitionCategorySort($status, $keyword, $category, $table)
-    {
-        return Petition::where('status', $status)
-            ->where('title', 'LIKE', '%' . $keyword . '%')
-            ->where('category', $category)
-            ->orderByDesc($table)
-            ->get();
-    }
-
-    //! Mencari petisi sesuai dengan
-    //! keyword dan kategori tertentu
-    public function searchPetitionCategory($status, $keyword, $category)
-    {
-        return Petition::where('status', $status)
-            ->where('title', 'LIKE', '%' . $keyword . '%')
-            ->where('category', $category)
-            ->get();;
-    }
-
-    //! Mencari petisi sesuai dengan
-    //! keyword dan sorting desc tertentu
-    public function searchPetitionSortBy($status, $keyword, $table)
-    {
-        return Petition::where('status', $status)
-            ->where('title', 'LIKE', '%' . $keyword . '%')
-            ->orderByDesc($table)
-            ->get();;
-    }
-
-    //! Mengurutkan petisi sesuai dengan
-    //! sorting desc dan kategori tertentu
-    public function sortPetitionCategory($category, $status, $table)
-    {
-        return Petition::where('status', $status)
-            ->where('category', $category)
-            ->orderByDesc($table)
-            ->get();
-    }
-
-    public function allStatusSortPetitionCategory($category, $table)
-    {
-        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
-            ->where('category', $category)
-            ->join('category', 'petition.category', 'category.id')
-            ->join('event_status', 'petition.status', 'event_status.id')
-            ->orderByDesc($table)
-            ->get();
-    }
-
-    public function allStatusSortPetition($table)
-    {
-        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
-            ->join('category', 'petition.category', 'category.id')
-            ->join('event_status', 'petition.status', 'event_status.id')
-            ->orderByDesc($table)
-            ->get();
-    }
-
-    public function allStatusPetitionByCategory($category)
-    {
-        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
-            ->where('category', $category)
-            ->join('category', 'petition.category', 'category.id')
-            ->join('event_status', 'petition.status', 'event_status.id')
-            ->get();
-    }
-
-    //! Mengurutkan petisi dengan status tertentu
-    //! secara descending sesuai dengan ketentuan yang dipilih
-    public function sortPetition($status, $table)
-    {
-        return Petition::where('status', $status)
-            ->orderByDesc($table)
-            ->get();
-    }
-
-    //! Menampilkan petisi dengan status tertentu sesuai kategori tertentu
-    public function petitionByCategory($category, $status)
-    {
-        return Petition::where('status', $status)
-            ->where('category', $category)
-            ->get();
-    }
-
-    //! Mengurutkan petisi yang dibuat oleh campaigner dan sesuai kategori tertentu
-    //! secara descending sesuai dengan ketentuan yang dipilih
-    public function sortPetitionCategoryByMe($category, $idCampaigner, $table)
-    {
-        return Petition::where('idCampaigner', $idCampaigner)
-            ->where('category', $category)
-            ->orderByDesc($table)
-            ->get();
-    }
-
-    //! Mengurutkan petisi yang dibuat oleh campaigner
-    //! secara descending sesuai dengan ketentuan yang dipilih
-    public function sortMyPetition($idCampaigner, $table)
-    {
-        return Petition::where('idCampaigner', $idCampaigner)
-            ->orderByDesc($table)
-            ->get();
-    }
-
-    //! Menampilkan petisi yang dibuat oleh campaigner sesuai kategori tertentu
-    public function myPetitionByCategory($category, $idCampaigner)
-    {
-        return Petition::where('idCampaigner', $idCampaigner)
-            ->where('category', $category)
-            ->get();
-    }
-
-    //! Mengurutkan petisi yang pernah diikuti participant sesuai kategori tertentu
-    //! secara descending sesuai dengan ketentuan yang dipilih
-    public function sortPetitionCategoryParticipated($category, $idParticipant, $table)
-    {
-        return ParticipatePetition::where('idParticipant', $idParticipant)
-            ->join('petition', 'participate_petition.idPetition', '=', 'petition.id')
-            ->where('petition.category', $category)
-            ->orderByDesc('petition.' . $table)
-            ->get();
-    }
-
-    //! Mengurutkan petisi yang pernah diikuti participant
-    //! secara descending sesuai dengan ketentuan yang dipilih
-    public function sortPetitionParticipated($idParticipant, $table)
-    {
-        return ParticipatePetition::where('idParticipant', $idParticipant)
-            ->join('petition', 'participate_petition.idPetition', '=', 'petition.id')
-            ->orderByDesc('petition.' . $table)
-            ->get();
-    }
-
-    //! Menampilkan petisi pernah diikuti participant sesuai kategori tertentu
-    public function participatedPetitionByCategory($category, $idParticipant)
-    {
-        return ParticipatePetition::where('idParticipant', $idParticipant)
-            ->join('petition', 'participate_petition.idPetition', '=', 'petition.id')
-            ->where('petition.category', $category)
-            ->get();
-    }
-
-    //! Menampilkan daftar petisi berdasarkan tipe event (berlangsung, menang, dll)
-    public function listPetitionType($status)
-    {
-        return Petition::where('status', $status)->get();
-    }
-
-    //! Menampilkan daftar petisi yang pernah diikuti participant
-    public function listPetitionParticipated($idParticipant)
-    {
-        return ParticipatePetition::where('idParticipant', $idParticipant)
-            ->join('petition', 'participate_petition.idPetition', '=', 'petition.id')
-            ->get();
-    }
-
-    //! Menampilkan daftar petisi yang dibuat oleh campaigner
-    public function listPetitionByMe($idCampaigner)
-    {
-        return Petition::where('idCampaigner', $idCampaigner)->get();
-    }
-
-    //! Menampilkan seluruh daftar petisi yang sedang aktif
-    public function getAllActivePetition()
-    {
-        return Petition::where('status', ACTIVE)->get();
-    }
-
-    public function indexPetitionLimit()
-    {
-        return Petition::where('status', ACTIVE)->take(3)->get();
-    }
-
-    //! Menampilkan detail petisi tertentu berdasarkan ID
-    public function showPetition($id)
-    {
-        return Petition::where('id', $id)->first();
-    }
-
-    //! Menampilkan komentar yang ada pada petisi tertentu berdasarkan ID
-    public function commentsPetition($id)
-    {
-        return ParticipatePetition::where('idPetition', $id)
-            ->join('users', 'participate_petition.idParticipant', '=', 'users.id')
-            ->get();
-    }
-
-    //! Menampilkan berita perkembangan yang ada pada petisi tertentu berdasarkan ID
-    public function newsPetition($id)
-    {
-        return UpdateNews::where('idPetition', $id)->get();
-    }
-
-    //! Menyimpan data berita perkembangan yang dibuat oleh campaigner
-    public function storeProgressPetition($updateNews)
-    {
-        UpdateNews::create([
-            'idPetition' => $updateNews->getIdPetition(),
-            'image' => $updateNews->getImage(),
-            'title' => $updateNews->getTitle(),
-            'content' => $updateNews->getContent(),
-            'link' => $updateNews->getLink(),
-            'created_at' => $updateNews->getCreatedAt()
-        ]);
-    }
-
-    //! Menyimpan data event petisi yang dibuat oleh campaigner
-    public function storePetition($petition)
-    {
-        Petition::create([
-            'idCampaigner' => $petition->getIdCampaigner(),
-            'title' => $petition->getTitle(),
-            'photo' => $petition->getPhoto(),
-            'category' => $petition->getCategory(),
-            'purpose' => $petition->getPurpose(),
-            'deadline' => $petition->getDeadline(),
-            'status' => $petition->getStatus(),
-            'created_at' => $petition->getCreatedAt(),
-            'signedCollected' => $petition->getSignedCollected(),
-            'signedTarget' => $petition->getSignedTarget(),
-            'targetPerson' => $petition->getTargetPerson()
-        ]);
-    }
-
-    //! Menyimpan data event petisi yang dibuat oleh campaigner
-    public function updatePetition($petition, $id)
-    {
-        Petition::where('id', $id)->update([
-            'idCampaigner' => $petition->getIdCampaigner(),
-            'title' => $petition->getTitle(),
-            'photo' => $petition->getPhoto(),
-            'category' => $petition->getCategory(),
-            'purpose' => $petition->getPurpose(),
-            'deadline' => $petition->getDeadline(),
-            'status' => $petition->getStatus(),
-            'created_at' => $petition->getCreatedAt(),
-            'signedCollected' => $petition->getSignedCollected(),
-            'signedTarget' => $petition->getSignedTarget(),
-            'targetPerson' => $petition->getTargetPerson()
-        ]);
-    }
-
-    //! Menyimpan data participant yang berpartisipasi pada petisi tertentu
-    public function signPetition($petition)
-    {
-        return ParticipatePetition::create([
-            'idPetition' => $petition->idPetition,
-            'idParticipant' => $petition->idParticipant,
-            'comment' => $petition->comment,
-            'created_at' => Carbon::now()->format('Y-m-d')
-        ]);
-    }
-
-    //! Mengambil jumlah total tandatangan petisi tertentu saat itu
-    public function calculatedSignDonation($idEvent, $typeEvent)
-    {
-        if ($typeEvent == PETITION) {
-            return ParticipatePetition::where('idPetition', $idEvent)->count();
-        }
-
-        // return ParticipatePetition::where('idPetition', $idEvent)->count();
-    }
-
-    //! Update jumlah tandatangan petisi tertentu
-    public function updateCalculatedSign($idEvent, $count)
-    {
-        return Petition::where('id', $idEvent)->update([
-            'signedCollected' => $count
-        ]);
-    }
-
-    //* =========================================================================================
-    //* --------------------------------------- DAO Auth ----------------------------------------
-    //* =========================================================================================
-    public function login($request)
-    {
-        return Auth::attempt([
-            'email' =>  $request->email,
-            'password' => $request->password
-        ]);
-    }
-
-    public function register($data)
-    {
-        return $data->save();
-    }
-
-    public function reset($token, $request)
-    {
-        return DB::table('password_resets')->insert(
-            ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]
-        );
-    }
-
-    public function mail($token, $request, $view, $subject)
-    {
-        Mail::send($view, ['token' => $token, 'email' => $request->email], function ($message) use ($request, $subject) {
-            $message->to($request->email);
-            $message->subject($subject);
-        });
-    }
-
-    public function getPasswordReset($request)
-    {
-        return DB::table('password_resets')
-            ->where(['email' => $request->email, 'token' => $request->token])
-            ->first();
-    }
-
-    public function updateUser($request)
-    {
-        User::where('email', $request->email)
-            ->update(['password' => Hash::make($request->password)]);
-    }
-
-    public function deleteToken($request)
-    {
-        DB::table('password_resets')->where(['email' => $request->email])->delete();
-    }
-
-    //* =========================================================================================
-    //* ------------------------------------ DAO Donation ---------------------------------------
-    //* =========================================================================================
     //! Mengambil seluruh donasi dengan status aktif / sedang berlangsung
-    public function getListDonation()
+    public function getListActiveDonation()
     {
         return Donation::selectRaw('donation.*, users.name as name')
             ->where('donation.status', ACTIVE)
             ->join('users', 'donation.idCampaigner', 'users.id')
             ->get();
     }
-
-    public function getListDonationLimit()
-    {
-        return Donation::selectRaw('donation.*, users.name as name')
-            ->where('donation.status', ACTIVE)
-            ->join('users', 'donation.idCampaigner', 'users.id')
-            ->take(3)
-            ->get();
-    }
-
 
     //! Mengambil seluruh donasi dengan status aktif / sedang berlangsung
     public function getADonation($id)
     {
-        return Donation::selectRaw('donation.*, users.name as name')
+        return Donation::selectRaw('donation.*, users.name as name, category.description as category_description')
             ->where('donation.id', $id)
             ->join('users', 'donation.idCampaigner', 'users.id')
+            ->join('category', 'category.id', 'donation.category')
             ->first();
     }
 
@@ -607,7 +58,6 @@ class EventDao
                     ->on('transaction.idDonation', 'participate_donation.idDonation');
             })
             ->where('participate_donation.idDonation', $idEvent)
-            // ->where('transaction.status', 1)
             ->get();
     }
 
@@ -657,7 +107,9 @@ class EventDao
 
     public function getAUserTransaction($idUser, $idEvent)
     {
-        return Transaction::where('idParticipant', $idUser)->where('idDonation', $idEvent)->first();
+        return Transaction::where('idParticipant', $idUser)
+            ->where('idDonation', $idEvent)
+            ->first();
     }
 
     //! Mencari Donasi sesuai dengan 
@@ -862,7 +314,7 @@ class EventDao
         ]);
     }
 
-    public function updateDonation($donation, $id)
+    public function updateEventDonation($donation, $id)
     {
         Donation::where('id', $id)->update([
             'category' => $donation->getCategory(),
@@ -899,12 +351,5 @@ class EventDao
     public function getLastIdDonation()
     {
         return Donation::orderBy('id', 'desc')->take(1)->first();
-    }
-
-    public function updateStatusEvent($id, $status)
-    {
-        Donation::where('id', $id)->update([
-            'status' => $status
-        ]);
     }
 }

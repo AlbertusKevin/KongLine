@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use RealRashid\SweetAlert\Facades\Alert;
+use App\Domain\Profile\Service\ProfileService;
 use Illuminate\Http\Request;
 
 class ParticipantMiddleware
@@ -17,11 +17,13 @@ class ParticipantMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->role == 'participant') {
+        $profile_service = new ProfileService();
+        $user = $profile_service->getAProfile();
+
+        if ($user->role == PARTICIPANT) {
             return $next($request);
         }
 
-        Alert::error('Error','Anda tidak memiliki akses');
-        return redirect()->back();
+        return redirect("/")->with(['type' => "error", 'message' => "Anda tidak memiliki akses"]);
     }
 }

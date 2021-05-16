@@ -22,6 +22,11 @@ class CommunicationService
         return $this->dao->getAdmin();
     }
 
+    public function getContactMessages($user)
+    {
+        return $this->dao->getMessageReceiver($user);
+    }
+
     public function findMessageReceiver($id)
     {
         return $this->dao->getMessageReceiver($id);

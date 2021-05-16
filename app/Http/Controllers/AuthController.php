@@ -17,37 +17,12 @@ class AuthController extends Controller
         $this->profile_service = new ProfileService();
     }
 
-    public function postRegister(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'firstname' => 'required|min:4',
-            'lastname' => 'min:4',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect('/register')
-                ->withInput()
-                ->withErrors($validator)
-                ->with(['type' => "error", 'message' => 'Name minimal 4 karakter, password minimal 6, dan pastikan email belum pernah digunakan orang lain.']);
-        }
-
-        $this->profile_service->authRegis($request);
-        return redirect('login')->with(['type' => "success", 'message' => 'Registrasi berhasil. Silahkan login.']);
-    }
-
-    public function getLogin()
+    public function getViewLogin()
     {
         return view('auth.login');
     }
 
-    public function getRegister()
-    {
-        return view('auth.register');
-    }
-
-    public function postLogin(Request $request)
+    public function postDataLogin(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
@@ -74,18 +49,43 @@ class AuthController extends Controller
         return redirect('/login')->with(['type' => "error", 'message' => 'Email atau password salah. Silahkan coba lagi']);;
     }
 
+    public function getViewRegister()
+    {
+        return view('auth.register');
+    }
+
+    public function postDataRegister(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'firstname' => 'required|min:4',
+            'lastname' => 'min:4',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/register')
+                ->withInput()
+                ->withErrors($validator)
+                ->with(['type' => "error", 'message' => 'Nama minimal 4 karakter, password minimal 6, dan pastikan email belum pernah digunakan orang lain.']);
+        }
+
+        $this->profile_service->authRegis($request);
+        return redirect('login')->with(['type' => "success", 'message' => 'Registrasi berhasil. Silahkan login.']);
+    }
+
     public function logout()
     {
         Auth::logout();
         return redirect('/login');
     }
 
-    public function getForgot()
+    public function getViewForgotPassword()
     {
         return view('auth.forgot');
     }
 
-    public function postForgot(Request $request)
+    public function postDataForgotPassword(Request $request)
     {
         $request->validate([
             'email' => 'required|email|exists:users',
@@ -94,18 +94,18 @@ class AuthController extends Controller
         $view = 'auth.verify';
         $subject = 'Reset Password';
 
-        $this->profile_service->authForgot($request, $view, $subject);
+        $this->profile_service->authForgotPassword($request, $view, $subject);
 
         Alert::toast('Silahkan cek email Anda');
         return back();
     }
 
-    public function getReset($email, $token)
+    public function getViewResetPassword($email, $token)
     {
         return view('auth.reset', ['token' => $token, 'email' => $email]);
     }
 
-    public function postReset(Request $request)
+    public function postResetPassword(Request $request)
     {
         $result = $this->profile_service->authReset($request);
 

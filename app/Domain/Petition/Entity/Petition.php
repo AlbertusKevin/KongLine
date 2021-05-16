@@ -4,6 +4,7 @@ namespace App\Domain\Petition\Entity;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Domain\Profile\Entity\User;
 
 class Petition extends Model
 {

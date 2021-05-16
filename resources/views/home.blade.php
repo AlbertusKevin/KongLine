@@ -48,8 +48,8 @@
                 <div class="col-md-4">
                     <div class="card m-2" style="padding: 0; ">
                         <div style="position:relative;">
-                            <img src="{{ $d->photo }}" class="card-img-top " alt="donation picture">
-                            <p class="donate-count">{{ $d->participatedonation->count() }} Donatur</p>
+                            <img src="{{ $d->photo }}" class="card-img-top card-img-home" alt="donation picture">
+                            <p class="donate-count">{{ $d->totalDonatur }} Donatur</p>
                         </div>
                         <div class="card-body">
                             <p class="card-text">{{ $d->title }}</p>
@@ -80,7 +80,7 @@
                 <div class="col-md-4">
                     <div class="card m-2 h-100" style="padding: 0; ">
                         <div style="position:relative;">
-                            <img src="{{ $p->photo }}" class="card-img-top profile" alt="petition picture">
+                            <img src="{{ $p->photo }}" class="card-img-top card-img-home" alt="petition picture">
                             <p class="donate-count">{{ $p->signedCollected }} Partisipan</p>
                         </div>
                         <div class="card-body card-text">

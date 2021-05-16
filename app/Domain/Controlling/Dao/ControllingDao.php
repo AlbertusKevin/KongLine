@@ -2,20 +2,20 @@
 
 namespace App\Domain\Controlling\Dao;
 
-use App\Domain\Event\Entity\Donation;
-use App\Domain\Event\Entity\User;
-use App\Domain\Event\Entity\ParticipateDonation;
-use App\Domain\Event\Entity\ParticipatePetition;
-use App\Domain\Event\Entity\Petition;
-use App\Domain\Event\Entity\Transaction;
-use Illuminate\Support\Facades\DB;
+use App\Domain\Donation\Entity\Donation;
+use App\Domain\Petition\Entity\Petition;
+use App\Domain\Profile\Entity\User;
+
+use App\Domain\Donation\Entity\ParticipateDonation;
+use App\Domain\Petition\Entity\ParticipatePetition;
+use App\Domain\Donation\Entity\Transaction;
 use Illuminate\Support\Facades\Mail;
 
-class AdminDao
+class ControllingDao
 {
     public function getAllUser()
     {
-        return User::where("id", "!=", GUEST_ID)->get();
+        return User::where("id", "!=", GUEST_ID)->where("role", "!=", ADMIN)->get();
     }
 
     public function getUserById($id)
@@ -58,7 +58,7 @@ class AdminDao
         return ParticipateDonation::where('idParticipant', $id)->count();
     }
 
-    public function listUserByRole($role)
+    public function getUsersByRole($role)
     {
         return User::where('role', $role)->where('role', '!=', GUEST)->get();
     }
@@ -134,24 +134,10 @@ class AdminDao
         return Petition::all()->sortByDesc("created_at")->take(3);
     }
 
-    public function allPetition()
-    {
-        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
-            ->join('category', 'petition.category', 'category.id')
-            ->join('event_status', 'petition.status', 'event_status.id')
-            ->get();
-    }
+    //
+    //
+    //
 
-    //
-    //
-    //
-    public function allDonation()
-    {
-        return Donation::selectRaw('donation.*, category.description as category, event_status.description as status')
-            ->join('category', 'donation.category', 'category.id')
-            ->join('event_status', 'donation.status', 'event_status.id')
-            ->get();
-    }
 
     public function selectDonation($status)
     {
@@ -408,7 +394,9 @@ class AdminDao
     }
     public function countDonatur($idDonation)
     {
-        return ParticipateDonation::where('idDonation', $idDonation)->count();
+        return Transaction::where('idDonation', $idDonation)
+            ->where("status", CONFIRMED_TRANSACTION)
+            ->count();
     }
 
     public function updateTotalDonatur($idDonation, $totalDonatur)
@@ -458,7 +446,7 @@ class AdminDao
             ->get();
     }
 
-    ////Mencari User sesuai keyword untuk tab PENGAJUAN
+    //Mencari User sesuai keyword untuk tab PENGAJUAN
     public function searchUserPengajuan($keyword)
     {
         return User::where('status', '=', 3)
@@ -493,16 +481,6 @@ class AdminDao
             ->select('donation.id', 'category.description', 'donation.photo', 'donation.title', 'users.name')
             ->get();
 
-        /*SQL Syntax :
-                            SELECT 'donation.id','donation.category','donation.photo','donation.title','users.name' 
-                            FROM `Donation` 
-                            JOIN(`participate_donation`) 
-                            ON `participate_donation.id` = `donation.id`
-                            JOIN(`users`)
-                            ON `users.id` = `donation.idCampaigner'
-                            WHERE('participate_donation.idParticipant' = $id);
-                        */
-
         return $donations;
     }
 
@@ -516,16 +494,6 @@ class AdminDao
             ->get();
 
         return $petitions;
-    }
-
-    public function countDonationMade($id)
-    {
-        return Donation::where('idCampaigner', $id)->count();
-    }
-
-    public function countPetitionMade($id)
-    {
-        return Petition::where('idCampaigner', $id)->count();
     }
 
     public function sendEmail($event, $view, $subject, $event_chosen)
@@ -550,6 +518,16 @@ class AdminDao
         return Petition::find($id);
     }
 
+    public function countDonationMade($id)
+    {
+        return Donation::where('idCampaigner', $id)->count();
+    }
+
+    public function countPetitionMade($id)
+    {
+        return Petition::where('idCampaigner', $id)->count();
+    }
+
     public function getUserMadeDonation($id)
     {
         $donations = Donation::join('users', 'users.id', 'donation.idCampaigner')
@@ -558,16 +536,6 @@ class AdminDao
             ->select('donation.id', 'category.description', 'donation.photo', 'donation.title', 'users.name')
             ->get();
         return $donations;
-
-        /*SQL Syntax :
-                            SELECT 'donation.id','donation.category','donation.photo','donation.title','users.name' 
-                            FROM `Donation` 
-                            JOIN(`users`)
-                            ON `users.id` = `donation.idCampaigner'
-                            JOIN(`category`)
-                            ON `categry.id` = `donation.category`
-                            WHERE('donation.idCampaigner' = $id);
-                        */
     }
 
     public function getUserMadePetition($id)

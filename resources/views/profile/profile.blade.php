@@ -38,7 +38,7 @@
             @elseif ($user->role == 'campaigner' || $user->status == 3)
                 <div class="card w-100 mt-2">
                     <div class="card-body">
-                        <a href="/campaigner" type="button" class="card-text">Data Campaigner</a>
+                        <a href="/profile/campaigner" type="button" class="card-text">Data Campaigner</a>
                     </div>
                 </div>
             @endif

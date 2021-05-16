@@ -55,7 +55,7 @@
                             {{ $petition->signedTarget }} </h4>
                         <p class="font-weight-bold">Orang telah menendatangani Petisi ini !</p>
                     @else
-                        @if (!$isParticipated)
+                        @if ($isParticipated)
                             <h4 class="mt-5 ml-4">{{ number_format($petition->signedCollected) }} dari
                                 {{ number_format($petition->signedTarget) }} </h4>
                             <p class="ml-4">Orang telah menendatangani Petisi ini !</p>
