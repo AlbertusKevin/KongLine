@@ -102,9 +102,11 @@
                                     <div class="card-body">
                                         <p class="card-text">{{ $message['content'] }}
                                         </p>
-                                        <a href="/inbox" type="button"
-                                            class="btn btn-outline-secondary btn-sm rounded-pill">Hubungi
-                                            Admin</a>
+                                        @if ($petition->idCampaigner == $user->id)
+                                            <a href="/inbox" type="button"
+                                                class="btn btn-outline-secondary btn-sm rounded-pill">Hubungi
+                                                Admin</a>
+                                        @endif
                                     </div>
                                 </div>
                                 @if ($petition->status == NOT_CONFIRMED || $petition->status == REJECTED)

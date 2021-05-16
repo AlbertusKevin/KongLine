@@ -184,7 +184,7 @@ const changePetitionList = (petition) => {
                 </div>
             </div>
             <div class="col-md-4">
-                <img src="/${petition.photo}" alt="Gambar dari petisi '${
+                <img src="${petition.photo}" alt="Gambar dari petisi '${
         petition.title
     }'"
                     class="img-thumbnail">
@@ -251,7 +251,7 @@ const changeDonationList = (donation) => {
     return /*html*/ `
     <div class="card col-md-4 p-2 mb-3" style="padding: 0; ">
         <div style="position:relative;">
-            <img src=${donation.photo} class="img-donation card-img-top"
+            <img src="${donation.photo}" class="img-donation card-img-top"
                 alt=" ${donation.title} donation's picture">
             <p class="donate-count">${donation.totalDonatur} Donatur</p>
             <p class="time-left">
@@ -1257,7 +1257,7 @@ const makeDonationCardView = (event) => {
     return `
         <div class="m-2">
             <div class="card" style="width: 18rem; position:relative;">
-                <img src="/${event.photo}" class="card-img-top" alt="...">
+                <img src="${event.photo}" class="card-img-top" alt="...">
                 <p class="time-left">Donation</p>
                 <div class="card-body">
                     <h5 class="card-title">${event.title}</h5>
@@ -1273,7 +1273,7 @@ const makePetitionCardView = (event) => {
     return `
         <div class="m-2">
             <div class="card" style="width: 18rem; position:relative;">
-                <img src="/${event.photo}" class="card-img-top" alt="...">
+                <img src="${event.photo}" class="card-img-top" alt="...">
                 <p class="time-left-white">Petition</p>
                 <div class="card-body">
                     <h5 class="card-title">${event.title}</h5>

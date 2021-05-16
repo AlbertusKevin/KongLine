@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <img src="{{ $list->photo }}" alt="Gambar dari petisi '{{ $list->title }}'"
-                                        class="img-thumbnail">
+                                        class="img-thumbnail img-list-petition">
                                 </div>
                             </div>
                         </div>
