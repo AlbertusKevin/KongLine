@@ -43,6 +43,11 @@ class ControllingDao
         return Donation::where('status', 0)->count();
     }
 
+    public function getCountWaitingTransaction()
+    {
+        return Transaction::where('status', 2)->count();
+    }
+
     public function getCountWaitingPetition()
     {
         return Petition::where('status', 0)->count();

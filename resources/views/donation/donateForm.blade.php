@@ -62,8 +62,7 @@
                             <h5 class="font-weight-bold">Isi Nominal Donasi&nbsp;<sup>*</sup></h5>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="nominal" name="nominal">
-                                <small class="form-text text-muted">Donasi mulai dari Rp
-                                    10,000,-</small>
+                                <small class="form-text text-muted">Donasi mulai dari Rp 10,000,-</small>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="annonymousDonatur"

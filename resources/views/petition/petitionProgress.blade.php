@@ -66,7 +66,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 text-center">
-                            <img src="/{{ $news->image }}" class="img-thumbnail" alt="News Image">
+                            <img src="{{ $news->image }}" class="img-thumbnail" alt="News Image">
                         </div>
                     </div>
                 </div>

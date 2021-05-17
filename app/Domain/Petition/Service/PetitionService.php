@@ -462,7 +462,7 @@ class PetitionService
     //! Memproses tandatangan peserta pada petisi tertentu
     public function signedThePetition($request, $idEvent, $user)
     {
-        $petition = new Model\ParticipatePetition($idEvent, $user->id, $request->petitionComment, Carbon::now()->format('Y-m-d'));
+        $petition = new Model\ParticipatePetition($idEvent, $user->id, $request->petitionComment, Carbon::now('+7:00'));
 
         // input data participant yang tanda tangan
         $this->petition_dao->signedThePetition($petition, $idEvent, $user);

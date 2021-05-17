@@ -57,7 +57,11 @@
         </div>
         <div class="row mt-5">
             <div class="col-md-12">
-                <small><a href="/admin/donation/transaction">Transaksi donasi untuk diproses</a></small>
+                <div class="text-right">
+                    <a href="{{ url('/admin/donation/transaction') }}" class="badge badge-info mb-3 p-2">Transaksi donasi
+                        untuk
+                        diproses</a>
+                </div>
                 <table class="table table-hover text-center">
                     <thead>
                         <tr>

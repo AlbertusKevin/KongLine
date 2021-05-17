@@ -21,6 +21,21 @@ class DonationService
         $this->donation_dao = new DonationDao();
     }
 
+    public function preprocessNominalDonation($request)
+    {
+        $nominal = explode(",", $request->nominal);
+        $nominal = (int)join("", $nominal);
+
+        if (gettype($nominal) != "integer") {
+            return "not_number";
+            if ($nominal < MIN_DONATION) {
+                return "below_min";
+            }
+        }
+
+        return $nominal;
+    }
+
     //! Mengambil nama bank yang bisa digunakan untuk transfer
     public function getListOfBank()
     {
@@ -101,23 +116,21 @@ class DonationService
         return $this->donation_dao->getAUserTransaction($idUser, $idEvent);
     }
 
-    public function checkAnUserTransactionStatus($participatedDonation, $id)
+    public function checkAnUserTransactionStatus($idUser, $idEvent)
     {
-        foreach ($participatedDonation as $participate) {
-            if ($participate->idParticipant == $id) {
-                if ($participate->status == 1) {
-                    return CONFIRMED_TRANSACTION;
-                }
-                if ($participate->status == 2) {
-                    return NOT_CONFIRMED_TRANSACTION;
-                }
-                if ($participate->status == 3) {
-                    return REJECTED_TRANSACTION;
-                }
-                if (!empty($participate->repaymentPicture) && $participate->status == 0) {
-                    return NOT_UPLOADED;
-                }
-            }
+
+        $statusTransaction = $this->donation_dao->getAUserTransaction($idUser, $idEvent)->status;
+        if ($statusTransaction == CONFIRMED_TRANSACTION) {
+            return CONFIRMED_TRANSACTION;
+        }
+        if ($statusTransaction == NOT_CONFIRMED_TRANSACTION) {
+            return NOT_CONFIRMED_TRANSACTION;
+        }
+        if ($statusTransaction == REJECTED_TRANSACTION) {
+            return REJECTED_TRANSACTION;
+        }
+        if ($statusTransaction == NOT_UPLOADED) {
+            return NOT_UPLOADED;
         }
 
         return false;

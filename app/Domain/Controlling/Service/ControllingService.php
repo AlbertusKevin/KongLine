@@ -29,6 +29,7 @@ class ControllingService
         $dashboard_data["campaigner_count"] = $this->controlling_dao->getCountCampaigner();
         $dashboard_data["waiting_campaigner"] = $this->controlling_dao->getCountWaitingCampaigner();
         $dashboard_data["waiting_donation"] = $this->controlling_dao->getCountWaitingDonation();
+        $dashboard_data["waiting_transaction"] = $this->controlling_dao->getCountWaitingTransaction();
         $dashboard_data["waiting_petition"] = $this->controlling_dao->getCountWaitingPetition();
         $dashboard_data["list_donation_limited"] = $this->controlling_dao->getListDonationLimit();
         $dashboard_data["list_petition_limited"] = $this->controlling_dao->getListPetitionLimit();

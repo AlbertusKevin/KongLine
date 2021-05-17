@@ -71,13 +71,7 @@
                 </div>
             </div>
             <div class="row w-35 ml-auto mr-auto mt-4">
-                <div class="col-md-12">
-                    <div class="modal-content">
-                        <div class="modal-body p-4 text-center">
-                            <img src="/{{ $transaction->repaymentPicture }}" alt="file preview" class="img-preview">
-                        </div>
-                    </div>
-                </div>
+                <img src="/{{ $transaction->repaymentPicture }}" alt="file preview" class="img-preview">
             </div>
         </form>
 

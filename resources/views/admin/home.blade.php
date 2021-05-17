@@ -53,6 +53,12 @@
                             <h1 class="text-bold"> {{ $dashboard_data['waiting_petition'] }} </h1>
                         </div>
                     </div>
+                    <div class="col">
+                        <div class="card card-admin transaction-confirmation">
+                            <p class="text-12"> Transaksi donasi untuk Dikonfirmasi :</p>
+                            <h1 class="text-bold"> {{ $dashboard_data['waiting_transaction'] }} </h1>
+                        </div>
+                    </div>
                 </div>
                 <div class="row bottom-right mt-4">
                     <div class="col-sm-12">

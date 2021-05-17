@@ -99,6 +99,7 @@ class ProfileService
         $user->status = ACTIVE;
         $user->role = PARTICIPANT;
         $user->photoProfile = DEFAULT_PROFILE;
+        $user->backgroundPicture = DEFAULT_COVER_PROFILE;
 
         if ($request->password) {
             $user->password = Hash::make($request->password);

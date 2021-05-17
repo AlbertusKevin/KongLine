@@ -5,9 +5,9 @@ namespace App\Domain\Donation\Model;
 class Transaction
 {
     //attribute
-    private $idDonation, $idParticipant, $accountNumber, $nominal, $repaymentPicture, $annonymousDonate, $status, $created_at;
+    private $idDonation, $idParticipant, $accountNumber, $nominal, $repaymentPicture, $annonymousDonate, $status, $created_at, $updated_at;
 
-    public function __construct($idDonation, $idParticipant, $accountNumber, $nominal, $annonymousDonate, $status, $created_at)
+    public function __construct($idDonation, $idParticipant, $accountNumber, $nominal, $annonymousDonate, $status, $created_at, $updated_at)
     {
         $this->idDonation = $idDonation;
         $this->idParticipant = $idParticipant;
@@ -16,6 +16,7 @@ class Transaction
         $this->annonymousDonate = $annonymousDonate;
         $this->status = $status;
         $this->created_at = $created_at;
+        $this->updated_at = $updated_at;
     }
 
     public function getIdDonation()
@@ -56,5 +57,10 @@ class Transaction
     public function getCreatedAt()
     {
         return $this->created_at;
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
     }
 }

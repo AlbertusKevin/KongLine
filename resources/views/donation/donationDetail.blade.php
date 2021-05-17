@@ -236,34 +236,32 @@
         <div id="donatur">
             <ul class="list-group">
                 @foreach ($donation['participated'] as $donatur)
-                    @if ($donatur->status == 1)
-                        <li class="list-group-item">
-                            <div class="row text-left">
-                                @if ($donatur->annonymous_comment == 1)
-                                    <div class="col-md-2 offset-md-2">
-                                        <img src="{{ DEFAULT_PROFILE }}" alt="Photo Profile" class="donatur-photo">
-                                    </div>
-                                    <div class="col-md-5">
-                                        <span class="ml-3"> Annonymous </span>
-                                    </div>
-                                @else
-                                    <div class="col-md-2 offset-md-2">
-                                        <img src="{{ $donatur->photoProfile }}" alt="{{ $donatur->name }} Profile"
-                                            class="donatur-photo rounded-circle">
-                                    </div>
-                                    <div class="col-md-5">
-                                        <span class="ml-3"> {{ $donatur->name }} </span>
-                                    </div>
-                                @endif
-                            </div>
-                        </li>
-                    @endif
+                    <li class="list-group-item">
+                        <div class="row text-left">
+                            @if ($donatur->annonymous_comment == 1)
+                                <div class="col-md-2 offset-md-2">
+                                    <img src="{{ DEFAULT_PROFILE }}" alt="Photo Profile" class="donatur-photo">
+                                </div>
+                                <div class="col-md-5">
+                                    <span class="ml-3"> Annonymous </span>
+                                </div>
+                            @else
+                                <div class="col-md-2 offset-md-2">
+                                    <img src="{{ $donatur->photoProfile }}" alt="{{ $donatur->name }} Profile"
+                                        class="donatur-photo rounded-circle">
+                                </div>
+                                <div class="col-md-5">
+                                    <span class="ml-3"> {{ $donatur->name }} </span>
+                                </div>
+                            @endif
+                        </div>
+                    </li>
                 @endforeach
             </ul>
         </div>
         <div id="comment">
             @foreach ($donation['participated'] as $donatur)
-                @if ($donatur->comment != null && $donatur->status == 1)
+                @if ($donatur->comment != null)
                     @if ($donatur->annonymous_comment == 1)
                         <div class="card mb-4">
                             <div class=" row no-gutters">

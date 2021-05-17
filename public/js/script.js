@@ -620,6 +620,14 @@ $(".category-petition").on("click", function (e) {
 });
 
 // Untuk donasi
+$("#nominal").on("keyup", function () {
+    let input = $(this).val();
+    input = input.toString().split(",").join("");
+    console.log(input);
+    input = input.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    $(this).val(input);
+});
+
 $("#search-donation").on("keyup", function () {
     let keyword = $(this).val();
     let category = $("#category-donation-selected").val();

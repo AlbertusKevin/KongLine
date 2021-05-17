@@ -5,6 +5,7 @@ define("DEFAULT_PROFILE", "/images/profile/photo/default.png");
 define("DEFAULT_COVER_PROFILE", "/images/profile/background/default-cover-profile.png");
 define("DEFAULT_FILE_PREVIEW", "/images/app/pictures/default-file.png");
 define("GUEST_ID", 1);
+define("MIN_DONATION", 10000);
 
 // Status Event
 define("NOT_CONFIRMED", 0);
