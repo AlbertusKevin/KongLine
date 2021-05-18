@@ -36,10 +36,10 @@ class ProfileService
     }
 
     // Memproses update profile
-    public function updateProfile($request, $id)
+    public function updateProfile($request, $user)
     {
-        $pathBackground = null;
-        $pathProfile = null;
+        $pathBackground = $user->backgroundPicture;
+        $pathProfile = $user->photoProfile;
 
         if (!empty($request->file('profile_picture'))) {
             $pathProfile = HelperService::uploadImage($request->file('profile_picture'), FOLDER_IMAGE_PROFILE);
@@ -47,7 +47,7 @@ class ProfileService
         if ($request->file('zoom_picture')) {
             $pathBackground = HelperService::uploadImage($request->file('zoom_picture'), FOLDER_IMAGE_COVER);
         }
-        $this->profile_dao->updateProfile($request, $id, $pathProfile, $pathBackground);
+        $this->profile_dao->updateProfile($request, $user->id, $pathProfile, $pathBackground);
     }
 
     public function deleteAccount($id)

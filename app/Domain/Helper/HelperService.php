@@ -23,11 +23,9 @@ class HelperService
         //buat nama baru yang unique: 7dsf83hd.jpg
         $pictName = uniqid() . '.' . end($pictName);
         // pindahkan file dari tmp ke folder tujuan
-
-        // die();
         $img->move($folder, $pictName);
 
-        return $folder . $pictName;   //membuat file path yang akan digunakan sebagai src html
+        return '/' . $folder . $pictName;   //membuat file path yang akan digunakan sebagai src html
     }
 
     // Untuk navbar, perbedaan untuk Admin dan Pengguna (guest, campaigner, participant)
