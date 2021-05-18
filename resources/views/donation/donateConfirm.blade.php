@@ -108,7 +108,7 @@
                                 </tr>
                                 <tr>
                                     <td>Jumlah Donasi:</td>
-                                    <td>{{ $transaction->nominal }}</td>
+                                    <td>Rp. {{ number_format($transaction->nominal, 2, ',', '.') }}</td>
                                 </tr>
                             </tbody>
                         </table>

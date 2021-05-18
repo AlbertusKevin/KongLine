@@ -7,6 +7,14 @@ define("DEFAULT_FILE_PREVIEW", "/images/app/pictures/default-file.png");
 define("GUEST_ID", 1);
 define("MIN_DONATION", 10000);
 
+define("FOLDER_IMAGE_PETITION", "/images/petition/events/");
+define("FOLDER_IMAGE_PETITION_PROGRESS", "/images/petition/update_news/");
+define("FOLDER_IMAGE_DONATION", "/images/donation/");
+define("FOLDER_IMAGE_PROFILE", "/images/profile/photo/");
+define("FOLDER_IMAGE_COVER", "/images/profile/background/");
+define("FOLDER_IMAGE_TRANSACTION", "/images/verification/transaction/");
+define("FOLDER_IMAGE_KTP", "/images/verification/ktp/");
+
 // Status Event
 define("NOT_CONFIRMED", 0);
 define("ACTIVE", 1);

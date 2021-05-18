@@ -119,18 +119,21 @@ class DonationService
     public function checkAnUserTransactionStatus($idUser, $idEvent)
     {
 
-        $statusTransaction = $this->donation_dao->getAUserTransaction($idUser, $idEvent)->status;
-        if ($statusTransaction == CONFIRMED_TRANSACTION) {
-            return CONFIRMED_TRANSACTION;
-        }
-        if ($statusTransaction == NOT_CONFIRMED_TRANSACTION) {
-            return NOT_CONFIRMED_TRANSACTION;
-        }
-        if ($statusTransaction == REJECTED_TRANSACTION) {
-            return REJECTED_TRANSACTION;
-        }
-        if ($statusTransaction == NOT_UPLOADED) {
-            return NOT_UPLOADED;
+        $statusTransaction = $this->donation_dao->getAUserTransaction($idUser, $idEvent);
+
+        if (!empty($statusTransaction)) {
+            if ($statusTransaction->status == CONFIRMED_TRANSACTION) {
+                return CONFIRMED_TRANSACTION;
+            }
+            if ($statusTransaction->status == NOT_CONFIRMED_TRANSACTION) {
+                return NOT_CONFIRMED_TRANSACTION;
+            }
+            if ($statusTransaction->status == REJECTED_TRANSACTION) {
+                return REJECTED_TRANSACTION;
+            }
+            if ($statusTransaction->status == NOT_UPLOADED) {
+                return NOT_UPLOADED;
+            }
         }
 
         return false;
@@ -148,7 +151,11 @@ class DonationService
 
     public function confirmationPictureDonation($picture, $id)
     {
-        $pathRepaymentPicture = HelperService::uploadImage($picture, 'donation/bukti_transfer');
+        $folder = $this->getADonation($id)->title;
+        $folder = HelperService::makeSlugify($folder);
+        $folder = FOLDER_IMAGE_TRANSACTION . $folder;
+
+        $pathRepaymentPicture = HelperService::uploadImage($picture, $folder);
         $this->donation_dao->confirmationPictureDonation($pathRepaymentPicture, $id);
     }
 
@@ -274,7 +281,7 @@ class DonationService
 
     public function storeDonationCreated($donation)
     {
-        $pathPhoto = HelperService::uploadImage($donation->getPhoto(), 'images/donation');
+        $pathPhoto = HelperService::uploadImage($donation->getPhoto(), FOLDER_IMAGE_DONATION);
         $donation->setPhoto($pathPhoto);
         $this->donation_dao->storeDonationCreated($donation);
     }
@@ -282,7 +289,7 @@ class DonationService
     public function updateEventDonation($donation, $id, $empty)
     {
         if (!$empty) {
-            $pathPhoto = HelperService::uploadImage($donation->getPhoto(), 'images/donation');
+            $pathPhoto = HelperService::uploadImage($donation->getPhoto(), FOLDER_IMAGE_DONATION);
             $donation->setPhoto($pathPhoto);
         }
         $this->donation_dao->updateEventDonation($donation, $id);

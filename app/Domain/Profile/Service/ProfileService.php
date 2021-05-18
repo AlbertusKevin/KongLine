@@ -38,8 +38,15 @@ class ProfileService
     // Memproses update profile
     public function updateProfile($request, $id)
     {
-        $pathProfile = HelperService::uploadImage($request->file('profile_picture'), 'profile/photo');
-        $pathBackground = HelperService::uploadImage($request->file('zoom_picture'), 'profile/background');
+        $pathBackground = null;
+        $pathProfile = null;
+
+        if (!empty($request->file('profile_picture'))) {
+            $pathProfile = HelperService::uploadImage($request->file('profile_picture'), FOLDER_IMAGE_PROFILE);
+        }
+        if ($request->file('zoom_picture')) {
+            $pathBackground = HelperService::uploadImage($request->file('zoom_picture'), FOLDER_IMAGE_COVER);
+        }
         $this->profile_dao->updateProfile($request, $id, $pathProfile, $pathBackground);
     }
 
@@ -54,7 +61,7 @@ class ProfileService
             return $this->profile_dao->updateAccountNumber($request, $user->id);
         }
 
-        $pathKTP = HelperService::uploadImage($request->file('KTP_picture'), 'profile/KTP');
+        $pathKTP = HelperService::uploadImage($request->file('KTP_picture'), FOLDER_IMAGE_KTP);
         return $this->profile_dao->updateToCampaigner($request, $user->id, $pathKTP);
     }
 

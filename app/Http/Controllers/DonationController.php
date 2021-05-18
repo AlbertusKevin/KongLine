@@ -51,9 +51,9 @@ class DonationController extends Controller
     {
         $donation = $this->donation_service->getCompleteInformationADonation($id);
         $user = $this->profile_service->getAProfile();
-        $userTransactionStatus = $this->donation_service->checkAnUserTransactionStatus($user->id, $donation['detail']->id);
         // cek apakah user ini pernah berpartisipasi di event ini
         $isParticipated = $this->event_service->checkParticipated($id, $user->id, DONATION);
+        $userTransactionStatus = $this->donation_service->checkAnUserTransactionStatus($user->id, $donation['detail']->id);
         $message = $this->event_service->messageOfEvent($donation['detail']->status);
         $navbar = HelperService::getNavbar();
 
