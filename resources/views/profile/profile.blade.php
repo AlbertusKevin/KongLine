@@ -110,4 +110,6 @@
             <a type="button" href="/delete" class="btn btn-danger mt-5">Hapus Akun</a>
         </form>
     </div>
+
+
 @endsection
