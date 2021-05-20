@@ -36,7 +36,7 @@ class ControllingController extends Controller
     {
         $listCategory = $this->event_service->getAllCategoriesEvent();
         $petitionList = $this->petition_service->getAllPetition();
-        return view('admin.listPetition', compact('listCategory', 'petitionList'));
+        return view('admin.petition.listPetition', compact('listCategory', 'petitionList'));
     }
 
     public function acceptPetition($id)
@@ -214,8 +214,8 @@ class ControllingController extends Controller
     {
         $users = $this->controlling_service->getAllUser();
         $eventCount = $this->controlling_service->countEventParticipate($users);
-        $changeDateFormat = $this->controlling_service->changeDateFormat();
-        return view('/admin/listUser', compact('users', 'eventCount', 'changeDateFormat'));
+        $changeDateFormat = $this->controlling_service->changeDateFormatCreatedAt($users);
+        return view('admin.user.listUser', compact('users', 'eventCount', 'changeDateFormat'));
     }
 
     public function getUserInfo($id)

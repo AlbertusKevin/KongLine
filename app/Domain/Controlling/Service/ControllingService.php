@@ -5,12 +5,14 @@ namespace App\Domain\Controlling\Service;
 use App\Domain\Controlling\Dao\ControllingDao;
 use App\Domain\Profile\Service\ProfileService;
 use App\Domain\Donation\Service\DonationService;
+use App\Domain\Event\Service\EventService;
 use Illuminate\Support\Carbon;
 
 class ControllingService
 {
     private $controlling_dao;
     private $profile_service;
+    private $event_service;
     private $donation_service;
 
     public function __construct()
@@ -18,6 +20,7 @@ class ControllingService
         $this->controlling_dao = new ControllingDao();
         $this->profile_service = new ProfileService();
         $this->donation_service = new DonationService();
+        $this->event_service = new EventService();
     }
 
     public function getAdminDashboardData()
@@ -69,13 +72,11 @@ class ControllingService
     }
 
     //Mengubah Format tanggal, ex:2019-10-02 ---> 2019/10/02
-    public function changeDateFormat()
+    public function changeDateFormatCreatedAt($items)
     {
-        $users = $this->controlling_dao->getAllUser();
         $tanggal = array();
-        foreach ($users as $user) {
-            $tanggalDibuat = $user->created_at;
-            $tanggalDibuat = explode(" ", $tanggalDibuat);
+        foreach ($items as $item) {
+            $tanggalDibuat = explode(" ", $item->created_at);
             $tanggalDibuat = str_replace("-", "/", $tanggalDibuat[0]);
             array_push($tanggal, $tanggalDibuat);
         }
@@ -130,14 +131,6 @@ class ControllingService
                 return $this->controlling_dao->sortByCountEventAll();
             } else {
                 return $this->controlling_dao->sortByCountEvent($request->roleUserType);
-            }
-        }
-
-        if ($request->sortBy == 'Role') {
-            if ($request->roleUserType == 'semua') {
-                return $this->controlling_dao->sortByRoleAll();
-            } else {
-                return $this->controlling_dao->sortByRoleSpecific($request->roleUserType);
             }
         }
     }
@@ -242,8 +235,7 @@ class ControllingService
     //! {{-- lewat ajax --}}
     public function adminSortDonation($request)
     {
-        $category = $this->eventService->categorySelect($request);
-        // dd($category . " " . $request->sortBy . " " . $request->typeDonation);
+        $category = $this->event_service->categorySelect($request);
 
         //jika tidak sort dan tidak pilih category
         if ($request->sortBy == NONE && $category == 0) {
@@ -384,7 +376,7 @@ class ControllingService
 
     public function adminSearchDonation($request)
     {
-        $category = $this->eventService->categorySelect($request);
+        $category = $this->event_service->categorySelect($request);
         $sortBy = $request->sortBy;
 
         if ($request->typeDonation == SEMUA) {

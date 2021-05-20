@@ -78,7 +78,7 @@
                 <div class="card card-admin height" id="pengajuan-donasi">
                     <div class="name">
                         <p> Donasi Terbaru </p>
-                        <a href="/donation" class="text-12">Lihat lainnya</a>
+                        <a href="/admin/donation" class="text-12">Lihat lainnya</a>
                     </div>
                     @foreach ($dashboard_data['list_donation_limited'] as $donation)
                         <a href="/donation/{{ $donation->id }}">
@@ -93,7 +93,7 @@
                 <div class="card card-admin height" id="pengajuan-petisi">
                     <div class="name">
                         <p> Petisi Terbaru </p>
-                        <a href="/petition" class="text-12">Lihat lainnya</a>
+                        <a href="/admin/petition" class="text-12">Lihat lainnya</a>
                     </div>
                     @foreach ($dashboard_data['list_petition_limited'] as $petition)
                         <a href="/petition/{{ $petition->id }}">

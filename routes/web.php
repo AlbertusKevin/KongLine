@@ -139,15 +139,15 @@ Route::post('/input', [ForumController::class, 'input']);
 Route::get('/admin', [ControllingController::class, 'home'])->name('admin')->middleware('admin');
 
 //! Users
-Route::get('/admin/listUser', [ControllingController::class, 'getAllUsers'])->middleware('admin');
+Route::get('/admin/user', [ControllingController::class, 'getAllUsers'])->middleware('admin');
 
 //* -------- ajax -----------
-Route::get('/admin/listUser/role', [ControllingController::class, 'getUsersByRole'])->middleware('admin');
-Route::get('/admin/listUser/sort', [ControllingController::class, 'sortListUser'])->middleware('admin');
-Route::get('/admin/listUser/search', [ControllingController::class, 'searchUser'])->middleware('admin');
+Route::get('/admin/user/role', [ControllingController::class, 'getUsersByRole'])->middleware('admin');
+Route::get('/admin/user/sort', [ControllingController::class, 'sortListUser'])->middleware('admin');
+Route::get('/admin/user/search', [ControllingController::class, 'searchUser'])->middleware('admin');
 Route::get('/admin/user/diikuti/{id}', [ControllingController::class, 'getEventParticipate'])->middleware('admin');
 Route::get('/admin/user/dibuat/{id}', [ControllingController::class, 'getEventMade'])->middleware('admin');
-Route::get('/admin/listUser/countEvent', [ControllingController::class, 'countEventParticipate'])->middleware('admin');
+Route::get('/admin/user/countEvent', [ControllingController::class, 'countEventParticipate'])->middleware('admin');
 
 Route::get('/admin/user/{id}', [ControllingController::class, 'getUserInfo'])->middleware('admin');
 Route::patch('/admin/user/terimaPengajuan/{id}', [ControllingController::class, 'acceptUserToCampaigner'])->middleware('admin');

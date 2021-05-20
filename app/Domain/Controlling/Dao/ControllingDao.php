@@ -45,7 +45,7 @@ class ControllingDao
 
     public function getCountWaitingTransaction()
     {
-        return Transaction::where('status', 2)->count();
+        return Transaction::where('status', NOT_CONFIRMED_TRANSACTION)->count();
     }
 
     public function getCountWaitingPetition()
@@ -116,17 +116,6 @@ class ControllingDao
     {
         return User::where('role', '!=', GUEST)
             ->orderBy('email', 'asc')->get();
-    }
-
-    public function sortByRoleAll()
-    {
-        return User::where('role', '!=', GUEST)->orderBy('role', 'asc')->get();
-    }
-
-    public function sortByRoleSpecific($role)
-    {
-        return User::where('role', $role)
-            ->orderBy('role', 'asc')->get();
     }
 
     public function getListDonationLimit()
@@ -581,7 +570,7 @@ class ControllingDao
 
     public function sortByCountEventAll()
     {
-        return User::orderBy('countEvent', 'desc')->get();
+        return User::where('id', '!=', GUEST_ID)->orderBy('countEvent', 'desc')->get();
     }
 
     public function sortByCountEvent($role)
