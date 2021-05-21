@@ -37,9 +37,9 @@
             <div class="collapse navbar-collapse justify-content-end mr-5 pr-5" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link" href="{{ url('/admin') }}">Dashboard</a>
-                    <a class="nav-link" href="{{ url('/admin/listUser') }}">User</a>
-                    <a class="nav-link" href="{{ url('/admin/donation') }}">Donasi</a>
-                    <a class="nav-link" href="{{ url('/admin/petition') }}">Petisi</a>
+                    <a class="nav-link" href="{{ url('/admin/user') }}">User</a>
+                    <a class="nav-link" href="{{ url('/admin/donation') }}">Donation</a>
+                    <a class="nav-link" href="{{ url('/admin/petition') }}">Petition</a>
                     <a class="nav-link" href="{{ url('/forum') }}">Forum</a>
                     <a class="nav-link" href="{{ url('/inbox') }}">Service</a>
                     <div class="dropdown m-2 mr-2">

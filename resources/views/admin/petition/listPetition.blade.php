@@ -69,12 +69,12 @@
                     <tbody id="petition-list">
                         @foreach ($petitionList as $petition)
                             <tr>
-                                <td>{{ $petition->created_at }}</td>
+                                <td>{{ date_format(date_create($petition->created_at), 'Y/m/d') }}</td>
                                 <td><a href="/petition/{{ $petition->id }}"
                                         style="color:black;">{{ $petition->title }}</a></td>
                                 <td>{{ $petition->category }}</td>
                                 <td>{{ $petition->signedTarget }}</td>
-                                <td>{{ $petition->deadline }}</td>
+                                <td>{{ date_format(date_create($petition->deadline), 'Y/m/d') }}</td>
                                 <td>{{ $petition->status }}</td>
                             </tr>
                         @endforeach

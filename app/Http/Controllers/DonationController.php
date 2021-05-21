@@ -51,9 +51,9 @@ class DonationController extends Controller
     {
         $donation = $this->donation_service->getCompleteInformationADonation($id);
         $user = $this->profile_service->getAProfile();
-        $userTransactionStatus = $this->donation_service->checkAnUserTransactionStatus($donation['participated'], $user->id);
         // cek apakah user ini pernah berpartisipasi di event ini
-        $isParticipated = $this->event_service->checkParticipated($id, $user, DONATION);
+        $isParticipated = $this->event_service->checkParticipated($id, $user->id, DONATION);
+        $userTransactionStatus = $this->donation_service->checkAnUserTransactionStatus($user->id, $donation['detail']->id);
         $message = $this->event_service->messageOfEvent($donation['detail']->status);
         $navbar = HelperService::getNavbar();
 
@@ -117,7 +117,7 @@ class DonationController extends Controller
             $request->purpose,
             $request->deadline,
             0,
-            Carbon::now()->format("Y-m-d"),
+            Carbon::now('+7:00'),
             0,
             $request->donationTarget,
             0,
@@ -224,11 +224,21 @@ class DonationController extends Controller
 
     public function postDonate(Request $request, $id)
     {
+
         $validator = Validator::make($request->all(), [
-            'nominal' => 'required|numeric|min:10000',
+            'nominal' => 'required',
             'rekeningUser' => 'required|numeric',
             'comment' => 'nullable|min:20'
         ]);
+
+        $nominal = $this->donation_service->preprocessNominalDonation($request);
+
+        if ($nominal == "not_number") {
+            return redirect('/donation/donate/' . $id)->withInput()->with(['type' => "error", 'message' => 'Input nominal harus berupa angka']);
+            if ($nominal == "below_min") {
+                return redirect('/donation/donate/' . $id)->withInput()->with(['type' => "error", 'message' => 'Donasi minimal ' . MIN_DONATION]);
+            }
+        }
 
         if ($validator->fails()) {
             $messageError = [];
@@ -244,8 +254,8 @@ class DonationController extends Controller
         $annonymousComment = $this->event_service->checkAnnonym($request->annonymousComment);
         $annonymousDonate = $this->event_service->checkAnnonym($request->annonymousDonatur);
 
-        $participateDonation = new Model\ParticipateDonation($id, $user->id, $request->comment, Carbon::now()->format('Y-m-d'), $annonymousComment);
-        $transaction = new Model\Transaction($id, $user->id, $request->rekeningUser, $request->nominal, $annonymousDonate, 0, Carbon::now()->format("Y-m-d"));
+        $participateDonation = new Model\ParticipateDonation($id, $user->id, $request->comment, Carbon::now('+7:00'), $annonymousComment);
+        $transaction = new Model\Transaction($id, $user->id, $request->rekeningUser, $nominal, $annonymousDonate, 0, Carbon::now('+7:00'), Carbon::now('+7:00'));
         $this->donation_service->postDonate($participateDonation);
         $this->donation_service->postTransaction($transaction);
 

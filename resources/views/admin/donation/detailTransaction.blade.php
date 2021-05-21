@@ -39,7 +39,7 @@
                                 </tr>
                                 <tr>
                                     <td>Jumlah Donasi:</td>
-                                    <td>{{ $transaction->nominal }}</td>
+                                    <td>Rp. {{ number_format($transaction->nominal, 2, ',', '.') }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -48,13 +48,7 @@
             </div>
         </div>
         <div class="row w-35 ml-auto mr-auto mt-4">
-            <div class="col-md-12">
-                <div class="modal-content">
-                    <div class="modal-body p-4 text-center">
-                        <img src="/{{ $transaction->repaymentPicture }}" alt="bukti transaksi" class="img-preview">
-                    </div>
-                </div>
-            </div>
+            <img src="{{ $transaction->repaymentPicture }}" alt="bukti transaksi" class="img-preview">
         </div>
         @if ($transaction->status == NOT_CONFIRMED_TRANSACTION)
             <div class="row w-35 ml-auto mr-auto mt-4 text-center">

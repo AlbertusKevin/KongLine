@@ -40,10 +40,10 @@
             @foreach ($comments as $comment)
                 @if ($comment->comment != null)
                     <div class="card mb-4">
-                        <div class=" row no-gutters">
+                        <div class=" row">
                             <div class="col-md-4 text-center pt-2 pb-2">
-                                <img src="/{{ $comment->photoProfile }}"
-                                    class="img-thumbnail petition-comment-img-profile" alt="Participant's Image Profile">
+                                <img src="{{ $comment->photoProfile }}" class="img-thumbnail petition-comment-img-profile"
+                                    alt="Participant's Image Profile">
                             </div>
                             <div class="col-md-8 pt-2 pb-2">
                                 <div class="card-body">

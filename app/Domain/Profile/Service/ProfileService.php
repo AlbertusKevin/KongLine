@@ -36,11 +36,18 @@ class ProfileService
     }
 
     // Memproses update profile
-    public function updateProfile($request, $id)
+    public function updateProfile($request, $user)
     {
-        $pathProfile = HelperService::uploadImage($request->file('profile_picture'), 'profile/photo');
-        $pathBackground = HelperService::uploadImage($request->file('zoom_picture'), 'profile/background');
-        $this->profile_dao->updateProfile($request, $id, $pathProfile, $pathBackground);
+        $pathBackground = $user->backgroundPicture;
+        $pathProfile = $user->photoProfile;
+
+        if (!empty($request->file('profile_picture'))) {
+            $pathProfile = HelperService::uploadImage($request->file('profile_picture'), FOLDER_IMAGE_PROFILE);
+        }
+        if ($request->file('zoom_picture')) {
+            $pathBackground = HelperService::uploadImage($request->file('zoom_picture'), FOLDER_IMAGE_COVER);
+        }
+        $this->profile_dao->updateProfile($request, $user->id, $pathProfile, $pathBackground);
     }
 
     public function deleteAccount($id)
@@ -54,7 +61,7 @@ class ProfileService
             return $this->profile_dao->updateAccountNumber($request, $user->id);
         }
 
-        $pathKTP = HelperService::uploadImage($request->file('KTP_picture'), 'profile/KTP');
+        $pathKTP = HelperService::uploadImage($request->file('KTP_picture'), FOLDER_IMAGE_KTP);
         return $this->profile_dao->updateToCampaigner($request, $user->id, $pathKTP);
     }
 
@@ -99,6 +106,7 @@ class ProfileService
         $user->status = ACTIVE;
         $user->role = PARTICIPANT;
         $user->photoProfile = DEFAULT_PROFILE;
+        $user->backgroundPicture = DEFAULT_COVER_PROFILE;
 
         if ($request->password) {
             $user->password = Hash::make($request->password);

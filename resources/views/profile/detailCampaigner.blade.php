@@ -21,7 +21,7 @@
             @if ($user->status == 3 || $user->role == PARTICIPANT)
                 <div class="form-group">
                     @if ($user->status == 3)
-                        <img src="/{{ $user->ktpPicture }}" alt="KTP" class="img-thumbnail" width="300px"><br><br>
+                        <img src="{{ $user->ktpPicture }}" alt="KTP" class="img-thumbnail" width="300px"><br><br>
                     @endif
                     <label for="KTP_picture">Foto KTP</label>
                     <input type="file" class="form-control" name="KTP_picture" id="KTP_picture">
@@ -42,7 +42,11 @@
                 <input type="text" class="form-control" id="rekening" name="rekening" value="{{ $user->accountNumber }}">
             </div>
 
-            <button type="submit" class="btn btn-primary mt-5">Perbarui</button>
+            @if ($user->status == 1 && $user->role == PARTICIPANT)
+                <button type="submit" class="btn btn-primary mt-5">Daftar</button>
+            @else
+                <button type="submit" class="btn btn-primary mt-5">Perbarui</button>
+            @endif
             <a type="button" href="{{ url('/profile') }}" class="btn btn-light mt-5">Batal</a>
         </form>
     </div>

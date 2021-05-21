@@ -1,6 +1,7 @@
 const baseURL = "http://localhost:8000";
 
 const getNowURL = () => window.location.href.split("/")[3];
+const getNowURLAdmin = () => window.location.href.split("/")[4];
 
 // fungsi umum
 const checkTypePetition = (type) => {
@@ -87,13 +88,13 @@ const getACategory = (idCategory) => {
 const changeTablePetition = (petition) => {
     return /*html*/ `
     <tr>
-        <td>${petition.created_at}</td>
+        <td>${changeDateFormat(petition.created_at)}</td>
         <td><a href="/petition/${petition.id}" style = "color:black;">${
         petition.title
     }</a></td>
         <td>${getACategory(petition.category)}</td>
         <td>${petition.signedTarget}</td>
-        <td>${petition.deadline}</td>
+        <td>${changeDateFormat(petition.deadline)}</td>
         <td>${getStatus(petition.status)}</td>
     </tr>
         `;
@@ -118,13 +119,13 @@ const emptySearchTablePetition = (keyword) => {
 const changeTableDonation = (donation) => {
     return /*html*/ `
     <tr>
-        <td>${donation.created_at}</td>
+        <td>${changeDateFormat(donation.created_at)}</td>
         <td><a href="/donation/${donation.id}" style = "color:black;">${
         donation.title
     }</a></td>
         <td>${donation.category}</td>
         <td>Rp. ${donation.donationTarget.toLocaleString("en")},00</td>
-        <td>${donation.deadline}</td>
+        <td>${changeDateFormat(donation.deadline)}</td>
         <td>${donation.status}</td>
     </tr>
         `;
@@ -184,7 +185,7 @@ const changePetitionList = (petition) => {
                 </div>
             </div>
             <div class="col-md-4">
-                <img src="/${petition.photo}" alt="Gambar dari petisi '${
+                <img src="${petition.photo}" alt="Gambar dari petisi '${
         petition.title
     }'"
                     class="img-thumbnail">
@@ -251,7 +252,7 @@ const changeDonationList = (donation) => {
     return /*html*/ `
     <div class="card col-md-4 p-2 mb-3" style="padding: 0; ">
         <div style="position:relative;">
-            <img src=${donation.photo} class="img-donation card-img-top"
+            <img src="${donation.photo}" class="img-donation card-img-top"
                 alt=" ${donation.title} donation's picture">
             <p class="donate-count">${donation.totalDonatur} Donatur</p>
             <p class="time-left">
@@ -416,13 +417,28 @@ const emptyTableTransaction = () => {
 //untuk active link sesuai page yang diklik
 $(".nav-link").ready(function () {
     let url = getNowURL();
-    console.log(url);
-
-    $(".nav-link").each(function () {
-        if ($(this).html().toLowerCase() == url) {
-            $(this).addClass("active");
-        }
-    });
+    if (url == "admin") {
+        url = getNowURLAdmin();
+        $(".nav-link").each(function () {
+            if (url == undefined) {
+                if ($(this).html() == "Dashboard") {
+                    $(this).addClass("badge badge-warning");
+                }
+            } else if ($(this).html().toLowerCase() == url) {
+                $(this).addClass("badge badge-warning");
+            }
+        });
+    } else {
+        $(".nav-link").each(function () {
+            if (url == "inbox") {
+                if ($(this).html() == "Service") {
+                    $(this).addClass("badge badge-warning");
+                }
+            } else if ($(this).html().toLowerCase() == url) {
+                $(this).addClass("badge badge-warning");
+            }
+        });
+    }
 });
 
 $("#check-terms-agreement").on("click", function () {
@@ -620,6 +636,14 @@ $(".category-petition").on("click", function (e) {
 });
 
 // Untuk donasi
+$("#nominal").on("keyup", function () {
+    let input = $(this).val();
+    input = input.toString().split(",").join("");
+    console.log(input);
+    input = input.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    $(this).val(input);
+});
+
 $("#search-donation").on("keyup", function () {
     let keyword = $(this).val();
     let category = $("#category-donation-selected").val();
@@ -945,7 +969,7 @@ $(".role-type").on("click", function () {
     console.log(roleType);
 
     $.ajax({
-        url: "/admin/listUser/role",
+        url: "/admin/user/role",
         data: { roleType },
         dataType: "json",
         success: (data) => {
@@ -995,7 +1019,7 @@ const countEventParticipate = (userId) => {
     console.log(userId);
 
     $.ajax({
-        url: "/admin/listUser/countEvent",
+        url: "/admin/user/countEvent",
         data: { userId },
         dataType: "json",
         success: (data) => {
@@ -1088,15 +1112,12 @@ $(".sort-list-user").on("click", function (e) {
 
     let roleUserType = roleTypeUser($(".btn-role").html());
 
-    console.log("Sort By : ", sortBy);
-    console.log("Role User : ", roleUserType);
-
     sortListUser(sortBy, roleUserType);
 });
 
 const sortListUser = (sortBy, roleUserType) => {
     $.ajax({
-        url: "/admin/listUser/sort",
+        url: "/admin/user/sort",
         data: { sortBy, roleUserType },
         dataType: "json",
         success: (data) => {
@@ -1146,7 +1167,7 @@ $("#search-user").on("keyup", function () {
     // console.log("Keyword : ", keyword, "Role User : ", roleUserType);
 
     $.ajax({
-        url: "/admin/listUser/search",
+        url: "/admin/user/search",
         data: { keyword, roleUserType },
         dataType: "json",
         success: (data) => {
@@ -1257,7 +1278,7 @@ const makeDonationCardView = (event) => {
     return `
         <div class="m-2">
             <div class="card" style="width: 18rem; position:relative;">
-                <img src="/${event.photo}" class="card-img-top" alt="...">
+                <img src="${event.photo}" class="card-img-top" alt="...">
                 <p class="time-left">Donation</p>
                 <div class="card-body">
                     <h5 class="card-title">${event.title}</h5>
@@ -1273,7 +1294,7 @@ const makePetitionCardView = (event) => {
     return `
         <div class="m-2">
             <div class="card" style="width: 18rem; position:relative;">
-                <img src="/${event.photo}" class="card-img-top" alt="...">
+                <img src="${event.photo}" class="card-img-top" alt="...">
                 <p class="time-left-white">Petition</p>
                 <div class="card-body">
                     <h5 class="card-title">${event.title}</h5>

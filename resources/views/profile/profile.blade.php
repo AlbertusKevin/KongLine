@@ -2,8 +2,8 @@
 
 @section('content')
     @include('layout.message')
-    <div class="jumbotron text-center" style="background-image: url('/{{ $user->backgroundPicture }}');">
-        <img src="/{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
+    <div class="jumbotron text-center" style="background-image: url('{{ $user->backgroundPicture }}');">
+        <img src="{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
         <h3 class="display-4">{{ $user->name }}</h3>
         @if ($user->role == 'campaigner')
             <h1><span class="badge rounded-pill bg-primary text-white">Campaigner</span></h1>
@@ -62,7 +62,7 @@
             </div>
             <div class="form-group">
                 <label for="about">Tentang Saya</label>
-                <textarea class="form-control" id="about" rows="3" name="aboutMe" value="{{ $user->aboutMe }}"></textarea>
+                <textarea class="form-control" id="about" rows="3" name="aboutMe">{{ $user->aboutMe }}</textarea>
             </div>
             <div class="form-group">
                 <label for="kota">Kota</label>
@@ -110,4 +110,6 @@
             <a type="button" href="/delete" class="btn btn-danger mt-5">Hapus Akun</a>
         </form>
     </div>
+
+
 @endsection

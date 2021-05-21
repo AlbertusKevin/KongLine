@@ -87,9 +87,16 @@ class AuthController extends Controller
 
     public function postDataForgotPassword(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users',
         ]);
+
+        if ($validator->fails()) {
+            return redirect('/forgot')
+                ->withInput()
+                ->withErrors($validator)
+                ->with(['type' => "error", 'message' => 'Email kurang tepat. Pastikan format email benar dan terdaftar pada sistem.']);
+        };
 
         $view = 'auth.verify';
         $subject = 'Reset Password';

@@ -7,6 +7,7 @@ use App\Domain\Donation\Entity\DetailAllocation;
 use App\Domain\Donation\Entity\Donation;
 use App\Domain\Donation\Entity\ParticipateDonation;
 use App\Domain\Donation\Entity\Transaction;
+use Carbon\Carbon;
 
 class DonationDao
 {
@@ -58,6 +59,7 @@ class DonationDao
                     ->on('transaction.idDonation', 'participate_donation.idDonation');
             })
             ->where('participate_donation.idDonation', $idEvent)
+            ->where('transaction.status', CONFIRMED_TRANSACTION)
             ->get();
     }
 
@@ -94,7 +96,8 @@ class DonationDao
     {
         Transaction::where('idDonation', $id)->update([
             'status' => NOT_CONFIRMED_TRANSACTION,
-            'repaymentPicture' => $file
+            'repaymentPicture' => $file,
+            'updated_at' => Carbon::now('+7:00')
         ]);
     }
 

@@ -13,6 +13,6 @@ class Service extends Model
 
     public function user()
     {
-        return $this->belongsTo('\App\Domain\Event\Entity\User');
+        return $this->belongsTo('\App\Domain\Profile\Entity\User');
     }
 }

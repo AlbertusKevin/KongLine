@@ -96,10 +96,10 @@ class PetitionDao
     public function signedThePetition($petition)
     {
         return ParticipatePetition::create([
-            'idPetition' => $petition->idPetition,
-            'idParticipant' => $petition->idParticipant,
-            'comment' => $petition->comment,
-            'created_at' => Carbon::now()->format('Y-m-d')
+            'idPetition' => $petition->getIdPetition(),
+            'idParticipant' => $petition->getIdParticipant(),
+            'comment' => $petition->getComment(),
+            'created_at' => $petition->getCreatedAt()
         ]);
     }
 

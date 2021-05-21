@@ -57,7 +57,11 @@
         </div>
         <div class="row mt-5">
             <div class="col-md-12">
-                <small><a href="/admin/donation/transaction">Transaksi donasi untuk diproses</a></small>
+                <div class="text-right">
+                    <a href="{{ url('/admin/donation/transaction') }}" class="badge badge-info mb-3 p-2">Transaksi donasi
+                        untuk
+                        diproses</a>
+                </div>
                 <table class="table table-hover text-center">
                     <thead>
                         <tr>
@@ -72,12 +76,12 @@
                     <tbody id="donation-list">
                         @foreach ($donationList as $donation)
                             <tr>
-                                <td>{{ $donation->created_at }}</td>
+                                <td>{{ date_format(date_create($donation->created_at), 'Y/m/d') }}</td>
                                 <td><a href="/donation/{{ $donation->id }}"
                                         style="color:black;">{{ $donation->title }}</a></td>
                                 <td>{{ $donation->category }}</td>
                                 <td>Rp. {{ number_format($donation->donationTarget, 2, ',', '.') }}</td>
-                                <td>{{ $donation->deadline }}</td>
+                                <td>{{ date_format(date_create($donation->deadline), 'Y/m/d') }}</td>
                                 <td>{{ $donation->status }}</td>
                             </tr>
                         @endforeach

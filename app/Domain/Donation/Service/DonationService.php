@@ -21,6 +21,21 @@ class DonationService
         $this->donation_dao = new DonationDao();
     }
 
+    public function preprocessNominalDonation($request)
+    {
+        $nominal = explode(",", $request->nominal);
+        $nominal = (int)join("", $nominal);
+
+        if (gettype($nominal) != "integer") {
+            return "not_number";
+            if ($nominal < MIN_DONATION) {
+                return "below_min";
+            }
+        }
+
+        return $nominal;
+    }
+
     //! Mengambil nama bank yang bisa digunakan untuk transfer
     public function getListOfBank()
     {
@@ -101,22 +116,23 @@ class DonationService
         return $this->donation_dao->getAUserTransaction($idUser, $idEvent);
     }
 
-    public function checkAnUserTransactionStatus($participatedDonation, $id)
+    public function checkAnUserTransactionStatus($idUser, $idEvent)
     {
-        foreach ($participatedDonation as $participate) {
-            if ($participate->idParticipant == $id) {
-                if ($participate->status == 1) {
-                    return CONFIRMED_TRANSACTION;
-                }
-                if ($participate->status == 2) {
-                    return NOT_CONFIRMED_TRANSACTION;
-                }
-                if ($participate->status == 3) {
-                    return REJECTED_TRANSACTION;
-                }
-                if (!empty($participate->repaymentPicture) && $participate->status == 0) {
-                    return NOT_UPLOADED;
-                }
+
+        $statusTransaction = $this->donation_dao->getAUserTransaction($idUser, $idEvent);
+
+        if (!empty($statusTransaction)) {
+            if ($statusTransaction->status == CONFIRMED_TRANSACTION) {
+                return CONFIRMED_TRANSACTION;
+            }
+            if ($statusTransaction->status == NOT_CONFIRMED_TRANSACTION) {
+                return NOT_CONFIRMED_TRANSACTION;
+            }
+            if ($statusTransaction->status == REJECTED_TRANSACTION) {
+                return REJECTED_TRANSACTION;
+            }
+            if ($statusTransaction->status == NOT_UPLOADED) {
+                return NOT_UPLOADED;
             }
         }
 
@@ -135,7 +151,11 @@ class DonationService
 
     public function confirmationPictureDonation($picture, $id)
     {
-        $pathRepaymentPicture = HelperService::uploadImage($picture, 'donation/bukti_transfer');
+        $folder = $this->getADonation($id)->title;
+        $folder = HelperService::makeSlugify($folder);
+        $folder = FOLDER_IMAGE_TRANSACTION . $folder;
+
+        $pathRepaymentPicture = HelperService::uploadImage($picture, $folder);
         $this->donation_dao->confirmationPictureDonation($pathRepaymentPicture, $id);
     }
 
@@ -261,7 +281,7 @@ class DonationService
 
     public function storeDonationCreated($donation)
     {
-        $pathPhoto = HelperService::uploadImage($donation->getPhoto(), 'images/donation');
+        $pathPhoto = HelperService::uploadImage($donation->getPhoto(), FOLDER_IMAGE_DONATION);
         $donation->setPhoto($pathPhoto);
         $this->donation_dao->storeDonationCreated($donation);
     }
@@ -269,7 +289,7 @@ class DonationService
     public function updateEventDonation($donation, $id, $empty)
     {
         if (!$empty) {
-            $pathPhoto = HelperService::uploadImage($donation->getPhoto(), 'images/donation');
+            $pathPhoto = HelperService::uploadImage($donation->getPhoto(), FOLDER_IMAGE_DONATION);
             $donation->setPhoto($pathPhoto);
         }
         $this->donation_dao->updateEventDonation($donation, $id);

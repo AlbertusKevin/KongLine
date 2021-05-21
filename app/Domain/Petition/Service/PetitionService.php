@@ -454,6 +454,10 @@ class PetitionService
     //! Menyimpan perkembangan berita terbaru yang diinput oleh pengguna pada petisi tertentu
     public function saveProgressPetition($updateNews)
     {
+        $folder = $this->getDetailPetition(5)->title;
+        $folder = HelperService::makeSlugify($folder);
+        $folder = FOLDER_IMAGE_PETITION_PROGRESS . $folder;
+
         $pathImage = HelperService::uploadImage($updateNews->getImage(), "petition/update_news");
         $updateNews->setImage($pathImage);
         $this->petition_dao->saveProgressPetition($updateNews);
@@ -462,7 +466,7 @@ class PetitionService
     //! Memproses tandatangan peserta pada petisi tertentu
     public function signedThePetition($request, $idEvent, $user)
     {
-        $petition = new Model\ParticipatePetition($idEvent, $user->id, $request->petitionComment, Carbon::now()->format('Y-m-d'));
+        $petition = new Model\ParticipatePetition($idEvent, $user->id, $request->petitionComment, Carbon::now('+7:00'));
 
         // input data participant yang tanda tangan
         $this->petition_dao->signedThePetition($petition, $idEvent, $user);
@@ -480,7 +484,7 @@ class PetitionService
     {
         $pathImage = HelperService::uploadImage(
             $petition->getPhoto(),
-            "petition"
+            FOLDER_IMAGE_PETITION
         );
 
         $petition->setPhoto($pathImage);
@@ -493,7 +497,7 @@ class PetitionService
         if (!$empty) {
             $pathImage = HelperService::uploadImage(
                 $petition->getPhoto(),
-                "petition"
+                FOLDER_IMAGE_PETITION
             );
 
             $petition->setPhoto($pathImage);

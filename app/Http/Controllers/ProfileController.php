@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Domain\Profile\Service\ProfileService;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfileController extends Controller
 {
@@ -25,7 +26,7 @@ class ProfileController extends Controller
     public function updateAnUserData(Request $request)
     {
         $user = $this->profile_service->getAProfile();
-        $this->profile_service->updateProfile($request, $user->id);
+        $this->profile_service->updateProfile($request, $user);
         return redirect('/profile');
     }
 

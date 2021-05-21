@@ -36,7 +36,7 @@ class ControllingController extends Controller
     {
         $listCategory = $this->event_service->getAllCategoriesEvent();
         $petitionList = $this->petition_service->getAllPetition();
-        return view('admin.listPetition', compact('listCategory', 'petitionList'));
+        return view('admin.petition.listPetition', compact('listCategory', 'petitionList'));
     }
 
     public function acceptPetition($id)
@@ -91,7 +91,7 @@ class ControllingController extends Controller
         $listCategory = $this->event_service->getAllCategoriesEvent();
         $donationList = $this->donation_service->getAllDonation();
 
-        return view("admin.listDonation", compact('listCategory', 'donationList'));
+        return view("admin.donation.listDonation", compact('listCategory', 'donationList'));
     }
 
     public function acceptDonation($id)
@@ -157,14 +157,14 @@ class ControllingController extends Controller
     public function getAllTransaction()
     {
         $transactions = $this->controlling_service->getAllTransaction();
-        return view('admin.listTransaction', compact('transactions'));
+        return view('admin.donation.listTransaction', compact('transactions'));
     }
 
     public function getATransaction($id)
     {
         $transaction = $this->controlling_service->getAUserTransaction($id);
         // dd($transaction);
-        return view('admin.detailTransaction', compact('transaction'));
+        return view('admin.donation.detailTransaction', compact('transaction'));
     }
 
     public function confirmTransaction($id)
@@ -214,8 +214,8 @@ class ControllingController extends Controller
     {
         $users = $this->controlling_service->getAllUser();
         $eventCount = $this->controlling_service->countEventParticipate($users);
-        $changeDateFormat = $this->controlling_service->changeDateFormat();
-        return view('/admin/listUser', compact('users', 'eventCount', 'changeDateFormat'));
+        $changeDateFormat = $this->controlling_service->changeDateFormatCreatedAt($users);
+        return view('admin.user.listUser', compact('users', 'eventCount', 'changeDateFormat'));
     }
 
     public function getUserInfo($id)
