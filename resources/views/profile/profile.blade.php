@@ -3,13 +3,16 @@
 @section('content')
     @include('layout.message')
     <div class="jumbotron text-center" style="background-image: url('{{ $user->backgroundPicture }}');">
-        <img src="{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
-        <h3 class="display-4">{{ $user->name }}</h3>
-        @if ($user->role == 'campaigner')
-            <h1><span class="badge rounded-pill bg-primary text-white">Campaigner</span></h1>
-        @endif
-        <a href="{{ $user->linkProfile }}" target="_blank" class="lead">{{ $user->linkProfile }}</a>
-        <p class="mt-5">Terima kasih telah menjadi anggota aktif dari komunitas kami. </p>
+        <div
+            style="width: 80%; padding: 75px 10px; margin-left: auto; margin-right: auto; background-color: rgba(255, 255, 255, 0.5)">
+            <img src="{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
+            <h3 class="display-4">{{ $user->name }}</h3>
+            @if ($user->role == 'campaigner')
+                <h1><span class="badge rounded-pill bg-primary text-white">Campaigner</span></h1>
+            @endif
+            <a href="{{ $user->linkProfile }}" target="_blank" class="lead">{{ $user->linkProfile }}</a>
+            <p class="mt-5">Terima kasih telah menjadi anggota aktif dari komunitas kami. </p>
+        </div>
     </div>
 
     <div class="container">
