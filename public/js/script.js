@@ -1278,7 +1278,7 @@ const makeDonationCardView = (event) => {
     return `
         <div class="m-2">
             <div class="card" style="width: 18rem; position:relative;">
-                <img src="${event.photo}" class="card-img-top" alt="...">
+                <img src="${event.photo}" class="card-img-top event-profile" alt="...">
                 <p class="time-left">Donation</p>
                 <div class="card-body">
                     <h5 class="card-title">${event.title}</h5>
@@ -1294,7 +1294,7 @@ const makePetitionCardView = (event) => {
     return `
         <div class="m-2">
             <div class="card" style="width: 18rem; position:relative;">
-                <img src="${event.photo}" class="card-img-top" alt="...">
+                <img src="${event.photo}" class="card-img-top event-profile" alt="...">
                 <p class="time-left-white">Petition</p>
                 <div class="card-body">
                     <h5 class="card-title">${event.title}</h5>

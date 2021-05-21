@@ -6,6 +6,7 @@ define("DEFAULT_COVER_PROFILE", "/images/profile/background/default-cover-profil
 define("DEFAULT_FILE_PREVIEW", "/images/app/pictures/default-file.png");
 define("GUEST_ID", 1);
 define("MIN_DONATION", 10000);
+define("MAX_CHARACTER", 150);
 
 define("FOLDER_IMAGE_PETITION", "images/petition/events/");
 define("FOLDER_IMAGE_PETITION_PROGRESS", "images/petition/update_news/");

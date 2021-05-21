@@ -228,7 +228,7 @@ class ControllingController extends Controller
         $countDonation = $events[0]->count();
         $countPetition = $events[1]->count();
         $countTotal = $countDonation + $countPetition;
-        return view('admin.userAdmin', compact('user', 'events', 'countTotal', 'eventMade'));
+        return view('admin.user.detailUser', compact('user', 'events', 'countTotal', 'eventMade'));
     }
 
     public function acceptUserToCampaigner($id)

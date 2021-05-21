@@ -4,56 +4,38 @@
     User - Detail
 @endsection
 @section('content')
-    <div class="jumbotron text-center" style="background-image: url('/{{ $user->backgroundPicture }}');">
-        <img src="/{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
-        <h3 class="display-4 name">{{ $user->name }}</h3>
-        {{-- <h6 class="userId={{$user->id}}">{{ $user->id }}</h6> --}}
-        <p class="lead">{{ $user->email }}</p>
-        @if ($user->dob == null)
-            <p class="text-danger">Tidak ada data tanggal lahir.</p>
-        @else
-            <p>{{ $user->dob }}</p>
-        @endif
-        <button type="button" class="btn btn-success mb-2" disabled>{{ $user->role }}</button><br>
+    <div class="jumbotron text-center" style="background-image: url('{{ $user->backgroundPicture }}');">
+        <div
+            style="width: 80%; padding: 75px 10px; margin-left: auto; margin-right: auto; background-color: rgba(255, 255, 255, 0.5); border-radius: 20px;">
+            <img src="{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
+            <h3 class="display-4 name">{{ $user->name }}</h3>
+            <p class="lead">{{ $user->email }}</p>
+            @if ($user->dob != null)
+                <p>{{ date_format(date_create($user->dob), 'd F Y') }}</p>
+            @endif
+            <button type="button" class="btn btn-success mb-2" disabled>{{ $user->role }}</button><br>
+            @if ($user->status == 0)
+                <span class="badge badge-info p-2">Akun Telah Dihapus</span><br>
+            @elseif($user->status == 2)
+                <span class="badge badge-danger p-2">Akun Telah Diblokir</span><br>
+            @elseif ($user->status == 3)
+                <span class="badge badge-warning p-2">Pengajuan</span><br>
+                <form id="confirm-pengajuan" action="/admin/user/terimaPengajuan/{{ $user->id }}" method="POST"
+                    style="display: inline-block">
+                    @csrf
+                    @method('patch')
+                    <button type="submit" class="btn btn-primary my-4 rounded-pill terimaPengajuan">Terima
+                        Pengajuan</button>
+                </form>
 
-        @if ($user->status != 1)
-            <span class="badge badge-warning p-2">Pengajuan</span><br>
-            <form id="confirm-pengajuan" action="/admin/user/terimaPengajuan/{{ $user->id }}" method="POST"
-                style="display: inline-block">
-                @csrf
-                @method('patch')
-                <button type="submit" class="btn btn-primary my-4 rounded-pill terimaPengajuan">Terima
-                    Pengajuan</button>
-            </form>
-
-            <form action="/admin/user/tolakPengajuan/{{ $user->id }}" method="POST" style="display: inline-block">
-                @csrf
-                @method('patch')
-                <button type="submit" class="btn btn-danger rounded-pill tolakPengajuan">Tolak Pengajuan</button>
-            </form>
-        @endif
+                <form action="/admin/user/tolakPengajuan/{{ $user->id }}" method="POST" style="display: inline-block">
+                    @csrf
+                    @method('patch')
+                    <button type="submit" class="btn btn-danger rounded-pill tolakPengajuan">Tolak Pengajuan</button>
+                </form>
+            @endif
+        </div>
     </div>
-
-    {{-- <script>
-        function confirmPengajuan(form_id){
-            Alert({
-                title: 'Terima Pengajuan?',
-                text: 'Anda akan menerima pengajuan upgrade ke Campaigner',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Terima pengajuan',
-            })
-            .then((accept) =>{
-                if(accept){
-                    $("#" + form_id).submit();
-                }else{
-                    Alert("Canceled!");
-                }
-            });
-        }
-    </script> --}}
 
     <div class="container">
         <div class="container">
@@ -66,92 +48,67 @@
                     {{ $user->name }}
                 </div>
             </div>
-            <div class="row py-3">
-                <div class="col-sm-2">
-                    Tentang Saya
-                </div>
-                @if ($user->aboutMe == null)
-                    <div class="col-sm-10">
-                        <p class="text-danger">Tidak ada data Tentang Saya.</p>
+            @if ($user->aboutMe != null || $user->aboutMe != '')
+                <div class="row py-3">
+                    <div class="col-sm-2">
+                        Tentang Saya
                     </div>
-                @else
                     <div class="col-sm-10">
                         {{ $user->aboutMe }}
                     </div>
-                @endif
-            </div>
-            <div class="row py-3">
-                <div class="col-sm-2">
-                    Kota
                 </div>
-                @if ($user->city == null)
-                    <div class="col-sm-10">
-                        <p class="text-danger">Tidak ada data Kota.</p>
+            @endif
+            @if ($user->city != null || $user->city != '')
+                <div class="row py-3">
+                    <div class="col-sm-2">
+                        Kota
                     </div>
-                @else
                     <div class="col-sm-10">
                         {{ $user->city }}
                     </div>
-                @endif
-            </div>
-            <div class="row py-3">
-                <div class="col-sm-2">
-                    Negara
                 </div>
-                @if ($user->country == null)
-                    <div class="col-sm-10">
-                        <p class="text-danger">Tidak ada data Negara.</p>
+            @endif
+            @if ($user->country != null || $user->country != '')
+                <div class="row py-3">
+                    <div class="col-sm-2">
+                        Negara
                     </div>
-                @else
                     <div class="col-sm-10">
                         {{ $user->country }}
                     </div>
-                @endif
-            </div>
-            <div class="row py-3">
-                <div class="col-sm-2">
-                    Alamat
                 </div>
-                @if ($user->address == null)
-                    <div class="col-sm-10">
-                        <p class="text-danger">Tidak ada data Alamat.</p>
+            @endif
+            @if ($user->address != null || $user->address != '')
+                <div class="row py-3">
+                    <div class="col-sm-2">
+                        Alamat
                     </div>
-                @else
                     <div class="col-sm-10">
                         {{ $user->address }}
                     </div>
-                @endif
-            </div>
-            <div class="row py-3">
-                <div class="col-sm-2">
-                    Kode Pos
                 </div>
-                @if ($user->zipCode == null)
-                    <div class="col-sm-10">
-                        <p class="text-danger">Tidak ada data Kode Pos.</p>
+            @endif
+            @if ($user->zipCode != null || $user->zipCode != '')
+                <div class="row py-3">
+                    <div class="col-sm-2">
+                        Kode Pos
                     </div>
-                @else
                     <div class="col-sm-10">
                         {{ $user->zipCode }}
                     </div>
-                @endif
-            </div>
-            <div class="row py-3">
-                <div class="col-sm-2">
-                    Nomor Telepon
                 </div>
-                @if ($user->phoneNumber == null)
-                    <div class="col-sm-10">
-                        <p class="text-danger">Tidak ada data Nomor Telepon.</p>
+            @endif
+            @if ($user->phoneNumber != null || $user->phoneNumber != '')
+                <div class="row py-3">
+                    <div class="col-sm-2">
+                        Nomor Telepon
                     </div>
-                @else
                     <div class="col-sm-10">
                         {{ $user->phoneNumber }}
                     </div>
-                @endif
-            </div>
+                </div>
+            @endif
             @if ($user->role == CAMPAIGNER || $user->status == WAITING)
-
                 @if ($user->role == CAMPAIGNER)
                     <h3 class="mt-5">Campaigner</h3>
                 @else
@@ -178,7 +135,8 @@
                         KTP
                     </div>
                     <div class="col-sm-10">
-                        <img src="/{{ $user->ktpPicture }}" class="img-thumbnail" alt="tolak">
+                        <img src="{{ $user->ktpPicture }}" class="img-thumbnail" alt="{{ $user->name }}'s KTP"
+                            width="35%">
                     </div>
                 </div>
             @endif
@@ -197,10 +155,8 @@
                     @endif
                 </div>
             </div>
-            {{-- <div class="event-list"> --}}
 
             <div class="row flex-nowrap event horizontal-scroll">
-                {{-- <div class="event"> --}}
                 @php
                     $status = DONATION;
                 @endphp
@@ -209,7 +165,8 @@
                         @if ($status == DONATION)
                             <div class="m-2">
                                 <div class="card" style="width: 18rem;">
-                                    <img src="/{{ $singleEvent->photo }}" class="card-img-top event-profile" alt="...">
+                                    <img src="{{ $singleEvent->photo }}" class="card-img-top event-profile"
+                                        alt="{{ $singleEvent->title }}'s photo">
                                     <p class="time-left">Donation</p>
                                     <div class="card-body">
                                         <h5 class="card-title event-text">{{ $singleEvent->title }}</h5>
@@ -222,7 +179,8 @@
                         @elseif ($status == PETITION)
                             <div class="m-2">
                                 <div class="card" style="width: 18rem;">
-                                    <img src="/{{ $singleEvent->photo }}" class="card-img-top event-profile" alt="...">
+                                    <img src="{{ $singleEvent->photo }}" class="card-img-top event-profile"
+                                        alt="{{ $singleEvent->title }}'s photo">
                                     <p class="time-left-white">Petition</p>
                                     <div class="card-body">
                                         <h5 class="card-title event-text">{{ $singleEvent->title }}</h5>
@@ -240,9 +198,7 @@
                         @endphp
                     @endif
                 @endforeach
-                {{-- </div> --}}
             </div>
-            {{-- </div> --}}
         </div>
     </div>
 @endsection

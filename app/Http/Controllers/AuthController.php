@@ -43,10 +43,13 @@ class AuthController extends Controller
                 return redirect('/admin');
             } elseif (Auth::user()->status == 1 || Auth::user()->status == 3) {
                 return redirect('/home');
+            } else {
+                Auth::logout();
+                return redirect('/login')->with(['type' => "error", 'message' => 'Akun tidak terdaftar']);
             }
         }
 
-        return redirect('/login')->with(['type' => "error", 'message' => 'Email atau password salah. Silahkan coba lagi']);;
+        return redirect('/login')->with(['type' => "error", 'message' => 'Email atau password salah. Silahkan coba lagi']);
     }
 
     public function getViewRegister()

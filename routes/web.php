@@ -37,6 +37,7 @@ Route::get('/profile', [ProfileController::class, 'getViewDetailAnUser']);
 Route::put('/profile', [ProfileController::class, 'updateAnUserData']);
 
 Route::get('/delete', [ProfileController::class, 'deleteAnUserAccount']);
+Route::post('/delete/profile/verification', [ProfileController::class, 'verifyProfileDeleteAccount']);
 
 Route::get('/profile/campaigner', [ProfileController::class, 'detailDataCampaigner']);
 Route::put('/profile/campaigner', [ProfileController::class, 'processDataCampaigner']);

@@ -274,7 +274,7 @@ button.btn-new-petition{
     border-radius: 10px;
 }
 
-.img-donation {
+.img-donation, .img-events-user {
   height: 350px;
   max-height: 350px;
 }

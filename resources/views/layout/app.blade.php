@@ -103,7 +103,7 @@
                 </div>
             </div>
             <div class="row justify-content-center mt-5 font-weight-bold">
-                <p style="color: #03254C;">Copyright 2021 YuBisaYu</p>
+                <p style="color: #03254C;">Copyright &copy; {{ date('Y') }} YuBisaYu</p>
             </div>
         </div>
     </footer>

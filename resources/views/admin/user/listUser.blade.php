@@ -67,14 +67,12 @@
                         {{ $eventCount[$i][1] }}
                         </td> @endif
                         <td class="text-left">
-                            @if ($users[$i]->role == 'guest')
-                                <span class="badge badge-dark p-2">{{ $users[$i]->role }}</span>
-                            @elseif ($users[$i]->role == 'participant' && $users[$i]->status != 3)
+                            @if ($users[$i]->role == 'participant' && $users[$i]->status != 3)
                                 <span class="badge badge-primary p-2">{{ $users[$i]->role }}</span>
                             @elseif ($users[$i]->role == 'campaigner')
                                 <span class="badge badge-success p-2">{{ $users[$i]->role }}</span>
-                            @elseif ($users[$i]->role == 'participant' && $users[$i]->status == 3)
-                                <span class="badge badge-warning p-2">{{ $users[$i]->role }}</span>
+                            @elseif ($users[$i]->status == 3)
+                                <span class="badge badge-warning p-2">waiting</span>
                             @endif
                         </td>
                         </tr>

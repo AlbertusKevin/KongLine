@@ -25,9 +25,26 @@ class ProfileController extends Controller
 
     public function updateAnUserData(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'about' => 'max:' . MAX_CHARACTER . "|nullable",
+            'linkProfile' => "url|nullable",
+            'phoneNumber' => "numeric|nullable",
+            'zipCode' => 'numeric|nullable',
+            "cover_picture" => "mimes:jpg,bmp,png|nullable",
+            "profile_picture" => "mimes:jpg,bmp,png|nullable"
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+            return redirect('/profile')->with(['type' => 'error', 'message' => $messageError]);
+        };
+
         $user = $this->profile_service->getAProfile();
         $this->profile_service->updateProfile($request, $user);
-        return redirect('/profile');
+        return redirect('/profile')->with(['type' => "success", 'message' => "Profile berhasil diperbarui"]);
     }
 
     // Update data campaigner, upgrade ke campaigner, atau edit pengajuan campaigner
@@ -106,6 +123,26 @@ class ProfileController extends Controller
     {
         $user = $this->profile_service->getAProfile();
         $this->profile_service->deleteAccount($user->id);
-        return redirect('logout');
+        return redirect('logout')->with(['type' => 'success', 'message' => "Akun telah berhasil dihapus."]);
+    }
+
+    public function verifyProfileDeleteAccount(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with(['type' => 'error', 'message' => "Silahkan masukkan password."]);
+        };
+
+        $result = $this->profile_service->verifyProfile($request);
+
+        if (!$result) {
+            return redirect()->back()->with(['type' => 'error', 'message' => "Verifikasi akun tidak berhasil."]);
+        }
+
+        return redirect("/delete");
     }
 }
