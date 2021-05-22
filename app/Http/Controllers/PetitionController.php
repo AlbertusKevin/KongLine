@@ -134,7 +134,6 @@ class PetitionController extends Controller
             'category' => 'required',
             'photo' => 'required|image',
             'signedTarget' => 'required|numeric',
-            'deadline' => 'date|required',
             'purpose' => 'required|min:300',
             'targetPerson' => 'required'
         ]);
@@ -150,7 +149,7 @@ class PetitionController extends Controller
         };
 
         $user = $this->profile_service->getAProfile();
-        $petition = new Model\Petition($user->id, $request->title, $request->file('photo'), $request->category, $request->purpose, $request->deadline, 0, Carbon::now()->format('Y-m-d'), $request->signedTarget, 0, $request->targetPerson);
+        $petition = new Model\Petition($user->id, $request->title, $request->file('photo'), $request->category, $request->purpose, 0, Carbon::now('+7:00'), Carbon::now('+7:00'), $request->signedTarget, 0, $request->targetPerson);
         $this->petition_service->saveDataEventPetition($petition);
 
         return redirect('/petition')->with(['type' => "success", 'message' => 'Petisi Anda telah didaftarkan. Tunggu konfirmasi dari admin.']);
@@ -173,7 +172,6 @@ class PetitionController extends Controller
             'category' => 'required',
             'photo' => 'image',
             'signedTarget' => 'required|numeric',
-            'deadline' => 'date|required',
             'purpose' => 'required|min:300',
             'targetPerson' => 'required'
         ]);
@@ -199,7 +197,7 @@ class PetitionController extends Controller
             $empty = false;
         }
 
-        $petition = new Model\Petition($user->id, $request->title, $file, $request->category, $request->purpose, $request->deadline, 0, $oldPetition->created_at, $request->signedTarget, 0, $request->targetPerson);
+        $petition = new Model\Petition($user->id, $request->title, $file, $request->category, $request->purpose, 0, $oldPetition->created_at, Carbon::now('+7:00'), $request->signedTarget, 0, $request->targetPerson);
         $this->petition_service->updatePetition($petition, $id, $empty);
 
         return redirect('/petition/edit/' . $id)->with(['type' => "success", 'message' => 'Petisi Anda berhasil diperbarui.']);

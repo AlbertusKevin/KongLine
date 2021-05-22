@@ -101,9 +101,9 @@
                                                 menandatangani petisi ini</small></p>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 p-2">
                                     <img src="{{ $list->photo }}" alt="Gambar dari petisi '{{ $list->title }}'"
-                                        class="img-thumbnail img-list-petition">
+                                        class="img-list-petition">
                                 </div>
                             </div>
                         </div>

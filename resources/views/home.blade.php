@@ -1,7 +1,6 @@
 @extends('layout.app')
 
 @section('content')
-    <script src="{{ URL::asset('js/plus.js') }}"></script>
     @include('layout.message')
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -30,6 +29,7 @@
         </a>
     </div>
 
+    {{-- Card for donation --}}
     <section class="container mt-5">
         <div class="row">
             <h2 class="col">Donasi</h2>
@@ -48,7 +48,7 @@
                 <div class="col-md-4">
                     <div class="card m-2" style="padding: 0; ">
                         <div style="position:relative;">
-                            <img src="{{ $d->photo }}" class="card-img-top card-img-home" alt="donation picture">
+                            <img src="{{ $d->photo }}" class="card-img-top event-picture" alt="donation picture">
                             <p class="donate-count">{{ $d->totalDonatur }} Donatur</p>
                         </div>
                         <div class="card-body">
@@ -62,6 +62,7 @@
         </div>
     </section>
 
+    {{-- Card for donation --}}
     <section class="container mt-5">
         <div class="row">
             <h2 class="col">Petisi</h2>
@@ -80,7 +81,7 @@
                 <div class="col-md-4">
                     <div class="card m-2 h-100" style="padding: 0; ">
                         <div style="position:relative;">
-                            <img src="{{ $p->photo }}" class="card-img-top card-img-home" alt="petition picture">
+                            <img src="{{ $p->photo }}" class="card-img-top event-picture" alt="petition picture">
                             <p class="donate-count">{{ $p->signedCollected }} Partisipan</p>
                         </div>
                         <div class="card-body card-text">
@@ -93,18 +94,17 @@
             @endforeach
         </div>
         </div>
-
-        @if ($user->role != ADMIN && $user->role != GUEST)
-            <button id="btnopenchat" class="open-button" onclick="openChat()">Chat</button>
-            <button id="btnclosechat" class="open-button" onclick="closeChat()" style="display:block;">Chat</button>
-
-            <div id="myChat">
-                @livewire('message', ['users' => $users, 'messages' => $messages ?? null])
-            </div>
-        @endif
-        <!-- <div class="card" style="width: 18rem;"> -->
-        <!-- </div> -->
-
     </section>
 
+    {{-- button chat --}}
+    @if ($user->role != ADMIN && $user->role != GUEST)
+        <button id="btnopenchat" class="open-button" onclick="openChat()">Chat</button>
+        <button id="btnclosechat" class="open-button" onclick="closeChat()" style="display:block;">Chat</button>
+
+        <div id="myChat">
+            @livewire('message', ['users' => $users, 'messages' => $messages ?? null])
+        </div>
+    @endif
+
+    <script src="{{ URL::asset('js/plus.js') }}"></script>
 @endsection

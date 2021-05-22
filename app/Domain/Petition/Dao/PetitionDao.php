@@ -65,9 +65,9 @@ class PetitionDao
             'photo' => $petition->getPhoto(),
             'category' => $petition->getCategory(),
             'purpose' => $petition->getPurpose(),
-            'deadline' => $petition->getDeadline(),
             'status' => $petition->getStatus(),
             'created_at' => $petition->getCreatedAt(),
+            'updated_at' => $petition->getUpdatedAt(),
             'signedCollected' => $petition->getSignedCollected(),
             'signedTarget' => $petition->getSignedTarget(),
             'targetPerson' => $petition->getTargetPerson()
@@ -83,9 +83,9 @@ class PetitionDao
             'photo' => $petition->getPhoto(),
             'category' => $petition->getCategory(),
             'purpose' => $petition->getPurpose(),
-            'deadline' => $petition->getDeadline(),
             'status' => $petition->getStatus(),
             'created_at' => $petition->getCreatedAt(),
+            'updated_at' => $petition->getUpdatedAt(),
             'signedCollected' => $petition->getSignedCollected(),
             'signedTarget' => $petition->getSignedTarget(),
             'targetPerson' => $petition->getTargetPerson()

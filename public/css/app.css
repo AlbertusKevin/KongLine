@@ -58,6 +58,7 @@ footer {
   height: 250px;
   max-height: 250px;
   width: auto;
+  object-fit: cover;
 }
 
 .detail-donate-photo {
@@ -67,7 +68,6 @@ footer {
 }
 
 .donate-button{
-  height: 50px;
   width: 130px;
   background: #EF3939;
 }
@@ -174,9 +174,10 @@ button.approve-event{
   width: 100%;
 }
 
-.img-list-petition{
+.img-list-petition, .img-progress-petition{
   max-width: 200px;
-  height: 500px;
+  height: 100%;
+  object-fit:cover;
 }
 
 .petition-detail-description {
@@ -274,7 +275,7 @@ button.btn-new-petition{
     border-radius: 10px;
 }
 
-.img-donation, .img-events-user {
+.img-donation {
   height: 350px;
   max-height: 350px;
 }

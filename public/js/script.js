@@ -85,6 +85,7 @@ const getACategory = (idCategory) => {
     }
 };
 
+// Search-sort-category petition admin
 const changeTablePetition = (petition) => {
     return /*html*/ `
     <tr>
@@ -116,6 +117,7 @@ const emptySearchTablePetition = (keyword) => {
         `;
 };
 
+// Search-sort-category donation admin
 const changeTableDonation = (donation) => {
     return /*html*/ `
     <tr>
@@ -147,6 +149,7 @@ const emptySearchTableDonation = (keyword) => {
         `;
 };
 
+// Search-sort-category transaction admin
 const emptySearchTableTransaction = (keyword) => {
     return /*html*/ `
     <tr>
@@ -155,6 +158,45 @@ const emptySearchTableTransaction = (keyword) => {
         `;
 };
 
+const changeTableTransaction = (transaction) => {
+    let status = "";
+    let typeBadge = "";
+
+    if (transaction.status == 0) {
+        status = "Perlu Konfirmasi";
+        typeBadge = "info";
+    } else if (transaction.status == 1) {
+        status = "Dikonfirmasi";
+        typeBadge = "success";
+    } else {
+        status = "Ditolak";
+        typeBadge = "danger";
+    }
+
+    return /*html*/ `
+    <tr>
+        <td>${transaction.created_at}</td>
+        <td>${transaction.title}</td>
+        <td>${transaction.name}</td>
+        <td>Rp. ${transaction.nominal.toLocaleString("en")},00</td>
+        <td><p class="badge badge-${typeBadge}">${status}</p></td>
+        <td><a href="/admin/donation/transaction/${
+            transaction.id
+        }" type="button"
+                class="btn btn-primary">detail</a></td>
+    </tr>
+        `;
+};
+
+const emptyTableTransaction = () => {
+    return /*html*/ `
+    <tr>
+        <td colspan="6">Belum ada Transaksi pada daftar ini</td>
+    </tr>
+        `;
+};
+
+// Search-sort-category petition
 const changePetitionList = (petition) => {
     return /*html*/ `
         <div class="card mb-3 ml-auto mr-auto mt-5" style="max-width: 650px;">
@@ -184,11 +226,11 @@ const changePetitionList = (petition) => {
                             menandatangani petisi ini</small></p>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 p-2">
                 <img src="${petition.photo}" alt="Gambar dari petisi '${
         petition.title
     }'"
-                    class="img-thumbnail">
+                    class="img-list-petition">
             </div>
         </div>
         </div>
@@ -223,6 +265,7 @@ const listPetitionTypeEmpty = (keyword) => {
     `;
 };
 
+// Search-sort-category donation
 const changeDonationList = (donation) => {
     let collectedNum, collectedDesc;
 
@@ -234,7 +277,11 @@ const changeDonationList = (donation) => {
         collectedDesc = "Menuju Target";
     }
 
-    if (
+    if (donation.status == 0) {
+        deadline = "pending";
+    } else if (donation.status == 5) {
+        deadline = "rejected";
+    } else if (
         Math.ceil(
             (new Date(donation.deadline) - new Date().getTime()) /
                 (60 * 60 * 24 * 1000)
@@ -252,7 +299,7 @@ const changeDonationList = (donation) => {
     return /*html*/ `
     <div class="card col-md-4 p-2 mb-3" style="padding: 0; ">
         <div style="position:relative;">
-            <img src="${donation.photo}" class="img-donation card-img-top"
+            <img src="${donation.photo}" class="event-picture card-img-top"
                 alt=" ${donation.title} donation's picture">
             <p class="donate-count">${donation.totalDonatur} Donatur</p>
             <p class="time-left">
@@ -373,44 +420,6 @@ const sortListDonation = (sortBy, category) => {
             }
         },
     });
-};
-
-const changeTableTransaction = (transaction) => {
-    let status = "";
-    let typeBadge = "";
-
-    if (transaction.status == 0) {
-        status = "Perlu Konfirmasi";
-        typeBadge = "info";
-    } else if (transaction.status == 1) {
-        status = "Dikonfirmasi";
-        typeBadge = "success";
-    } else {
-        status = "Ditolak";
-        typeBadge = "danger";
-    }
-
-    return /*html*/ `
-    <tr>
-        <td>${transaction.created_at}</td>
-        <td>${transaction.title}</td>
-        <td>${transaction.name}</td>
-        <td>Rp. ${transaction.nominal.toLocaleString("en")},00</td>
-        <td><p class="badge badge-${typeBadge}">${status}</p></td>
-        <td><a href="/admin/donation/transaction/${
-            transaction.id
-        }" type="button"
-                class="btn btn-primary">detail</a></td>
-    </tr>
-        `;
-};
-
-const emptyTableTransaction = () => {
-    return /*html*/ `
-    <tr>
-        <td colspan="6">Belum ada Transaksi pada daftar ini</td>
-    </tr>
-        `;
 };
 
 // fungsi trigger

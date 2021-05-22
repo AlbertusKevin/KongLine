@@ -11,7 +11,6 @@ class Donation extends Model
     // Konfigurasi ORM
     use HasFactory;
     protected $table = 'donation';
-    public $timestamps = false;
     protected $guarded = ['id'];
 
     // Relasi

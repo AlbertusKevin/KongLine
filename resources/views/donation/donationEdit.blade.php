@@ -39,9 +39,9 @@
                             aria-describedby="donationTarget" value="{{ $donation->donationTarget }}">
                     </div>
                     <div class="form-group mb-5">
-                        <label for="deadline">Batas Waktu</label>
-                        <input type="date" class="form-control" id="deadline" name="deadline" aria-describedby="deadline"
-                            placeholder="pilih waktu" value="{{ date('Y-m-d', strtotime($donation->deadline)) }}">
+                        <label for="deadline">Lama Event Berlangsung (minggu)</label>
+                        <input type="number" class="form-control" id="deadline" name="deadline" aria-describedby="deadline"
+                            placeholder="e.g: 2 minggu" value="{{ $donation->duration_event }}">
                     </div>
                     <div class="form-group mb-5">
                         <label for="photo">Foto</label>

@@ -87,7 +87,7 @@ class DonationController extends Controller
             'purpose' => 'required|min:150',
             'category' => 'required',
             'donationTarget' => 'required|numeric',
-            'deadline' => 'required',
+            'deadline' => 'required|numeric',
             'photo' => 'required|image',
             'assistedSubject' => 'required',
             'bank' => 'required',
@@ -115,15 +115,16 @@ class DonationController extends Controller
             $request->file('photo'),
             $request->category,
             $request->purpose,
-            $request->deadline,
             0,
+            Carbon::now('+7:00'),
             Carbon::now('+7:00'),
             0,
             $request->donationTarget,
             0,
             $request->assistedSubject,
             $request->bank,
-            $request->accountNumber
+            $request->accountNumber,
+            $request->deadline,
         );
 
         $this->donation_service->storeDonationCreated($donation);
@@ -155,7 +156,7 @@ class DonationController extends Controller
             'purpose' => 'required|min:150',
             'category' => 'required',
             'donationTarget' => 'required|numeric',
-            'deadline' => 'required',
+            'deadline' => 'required|numeric',
             'assistedSubject' => 'required',
             'bank' => 'required',
             'accountNumber' => 'required|numeric',
@@ -191,15 +192,16 @@ class DonationController extends Controller
             $file,
             $request->category,
             $request->purpose,
-            $request->deadline,
             0,
             $oldDonation->created_at,
+            Carbon::now('+7:00'),
             0,
             $request->donationTarget,
             0,
             $request->assistedSubject,
             $request->bank,
-            $request->accountNumber
+            $request->accountNumber,
+            $request->deadline
         );
         // update data donasi
         $this->donation_service->updateEventDonation($donation, $id, $empty);

@@ -24,8 +24,9 @@ class CreatePetitionsTable extends Migration
             $table->integer('signedCollected');
             $table->tinyInteger('category')->unsigned();
             $table->tinyInteger('status')->unsigned();
-            $table->timestamp('deadline');
-            $table->longText('reason')->nullable();;
+            $table->tinyInteger('stack')->unsigned()->default(0);
+            $table->timestamp('deadline')->nullable();
+            $table->longText('reason')->nullable();
             $table->timestamps();
         });
 

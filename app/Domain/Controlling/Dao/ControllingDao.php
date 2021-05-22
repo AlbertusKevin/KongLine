@@ -305,6 +305,14 @@ class ControllingDao
         Petition::where('id', $id)->update(['status' => $status]);
     }
 
+    public function acceptDonation($id, $data)
+    {
+        Donation::where('id', $id)->update([
+            'updated_at' => $data['updated_at'],
+            'deadline' => $data['deadline']
+        ]);
+    }
+
     public function changeReason($id, $event, $reason)
     {
         if ($event == DONATION) {

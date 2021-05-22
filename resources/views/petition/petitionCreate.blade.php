@@ -40,11 +40,6 @@
                         <input type="text" class="form-control" id="signedTarget" name="signedTarget"
                             aria-describedby="signedTarget">
                     </div>
-                    <div class="form-group mb-5">
-                        <label for="deadline">Batas Waktu</label>
-                        <input type="date" class="form-control" id="deadline" name="deadline" aria-describedby="deadline"
-                            placeholder="pilih waktu">
-                    </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">

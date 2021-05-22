@@ -65,8 +65,8 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="col-md-4 text-center">
-                            <img src="{{ $news->image }}" class="img-thumbnail" alt="News Image">
+                        <div class="col-md-4 text-center p-3">
+                            <img src="{{ $news->image }}" class="img-thumbnail img-progress-petition" alt="News Image">
                         </div>
                     </div>
                 </div>

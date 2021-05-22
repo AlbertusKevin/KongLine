@@ -6,7 +6,7 @@ use App\Domain\Controlling\Dao\ControllingDao;
 use App\Domain\Profile\Service\ProfileService;
 use App\Domain\Donation\Service\DonationService;
 use App\Domain\Event\Service\EventService;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 
 class ControllingService
 {
@@ -531,7 +531,13 @@ class ControllingService
 
     public function acceptDonation($id)
     {
+        $donation = $this->donation_service->getADonation($id);
+
+        $data["updated_at"] = Carbon::now("+7:00");
+        $data["deadline"] = Carbon::now("+7:00")->addWeeks($donation->duration_event);
+
         $this->controlling_dao->changeEventStatus($id, ACTIVE, DONATION);
+        $this->controlling_dao->acceptDonation($id, $data);
     }
 
     public function rejectDonation($id, $reason)
@@ -624,6 +630,8 @@ class ControllingService
     public function acceptPetition($id)
     {
         $this->controlling_dao->changeEventStatus($id, ACTIVE, PETITION);
+
+        $this->controlling_dao->acceptPetition($id, $data);
     }
 
     public function rejectPetition($id, $reason)
