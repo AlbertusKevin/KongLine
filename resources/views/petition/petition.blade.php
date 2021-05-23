@@ -92,7 +92,7 @@
                                         <h5 class="card-title"><a
                                                 href="/petition/{{ $list->id }}">{{ $list->title }}</a>
                                         </h5>
-                                        @if ($list->status == 1)
+                                        @if ($list->status == 'active')
                                             <small class="text-muted">Hingga
                                                 {{ date_format(date_create($list->deadline), 'M d, Y') }}</small>
                                         @endif

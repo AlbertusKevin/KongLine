@@ -143,8 +143,8 @@ class PetitionDao
         return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
             ->join('category', 'petition.category', 'category.id')
             ->join('event_status', 'petition.status', 'event_status.id')
-            ->where('status', $status)
-            ->where('title', 'LIKE', '%' . $keyword . '%')
+            ->where('petition.status', $status)
+            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
             ->get();
     }
 
@@ -267,6 +267,46 @@ class PetitionDao
             ->join('category', 'petition.category', 'category.id')
             ->join('event_status', 'petition.status', 'event_status.id')
             ->where('petition.status', $status)
+            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
+            ->orderByDesc($table)
+            ->get();;
+    }
+
+    public function searchAllPetition($keyword)
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
+            ->get();
+    }
+
+    public function searchAllPetitionCategorySort($status, $keyword, $category, $table)
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
+            ->where('petition.category', $category)
+            ->orderByDesc($table)
+            ->get();
+    }
+
+    public function searchAllPetitionCategory($status, $keyword, $category)
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
+            ->where('petition.category', $category)
+            ->get();;
+    }
+
+    public function searchAllPetitionSortBy($status, $keyword, $table)
+    {
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
             ->where('petition.title', 'LIKE', '%' . $keyword . '%')
             ->orderByDesc($table)
             ->get();;

@@ -114,7 +114,7 @@ class PetitionService
         $userId = $this->profile_service->getAProfile()->id;
         $category = $this->event_service->categorySelect($request);
         $sortBy = $request->sortBy;
-
+        // dd($request);
         if ($request->typePetition == BERLANGSUNG) {
             if ($category == 0 && $sortBy == NONE) {
                 return $this->petition_dao->searchPetition(ACTIVE, $request->keyword);
@@ -167,6 +167,31 @@ class PetitionService
                 }
                 if ($sortBy == EVENT_TERBARU) {
                     return $this->petition_dao->searchPetitionSortBy(PROCEEDED, $request->keyword, CREATED_COLUMN);
+                }
+            }
+        }
+
+        if ($request->typePetition == SEMUA) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->petition_dao->searchAllPetition($request->keyword);
+            }
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->petition_dao->searchAllPetitionCategorySort(PROCEEDED, $request->keyword, $category, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->petition_dao->searchAllPetitionCategorySort(PROCEEDED, $request->keyword, $category, CREATED_COLUMN);
+                }
+            }
+            if ($category != 0) {
+                return $this->petition_dao->searchAllPetitionCategory(PROCEEDED, $request->keyword, $category);
+            }
+            if ($sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->petition_dao->searchAllPetitionSortBy(PROCEEDED, $request->keyword, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->petition_dao->searchAllPetitionSortBy(PROCEEDED, $request->keyword, CREATED_COLUMN);
                 }
             }
         }

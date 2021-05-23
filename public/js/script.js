@@ -215,7 +215,7 @@ const changePetitionList = (petition) => {
     });
 
     let deadline =
-        petition.status == 1
+        petition.status == "active"
             ? /*html*/ `
             <small class="text-muted">Hingga ${formattedDate}</small>`
             : "";
@@ -555,6 +555,11 @@ $(".petition-type").on("click", function () {
             $(".petition-page-subtitle").html(
                 "Lihat Petisi yang Telah Saya Buat di Website Ini"
             );
+        } else if (typePetition == "mencapai_target") {
+            $(".petition-page-title").html("Mencapai Target");
+            $(".petition-page-subtitle").html(
+                "Petisi yang telah mencapai target namun belum memperoleh kemenangan"
+            );
         } else {
             $(".petition-page-title").html("Daftar Ikut Serta Petisi");
             $(".petition-page-subtitle").html(
@@ -596,21 +601,22 @@ $(".petition-type").on("click", function () {
 $("#search-petition").on("keyup", function () {
     let url = getNowURL();
     let keyword = $(this).val();
-    let typePetition = $(".btn-primary").html();
+    let typePetition = $(".btn-primary.petition-type").html();
     let category = $("#category-choosen").val();
     let sortBy = $("#sort-by").val();
 
     typePetition = checkTypePetition(typePetition);
-
     $.ajax({
         url: "/petition/search",
         data: { keyword, typePetition, category, sortBy },
         dataType: "json",
         success: (data) => {
+            console.log(data);
             let html = "";
             if (data.length != 0) {
                 if (url != "admin") {
                     data.forEach((petition) => {
+                        console.log(petition);
                         html += changePetitionList(petition);
                     });
                 } else {
