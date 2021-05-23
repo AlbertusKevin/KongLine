@@ -26,6 +26,8 @@
                     class="btn btn-primary petition-type rounded-pill">Berlangsung</button>
                 <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">Telah
                     Menang</button>
+                <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">Mencapai
+                    Target</button>
                 @if ($user->role == 'participant' || $user->role == 'campaigner')
                     <button href="/petition" type="button" class="btn btn-light petition-type rounded-pill ml-3">Ikut
                         Serta</button>
@@ -80,8 +82,9 @@
                         </div>
                     </div>
                 @endif
+
                 @foreach ($petitionList as $list)
-                    @if ($list->status != 0)
+                    @if ($list->status != 'not_confirmed')
                         <div class="card mb-3 ml-auto mr-auto mt-5" style="max-width: 650px;">
                             <div class="row no-gutters">
                                 <div class="col-md-8">
@@ -89,6 +92,10 @@
                                         <h5 class="card-title"><a
                                                 href="/petition/{{ $list->id }}">{{ $list->title }}</a>
                                         </h5>
+                                        @if ($list->status == 1)
+                                            <small class="text-muted">Hingga
+                                                {{ date_format(date_create($list->deadline), 'M d, Y') }}</small>
+                                        @endif
                                         <p class="card-text petition-description">{{ $list->purpose }}</p>
                                         <p class="card-text"><small class="text-muted">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"

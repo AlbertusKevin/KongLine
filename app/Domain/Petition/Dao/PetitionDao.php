@@ -9,6 +9,16 @@ use Carbon\Carbon;
 
 class PetitionDao
 {
+    public function deadlinePetition($id, $data)
+    {
+        Petition::where('id', $id)->update([
+            'stack' => $data['stack'],
+            'updated_at' => $data['updated_at'],
+            'deadline' => $data['deadline'],
+            'signedTarget' => $data['signedTarget']
+        ]);
+    }
+
     public function getAllPetition()
     {
         return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
@@ -20,7 +30,11 @@ class PetitionDao
     //! Menampilkan seluruh daftar petisi yang sedang aktif
     public function getActivePetition()
     {
-        return Petition::where('status', ACTIVE)->get();
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->where('status', ACTIVE)
+            ->get();
     }
 
     //! Menampilkan detail petisi tertentu berdasarkan ID
@@ -70,7 +84,8 @@ class PetitionDao
             'updated_at' => $petition->getUpdatedAt(),
             'signedCollected' => $petition->getSignedCollected(),
             'signedTarget' => $petition->getSignedTarget(),
-            'targetPerson' => $petition->getTargetPerson()
+            'targetPerson' => $petition->getTargetPerson(),
+            'stack' => 0
         ]);
     }
 
@@ -125,7 +140,10 @@ class PetitionDao
     //! status (berdasarkan tipe petisi) dan keyword tertentu
     public function searchPetition($status, $keyword)
     {
-        return Petition::where('status', $status)
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->where('status', $status)
             ->where('title', 'LIKE', '%' . $keyword . '%')
             ->get();
     }
@@ -218,9 +236,12 @@ class PetitionDao
     //! keyword, sorting desc, dan kategori tertentu
     public function searchPetitionCategorySort($status, $keyword, $category, $table)
     {
-        return Petition::where('status', $status)
-            ->where('title', 'LIKE', '%' . $keyword . '%')
-            ->where('category', $category)
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->where('petition.status', $status)
+            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
+            ->where('petition.category', $category)
             ->orderByDesc($table)
             ->get();
     }
@@ -229,9 +250,12 @@ class PetitionDao
     //! keyword dan kategori tertentu
     public function searchPetitionCategory($status, $keyword, $category)
     {
-        return Petition::where('status', $status)
-            ->where('title', 'LIKE', '%' . $keyword . '%')
-            ->where('category', $category)
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->where('petition.status', $status)
+            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
+            ->where('petition.category', $category)
             ->get();;
     }
 
@@ -239,8 +263,11 @@ class PetitionDao
     //! keyword dan sorting desc tertentu
     public function searchPetitionSortBy($status, $keyword, $table)
     {
-        return Petition::where('status', $status)
-            ->where('title', 'LIKE', '%' . $keyword . '%')
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->where('petition.status', $status)
+            ->where('petition.title', 'LIKE', '%' . $keyword . '%')
             ->orderByDesc($table)
             ->get();;
     }
@@ -249,8 +276,11 @@ class PetitionDao
     //! sorting desc dan kategori tertentu
     public function sortPetitionCategory($category, $status, $table)
     {
-        return Petition::where('status', $status)
-            ->where('category', $category)
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->where('petition.status', $status)
+            ->where('petition.category', $category)
             ->orderByDesc($table)
             ->get();
     }
@@ -287,7 +317,10 @@ class PetitionDao
     //! secara descending sesuai dengan ketentuan yang dipilih
     public function sortPetition($status, $table)
     {
-        return Petition::where('status', $status)
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->where('petition.status', $status)
             ->orderByDesc($table)
             ->get();
     }
@@ -295,8 +328,11 @@ class PetitionDao
     //! Menampilkan petisi dengan status tertentu sesuai kategori tertentu
     public function petitionByCategory($category, $status)
     {
-        return Petition::where('status', $status)
-            ->where('category', $category)
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->where('petition.status', $status)
+            ->where('petition.category', $category)
             ->get();
     }
 
@@ -360,7 +396,11 @@ class PetitionDao
     //! Menampilkan daftar petisi berdasarkan tipe event (berlangsung, menang, dll)
     public function getListPetitionByStatus($status)
     {
-        return Petition::where('status', $status)->get();
+        return Petition::selectRaw('petition.*, category.description as category, event_status.description as status')
+            ->join('category', 'petition.category', 'category.id')
+            ->join('event_status', 'petition.status', 'event_status.id')
+            ->where('petition.status', $status)
+            ->get();
     }
 
     //! Menampilkan daftar petisi yang pernah diikuti participant

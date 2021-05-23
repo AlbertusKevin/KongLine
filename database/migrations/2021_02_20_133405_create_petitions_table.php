@@ -20,7 +20,7 @@ class CreatePetitionsTable extends Migration
             $table->string('photo');
             $table->longText('purpose');
             $table->string('targetPerson');
-            $table->integer('signedTarget');
+            $table->integer('signedTarget')->default(0);
             $table->integer('signedCollected');
             $table->tinyInteger('category')->unsigned();
             $table->tinyInteger('status')->unsigned();

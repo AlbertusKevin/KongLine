@@ -27,6 +27,46 @@ class PetitionService
         return $this->petition_dao->getAllPetition();
     }
 
+    public function deadlinePetition()
+    {
+        $petitions = $this->getActivePetition();
+        foreach ($petitions as $petition) {
+            if (strtotime($petition->deadline) - strtotime(Carbon::now('+7:00')) <= 0) {
+                if ($petition->signedTarget - $petition->signedCollected > 0) {
+                    $stack = $petition->stack;
+                    $data['updated_at'] = Carbon::now('+7:00');
+                    $data['stack'] = $stack + 1;
+
+                    if ($stack == 1) {
+                        $data['deadline'] = Carbon::now('+7:00')->addMonth();
+                        $data['signedTarget'] = SIGNED_TARGET_STACK_2;
+                        $this->petition_dao->deadlinePetition($petition->id, $data);
+                    } else if ($stack == 2) {
+                        $data['deadline'] = Carbon::now('+7:00')->addMonth();
+                        $data['signedTarget'] = SIGNED_TARGET_STACK_3;
+                        $this->petition_dao->deadlinePetition($petition->id, $data);
+                    } else if ($stack == 3) {
+                        $data['deadline'] = Carbon::now('+7:00')->addMonths(3);
+                        $data['signedTarget'] = SIGNED_TARGET_STACK_4;
+                        $this->petition_dao->deadlinePetition($petition->id, $data);
+                    } else if ($stack == 4) {
+                        $data['deadline'] = Carbon::now('+7:00')->addMonths(6);
+                        $data['signedTarget'] = SIGNED_TARGET_STACK_5;
+                        $this->petition_dao->deadlinePetition($petition->id, $data);
+                    } else if ($stack == 5) {
+                        $data['deadline'] = Carbon::now('+7:00')->addMonths(12);
+                        $data['signedTarget'] = SIGNED_TARGET_STACK_6;
+                        $this->petition_dao->deadlinePetition($petition->id, $data);
+                    } else {
+                        $this->event_service->updateStatusEvent($petition->id, FINISHED, PETITION);
+                    }
+                } else {
+                    $this->event_service->updateStatusEvent($petition->id, TARGET_REACHED, PETITION);
+                }
+            }
+        }
+    }
+
     //! Menampilkan seluruh petisi yang sedang berlangsung
     public function getActivePetition()
     {
@@ -43,7 +83,11 @@ class PetitionService
         }
 
         if ($request->typePetition == MENANG) {
-            return $this->petition_dao->getListPetitionByStatus(FINISHED);
+            return $this->petition_dao->getListPetitionByStatus(PROCEEDED);
+        }
+
+        if ($request->typePetition == MENCAPAI_TARGET) {
+            return $this->petition_dao->getListPetitionByStatus(TARGET_REACHED);
         }
 
         if ($request->typePetition == PARTISIPASI) {
@@ -104,25 +148,50 @@ class PetitionService
 
         if ($request->typePetition == MENANG) {
             if ($category == 0 && $sortBy == NONE) {
-                return $this->petition_dao->searchPetition(FINISHED, $request->keyword);
+                return $this->petition_dao->searchPetition(PROCEEDED, $request->keyword);
             }
             if ($category != 0 && $sortBy != NONE) {
                 if ($sortBy == TANDA_TANGAN) {
-                    return $this->petition_dao->searchPetitionCategorySort(FINISHED, $request->keyword, $category, SIGNED_COLUMN);
+                    return $this->petition_dao->searchPetitionCategorySort(PROCEEDED, $request->keyword, $category, SIGNED_COLUMN);
                 }
                 if ($sortBy == EVENT_TERBARU) {
-                    return $this->petition_dao->searchPetitionCategorySort(FINISHED, $request->keyword, $category, CREATED_COLUMN);
+                    return $this->petition_dao->searchPetitionCategorySort(PROCEEDED, $request->keyword, $category, CREATED_COLUMN);
                 }
             }
             if ($category != 0) {
-                return $this->petition_dao->searchPetitionCategory(FINISHED, $request->keyword, $category);
+                return $this->petition_dao->searchPetitionCategory(PROCEEDED, $request->keyword, $category);
             }
             if ($sortBy != NONE) {
                 if ($sortBy == TANDA_TANGAN) {
-                    return $this->petition_dao->searchPetitionSortBy(FINISHED, $request->keyword, SIGNED_COLUMN);
+                    return $this->petition_dao->searchPetitionSortBy(PROCEEDED, $request->keyword, SIGNED_COLUMN);
                 }
                 if ($sortBy == EVENT_TERBARU) {
-                    return $this->petition_dao->searchPetitionSortBy(FINISHED, $request->keyword, CREATED_COLUMN);
+                    return $this->petition_dao->searchPetitionSortBy(PROCEEDED, $request->keyword, CREATED_COLUMN);
+                }
+            }
+        }
+
+        if ($request->typePetition == MENCAPAI_TARGET) {
+            if ($category == 0 && $sortBy == NONE) {
+                return $this->petition_dao->searchPetition(TARGET_REACHED, $request->keyword);
+            }
+            if ($category != 0 && $sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->petition_dao->searchPetitionCategorySort(TARGET_REACHED, $request->keyword, $category, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->petition_dao->searchPetitionCategorySort(TARGET_REACHED, $request->keyword, $category, CREATED_COLUMN);
+                }
+            }
+            if ($category != 0) {
+                return $this->petition_dao->searchPetitionCategory(TARGET_REACHED, $request->keyword, $category);
+            }
+            if ($sortBy != NONE) {
+                if ($sortBy == TANDA_TANGAN) {
+                    return $this->petition_dao->searchPetitionSortBy(TARGET_REACHED, $request->keyword, SIGNED_COLUMN);
+                }
+                if ($sortBy == EVENT_TERBARU) {
+                    return $this->petition_dao->searchPetitionSortBy(TARGET_REACHED, $request->keyword, CREATED_COLUMN);
                 }
             }
         }
@@ -282,25 +351,51 @@ class PetitionService
             if ($request->sortBy == TANDA_TANGAN) {
                 //jika category juga dipilih
                 if ($category != 0) {
-                    return $this->petition_dao->sortPetitionCategory($category, FINISHED, SIGNED_COLUMN);
+                    return $this->petition_dao->sortPetitionCategory($category, PROCEEDED, SIGNED_COLUMN);
                 }
                 // jika hanya sort
-                return $this->petition_dao->sortPetition(FINISHED, SIGNED_COLUMN);
+                return $this->petition_dao->sortPetition(PROCEEDED, SIGNED_COLUMN);
             }
 
             // Jika sort dipilih
             if ($request->sortBy == EVENT_TERBARU) {
                 //jika category juga dipilih
                 if ($category != 0) {
-                    return $this->petition_dao->sortPetitionCategory($category, FINISHED, CREATED_COLUMN);
+                    return $this->petition_dao->sortPetitionCategory($category, PROCEEDED, CREATED_COLUMN);
                 }
                 // jika hanya sort
-                return $this->petition_dao->sortPetition(FINISHED, CREATED_COLUMN);
+                return $this->petition_dao->sortPetition(PROCEEDED, CREATED_COLUMN);
             }
 
             // Jika hanya pilih berdasarkan category
             if ($request->sortBy == NONE) {
-                return $this->petition_dao->petitionByCategory($category, FINISHED);
+                return $this->petition_dao->petitionByCategory($category, PROCEEDED);
+            }
+        }
+        if ($request->typePetition == MENCAPAI_TARGET) {
+            // Jika sort dipilih
+            if ($request->sortBy == TANDA_TANGAN) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->petition_dao->sortPetitionCategory($category, TARGET_REACHED, SIGNED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->petition_dao->sortPetition(TARGET_REACHED, SIGNED_COLUMN);
+            }
+
+            // Jika sort dipilih
+            if ($request->sortBy == EVENT_TERBARU) {
+                //jika category juga dipilih
+                if ($category != 0) {
+                    return $this->petition_dao->sortPetitionCategory($category, TARGET_REACHED, CREATED_COLUMN);
+                }
+                // jika hanya sort
+                return $this->petition_dao->sortPetition(TARGET_REACHED, CREATED_COLUMN);
+            }
+
+            // Jika hanya pilih berdasarkan category
+            if ($request->sortBy == NONE) {
+                return $this->petition_dao->petitionByCategory($category, TARGET_REACHED);
             }
         }
         if ($request->typePetition == PARTISIPASI) {

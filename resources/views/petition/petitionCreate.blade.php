@@ -16,7 +16,7 @@
                     <div class="form-group mb-5">
                         <label for="title">Judul Event</label>
                         <input type="text" class="form-control" id="title" name="title" aria-describedby="title"
-                            placeholder="Judul Event">
+                            placeholder="Judul Event" value="{{ old('title') }}">
                     </div>
                     <div class="form-group mb-5">
                         <label for="category">Kategori</label>
@@ -33,19 +33,16 @@
                     <div class="form-group mb-5">
                         <label for="targetPerson">Target Petisi</label>
                         <input type="text" class="form-control" id="targetPerson" name="targetPerson"
-                            aria-describedby="targetPerson">
-                    </div>
-                    <div class="form-group mb-5">
-                        <label for="signedTarget">Target Jumlah Tandatangan</label>
-                        <input type="text" class="form-control" id="signedTarget" name="signedTarget"
-                            aria-describedby="signedTarget">
+                            placeholder="Kepada pihak mana petisi ini ditujukan" aria-describedby="targetPerson"
+                            value="{{ old('targetPerson') }}">
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label for="purpose">Deskripsi</label>
                         <textarea class="form-control" id="purpose" name="purpose" rows="10"
-                            placeholder="Tuliskan deskripsi atau tujuan event ini" aria-describedby="purpose"></textarea>
+                            placeholder="Tuliskan deskripsi atau tujuan event ini"
+                            aria-describedby="purpose">{{ old('purpose') }}</textarea>
                     </div>
                     <div class="form-group form-check">
                         <input type="checkbox" class="form-check-input" id="check-terms-agreement">

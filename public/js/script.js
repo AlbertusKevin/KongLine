@@ -11,6 +11,9 @@ const checkTypePetition = (type) => {
     if (type.includes("Menang")) {
         return "menang";
     }
+    if (type.includes("Mencapai")) {
+        return "mencapai_target";
+    }
     if (type.includes("Selesai")) {
         return "selesai";
     }
@@ -41,11 +44,16 @@ const getStatus = (idStatusEvent) => {
             return "closed";
         case 4:
             return "canceled";
+        case 5:
+            return "rejected";
+        case 6:
+            return "proceeded";
+        case 7:
+            return "target reached";
     }
 };
 
 const getACategory = (idCategory) => {
-    console.log(idCategory);
     switch (idCategory) {
         case 1:
             return "Pendidikan";
@@ -93,10 +101,10 @@ const changeTablePetition = (petition) => {
         <td><a href="/petition/${petition.id}" style = "color:black;">${
         petition.title
     }</a></td>
-        <td>${getACategory(petition.category)}</td>
+        <td>${petition.category}</td>
         <td>${petition.signedTarget}</td>
         <td>${changeDateFormat(petition.deadline)}</td>
-        <td>${getStatus(petition.status)}</td>
+        <td>${petition.status}</td>
     </tr>
         `;
 };
@@ -198,6 +206,19 @@ const emptyTableTransaction = () => {
 
 // Search-sort-category petition
 const changePetitionList = (petition) => {
+    const date = new Date(petition.deadline);
+
+    const formattedDate = date.toLocaleString("en-US", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+    });
+
+    let deadline =
+        petition.status == 1
+            ? /*html*/ `
+            <small class="text-muted">Hingga ${formattedDate}</small>`
+            : "";
     return /*html*/ `
         <div class="card mb-3 ml-auto mr-auto mt-5" style="max-width: 650px;">
         <div class="row no-gutters">
@@ -206,6 +227,7 @@ const changePetitionList = (petition) => {
                     <h5 class="card-title"><a href="/petition/${petition.id}">${
         petition.title
     }</a></h5>
+    ${deadline}
                     <p class="card-text petition-description">${
                         petition.purpose
                     }</p>
@@ -263,6 +285,39 @@ const listPetitionTypeEmpty = (keyword) => {
         </div>
     </div>
     `;
+};
+
+const sortListPetition = (sortBy, category, typePetition) => {
+    const url = getNowURL();
+
+    $.ajax({
+        url: "/petition/sort",
+        data: { sortBy, category, typePetition },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                if (url != "admin") {
+                    data.forEach((petition) => {
+                        html += changePetitionList(petition);
+                    });
+                } else {
+                    data.forEach((petition) => {
+                        html += changeTablePetition(petition);
+                    });
+                }
+
+                $("#petition-list").html(html);
+            } else {
+                if (url != "admin") {
+                    html += listPetitionEmpty();
+                } else {
+                    html += emptyTablePetition();
+                }
+                $("#petition-list").html(html);
+            }
+        },
+    });
 };
 
 // Search-sort-category donation
@@ -346,39 +401,6 @@ const noListDonation = () => {
         </div>
     </div>
     `;
-};
-
-const sortListPetition = (sortBy, category, typePetition) => {
-    const url = getNowURL();
-
-    $.ajax({
-        url: "/petition/sort",
-        data: { sortBy, category, typePetition },
-        dataType: "json",
-        success: (data) => {
-            let html = "";
-            if (data.length != 0) {
-                if (url != "admin") {
-                    data.forEach((petition) => {
-                        html += changePetitionList(petition);
-                    });
-                } else {
-                    data.forEach((petition) => {
-                        html += changeTablePetition(petition);
-                    });
-                }
-
-                $("#petition-list").html(html);
-            } else {
-                if (url != "admin") {
-                    html += listPetitionEmpty();
-                } else {
-                    html += emptyTablePetition();
-                }
-                $("#petition-list").html(html);
-            }
-        },
-    });
 };
 
 const adminSortListDonation = (sortBy, category, typeDonation) => {

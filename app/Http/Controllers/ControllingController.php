@@ -34,6 +34,7 @@ class ControllingController extends Controller
     //? ========================================
     public function getAllPetition()
     {
+        $this->petition_service->deadlinePetition();
         $listCategory = $this->event_service->getAllCategoriesEvent();
         $petitionList = $this->petition_service->getAllPetition();
         return view('admin.petition.listPetition', compact('listCategory', 'petitionList'));
@@ -88,6 +89,7 @@ class ControllingController extends Controller
     //? ========================================
     public function getListDonation()
     {
+        $this->donation_service->updateDeadlineStatusDonation();
         $listCategory = $this->event_service->getAllCategoriesEvent();
         $donationList = $this->donation_service->getAllDonation();
 

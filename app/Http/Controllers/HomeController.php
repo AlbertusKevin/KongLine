@@ -24,6 +24,7 @@ class HomeController extends Controller
 
     public function index()
     {
+        $this->petition_service->deadlinePetition();
         $this->donation_service->updateDeadlineStatusDonation();
         $donasi = $this->donation_service->getListActiveDonation()->take(3);
         $petisi = $this->petition_service->getActivePetition()->take(3);

@@ -7,6 +7,13 @@ define("DEFAULT_FILE_PREVIEW", "/images/app/pictures/default-file.png");
 define("GUEST_ID", 1);
 define("MIN_DONATION", 10000);
 define("MAX_CHARACTER", 150);
+define("MAX_STACK", 6);
+define("SIGNED_TARGET_STACK_1", 100);
+define("SIGNED_TARGET_STACK_2", 500);
+define("SIGNED_TARGET_STACK_3", 1000);
+define("SIGNED_TARGET_STACK_4", 10000);
+define("SIGNED_TARGET_STACK_5", 50000);
+define("SIGNED_TARGET_STACK_6", 100000);
 
 define("FOLDER_IMAGE_PETITION", "images/petition/events/");
 define("FOLDER_IMAGE_PETITION_PROGRESS", "images/petition/update_news/");
@@ -24,6 +31,7 @@ define("CLOSED", 3);
 define("CANCELED", 4);
 define("REJECTED", 5);
 define("PROCEEDED", 6);
+define("TARGET_REACHED", 7);
 
 // Status User
 define("DELETED", 0);
@@ -44,6 +52,7 @@ define("DONATION", "donation");
 //petition type
 define("BERLANGSUNG", "berlangsung");
 define("MENANG", "menang");
+define("MENCAPAI_TARGET", "mencapai_target");
 define("SELESAI", "selesai");
 define("PARTISIPASI", "partisipasi");
 define("PETISI_SAYA", "petisi_saya");

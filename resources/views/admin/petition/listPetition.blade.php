@@ -47,6 +47,7 @@
                     <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Berlangsung</button>
                     <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Telah
                         Menang</button>
+                    <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Mencapai Target</button>
                     <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Dibatalkan</button>
                     <button type="button" class="btn btn-light petition-type rounded-pill ml-3">
                         Belum Valid</button>

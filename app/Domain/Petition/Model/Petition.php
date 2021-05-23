@@ -9,10 +9,10 @@ class Petition extends Event
     //attribute
     private $signedCollected, $signedTarget, $targetPerson;
 
-    public function __construct($idCampaigner, $title, $photo, $category, $purpose, $status, $created_at, $updated_at, $signedTarget, $signedCollected, $targetPerson)
+    public function __construct($idCampaigner, $title, $photo, $category, $purpose, $status, $created_at, $updated_at, $signedCollected, $targetPerson)
     {
         parent::__construct($idCampaigner, $title, $photo, $category, $purpose, $status, $created_at, $updated_at);
-        $this->signedTarget = $signedTarget;
+        $this->signedTarget = 0;
         $this->signedCollected = $signedCollected;
         $this->targetPerson = $targetPerson;
     }

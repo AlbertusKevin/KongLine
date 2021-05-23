@@ -5,6 +5,7 @@ namespace App\Domain\Controlling\Service;
 use App\Domain\Controlling\Dao\ControllingDao;
 use App\Domain\Profile\Service\ProfileService;
 use App\Domain\Donation\Service\DonationService;
+use App\Domain\Petition\Service\PetitionService;
 use App\Domain\Event\Service\EventService;
 use Carbon\Carbon;
 
@@ -14,12 +15,14 @@ class ControllingService
     private $profile_service;
     private $event_service;
     private $donation_service;
+    private $petition_service;
 
     public function __construct()
     {
         $this->controlling_dao = new ControllingDao();
         $this->profile_service = new ProfileService();
         $this->donation_service = new DonationService();
+        $this->petition_service = new PetitionService();
         $this->event_service = new EventService();
     }
 
@@ -629,7 +632,12 @@ class ControllingService
 
     public function acceptPetition($id)
     {
+        $petition = $this->petition_service->getDetailPetition($id);
         $this->controlling_dao->changeEventStatus($id, ACTIVE, PETITION);
+        $data['updated_at'] = Carbon::now('+7:00');
+        $data['deadline'] = Carbon::now('+7:00')->addMonth();
+        $data['signedTarget'] = SIGNED_TARGET_STACK_1;
+        $data['stack'] = 1;
 
         $this->controlling_dao->acceptPetition($id, $data);
     }
