@@ -369,13 +369,13 @@ class ControllingDao
     public function searchTransactionByDonationTitle($keyword)
     {
         return Transaction::selectRaw('transaction.id, transaction.idParticipant, transaction.created_at, donation.title, users.name, transaction.nominal, transaction.status')
-            ->where('donation.title', 'LIKE', "%" . $keyword . '%')
             ->join('participate_donation', function ($join) {
                 $join->on('participate_donation.idParticipant', '=', 'transaction.idParticipant')
                     ->on('transaction.idDonation', '=', 'participate_donation.idDonation');
             })
             ->join('donation', 'donation.id', 'participate_donation.idDonation')
             ->join('users', 'participate_donation.idParticipant', 'users.id')
+            ->where('donation.title', 'LIKE', "%" . $keyword . '%')
             ->get();
     }
 
@@ -420,6 +420,11 @@ class ControllingDao
     public function getDonationCollected($idDonation)
     {
         return Donation::find($idDonation);
+    }
+
+    public function getTotalDonation($idDonation)
+    {
+        return Transaction::where('idDonation', $idDonation)->where('status', CONFIRMED_TRANSACTION)->sum('nominal');
     }
 
     public function  updateDonationCollected($idDonation, $total)

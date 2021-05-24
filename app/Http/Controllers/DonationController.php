@@ -86,14 +86,13 @@ class DonationController extends Controller
             'title' => 'required',
             'purpose' => 'required|min:150',
             'category' => 'required',
-            'donationTarget' => 'required|numeric',
+            'donationTarget' => 'required',
             'deadline' => 'required|numeric',
             'photo' => 'required|image',
             'assistedSubject' => 'required',
             'bank' => 'required',
             'accountNumber' => 'required|numeric',
             'nominal' => 'required',
-            'nominal.*' => 'numeric',
             'allocationFor' => 'required'
         ]);
 
@@ -107,6 +106,14 @@ class DonationController extends Controller
             return redirect('/donation/create')->with(['type' => "error", 'message' => $messageError])->withInput();
         };
 
+        // validasi total alokasi dana !> target donasi
+        $targetDonation = HelperService::makeNumber($request->donationTarget);
+        $allocations = $this->donation_service->validateTotalAllocation($request->nominal, $targetDonation);
+
+        if (count($allocations) == 0) {
+            return redirect('/donation/create')->with(['type' => "error", 'message' => "Jumlah alokasi dana harus sama dengan target donasi"])->withInput();
+        }
+
         $user = $this->profile_service->getAProfile();
 
         $donation = new Model\Donation(
@@ -119,7 +126,7 @@ class DonationController extends Controller
             Carbon::now('+7:00'),
             Carbon::now('+7:00'),
             0,
-            $request->donationTarget,
+            $targetDonation,
             0,
             $request->assistedSubject,
             $request->bank,
@@ -130,8 +137,8 @@ class DonationController extends Controller
         $this->donation_service->storeDonationCreated($donation);
         $idDonation = $this->donation_service->getLastIdDonation()->id;
 
-        for ($i = 0; $i < count($request->nominal); $i++) {
-            $allocationDetail = new Model\DetailAllocation($idDonation, $request->allocationFor[$i], $request->nominal[$i]);
+        for ($i = 0; $i < count($allocations); $i++) {
+            $allocationDetail = new Model\DetailAllocation($idDonation, $request->allocationFor[$i], $allocations[$i]);
             $this->donation_service->storeDetailAllocation($allocationDetail);
         }
 
@@ -155,13 +162,12 @@ class DonationController extends Controller
             'title' => 'required',
             'purpose' => 'required|min:150',
             'category' => 'required',
-            'donationTarget' => 'required|numeric',
+            'donationTarget' => 'required',
             'deadline' => 'required|numeric',
             'assistedSubject' => 'required',
             'bank' => 'required',
             'accountNumber' => 'required|numeric',
             'nominal' => 'required',
-            'nominal.*' => 'numeric',
             'allocationFor' => 'required'
         ]);
 
@@ -174,6 +180,14 @@ class DonationController extends Controller
 
             return redirect('/donation/edit/' . $id)->with(['type' => "error", 'message' => $messageError])->withInput();
         };
+
+        // validasi total alokasi dana !> target donasi
+        $targetDonation = HelperService::makeNumber($request->donationTarget);
+        $allocations = $this->donation_service->validateTotalAllocation($request->nominal, $targetDonation);
+
+        if (count($allocations) == 0) {
+            return redirect('/donation/edit/' . $id)->with(['type' => "error", 'message' => "Jumlah alokasi dana harus sama dengan target donasi"])->withInput();
+        }
 
         $user = $this->profile_service->getAProfile();
         $oldDonation = $this->donation_service->getADonation($id);
@@ -196,7 +210,7 @@ class DonationController extends Controller
             $oldDonation->created_at,
             Carbon::now('+7:00'),
             0,
-            $request->donationTarget,
+            $targetDonation,
             0,
             $request->assistedSubject,
             $request->bank,
@@ -208,8 +222,8 @@ class DonationController extends Controller
         // hapus detail allocation yang id-nya $id
         $this->donation_service->deleteAllocationDetail($id);
         // insert detail allocation yang baru
-        for ($i = 0; $i < count($request->nominal); $i++) {
-            $allocationDetail = new Model\DetailAllocation($id, $request->allocationFor[$i], $request->nominal[$i]);
+        for ($i = 0; $i < count($allocations); $i++) {
+            $allocationDetail = new Model\DetailAllocation($id, $request->allocationFor[$i], $allocations[$i]);
             $this->donation_service->storeDetailAllocation($allocationDetail);
         }
 

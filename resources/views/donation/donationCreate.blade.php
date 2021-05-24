@@ -74,20 +74,20 @@
                         <table class="table table-sm text-center">
                             <thead>
                                 <tr>
-                                    <th scope="col">Nominal</th>
                                     <th scope="col">Alokasi</th>
+                                    <th scope="col">Nominal</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody id="allocation-list">
                                 <tr>
-                                    <td scope="row">
-                                        <input type="text" name="nominal[]" placeholder="nominal"
-                                            class="w-100 input-allocation">
-                                    </td>
                                     <td>
-                                        <input type="text" name="allocationFor[]" placeholder="allocationFor"
-                                            class="w-100 input-allocation">
+                                        <input type="text" name="allocationFor[]" placeholder="e.g: biaya administrasi"
+                                            autocomplete="off" class="w-100 input-allocation">
+                                    </td>
+                                    <td scope="row">
+                                        <input type="text" name="nominal[]" placeholder="e.g: 150000" autocomplete="off"
+                                            class="w-100 input-allocation nominal">
                                     </td>
                                     <td>
                                         <button type="button"

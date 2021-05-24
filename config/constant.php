@@ -83,6 +83,7 @@ define("PENGAJUAN", "pengajuan");
 define("SEMUA", "semua");
 
 //Transaction Type
+define("BELUM_UPLOAD", "belum_upload");
 define("KONFIRMASI", 'konfirmasi');
 define("GAGAL", 'gagal');
 

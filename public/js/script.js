@@ -171,11 +171,14 @@ const changeTableTransaction = (transaction) => {
     let typeBadge = "";
 
     if (transaction.status == 0) {
-        status = "Perlu Konfirmasi";
-        typeBadge = "info";
+        status = "Belum Upload";
+        typeBadge = "warning";
     } else if (transaction.status == 1) {
         status = "Dikonfirmasi";
         typeBadge = "success";
+    } else if (transaction.status == 2) {
+        status = "Perlu Konfirmasi";
+        typeBadge = "info ";
     } else {
         status = "Ditolak";
         typeBadge = "danger";
@@ -183,7 +186,7 @@ const changeTableTransaction = (transaction) => {
 
     return /*html*/ `
     <tr>
-        <td>${transaction.created_at}</td>
+        <td>${changeDateFormat(transaction.created_at)}</td>
         <td>${transaction.title}</td>
         <td>${transaction.name}</td>
         <td>Rp. ${transaction.nominal.toLocaleString("en")},00</td>
@@ -672,14 +675,34 @@ $(".category-petition").on("click", function (e) {
     sortListPetition(sortBy, category, typePetition);
 });
 
-// Untuk donasi
-$("#nominal").on("keyup", function () {
-    let input = $(this).val();
+const formattingNumber = (input) => {
     input = input.toString().split(",").join("");
-    console.log(input);
     input = input.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    return input;
+};
+
+// Untuk donasi
+$("#donationTarget").on("keyup", function () {
+    let input = formattingNumber($(this).val());
     $(this).val(input);
 });
+
+$(document).on("click", ".btn-remove-allocation", function () {
+    $(this).parent().parent().remove();
+});
+
+$("#allocation-list").on("keyup", ".nominal", function () {
+    let input = formattingNumber($(this).val());
+    $(this).val(input);
+});
+
+// $("#donationTarget").on("keyup", function () {
+//     let input = $(this).val();
+//     input = input.toString().split(",").join("");
+//     input = input.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+//     $(this).val(input);
+// });
+// $(".nominal").on("keyup", formattingNumber($(this).val()));
 
 $("#search-donation").on("keyup", function () {
     let keyword = $(this).val();
@@ -841,13 +864,13 @@ $("#repaymentPicture").on("change", function () {
 $(".btn-add-allocation").on("click", function () {
     let html = /*html*/ `
     <tr>
-        <td scope="row">
-            <input type="text" name="nominal[]" placeholder="nominal"
+        <td>
+            <input type="text" name="allocationFor[]" placeholder="e.g: biaya administrasi" autocomplete="off"
                 class="w-100 input-allocation">
         </td>
-        <td>
-            <input type="text" name="allocationFor[]" placeholder="allocationFor"
-                class="w-100 input-allocation">
+        <td scope="row">
+            <input type="text" name="nominal[]" placeholder="e.g: 150000" autocomplete="off"
+                class="w-100 input-allocation nominal">
         </td>
         <td>
             <button type="button"
@@ -1086,6 +1109,9 @@ $(".transaction-type").on("click", function () {
     $(this).removeClass("btn-light");
 
     let typeTransaction = $(this).html().toLowerCase();
+    if (typeTransaction.includes("Belum")) {
+        typeTransaction = "belum_upload";
+    }
 
     $.ajax({
         url: "/admin/transaction/type",

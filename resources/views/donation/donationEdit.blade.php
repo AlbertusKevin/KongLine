@@ -36,7 +36,8 @@
                     <div class="form-group mb-5">
                         <label for="donationTarget">Target Jumlah Donasi</label>
                         <input type="text" class="form-control" id="donationTarget" name="donationTarget"
-                            aria-describedby="donationTarget" value="{{ $donation->donationTarget }}">
+                            aria-describedby="donationTarget"
+                            value="{{ number_format($donation->donationTarget, 0, ',', ',') }}">
                     </div>
                     <div class="form-group mb-5">
                         <label for="deadline">Lama Event Berlangsung (minggu)</label>
@@ -74,21 +75,23 @@
                         <table class="table table-sm text-center">
                             <thead>
                                 <tr>
-                                    <th scope="col">Nominal</th>
                                     <th scope="col">Alokasi</th>
+                                    <th scope="col">Nominal</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody id="allocation-list">
                                 @foreach ($detailAllocation as $alloc)
                                     <tr>
-                                        <td scope="row">
-                                            <input type="text" name="nominal[]" placeholder="nominal"
-                                                class="w-100 input-allocation" value="{{ $alloc->nominal }}">
-                                        </td>
                                         <td>
                                             <input type="text" name="allocationFor[]" placeholder="allocationFor"
-                                                class="w-100 input-allocation" value="{{ $alloc->description }}">
+                                                autocomplete="off" class="w-100 input-allocation"
+                                                value="{{ $alloc->description }}">
+                                        </td>
+                                        <td scope="row">
+                                            <input type="text" name="nominal[]" placeholder="nominal" autocomplete="off"
+                                                class="w-100 input-allocation nominal"
+                                                value="{{ number_format($alloc->nominal, 0, ',', ',') }}">
                                         </td>
                                         <td>
                                             <button type="button"

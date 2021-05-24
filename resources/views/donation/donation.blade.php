@@ -67,7 +67,7 @@
                 </div>
             @endif
             @foreach ($donations as $donation)
-                <div class="card col-md-4 p-2 mb-5" style="width: 18rem;">
+                <div class="card col-md-4 p-2 mb-5">
                     <div style=" position:relative;">
                         <img src="{{ $donation->photo }}" class="event-picture card-img-top"
                             alt="{{ $donation->title }} donation's picture">

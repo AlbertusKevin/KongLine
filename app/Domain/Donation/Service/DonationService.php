@@ -23,8 +23,7 @@ class DonationService
 
     public function preprocessNominalDonation($request)
     {
-        $nominal = explode(",", $request->nominal);
-        $nominal = (int)join("", $nominal);
+        $nominal = HelperService::makeNumber($request->nominal);
 
         if (gettype($nominal) != "integer") {
             return "not_number";
@@ -279,10 +278,29 @@ class DonationService
         }
     }
 
+    public function validateTotalAllocation($totalNominal, $targetDonation)
+    {
+        $total = 0;
+        $list = [];
+
+        foreach ($totalNominal as $nominal) {
+            $allocation = HelperService::makeNumber($nominal);
+            $list[] = $allocation;
+            $total += $allocation;
+        }
+
+        if ($total != $targetDonation) {
+            return [];
+        }
+
+        return $list;
+    }
+
     public function storeDonationCreated($donation)
     {
         $pathPhoto = HelperService::uploadImage($donation->getPhoto(), FOLDER_IMAGE_DONATION);
         $donation->setPhoto($pathPhoto);
+
         $this->donation_dao->storeDonationCreated($donation);
     }
 

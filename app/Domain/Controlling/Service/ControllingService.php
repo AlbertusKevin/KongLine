@@ -565,8 +565,7 @@ class ControllingService
         $this->controlling_dao->updateTotalDonatur($transaction->idDonation, $totalDonatur);
 
         // ubah jumlah donasi yang terkumpul
-        $oldNominal = $this->controlling_dao->getDonationCollected($transaction->idDonation)->donationCollected;
-        $total = (int)$oldNominal + (int)$transaction->nominal;
+        $total = $this->controlling_dao->getTotalDonation($transaction->idDonation);
         $this->controlling_dao->updateDonationCollected($transaction->idDonation, $total);
     }
 
@@ -602,13 +601,16 @@ class ControllingService
     //! {{-- lewat ajax --}}
     public function transactionType($typeTransaction)
     {
-
         if ($typeTransaction == SEMUA) {
             return $this->controlling_dao->getAllTransaction();
         }
 
         if ($typeTransaction == KONFIRMASI) {
-            return $this->controlling_dao->selectTransaction(NOT_CONFIRMED);
+            return $this->controlling_dao->selectTransaction(NOT_CONFIRMED_TRANSACTION);
+        }
+
+        if ($typeTransaction == BELUM_UPLOAD) {
+            return $this->controlling_dao->selectTransaction(NOT_UPLOADED);
         }
         return $this->controlling_dao->selectTransaction(REJECTED_TRANSACTION);
     }
@@ -621,8 +623,13 @@ class ControllingService
         }
 
         if ($typeTransaction == KONFIRMASI) {
-            return $this->controlling_dao->searchTransactionWithStatusByDonationTitle(NOT_CONFIRMED, $keyword);
+            return $this->controlling_dao->searchTransactionWithStatusByDonationTitle(NOT_CONFIRMED_TRANSACTION, $keyword);
         }
+
+        if ($typeTransaction == BELUM_UPLOAD) {
+            return $this->controlling_dao->searchTransactionWithStatusByDonationTitle(NOT_UPLOADED, $keyword);
+        }
+
         return $this->controlling_dao->searchTransactionWithStatusByDonationTitle(REJECTED_TRANSACTION, $keyword);
     }
 

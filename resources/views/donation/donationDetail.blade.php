@@ -237,20 +237,20 @@
             <ul class="list-group">
                 @foreach ($donation['participated'] as $donatur)
                     <li class="list-group-item">
-                        <div class="row text-left">
+                        <div class="row">
                             @if ($donatur->annonymous_comment == 1)
-                                <div class="col-md-2 offset-md-2">
-                                    <img src="{{ DEFAULT_PROFILE }}" alt="Photo Profile" class="donatur-photo">
+                                <div class="col-md-2 offset-md-2 text-center">
+                                    <img src="{{ DEFAULT_PROFILE }}" alt="Photo Profile" class="profile-donatur">
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-5 text-left">
                                     <span class="ml-3"> Annonymous </span>
                                 </div>
                             @else
-                                <div class="col-md-2 offset-md-2">
+                                <div class="col-md-2 offset-md-2 text-center">
                                     <img src="{{ $donatur->photoProfile }}" alt="{{ $donatur->name }} Profile"
-                                        class="donatur-photo rounded-circle">
+                                        class="profile-donatur">
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-5 text-left">
                                     <span class="ml-3"> {{ $donatur->name }} </span>
                                 </div>
                             @endif
@@ -265,11 +265,11 @@
                     @if ($donatur->annonymous_comment == 1)
                         <div class="card mb-4">
                             <div class=" row no-gutters">
-                                <div class="col-md-2 offset-md-2 text-center p-3">
-                                    <img src="{{ DEFAULT_PROFILE }}" class="img-thumbnail rounded-circle"
+                                <div class="col-md-2 offset-md-2 text-right p-3">
+                                    <img src="{{ DEFAULT_PROFILE }}" class="profile-donatur"
                                         alt="Participant's Image Profile">
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-8 text-left">
                                     <div class="card-body">
                                         <h5 class="card-title font-weight-bold">Annonymous</h5>
                                         <p class="petition-description">{{ $donatur->comment }}</p>
@@ -280,11 +280,11 @@
                     @else
                         <div class="card mb-4">
                             <div class=" row no-gutters">
-                                <div class="col-md-2 offset-md-2 text-center p-3">
-                                    <img src="{{ $donatur->photoProfile }}" class="img-thumbnail rounded-circle"
+                                <div class="col-md-2 offset-md-2 text-right p-3">
+                                    <img src="{{ $donatur->photoProfile }}" class="profile-donatur"
                                         alt="Participant's Image Profile">
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-8 text-left">
                                     <div class="card-body">
                                         <h5 class="card-title font-weight-bold">{{ $donatur->name }}</h5>
                                         <p class="petition-description">{{ $donatur->comment }}</p>

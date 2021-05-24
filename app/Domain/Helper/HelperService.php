@@ -39,4 +39,11 @@ class HelperService
 
         return 'layout.app';
     }
+
+    public static function makeNumber($number)
+    {
+        $number = explode(',', $number);
+        $number = join("", $number);
+        return (int)$number;
+    }
 }

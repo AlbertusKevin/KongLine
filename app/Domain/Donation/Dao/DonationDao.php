@@ -335,7 +335,7 @@ class DonationDao
             'accountNumber' => $donation->getAccountNumber(),
             'bank' => $donation->getBank(),
             'created_at' => $donation->getCreatedAt(),
-            'updated_at' => $donation->geUpdatedAt()
+            'updated_at' => $donation->getUpdatedAt()
         ]);
     }
 
