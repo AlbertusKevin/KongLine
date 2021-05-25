@@ -183,6 +183,10 @@ img.profile-donatur {
   height: 50px;
 }
 
+.warning {
+  color: red;
+}
+
 .petition-detail-description {
   text-align: justify;
   text-indent: 50px;

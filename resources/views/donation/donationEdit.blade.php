@@ -24,6 +24,7 @@
                         <textarea class="form-control" id="purpose" name="purpose" rows="10"
                             placeholder="Tuliskan tujuan dan alasan dari event ini"
                             aria-describedby="purpose">{{ $donation->purpose }}</textarea>
+                        <small class="text-muted" id="valid-length">Max: 300 karakter</small>
                     </div>
                     <div class="form-group mb-5">
                         <label for="category">Kategori</label>

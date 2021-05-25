@@ -44,6 +44,7 @@
                             placeholder="Tuliskan deskripsi atau tujuan event ini"
                             aria-describedby="purpose">{{ old('purpose') }}</textarea>
                     </div>
+                    <small class="text-muted" id="valid-length">Max: 300 karakter</small>
                     <div class="form-group form-check">
                         <input type="checkbox" class="form-check-input" id="check-terms-agreement">
                         <label for="check-terms-agreement">Setuju dengan Syarat & Ketentuan

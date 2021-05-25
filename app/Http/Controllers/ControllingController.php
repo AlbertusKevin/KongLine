@@ -181,7 +181,7 @@ class ControllingController extends Controller
         // //todo: send email
         $view = "auth.trxConfirmEmail";
         $message = "Transaksi donasi Anda selesai diproses";
-        $this->controlling_service->sendEmailTransaction($id, $view, $message);
+        // $this->controlling_service->sendEmailTransaction($id, $view, $message);
         return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Transaksi telah berhasil disetujui.']);
     }
 

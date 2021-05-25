@@ -92,7 +92,7 @@ class PetitionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'content' => 'required|min:300',
+            'content' => 'required|min:150',
             'image' => 'image',
             'link' => 'active_url|nullable'
         ]);
@@ -135,7 +135,7 @@ class PetitionController extends Controller
             'title' => 'required',
             'category' => 'required',
             'photo' => 'required|image',
-            'purpose' => 'required|min:300',
+            'purpose' => 'required|min:150',
             'targetPerson' => 'required'
         ]);
 
@@ -172,7 +172,7 @@ class PetitionController extends Controller
             'title' => 'required',
             'category' => 'required',
             'photo' => 'image',
-            'purpose' => 'required|min:300',
+            'purpose' => 'required|min:150',
             'targetPerson' => 'required'
         ]);
 

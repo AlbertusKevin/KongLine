@@ -703,6 +703,49 @@ $("#allocation-list").on("keyup", ".nominal", function () {
 //     $(this).val(input);
 // });
 // $(".nominal").on("keyup", formattingNumber($(this).val()));
+function countWords() {
+    // Get the input text value
+    var text = document.getElementById("inputField").value;
+
+    var numWords = 0;
+
+    for (var i = 0; i < text.length; i++) {
+        var currentCharacter = text[i];
+
+        // Check if the character is a space
+        if (currentCharacter == " ") {
+            numWords += 1;
+        }
+    }
+
+    // Add 1 to make the count equal to
+    // the number of words
+    // (count of words = count of spaces + 1)
+    numWords += 1;
+}
+
+$("#purpose").on("keyup", function () {
+    let element = $("#valid-length");
+    let text = $(this).val();
+    let numWords = 0;
+
+    for (let i = 0; i < text.length; i++) {
+        let currentCharacter = text[i];
+        if (currentCharacter == " " && text[i + 1] != " ") {
+            numWords += 1;
+        }
+    }
+
+    if (numWords <= 300) {
+        element.removeClass("warning");
+        element.addClass("text-muted");
+        $("#valid-length").html("Panjang Karakter: " + numWords);
+    } else {
+        element.removeClass("text-muted");
+        element.addClass("warning");
+        element.html("Panjang Karakter Mencapai maximum!");
+    }
+});
 
 $("#search-donation").on("keyup", function () {
     let keyword = $(this).val();

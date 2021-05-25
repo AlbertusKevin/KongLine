@@ -46,6 +46,7 @@
                         <textarea class="form-control" id="purpose" name="purpose" rows="10"
                             placeholder="Tuliskan deskripsi atau tujuan event ini"
                             aria-describedby="purpose">{{ $petition->purpose }}</textarea>
+                        <small class="text-muted" id="valid-length">Max: 300 karakter</small>
                     </div>
                     <div class="form-group">
                         @if ($petition->status == NOT_CONFIRMED)
