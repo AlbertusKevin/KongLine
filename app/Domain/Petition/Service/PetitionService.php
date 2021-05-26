@@ -612,9 +612,10 @@ class PetitionService
     }
 
     //! Mengubah data petisi
-    public function updatePetition($petition, $id, $empty)
+    public function updatePetition($oldPetition, $petition, $id, $empty)
     {
         if (!$empty) {
+            HelperService::deleteImage($oldPetition->photo);
             $pathImage = HelperService::uploadImage(
                 $petition->getPhoto(),
                 FOLDER_IMAGE_PETITION

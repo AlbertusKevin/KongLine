@@ -92,7 +92,7 @@ class PetitionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'content' => 'required|min:150',
+            'content' => 'required|min:300',
             'image' => 'image',
             'link' => 'active_url|nullable'
         ]);
@@ -135,7 +135,7 @@ class PetitionController extends Controller
             'title' => 'required',
             'category' => 'required',
             'photo' => 'required|image',
-            'purpose' => 'required|min:150',
+            'purpose' => 'required|min:300',
             'targetPerson' => 'required'
         ]);
 
@@ -171,8 +171,8 @@ class PetitionController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'category' => 'required',
-            'photo' => 'image',
-            'purpose' => 'required|min:150',
+            'photo' => 'image|nullable',
+            'purpose' => 'required|min:300',
             'targetPerson' => 'required'
         ]);
 
@@ -198,7 +198,7 @@ class PetitionController extends Controller
         }
 
         $petition = new Model\Petition($user->id, $request->title, $file, $request->category, $request->purpose, 0, $oldPetition->created_at, Carbon::now('+7:00'), 0, $request->targetPerson);
-        $this->petition_service->updatePetition($petition, $id, $empty);
+        $this->petition_service->updatePetition($oldPetition, $petition, $id, $empty);
 
         return redirect('/petition/edit/' . $id)->with(['type' => "success", 'message' => 'Petisi Anda berhasil diperbarui.']);
     }

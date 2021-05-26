@@ -696,54 +696,23 @@ $("#allocation-list").on("keyup", ".nominal", function () {
     $(this).val(input);
 });
 
-// $("#donationTarget").on("keyup", function () {
-//     let input = $(this).val();
-//     input = input.toString().split(",").join("");
-//     input = input.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-//     $(this).val(input);
-// });
-// $(".nominal").on("keyup", formattingNumber($(this).val()));
-function countWords() {
-    // Get the input text value
-    var text = document.getElementById("inputField").value;
-
-    var numWords = 0;
-
-    for (var i = 0; i < text.length; i++) {
-        var currentCharacter = text[i];
-
-        // Check if the character is a space
-        if (currentCharacter == " ") {
-            numWords += 1;
-        }
-    }
-
-    // Add 1 to make the count equal to
-    // the number of words
-    // (count of words = count of spaces + 1)
-    numWords += 1;
-}
+$("#nominal").on("keyup", function () {
+    let input = formattingNumber($(this).val());
+    $(this).val(input);
+});
 
 $("#purpose").on("keyup", function () {
     let element = $("#valid-length");
     let text = $(this).val();
-    let numWords = 0;
 
-    for (let i = 0; i < text.length; i++) {
-        let currentCharacter = text[i];
-        if (currentCharacter == " " && text[i + 1] != " ") {
-            numWords += 1;
-        }
-    }
-
-    if (numWords <= 300) {
-        element.removeClass("warning");
-        element.addClass("text-muted");
-        $("#valid-length").html("Panjang Karakter: " + numWords);
-    } else {
+    if (text.length <= 300) {
         element.removeClass("text-muted");
         element.addClass("warning");
-        element.html("Panjang Karakter Mencapai maximum!");
+        element.html("Panjang Karakter: " + text.length);
+    } else {
+        element.removeClass("warning");
+        element.addClass("text-muted");
+        element.html("Panjang karakter Mencapai ketentuan minimum!");
     }
 });
 
@@ -832,7 +801,6 @@ $(".category-select-donation").on("click", function (e) {
         const typeDonation = checkTypePetition(
             $(".donation-type.btn-primary").html()
         );
-
         adminSortListDonation(sortBy, category, typeDonation);
     } else {
         sortListDonation(sortBy, category);
@@ -891,17 +859,29 @@ $(".show-comment").on("click", function () {
     $(".card-text").html(html);
 });
 
-$("#repaymentPicture").on("change", function () {
-    const cover = document.querySelector("#repaymentPicture");
-    const coverLabel = document.querySelector(".custom-file-label");
-    const imgPreview = document.querySelector(".img-preview");
-
+const changeImgPreview = (cover, coverLabel, imgPreview) => {
     coverLabel.textContent = cover.files[0].name;
     const fileCover = new FileReader();
     fileCover.readAsDataURL(cover.files[0]);
     fileCover.onload = function (e) {
         imgPreview.src = e.target.result;
     };
+};
+
+$(".choose-file").on("change", function () {
+    const cover = document.querySelector(".choose-file");
+    const coverLabel = document.querySelector(".custom-file-label");
+    const imgPreview = document.querySelector(".img-preview");
+
+    changeImgPreview(cover, coverLabel, imgPreview);
+});
+
+$(".choose-file-cover").on("change", function () {
+    const cover = document.querySelector(".choose-file-cover");
+    const coverLabel = document.querySelector(".custom-file-label-cover");
+    const imgPreview = document.querySelector(".img-preview-cover");
+
+    changeImgPreview(cover, coverLabel, imgPreview);
 });
 
 $(".btn-add-allocation").on("click", function () {

@@ -84,7 +84,7 @@ class DonationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'purpose' => 'required|min:150',
+            'purpose' => 'required|min:300',
             'category' => 'required',
             'donationTarget' => 'required',
             'deadline' => 'required|numeric',
@@ -160,7 +160,7 @@ class DonationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'purpose' => 'required|min:150',
+            'purpose' => 'required|min:300',
             'category' => 'required',
             'donationTarget' => 'required',
             'deadline' => 'required|numeric',
@@ -168,6 +168,7 @@ class DonationController extends Controller
             'bank' => 'required',
             'accountNumber' => 'required|numeric',
             'nominal' => 'required',
+            'photo' => 'nullable|image',
             'allocationFor' => 'required'
         ]);
 
@@ -218,7 +219,7 @@ class DonationController extends Controller
             $request->deadline
         );
         // update data donasi
-        $this->donation_service->updateEventDonation($donation, $id, $empty);
+        $this->donation_service->updateEventDonation($oldDonation, $donation, $id, $empty);
         // hapus detail allocation yang id-nya $id
         $this->donation_service->deleteAllocationDetail($id);
         // insert detail allocation yang baru
@@ -334,7 +335,11 @@ class DonationController extends Controller
             return redirect('/donation/donate/edit/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
         };
 
+        $user = $this->profile_service->getAProfile();
+        $oldTransaction = $this->donation_service->getAUserTransaction($user->id, $id);
+
         if (!empty($request->file('repaymentPicture'))) {
+            HelperService::deleteImage($oldTransaction->repaymentPicture);
             $this->donation_service->confirmationPictureDonation($request->file('repaymentPicture'), $id);
         } else {
             $this->donation_service->updateTransactionDonation($id);

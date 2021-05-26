@@ -24,7 +24,7 @@
                         <textarea class="form-control" id="purpose" name="purpose" rows="10"
                             placeholder="Tuliskan tujuan dan alasan dari event ini"
                             aria-describedby="purpose">{{ $donation->purpose }}</textarea>
-                        <small class="text-muted" id="valid-length">Max: 300 karakter</small>
+                        <small class="text-muted" id="valid-length">Minimal 300 karakter</small>
                     </div>
                     <div class="form-group mb-5">
                         <label for="category">Kategori</label>
@@ -47,7 +47,13 @@
                     </div>
                     <div class="form-group mb-5">
                         <label for="photo">Foto</label>
-                        <input type="file" class="form-control" id="photo" name="photo" aria-describedby="photo">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input choose-file" id="photo" name="photo">
+                            <label class="custom-file-label" for="photo">Foto event donasi</label>
+                        </div>
+                    </div>
+                    <div class="form-group mb-5 text-center">
+                        <img src="{{ $donation->photo }}" alt="" class="img-thumbnail img-preview">
                     </div>
                 </div>
                 <div class="col-md-5">

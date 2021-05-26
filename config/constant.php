@@ -1,8 +1,10 @@
 <?php
 //constant data
 define("ACCOUNT", "1702272081");
-define("DEFAULT_PROFILE", "/images/profile/photo/default.png");
-define("DEFAULT_COVER_PROFILE", "/images/profile/background/default-cover-profile.png");
+define("DEFAULT_FILE_PROFILE_PICTURE", "default.png");
+define("DEFAULT_FILE_COVER_PICTURE", "default-cover-profile.png");
+define("DEFAULT_PROFILE", "/images/profile/photo/" . DEFAULT_FILE_PROFILE_PICTURE);
+define("DEFAULT_COVER_PROFILE", "/images/profile/background/" . DEFAULT_FILE_COVER_PICTURE);
 define("DEFAULT_FILE_PREVIEW", "/images/app/pictures/default-file.png");
 define("GUEST_ID", 1);
 define("MIN_DONATION", 10000);

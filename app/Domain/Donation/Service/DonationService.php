@@ -304,9 +304,10 @@ class DonationService
         $this->donation_dao->storeDonationCreated($donation);
     }
 
-    public function updateEventDonation($donation, $id, $empty)
+    public function updateEventDonation($oldDonation, $donation, $id, $empty)
     {
         if (!$empty) {
+            HelperService::deleteImage($oldDonation->photo);
             $pathPhoto = HelperService::uploadImage($donation->getPhoto(), FOLDER_IMAGE_DONATION);
             $donation->setPhoto($pathPhoto);
         }

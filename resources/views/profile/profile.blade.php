@@ -100,13 +100,27 @@
                         value="{{ $user->phoneNumber }}">
                 </div>
             </div>
+
             <div class="form-row mt-2">
-                <label for="profile_picture">Profile Picture:</label>
-                <input type="file" class="form-control" name="profile_picture" id="profile_picture">
+                <label for="profile_picture">Gambar Profil:</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input choose-file" id="profile_picture" name="profile_picture">
+                    <label class="custom-file-label" for="profile_picture">pilih gambar</label>
+                </div>
+                <div class="form-group mb-2 mt-2 text-center">
+                    <img src="{{ $user->photoProfile }}" alt="" class="img-preview profile-preview">
+                </div>
             </div>
+
             <div class="form-row mt-2">
-                <label for="cover_picture">Cover Picture:</label>
-                <input type="file" class="form-control" name="cover_picture" id="cover_picture">
+                <label for="cover_picture">Gambar Latar Belakang:</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input choose-file-cover" id="cover_picture" name="cover_picture">
+                    <label class="custom-file-label custom-file-label-cover" for="cover_picture">pilih gambar</label>
+                </div>
+                <div class="form-group mb-2 mt-2 text-center">
+                    <img src="{{ $user->backgroundPicture }}" alt="" class="img-preview-cover profile-preview">
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary mt-5">Simpan</button>

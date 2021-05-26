@@ -27,14 +27,20 @@
                         </select>
                     </div>
                     <div class="form-group mb-5">
-                        <label for="photo">Foto</label>
-                        <input type="file" class="form-control" id="photo" name="photo" aria-describedby="photo">
-                    </div>
-                    <div class="form-group mb-5">
                         <label for="targetPerson">Target Petisi</label>
                         <input type="text" class="form-control" id="targetPerson" name="targetPerson"
                             placeholder="Kepada pihak mana petisi ini ditujukan" aria-describedby="targetPerson"
                             value="{{ old('targetPerson') }}">
+                    </div>
+                    <div class="form-group mb-5">
+                        <label for="photo">Foto</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input choose-file" id="photo" name="photo">
+                            <label class="custom-file-label" for="photo">Foto event petisi</label>
+                        </div>
+                    </div>
+                    <div class="form-group mb-5 text-center">
+                        <img src="{{ DEFAULT_FILE_PREVIEW }}" alt="" class="img-thumbnail img-preview">
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -44,7 +50,7 @@
                             placeholder="Tuliskan deskripsi atau tujuan event ini"
                             aria-describedby="purpose">{{ old('purpose') }}</textarea>
                     </div>
-                    <small class="text-muted" id="valid-length">Max: 300 karakter</small>
+                    <small class="text-muted" id="valid-length">Minimal 300 karakter</small>
                     <div class="form-group form-check">
                         <input type="checkbox" class="form-check-input" id="check-terms-agreement">
                         <label for="check-terms-agreement">Setuju dengan Syarat & Ketentuan

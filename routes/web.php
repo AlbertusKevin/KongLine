@@ -105,6 +105,8 @@ Route::post('/donation/create', [DonationController::class, 'saveEventDonation']
 //* --- menampilkan donasi ---
 Route::get('/donation', [DonationController::class, 'getListActiveDonation']);
 Route::get('/donation/{id}', [DonationController::class, 'getADonation']);
+
+//* --- Edit event donasi ---
 Route::get('/donation/edit/{id}', [DonationController::class, 'getViewEditDonation']);
 Route::put('/donation/{id}', [DonationController::class, 'updateEventDonation']);
 
