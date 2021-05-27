@@ -29,7 +29,9 @@
                         <label for="category">Kategori</label>
                         <select class="form-control" id="category" name="category" aria-describedby="category">
                             @foreach ($listCategory as $category)
-                                <option <?php $category->id == old('category') ? 'selected' : ''; ?> value="{{ $category->id }}">{{ $category->description }}</option>
+                                <option {{ $category->id == old('category') ? 'selected' : '' }}
+                                    value="{{ $category->id }}">{{ $category->description }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -41,7 +43,7 @@
                     <div class="form-group mb-5">
                         <label for="deadline">Lama Event Berlangsung (minggu)</label>
                         <input type="number" class="form-control" id="deadline" name="deadline" aria-describedby="deadline"
-                            placeholder="e.g: 2 minggu">
+                            placeholder="e.g: 2 minggu" value="{{ old('deadline') }}">
                     </div>
                     <div class="form-group mb-5">
                         <label for="photo">Foto</label>
@@ -64,15 +66,17 @@
                         <label for="category">Bank</label>
                         <select class="form-control" id="bank" name="bank" aria-describedby="bank">
                             @foreach ($listBank as $bank)
-                                <option value="{{ $bank->id }}" <?php $bank->id == old('bank') ?
-                                    'selected' : ''; ?>>{{ $bank->bank }}</option>
+                                <option {{ $bank->id == old('bank') ? 'selected' : '' }} value="{{ $bank->id }}">
+                                    {{ $bank->bank }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group mb-5">
                         <label for="accountNumber">No Rekening</label>
                         <input type="text" class="form-control" id="accountNumber" name="accountNumber"
-                            aria-describedby="accountNumber" value="{{ $user->accountNumber }}"
+                            aria-describedby="accountNumber"
+                            value="{{ old('accountNumber') !== null ? old('accountNumber') : $user->accountNumber }}"
                             placeholder="No Rekening untuk transfer jika donasi terkumpul">
                     </div>
                     <div class="form-group mb-5">
@@ -87,6 +91,27 @@
                                 </tr>
                             </thead>
                             <tbody id="allocation-list">
+                                @if (old('allocationFor') !== null || old('nominal') !== null)
+                                    @for ($i = 0; $i < count(old('allocationFor')); $i++)
+                                        <tr>
+                                            <td>
+                                                <input type="text" name="allocationFor[]"
+                                                    placeholder="e.g: biaya administrasi" autocomplete="off"
+                                                    class="w-100 input-allocation"
+                                                    value="{{ old('allocationFor')[$i] }}">
+                                            </td>
+                                            <td scope="row">
+                                                <input type="text" name="nominal[]" placeholder="e.g: 150000"
+                                                    autocomplete="off" class="w-100 input-allocation nominal"
+                                                    value="{{ old('nominal')[$i] }}">
+                                            </td>
+                                            <td>
+                                                <button type="button"
+                                                    class="badge badge-danger badge-pill btn-remove-allocation">remove</button>
+                                            </td>
+                                        </tr>
+                                    @endfor
+                                @endif
                                 <tr>
                                     <td>
                                         <input type="text" name="allocationFor[]" placeholder="e.g: biaya administrasi"
@@ -101,18 +126,22 @@
                                             class="badge badge-danger badge-pill btn-remove-allocation">remove</button>
                                     </td>
                                 </tr>
+
                             </tbody>
                         </table>
                     </div>
                     <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="check-terms-agreement">
+                        <input type="checkbox" class="form-check-input" id="check-terms-agreement"
+                            name="check-terms-agreement" {{ old('check-terms-agreement') == 'on' ? 'checked' : '' }}>
                         <label for="check-terms-agreement">Setuju dengan Syarat & Ketentuan
                             YukBisaYuk</label>
                     </div>
                     <div class="form-group">
                         <button type="button" class="btn btn-secondary verify-profile" data-toggle="modal"
-                            data-target="#verification-petition" disabled>Verifikasi Profil</button>
-                        <button type="submit" class="btn btn-secondary new-petition" disabled>Ajukan Event</button>
+                            data-target="#verification-petition"
+                            {{ old('check-terms-agreement') == 'on' ? '' : 'disabled' }}>Verifikasi Profil</button>
+                        <button type="submit" class="btn btn-secondary new-petition"
+                            {{ old('check-terms-agreement') == 'on' ? '' : 'disabled' }}>Ajukan Event</button>
                     </div>
                 </div>
             </div>

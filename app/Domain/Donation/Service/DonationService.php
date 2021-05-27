@@ -26,10 +26,10 @@ class DonationService
         $nominal = HelperService::makeNumber($request->nominal);
 
         if (gettype($nominal) != "integer") {
-            return "not_number";
-            if ($nominal < MIN_DONATION) {
-                return "below_min";
-            }
+            $nominal = "not_number";
+        }
+        if ($nominal < MIN_DONATION) {
+            $nominal = "below_min";
         }
 
         return $nominal;

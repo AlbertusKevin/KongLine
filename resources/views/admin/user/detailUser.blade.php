@@ -28,11 +28,12 @@
                         Pengajuan</button>
                 </form>
 
-                <form action="/admin/user/tolakPengajuan/{{ $user->id }}" method="POST" style="display: inline-block">
+                {{-- <form action="" method="POST" style="display: inline-block">
                     @csrf
-                    @method('patch')
-                    <button type="submit" class="btn btn-danger rounded-pill tolakPengajuan">Tolak Pengajuan</button>
-                </form>
+                    @method('patch') --}}
+                <button type="button" class="btn btn-danger rounded-pill tolakPengajuan" data-toggle="modal"
+                    data-target="#tolak-pengajuan">Tolak Pengajuan</button>
+                {{-- </form> --}}
             @endif
         </div>
     </div>
@@ -198,6 +199,33 @@
                         @endphp
                     @endif
                 @endforeach
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="tolak-pengajuan" tabindex="-1" aria-labelledby="tolak-pengajuan-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/admin/user/tolakPengajuan/{{ $user->id }}" method="post">
+                    @csrf
+                    @method('patch')
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tolak-pengajuan-label">Alasan Ditolak</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <textarea class="form-control" id="rejectCampaigner" name="rejectCampaigner"
+                                rows="3">{{ old('rejectCampaigner') }}</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button class="btn btn-danger" type="submit">Tolak</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

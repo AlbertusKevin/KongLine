@@ -22,7 +22,8 @@
                         <label for="category">Kategori</label>
                         <select class="form-control" id="category" name="category" aria-describedby="category">
                             @foreach ($listCategory as $category)
-                                <option value="{{ $category->id }}">{{ $category->description }}</option>
+                                <option {{ $category->id == old('category') ? 'selected' : '' }}
+                                    value="{{ $category->id }}">{{ $category->description }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -52,14 +53,17 @@
                     </div>
                     <small class="text-muted" id="valid-length">Minimal 300 karakter</small>
                     <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="check-terms-agreement">
+                        <input type="checkbox" class="form-check-input" id="check-terms-agreement"
+                            name="check-terms-agreement" {{ old('check-terms-agreement') == 'on' ? 'checked' : '' }}>
                         <label for="check-terms-agreement">Setuju dengan Syarat & Ketentuan
                             YukBisaYuk</label>
                     </div>
                     <div class="form-group">
                         <button type="button" class="btn btn-secondary verify-profile" data-toggle="modal"
-                            data-target="#verification-petition" disabled>Verifikasi Profil</button>
-                        <button type="submit" class="btn btn-secondary new-petition" disabled>Ajukan Event</button>
+                            data-target="#verification-petition"
+                            {{ old('check-terms-agreement') == 'on' ? '' : 'disabled' }}>Verifikasi Profil</button>
+                        <button type="submit" class="btn btn-secondary new-petition"
+                            {{ old('check-terms-agreement') == 'on' ? '' : 'disabled' }}>Ajukan Event</button>
                     </div>
                 </div>
             </div>

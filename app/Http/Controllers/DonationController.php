@@ -252,9 +252,10 @@ class DonationController extends Controller
 
         if ($nominal == "not_number") {
             return redirect('/donation/donate/' . $id)->withInput()->with(['type' => "error", 'message' => 'Input nominal harus berupa angka']);
-            if ($nominal == "below_min") {
-                return redirect('/donation/donate/' . $id)->withInput()->with(['type' => "error", 'message' => 'Donasi minimal ' . MIN_DONATION]);
-            }
+        }
+
+        if ($nominal == "below_min") {
+            return redirect('/donation/donate/' . $id)->withInput()->with(['type' => "error", 'message' => 'Donasi minimal ' . MIN_DONATION]);
         }
 
         if ($validator->fails()) {
@@ -301,7 +302,7 @@ class DonationController extends Controller
                 $messageError = $message;
             }
 
-            return redirect('/donation/confirm_donate/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
+            return redirect('/donation/confirm_donate/' . $id)->with(['type' => "error", 'message' => $messageError]);
         };
 
         $this->donation_service->confirmationPictureDonation($request->file('repaymentPicture'), $id);

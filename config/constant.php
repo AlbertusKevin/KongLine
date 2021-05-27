@@ -50,6 +50,8 @@ define("CAMPAIGNER", "campaigner");
 //event
 define("PETITION", "petition");
 define("DONATION", "donation");
+define("TRANSACTION", "transaction");
+define("REQ_CAMPAIGNER", "request_camp");
 
 //petition type
 define("BERLANGSUNG", "berlangsung");

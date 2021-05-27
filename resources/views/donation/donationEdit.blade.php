@@ -17,33 +17,47 @@
                     <div class="form-group mb-5">
                         <label for="title">Judul Event</label>
                         <input type="text" class="form-control" id="title" name="title" aria-describedby="title"
-                            placeholder="Judul Event" value="{{ $donation->title }}">
+                            placeholder="Judul Event"
+                            value="{{ old('title') !== null ? old('title') : $donation->title }}">
                     </div>
                     <div class="form-group">
                         <label for="purpose">Tujuan dan Alasan Galang Dana</label>
                         <textarea class="form-control" id="purpose" name="purpose" rows="10"
                             placeholder="Tuliskan tujuan dan alasan dari event ini"
-                            aria-describedby="purpose">{{ $donation->purpose }}</textarea>
+                            aria-describedby="purpose">{{ old('purpose') !== null ? old('purpose') : $donation->purpose }}</textarea>
                         <small class="text-muted" id="valid-length">Minimal 300 karakter</small>
                     </div>
                     <div class="form-group mb-5">
                         <label for="category">Kategori</label>
                         <select class="form-control" id="category" name="category" aria-describedby="category">
-                            @foreach ($listCategory as $category)
-                                <option <?php $category->id == $donation->category ? 'selected' : ''; ?> value="{{ $category->id }}">{{ $category->description }}</option>
-                            @endforeach
+                            @if (old('category') === null)
+                                @foreach ($listCategory as $category)
+                                    <option {{ $category->id == $donation->category ? 'selected' : '' }}
+                                        value="{{ $category->id }}">
+                                        {{ $category->description }}
+                                    </option>
+                                @endforeach
+                            @else
+                                @foreach ($listCategory as $category)
+                                    <option {{ $category->id == old('category') ? 'selected' : '' }}
+                                        value="{{ $category->id }}">
+                                        {{ $category->description }}
+                                    </option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     <div class="form-group mb-5">
                         <label for="donationTarget">Target Jumlah Donasi</label>
                         <input type="text" class="form-control" id="donationTarget" name="donationTarget"
                             aria-describedby="donationTarget"
-                            value="{{ number_format($donation->donationTarget, 0, ',', ',') }}">
+                            value="{{ old('donationTarget') !== null ? old('donationTarget') : number_format($donation->donationTarget, 0, ',', ',') }}">
                     </div>
                     <div class="form-group mb-5">
                         <label for="deadline">Lama Event Berlangsung (minggu)</label>
                         <input type="number" class="form-control" id="deadline" name="deadline" aria-describedby="deadline"
-                            placeholder="e.g: 2 minggu" value="{{ $donation->duration_event }}">
+                            placeholder="e.g: 2 minggu"
+                            value="{{ old('deadline') !== null ? old('deadline') : $donation->duration_event }}">
                     </div>
                     <div class="form-group mb-5">
                         <label for="photo">Foto</label>
@@ -60,20 +74,30 @@
                     <div class="form-group mb-5">
                         <label for="assistedSubject">Penerima Manfaat</label>
                         <input type="text" class="form-control" id="assistedSubject" name="assistedSubject"
-                            aria-describedby="assistedSubject" value="{{ $donation->assistedSubject }}">
+                            aria-describedby="assistedSubject"
+                            value="{{ old('assistedSubject') !== null ? old('assistedSubject') : $donation->assistedSubject }}">
                     </div>
                     <div class="form-group mb-5">
                         <label for="category">Bank</label>
                         <select class="form-control" id="bank" name="bank" aria-describedby="bank">
-                            @foreach ($listBank as $bank)
-                                <option value="{{ $bank->id }}" @if ($bank->id == $donation->bank) selected = "selected" @endif>{{ $bank->bank }}</option>
-                            @endforeach
+                            @if (old('bank') === null)
+                                @foreach ($listBank as $bank)
+                                    <option {{ $bank->id == $donation->bank ? 'selected' : '' }}
+                                        value="{{ $bank->id }}">{{ $bank->bank }}</option>
+                                @endforeach
+                            @else
+                                @foreach ($listBank as $bank)
+                                    <option {{ $bank->id == old('bank') ? 'selected' : '' }}
+                                        value="{{ $bank->id }}">{{ $bank->bank }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     <div class="form-group mb-5">
                         <label for="accountNumber">No Rekening</label>
                         <input type="text" class="form-control" id="accountNumber" name="accountNumber"
-                            aria-describedby="accountNumber" value="{{ $user->accountNumber }}"
+                            aria-describedby="accountNumber"
+                            value="{{ old('accountNumber') !== null ? old('accountNumber') : $user->accountNumber }}"
                             placeholder="No Rekening untuk transfer jika donasi terkumpul">
                     </div>
                     <div class="form-group mb-5">
@@ -88,24 +112,45 @@
                                 </tr>
                             </thead>
                             <tbody id="allocation-list">
-                                @foreach ($detailAllocation as $alloc)
-                                    <tr>
-                                        <td>
-                                            <input type="text" name="allocationFor[]" placeholder="allocationFor"
-                                                autocomplete="off" class="w-100 input-allocation"
-                                                value="{{ $alloc->description }}">
-                                        </td>
-                                        <td scope="row">
-                                            <input type="text" name="nominal[]" placeholder="nominal" autocomplete="off"
-                                                class="w-100 input-allocation nominal"
-                                                value="{{ number_format($alloc->nominal, 0, ',', ',') }}">
-                                        </td>
-                                        <td>
-                                            <button type="button"
-                                                class="badge badge-danger badge-pill btn-remove-allocation">remove</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                @if (old('allocationFor') !== null || old('nominal') !== null)
+                                    @for ($i = 0; $i < count(old('allocationFor')); $i++)
+                                        <tr>
+                                            <td>
+                                                <input type="text" name="allocationFor[]" placeholder="allocationFor"
+                                                    autocomplete="off" class="w-100 input-allocation"
+                                                    value="{{ old('allocationFor')[$i] }}">
+                                            </td>
+                                            <td scope="row">
+                                                <input type="text" name="nominal[]" placeholder="nominal" autocomplete="off"
+                                                    class="w-100 input-allocation nominal"
+                                                    value="{{ old('nominal')[$i] }}">
+                                            </td>
+                                            <td>
+                                                <button type="button"
+                                                    class="badge badge-danger badge-pill btn-remove-allocation">remove</button>
+                                            </td>
+                                        </tr>
+                                    @endfor
+                                @else
+                                    @foreach ($detailAllocation as $alloc)
+                                        <tr>
+                                            <td>
+                                                <input type="text" name="allocationFor[]" placeholder="allocationFor"
+                                                    autocomplete="off" class="w-100 input-allocation"
+                                                    value="{{ $alloc->description }}">
+                                            </td>
+                                            <td scope="row">
+                                                <input type="text" name="nominal[]" placeholder="nominal" autocomplete="off"
+                                                    class="w-100 input-allocation nominal"
+                                                    value="{{ number_format($alloc->nominal, 0, ',', ',') }}">
+                                            </td>
+                                            <td>
+                                                <button type="button"
+                                                    class="badge badge-danger badge-pill btn-remove-allocation">remove</button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>

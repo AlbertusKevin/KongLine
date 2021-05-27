@@ -513,23 +513,6 @@ class ControllingDao
         return $petitions;
     }
 
-    public function sendEmail($event, $view, $subject, $event_chosen)
-    {
-        Mail::send($view, ['event' => $event, 'event_chosen' => $event_chosen], function ($message) use ($event, $subject) {
-            $message->to($event->users->email);
-            $message->subject($subject);
-        });
-    }
-
-
-    public function sendEmailUser($user, $view, $subject)
-    {
-        Mail::send($view, ['user' => $user], function ($message) use ($user, $subject) {
-            $message->to($user->email);
-            $message->subject($subject);
-        });
-    }
-
     public function getPetitionById($id)
     {
         return Petition::find($id);
@@ -607,11 +590,27 @@ class ControllingDao
         return Transaction::find($id);
     }
 
-    public function sendEmailTrx($trx, $view, $subject)
+    public function sendEmailTrx($trx, $view, $email)
     {
-        Mail::send($view, ['transaction' => $trx], function ($message) use ($trx, $subject) {
+        Mail::send($view, ['transaction' => $trx, 'email' => $email], function ($message) use ($trx) {
             $message->to($trx->donations->users->email);
-            $message->subject($subject);
+            $message->subject("Tindak Lanjut Transaksi");
+        });
+    }
+
+    public function sendEmail($event, $view, $email, $event_chosen)
+    {
+        Mail::send($view, ['event' => $event, 'event_chosen' => $event_chosen, 'email' => $email], function ($message) use ($event) {
+            $message->to($event->users->email);
+            $message->subject("Tindak Lanjut Event");
+        });
+    }
+
+    public function sendEmailUser($user, $view, $email)
+    {
+        Mail::send($view, ['user' => $user, 'email' => $email], function ($message) use ($user) {
+            $message->to($user->email);
+            $message->subject("Tindak Lanjut Campaigner");
         });
     }
 }
