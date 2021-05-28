@@ -81,6 +81,8 @@ Route::get('/petition/create', [PetitionController::class, 'getViewCreatePetitio
 Route::post('/petition/create', [PetitionController::class, 'saveDataEventPetition'])->middleware('campaigner');
 Route::get('/petition/{id}', [PetitionController::class, 'getDetailPetition']);
 
+Route::get('/petition/{id}', [PetitionController::class, 'getDetailPetition']);
+
 Route::get('/petition/edit/{id}', [PetitionController::class, 'getViewEditPetition'])->middleware('campaigner');
 Route::put('/petition/{id}', [PetitionController::class, 'updatePetition'])->middleware('campaigner');
 
