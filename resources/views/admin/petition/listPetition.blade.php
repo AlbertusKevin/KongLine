@@ -74,7 +74,7 @@
                                 <td><a href="/petition/{{ $petition->id }}"
                                         style="color:black;">{{ $petition->title }}</a></td>
                                 <td>{{ $petition->category }}</td>
-                                <td>{{ $petition->signedTarget }}</td>
+                                <td>{{ number_format($petition->signedTarget, 0, ',', ',') }}</td>
                                 <td>{{ date_format(date_create($petition->deadline), 'Y/m/d') }}</td>
                                 <td>{{ $petition->status }}</td>
                             </tr>

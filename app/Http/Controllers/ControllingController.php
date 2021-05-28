@@ -211,7 +211,6 @@ class ControllingController extends Controller
     public function getATransaction($id)
     {
         $transaction = $this->controlling_service->getAUserTransaction($id);
-        // dd($transaction);
         return view('admin.donation.detailTransaction', compact('transaction'));
     }
 

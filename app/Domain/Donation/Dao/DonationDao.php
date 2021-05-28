@@ -94,7 +94,7 @@ class DonationDao
 
     public function confirmationPictureDonation($file, $id)
     {
-        Transaction::where('idDonation', $id)->update([
+        Transaction::where('id', $id)->update([
             'status' => NOT_CONFIRMED_TRANSACTION,
             'repaymentPicture' => $file,
             'updated_at' => Carbon::now('+7:00')

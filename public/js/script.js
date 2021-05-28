@@ -57,13 +57,10 @@ const getACategory = (idCategory) => {
     switch (idCategory) {
         case 1:
             return "Pendidikan";
-            break;
         case 2:
             return "Bencana Alam";
-            break;
         case 3:
             return "Difabel";
-            break;
         case 4:
             return "Infrastruktur Umum";
         case 5:
@@ -102,7 +99,7 @@ const changeTablePetition = (petition) => {
         petition.title
     }</a></td>
         <td>${petition.category}</td>
-        <td>${petition.signedTarget}</td>
+        <td>${petition.signedTarget.toLocaleString("en")}</td>
         <td>${changeDateFormat(petition.deadline)}</td>
         <td>${petition.status}</td>
     </tr>

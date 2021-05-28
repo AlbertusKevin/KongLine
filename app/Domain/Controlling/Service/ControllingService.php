@@ -662,7 +662,8 @@ class ControllingService
             $this->controlling_dao->sendEmailUser($id, $view, $subject);
         } else if ($type == TRANSACTION) {
             $trx = $this->controlling_dao->getTransactionById($id);
-            $this->controlling_dao->sendEmailTrx($trx, $view, $subject);
+            $user = $this->profile_service->findUser($trx->idParticipant);
+            $this->controlling_dao->sendEmailTrx($trx, $view, $subject, $user);
         } else {
             if ($type == PETITION) {
                 $event = $this->controlling_dao->getPetitionById($id);

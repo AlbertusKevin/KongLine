@@ -590,10 +590,10 @@ class ControllingDao
         return Transaction::find($id);
     }
 
-    public function sendEmailTrx($trx, $view, $email)
+    public function sendEmailTrx($trx, $view, $email, $user)
     {
-        Mail::send($view, ['transaction' => $trx, 'email' => $email], function ($message) use ($trx) {
-            $message->to($trx->donations->users->email);
+        Mail::send($view, ['transaction' => $trx, 'email' => $email], function ($message) use ($user) {
+            $message->to($user->email);
             $message->subject("Tindak Lanjut Transaksi");
         });
     }

@@ -150,12 +150,16 @@ class DonationService
 
     public function confirmationPictureDonation($picture, $id)
     {
+
         $folder = $this->getADonation($id)->title;
         $folder = HelperService::makeSlugify($folder);
         $folder = FOLDER_IMAGE_TRANSACTION . $folder;
 
+        $user = $this->profile_service->getAProfile();
+        $transaction = $this->donation_dao->getAUserTransaction($user->id, $id);
         $pathRepaymentPicture = HelperService::uploadImage($picture, $folder);
-        $this->donation_dao->confirmationPictureDonation($pathRepaymentPicture, $id);
+
+        $this->donation_dao->confirmationPictureDonation($pathRepaymentPicture, $transaction->id);
     }
 
     public function updateTransactionDonation($id)

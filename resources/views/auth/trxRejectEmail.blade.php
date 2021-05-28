@@ -40,7 +40,7 @@
                                                     valign="top">
                                                     Maaf ! Transaksi donasi <b><i>
                                                             {{ $transaction->donations->title }} </b></i> sebesar
-                                                    {{ $transaction->nominal }} tidak berhasil disalurkan dikarenakan
+                                                    Rp. {{ number_format($transaction->nominal, 2, ',', '.') }} tidak berhasil disalurkan dikarenakan
                                                     <u>{{ $email }}</u>. Klik <a
                                                         href="http://127.0.0.1:8000/donation/{{ $transaction->donations->id }}">
                                                         disini </a> untuk melihat donasi.

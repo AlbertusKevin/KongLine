@@ -35,6 +35,11 @@ class ProfileService
         return $this->profile_dao->getAProfile(GUEST_ID);
     }
 
+    public function findUser($id)
+    {
+        return $this->profile_dao->getAProfile($id);
+    }
+
     // Memproses update profile
     public function updateProfile($request, $user)
     {
