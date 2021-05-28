@@ -57,7 +57,7 @@
                         <div class="modal-body p-4">
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="repaymentPicture"
+                                    <input type="file" class="custom-file-input choose-file" id="repaymentPicture"
                                         name="repaymentPicture">
                                     <label class="custom-file-label" for="repaymentPicture">Input gambar bukti pembayaran
                                         (jpg, png)</label>

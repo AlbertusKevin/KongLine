@@ -23,12 +23,15 @@
                         <textarea class="form-control" id="purpose" name="purpose" rows="10"
                             placeholder="Tuliskan tujuan dan alasan dari event ini"
                             aria-describedby="purpose">{{ old('purpose') }}</textarea>
+                        <small class="text-muted" id="valid-length">Minimal 300 karakter</small>
                     </div>
                     <div class="form-group mb-5">
                         <label for="category">Kategori</label>
                         <select class="form-control" id="category" name="category" aria-describedby="category">
                             @foreach ($listCategory as $category)
-                                <option <?php $category->id == old('category') ? 'selected' : ''; ?> value="{{ $category->id }}">{{ $category->description }}</option>
+                                <option {{ $category->id == old('category') ? 'selected' : '' }}
+                                    value="{{ $category->id }}">{{ $category->description }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -38,13 +41,19 @@
                             aria-describedby="donationTarget" value="{{ old('donationTarget') }}">
                     </div>
                     <div class="form-group mb-5">
-                        <label for="deadline">Batas Waktu</label>
-                        <input type="date" class="form-control" id="deadline" name="deadline" aria-describedby="deadline"
-                            placeholder="pilih waktu">
+                        <label for="deadline">Lama Event Berlangsung (minggu)</label>
+                        <input type="number" class="form-control" id="deadline" name="deadline" aria-describedby="deadline"
+                            placeholder="e.g: 2 minggu" value="{{ old('deadline') }}">
                     </div>
                     <div class="form-group mb-5">
                         <label for="photo">Foto</label>
-                        <input type="file" class="form-control" id="photo" name="photo" aria-describedby="photo">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input choose-file" id="photo" name="photo">
+                            <label class="custom-file-label" for="photo">Foto event donasi</label>
+                        </div>
+                    </div>
+                    <div class="form-group mb-5 text-center">
+                        <img src="{{ DEFAULT_FILE_PREVIEW }}" alt="" class="img-thumbnail img-preview">
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -57,15 +66,17 @@
                         <label for="category">Bank</label>
                         <select class="form-control" id="bank" name="bank" aria-describedby="bank">
                             @foreach ($listBank as $bank)
-                                <option value="{{ $bank->id }}" <?php $bank->id == old('bank') ?
-                                    'selected' : ''; ?>>{{ $bank->bank }}</option>
+                                <option {{ $bank->id == old('bank') ? 'selected' : '' }} value="{{ $bank->id }}">
+                                    {{ $bank->bank }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group mb-5">
                         <label for="accountNumber">No Rekening</label>
                         <input type="text" class="form-control" id="accountNumber" name="accountNumber"
-                            aria-describedby="accountNumber" value="{{ $user->accountNumber }}"
+                            aria-describedby="accountNumber"
+                            value="{{ old('accountNumber') !== null ? old('accountNumber') : $user->accountNumber }}"
                             placeholder="No Rekening untuk transfer jika donasi terkumpul">
                     </div>
                     <div class="form-group mb-5">
@@ -74,38 +85,63 @@
                         <table class="table table-sm text-center">
                             <thead>
                                 <tr>
-                                    <th scope="col">Nominal</th>
                                     <th scope="col">Alokasi</th>
+                                    <th scope="col">Nominal</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody id="allocation-list">
+                                @if (old('allocationFor') !== null || old('nominal') !== null)
+                                    @for ($i = 0; $i < count(old('allocationFor')); $i++)
+                                        <tr>
+                                            <td>
+                                                <input type="text" name="allocationFor[]"
+                                                    placeholder="e.g: biaya administrasi" autocomplete="off"
+                                                    class="w-100 input-allocation"
+                                                    value="{{ old('allocationFor')[$i] }}">
+                                            </td>
+                                            <td scope="row">
+                                                <input type="text" name="nominal[]" placeholder="e.g: 150000"
+                                                    autocomplete="off" class="w-100 input-allocation nominal"
+                                                    value="{{ old('nominal')[$i] }}">
+                                            </td>
+                                            <td>
+                                                <button type="button"
+                                                    class="badge badge-danger badge-pill btn-remove-allocation">remove</button>
+                                            </td>
+                                        </tr>
+                                    @endfor
+                                @endif
                                 <tr>
-                                    <td scope="row">
-                                        <input type="text" name="nominal[]" placeholder="nominal"
-                                            class="w-100 input-allocation">
-                                    </td>
                                     <td>
-                                        <input type="text" name="allocationFor[]" placeholder="allocationFor"
-                                            class="w-100 input-allocation">
+                                        <input type="text" name="allocationFor[]" placeholder="e.g: biaya administrasi"
+                                            autocomplete="off" class="w-100 input-allocation">
+                                    </td>
+                                    <td scope="row">
+                                        <input type="text" name="nominal[]" placeholder="e.g: 150000" autocomplete="off"
+                                            class="w-100 input-allocation nominal">
                                     </td>
                                     <td>
                                         <button type="button"
                                             class="badge badge-danger badge-pill btn-remove-allocation">remove</button>
                                     </td>
                                 </tr>
+
                             </tbody>
                         </table>
                     </div>
                     <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="check-terms-agreement">
+                        <input type="checkbox" class="form-check-input" id="check-terms-agreement"
+                            name="check-terms-agreement" {{ old('check-terms-agreement') == 'on' ? 'checked' : '' }}>
                         <label for="check-terms-agreement">Setuju dengan Syarat & Ketentuan
                             YukBisaYuk</label>
                     </div>
                     <div class="form-group">
                         <button type="button" class="btn btn-secondary verify-profile" data-toggle="modal"
-                            data-target="#verification-petition" disabled>Verifikasi Profil</button>
-                        <button type="submit" class="btn btn-secondary new-petition" disabled>Ajukan Event</button>
+                            data-target="#verification-petition"
+                            {{ old('check-terms-agreement') == 'on' ? '' : 'disabled' }}>Verifikasi Profil</button>
+                        <button type="submit" class="btn btn-secondary new-petition"
+                            {{ old('check-terms-agreement') == 'on' ? '' : 'disabled' }}>Ajukan Event</button>
                     </div>
                 </div>
             </div>

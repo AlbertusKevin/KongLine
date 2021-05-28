@@ -305,6 +305,24 @@ class ControllingDao
         Petition::where('id', $id)->update(['status' => $status]);
     }
 
+    public function acceptDonation($id, $data)
+    {
+        Donation::where('id', $id)->update([
+            'updated_at' => $data['updated_at'],
+            'deadline' => $data['deadline']
+        ]);
+    }
+
+    public function acceptPetition($id, $data)
+    {
+        Petition::where('id', $id)->update([
+            'updated_at' => $data['updated_at'],
+            'deadline' => $data['deadline'],
+            'stack' => $data['stack'],
+            'signedTarget' => $data['signedTarget']
+        ]);
+    }
+
     public function changeReason($id, $event, $reason)
     {
         if ($event == DONATION) {
@@ -351,13 +369,13 @@ class ControllingDao
     public function searchTransactionByDonationTitle($keyword)
     {
         return Transaction::selectRaw('transaction.id, transaction.idParticipant, transaction.created_at, donation.title, users.name, transaction.nominal, transaction.status')
-            ->where('donation.title', 'LIKE', "%" . $keyword . '%')
             ->join('participate_donation', function ($join) {
                 $join->on('participate_donation.idParticipant', '=', 'transaction.idParticipant')
                     ->on('transaction.idDonation', '=', 'participate_donation.idDonation');
             })
             ->join('donation', 'donation.id', 'participate_donation.idDonation')
             ->join('users', 'participate_donation.idParticipant', 'users.id')
+            ->where('donation.title', 'LIKE', "%" . $keyword . '%')
             ->get();
     }
 
@@ -402,6 +420,11 @@ class ControllingDao
     public function getDonationCollected($idDonation)
     {
         return Donation::find($idDonation);
+    }
+
+    public function getTotalDonation($idDonation)
+    {
+        return Transaction::where('idDonation', $idDonation)->where('status', CONFIRMED_TRANSACTION)->sum('nominal');
     }
 
     public function  updateDonationCollected($idDonation, $total)
@@ -490,23 +513,6 @@ class ControllingDao
         return $petitions;
     }
 
-    public function sendEmail($event, $view, $subject, $event_chosen)
-    {
-        Mail::send($view, ['event' => $event, 'event_chosen' => $event_chosen], function ($message) use ($event, $subject) {
-            $message->to($event->users->email);
-            $message->subject($subject);
-        });
-    }
-
-
-    public function sendEmailUser($user, $view, $subject)
-    {
-        Mail::send($view, ['user' => $user], function ($message) use ($user, $subject) {
-            $message->to($user->email);
-            $message->subject($subject);
-        });
-    }
-
     public function getPetitionById($id)
     {
         return Petition::find($id);
@@ -584,11 +590,27 @@ class ControllingDao
         return Transaction::find($id);
     }
 
-    public function sendEmailTrx($trx, $view, $subject)
+    public function sendEmailTrx($trx, $view, $email, $user)
     {
-        Mail::send($view, ['transaction' => $trx], function ($message) use ($trx, $subject) {
-            $message->to($trx->donations->users->email);
-            $message->subject($subject);
+        Mail::send($view, ['transaction' => $trx, 'email' => $email], function ($message) use ($user) {
+            $message->to($user->email);
+            $message->subject("Tindak Lanjut Transaksi");
+        });
+    }
+
+    public function sendEmail($event, $view, $email, $event_chosen)
+    {
+        Mail::send($view, ['event' => $event, 'event_chosen' => $event_chosen, 'email' => $email], function ($message) use ($event) {
+            $message->to($event->users->email);
+            $message->subject("Tindak Lanjut Event");
+        });
+    }
+
+    public function sendEmailUser($user, $view, $email)
+    {
+        Mail::send($view, ['user' => $user, 'email' => $email], function ($message) use ($user) {
+            $message->to($user->email);
+            $message->subject("Tindak Lanjut Campaigner");
         });
     }
 }

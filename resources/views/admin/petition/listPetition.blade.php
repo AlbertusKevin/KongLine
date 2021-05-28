@@ -47,6 +47,7 @@
                     <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Berlangsung</button>
                     <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Telah
                         Menang</button>
+                    <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Mencapai Target</button>
                     <button type="button" class="btn btn-light petition-type rounded-pill ml-3">Dibatalkan</button>
                     <button type="button" class="btn btn-light petition-type rounded-pill ml-3">
                         Belum Valid</button>
@@ -73,7 +74,7 @@
                                 <td><a href="/petition/{{ $petition->id }}"
                                         style="color:black;">{{ $petition->title }}</a></td>
                                 <td>{{ $petition->category }}</td>
-                                <td>{{ $petition->signedTarget }}</td>
+                                <td>{{ number_format($petition->signedTarget, 0, ',', ',') }}</td>
                                 <td>{{ date_format(date_create($petition->deadline), 'Y/m/d') }}</td>
                                 <td>{{ $petition->status }}</td>
                             </tr>

@@ -11,6 +11,9 @@ const checkTypePetition = (type) => {
     if (type.includes("Menang")) {
         return "menang";
     }
+    if (type.includes("Mencapai")) {
+        return "mencapai_target";
+    }
     if (type.includes("Selesai")) {
         return "selesai";
     }
@@ -41,21 +44,23 @@ const getStatus = (idStatusEvent) => {
             return "closed";
         case 4:
             return "canceled";
+        case 5:
+            return "rejected";
+        case 6:
+            return "proceeded";
+        case 7:
+            return "target reached";
     }
 };
 
 const getACategory = (idCategory) => {
-    console.log(idCategory);
     switch (idCategory) {
         case 1:
             return "Pendidikan";
-            break;
         case 2:
             return "Bencana Alam";
-            break;
         case 3:
             return "Difabel";
-            break;
         case 4:
             return "Infrastruktur Umum";
         case 5:
@@ -85,6 +90,7 @@ const getACategory = (idCategory) => {
     }
 };
 
+// Search-sort-category petition admin
 const changeTablePetition = (petition) => {
     return /*html*/ `
     <tr>
@@ -92,10 +98,10 @@ const changeTablePetition = (petition) => {
         <td><a href="/petition/${petition.id}" style = "color:black;">${
         petition.title
     }</a></td>
-        <td>${getACategory(petition.category)}</td>
-        <td>${petition.signedTarget}</td>
+        <td>${petition.category}</td>
+        <td>${petition.signedTarget.toLocaleString("en")}</td>
         <td>${changeDateFormat(petition.deadline)}</td>
-        <td>${getStatus(petition.status)}</td>
+        <td>${petition.status}</td>
     </tr>
         `;
 };
@@ -116,6 +122,7 @@ const emptySearchTablePetition = (keyword) => {
         `;
 };
 
+// Search-sort-category donation admin
 const changeTableDonation = (donation) => {
     return /*html*/ `
     <tr>
@@ -147,6 +154,7 @@ const emptySearchTableDonation = (keyword) => {
         `;
 };
 
+// Search-sort-category transaction admin
 const emptySearchTableTransaction = (keyword) => {
     return /*html*/ `
     <tr>
@@ -155,7 +163,62 @@ const emptySearchTableTransaction = (keyword) => {
         `;
 };
 
+const changeTableTransaction = (transaction) => {
+    let status = "";
+    let typeBadge = "";
+
+    if (transaction.status == 0) {
+        status = "Belum Upload";
+        typeBadge = "warning";
+    } else if (transaction.status == 1) {
+        status = "Dikonfirmasi";
+        typeBadge = "success";
+    } else if (transaction.status == 2) {
+        status = "Perlu Konfirmasi";
+        typeBadge = "info ";
+    } else {
+        status = "Ditolak";
+        typeBadge = "danger";
+    }
+
+    return /*html*/ `
+    <tr>
+        <td>${changeDateFormat(transaction.created_at)}</td>
+        <td>${transaction.title}</td>
+        <td>${transaction.name}</td>
+        <td>Rp. ${transaction.nominal.toLocaleString("en")},00</td>
+        <td><p class="badge badge-${typeBadge}">${status}</p></td>
+        <td><a href="/admin/donation/transaction/${
+            transaction.id
+        }" type="button"
+                class="btn btn-primary">detail</a></td>
+    </tr>
+        `;
+};
+
+const emptyTableTransaction = () => {
+    return /*html*/ `
+    <tr>
+        <td colspan="6">Belum ada Transaksi pada daftar ini</td>
+    </tr>
+        `;
+};
+
+// Search-sort-category petition
 const changePetitionList = (petition) => {
+    const date = new Date(petition.deadline);
+
+    const formattedDate = date.toLocaleString("en-US", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+    });
+
+    let deadline =
+        petition.status == "active"
+            ? /*html*/ `
+            <small class="text-muted">Hingga ${formattedDate}</small>`
+            : "";
     return /*html*/ `
         <div class="card mb-3 ml-auto mr-auto mt-5" style="max-width: 650px;">
         <div class="row no-gutters">
@@ -164,6 +227,7 @@ const changePetitionList = (petition) => {
                     <h5 class="card-title"><a href="/petition/${petition.id}">${
         petition.title
     }</a></h5>
+    ${deadline}
                     <p class="card-text petition-description">${
                         petition.purpose
                     }</p>
@@ -184,11 +248,11 @@ const changePetitionList = (petition) => {
                             menandatangani petisi ini</small></p>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 p-2">
                 <img src="${petition.photo}" alt="Gambar dari petisi '${
         petition.title
     }'"
-                    class="img-thumbnail">
+                    class="img-list-petition">
             </div>
         </div>
         </div>
@@ -223,6 +287,40 @@ const listPetitionTypeEmpty = (keyword) => {
     `;
 };
 
+const sortListPetition = (sortBy, category, typePetition) => {
+    const url = getNowURL();
+
+    $.ajax({
+        url: "/petition/sort",
+        data: { sortBy, category, typePetition },
+        dataType: "json",
+        success: (data) => {
+            let html = "";
+            if (data.length != 0) {
+                if (url != "admin") {
+                    data.forEach((petition) => {
+                        html += changePetitionList(petition);
+                    });
+                } else {
+                    data.forEach((petition) => {
+                        html += changeTablePetition(petition);
+                    });
+                }
+
+                $("#petition-list").html(html);
+            } else {
+                if (url != "admin") {
+                    html += listPetitionEmpty();
+                } else {
+                    html += emptyTablePetition();
+                }
+                $("#petition-list").html(html);
+            }
+        },
+    });
+};
+
+// Search-sort-category donation
 const changeDonationList = (donation) => {
     let collectedNum, collectedDesc;
 
@@ -234,7 +332,11 @@ const changeDonationList = (donation) => {
         collectedDesc = "Menuju Target";
     }
 
-    if (
+    if (donation.status == 0) {
+        deadline = "pending";
+    } else if (donation.status == 5) {
+        deadline = "rejected";
+    } else if (
         Math.ceil(
             (new Date(donation.deadline) - new Date().getTime()) /
                 (60 * 60 * 24 * 1000)
@@ -252,7 +354,7 @@ const changeDonationList = (donation) => {
     return /*html*/ `
     <div class="card col-md-4 p-2 mb-3" style="padding: 0; ">
         <div style="position:relative;">
-            <img src="${donation.photo}" class="img-donation card-img-top"
+            <img src="${donation.photo}" class="event-picture card-img-top"
                 alt=" ${donation.title} donation's picture">
             <p class="donate-count">${donation.totalDonatur} Donatur</p>
             <p class="time-left">
@@ -301,39 +403,6 @@ const noListDonation = () => {
     `;
 };
 
-const sortListPetition = (sortBy, category, typePetition) => {
-    const url = getNowURL();
-
-    $.ajax({
-        url: "/petition/sort",
-        data: { sortBy, category, typePetition },
-        dataType: "json",
-        success: (data) => {
-            let html = "";
-            if (data.length != 0) {
-                if (url != "admin") {
-                    data.forEach((petition) => {
-                        html += changePetitionList(petition);
-                    });
-                } else {
-                    data.forEach((petition) => {
-                        html += changeTablePetition(petition);
-                    });
-                }
-
-                $("#petition-list").html(html);
-            } else {
-                if (url != "admin") {
-                    html += listPetitionEmpty();
-                } else {
-                    html += emptyTablePetition();
-                }
-                $("#petition-list").html(html);
-            }
-        },
-    });
-};
-
 const adminSortListDonation = (sortBy, category, typeDonation) => {
     $.ajax({
         url: "/admin/donation/sort",
@@ -373,44 +442,6 @@ const sortListDonation = (sortBy, category) => {
             }
         },
     });
-};
-
-const changeTableTransaction = (transaction) => {
-    let status = "";
-    let typeBadge = "";
-
-    if (transaction.status == 0) {
-        status = "Perlu Konfirmasi";
-        typeBadge = "info";
-    } else if (transaction.status == 1) {
-        status = "Dikonfirmasi";
-        typeBadge = "success";
-    } else {
-        status = "Ditolak";
-        typeBadge = "danger";
-    }
-
-    return /*html*/ `
-    <tr>
-        <td>${transaction.created_at}</td>
-        <td>${transaction.title}</td>
-        <td>${transaction.name}</td>
-        <td>Rp. ${transaction.nominal.toLocaleString("en")},00</td>
-        <td><p class="badge badge-${typeBadge}">${status}</p></td>
-        <td><a href="/admin/donation/transaction/${
-            transaction.id
-        }" type="button"
-                class="btn btn-primary">detail</a></td>
-    </tr>
-        `;
-};
-
-const emptyTableTransaction = () => {
-    return /*html*/ `
-    <tr>
-        <td colspan="6">Belum ada Transaksi pada daftar ini</td>
-    </tr>
-        `;
 };
 
 // fungsi trigger
@@ -524,6 +555,11 @@ $(".petition-type").on("click", function () {
             $(".petition-page-subtitle").html(
                 "Lihat Petisi yang Telah Saya Buat di Website Ini"
             );
+        } else if (typePetition == "mencapai_target") {
+            $(".petition-page-title").html("Mencapai Target");
+            $(".petition-page-subtitle").html(
+                "Petisi yang telah mencapai target namun belum memperoleh kemenangan"
+            );
         } else {
             $(".petition-page-title").html("Daftar Ikut Serta Petisi");
             $(".petition-page-subtitle").html(
@@ -565,21 +601,22 @@ $(".petition-type").on("click", function () {
 $("#search-petition").on("keyup", function () {
     let url = getNowURL();
     let keyword = $(this).val();
-    let typePetition = $(".btn-primary").html();
+    let typePetition = $(".btn-primary.petition-type").html();
     let category = $("#category-choosen").val();
     let sortBy = $("#sort-by").val();
 
     typePetition = checkTypePetition(typePetition);
-
     $.ajax({
         url: "/petition/search",
         data: { keyword, typePetition, category, sortBy },
         dataType: "json",
         success: (data) => {
+            console.log(data);
             let html = "";
             if (data.length != 0) {
                 if (url != "admin") {
                     data.forEach((petition) => {
+                        console.log(petition);
                         html += changePetitionList(petition);
                     });
                 } else {
@@ -635,13 +672,45 @@ $(".category-petition").on("click", function (e) {
     sortListPetition(sortBy, category, typePetition);
 });
 
-// Untuk donasi
-$("#nominal").on("keyup", function () {
-    let input = $(this).val();
+const formattingNumber = (input) => {
     input = input.toString().split(",").join("");
-    console.log(input);
     input = input.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    return input;
+};
+
+// Untuk donasi
+$("#donationTarget").on("keyup", function () {
+    let input = formattingNumber($(this).val());
     $(this).val(input);
+});
+
+$(document).on("click", ".btn-remove-allocation", function () {
+    $(this).parent().parent().remove();
+});
+
+$("#allocation-list").on("keyup", ".nominal", function () {
+    let input = formattingNumber($(this).val());
+    $(this).val(input);
+});
+
+$("#nominal").on("keyup", function () {
+    let input = formattingNumber($(this).val());
+    $(this).val(input);
+});
+
+$("#purpose").on("keyup", function () {
+    let element = $("#valid-length");
+    let text = $(this).val();
+
+    if (text.length <= 300) {
+        element.removeClass("text-muted");
+        element.addClass("warning");
+        element.html("Panjang Karakter: " + text.length);
+    } else {
+        element.removeClass("warning");
+        element.addClass("text-muted");
+        element.html("Panjang karakter Mencapai ketentuan minimum!");
+    }
 });
 
 $("#search-donation").on("keyup", function () {
@@ -729,7 +798,6 @@ $(".category-select-donation").on("click", function (e) {
         const typeDonation = checkTypePetition(
             $(".donation-type.btn-primary").html()
         );
-
         adminSortListDonation(sortBy, category, typeDonation);
     } else {
         sortListDonation(sortBy, category);
@@ -788,29 +856,41 @@ $(".show-comment").on("click", function () {
     $(".card-text").html(html);
 });
 
-$("#repaymentPicture").on("change", function () {
-    const cover = document.querySelector("#repaymentPicture");
-    const coverLabel = document.querySelector(".custom-file-label");
-    const imgPreview = document.querySelector(".img-preview");
-
+const changeImgPreview = (cover, coverLabel, imgPreview) => {
     coverLabel.textContent = cover.files[0].name;
     const fileCover = new FileReader();
     fileCover.readAsDataURL(cover.files[0]);
     fileCover.onload = function (e) {
         imgPreview.src = e.target.result;
     };
+};
+
+$(".choose-file").on("change", function () {
+    const cover = document.querySelector(".choose-file");
+    const coverLabel = document.querySelector(".custom-file-label");
+    const imgPreview = document.querySelector(".img-preview");
+
+    changeImgPreview(cover, coverLabel, imgPreview);
+});
+
+$(".choose-file-cover").on("change", function () {
+    const cover = document.querySelector(".choose-file-cover");
+    const coverLabel = document.querySelector(".custom-file-label-cover");
+    const imgPreview = document.querySelector(".img-preview-cover");
+
+    changeImgPreview(cover, coverLabel, imgPreview);
 });
 
 $(".btn-add-allocation").on("click", function () {
     let html = /*html*/ `
     <tr>
-        <td scope="row">
-            <input type="text" name="nominal[]" placeholder="nominal"
+        <td>
+            <input type="text" name="allocationFor[]" placeholder="e.g: biaya administrasi" autocomplete="off"
                 class="w-100 input-allocation">
         </td>
-        <td>
-            <input type="text" name="allocationFor[]" placeholder="allocationFor"
-                class="w-100 input-allocation">
+        <td scope="row">
+            <input type="text" name="nominal[]" placeholder="e.g: 150000" autocomplete="off"
+                class="w-100 input-allocation nominal">
         </td>
         <td>
             <button type="button"
@@ -1049,6 +1129,9 @@ $(".transaction-type").on("click", function () {
     $(this).removeClass("btn-light");
 
     let typeTransaction = $(this).html().toLowerCase();
+    if (typeTransaction.includes("Belum")) {
+        typeTransaction = "belum_upload";
+    }
 
     $.ajax({
         url: "/admin/transaction/type",
@@ -1278,7 +1361,7 @@ const makeDonationCardView = (event) => {
     return `
         <div class="m-2">
             <div class="card" style="width: 18rem; position:relative;">
-                <img src="${event.photo}" class="card-img-top" alt="...">
+                <img src="${event.photo}" class="card-img-top event-profile" alt="...">
                 <p class="time-left">Donation</p>
                 <div class="card-body">
                     <h5 class="card-title">${event.title}</h5>
@@ -1294,7 +1377,7 @@ const makePetitionCardView = (event) => {
     return `
         <div class="m-2">
             <div class="card" style="width: 18rem; position:relative;">
-                <img src="${event.photo}" class="card-img-top" alt="...">
+                <img src="${event.photo}" class="card-img-top event-profile" alt="...">
                 <p class="time-left-white">Petition</p>
                 <div class="card-body">
                     <h5 class="card-title">${event.title}</h5>

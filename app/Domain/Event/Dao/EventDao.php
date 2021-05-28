@@ -36,10 +36,11 @@ class EventDao
         return ParticipateDonation::where('idParticipant', $idParticipant)->where('idDonation', $idEvent)->first();
     }
 
-    public function updateStatusEvent($id, $status, $typeEvent)
+    public function updateStatusEvent($id, $status, $typeEvent, $updated_at)
     {
         if ($typeEvent == DONATION) {
             Donation::where('id', $id)->update([
+                'updated_at' => $updated_at,
                 'status' => $status
             ]);
         }

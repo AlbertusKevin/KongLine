@@ -23,14 +23,13 @@ class DonationService
 
     public function preprocessNominalDonation($request)
     {
-        $nominal = explode(",", $request->nominal);
-        $nominal = (int)join("", $nominal);
+        $nominal = HelperService::makeNumber($request->nominal);
 
         if (gettype($nominal) != "integer") {
-            return "not_number";
-            if ($nominal < MIN_DONATION) {
-                return "below_min";
-            }
+            $nominal = "not_number";
+        }
+        if ($nominal < MIN_DONATION) {
+            $nominal = "below_min";
         }
 
         return $nominal;
@@ -151,12 +150,16 @@ class DonationService
 
     public function confirmationPictureDonation($picture, $id)
     {
+
         $folder = $this->getADonation($id)->title;
         $folder = HelperService::makeSlugify($folder);
         $folder = FOLDER_IMAGE_TRANSACTION . $folder;
 
+        $user = $this->profile_service->getAProfile();
+        $transaction = $this->donation_dao->getAUserTransaction($user->id, $id);
         $pathRepaymentPicture = HelperService::uploadImage($picture, $folder);
-        $this->donation_dao->confirmationPictureDonation($pathRepaymentPicture, $id);
+
+        $this->donation_dao->confirmationPictureDonation($pathRepaymentPicture, $transaction->id);
     }
 
     public function updateTransactionDonation($id)
@@ -279,16 +282,36 @@ class DonationService
         }
     }
 
+    public function validateTotalAllocation($totalNominal, $targetDonation)
+    {
+        $total = 0;
+        $list = [];
+
+        foreach ($totalNominal as $nominal) {
+            $allocation = HelperService::makeNumber($nominal);
+            $list[] = $allocation;
+            $total += $allocation;
+        }
+
+        if ($total != $targetDonation) {
+            return [];
+        }
+
+        return $list;
+    }
+
     public function storeDonationCreated($donation)
     {
         $pathPhoto = HelperService::uploadImage($donation->getPhoto(), FOLDER_IMAGE_DONATION);
         $donation->setPhoto($pathPhoto);
+
         $this->donation_dao->storeDonationCreated($donation);
     }
 
-    public function updateEventDonation($donation, $id, $empty)
+    public function updateEventDonation($oldDonation, $donation, $id, $empty)
     {
         if (!$empty) {
+            HelperService::deleteImage($oldDonation->photo);
             $pathPhoto = HelperService::uploadImage($donation->getPhoto(), FOLDER_IMAGE_DONATION);
             $donation->setPhoto($pathPhoto);
         }

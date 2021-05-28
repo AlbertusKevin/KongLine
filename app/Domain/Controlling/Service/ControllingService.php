@@ -5,8 +5,9 @@ namespace App\Domain\Controlling\Service;
 use App\Domain\Controlling\Dao\ControllingDao;
 use App\Domain\Profile\Service\ProfileService;
 use App\Domain\Donation\Service\DonationService;
+use App\Domain\Petition\Service\PetitionService;
 use App\Domain\Event\Service\EventService;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 
 class ControllingService
 {
@@ -14,12 +15,14 @@ class ControllingService
     private $profile_service;
     private $event_service;
     private $donation_service;
+    private $petition_service;
 
     public function __construct()
     {
         $this->controlling_dao = new ControllingDao();
         $this->profile_service = new ProfileService();
         $this->donation_service = new DonationService();
+        $this->petition_service = new PetitionService();
         $this->event_service = new EventService();
     }
 
@@ -192,18 +195,15 @@ class ControllingService
 
     public function acceptUserToCampaigner($id, $view, $subject)
     {
-
         $user = $this->controlling_dao->getUserById($id);
-        $this->controlling_dao->sendEmailUser($user, $view, $subject);
-
+        $this->sendEmail($user, $view, $subject, REQ_CAMPAIGNER);
         return $this->controlling_dao->acceptUserToCampaigner($id, ACTIVE, CAMPAIGNER);
     }
 
-    public function rejectUserToCampaigner($id, $view, $subject)
+    public function rejectUserToCampaigner($id, $view, $message)
     {
-
         $user = $this->controlling_dao->getUserById($id);
-        $this->controlling_dao->sendEmailUser($user, $view, $subject);
+        $this->controlling_dao->sendEmailUser($user, $view, $message);
 
         return $this->controlling_dao->rejectUserToCampaigner($id, ACTIVE, PARTICIPANT);
     }
@@ -531,19 +531,23 @@ class ControllingService
 
     public function acceptDonation($id)
     {
+        $donation = $this->donation_service->getADonation($id);
+
+        $data["updated_at"] = Carbon::now("+7:00");
+        $data["deadline"] = Carbon::now("+7:00")->addWeeks($donation->duration_event);
+
         $this->controlling_dao->changeEventStatus($id, ACTIVE, DONATION);
+        $this->controlling_dao->acceptDonation($id, $data);
     }
 
-    public function rejectDonation($id, $reason)
+    public function rejectDonation($id)
     {
         $this->controlling_dao->changeEventStatus($id, REJECTED, DONATION);
-        $this->controlling_dao->changeReason($id, DONATION, $reason);
     }
 
-    public function closeDonation($id, $reason)
+    public function closeDonation($id)
     {
         $this->controlling_dao->changeEventStatus($id, CLOSED, DONATION);
-        $this->controlling_dao->changeReason($id, DONATION, $reason);
     }
 
     //? ========================================
@@ -556,8 +560,7 @@ class ControllingService
         $this->controlling_dao->updateTotalDonatur($transaction->idDonation, $totalDonatur);
 
         // ubah jumlah donasi yang terkumpul
-        $oldNominal = $this->controlling_dao->getDonationCollected($transaction->idDonation)->donationCollected;
-        $total = (int)$oldNominal + (int)$transaction->nominal;
+        $total = $this->controlling_dao->getTotalDonation($transaction->idDonation);
         $this->controlling_dao->updateDonationCollected($transaction->idDonation, $total);
     }
 
@@ -574,10 +577,9 @@ class ControllingService
         $this->controlling_dao->updateStatusTransaction($id, CONFIRMED_TRANSACTION);
     }
 
-    public function rejectTransaction($id, $reason)
+    public function rejectTransaction($id)
     {
         $this->controlling_dao->updateStatusTransaction($id, REJECTED_TRANSACTION);
-        $this->controlling_dao->changeReason($id, 'TRANSACTION', $reason);
     }
 
     public function getAllTransaction()
@@ -593,13 +595,16 @@ class ControllingService
     //! {{-- lewat ajax --}}
     public function transactionType($typeTransaction)
     {
-
         if ($typeTransaction == SEMUA) {
             return $this->controlling_dao->getAllTransaction();
         }
 
         if ($typeTransaction == KONFIRMASI) {
-            return $this->controlling_dao->selectTransaction(NOT_CONFIRMED);
+            return $this->controlling_dao->selectTransaction(NOT_CONFIRMED_TRANSACTION);
+        }
+
+        if ($typeTransaction == BELUM_UPLOAD) {
+            return $this->controlling_dao->selectTransaction(NOT_UPLOADED);
         }
         return $this->controlling_dao->selectTransaction(REJECTED_TRANSACTION);
     }
@@ -612,8 +617,13 @@ class ControllingService
         }
 
         if ($typeTransaction == KONFIRMASI) {
-            return $this->controlling_dao->searchTransactionWithStatusByDonationTitle(NOT_CONFIRMED, $keyword);
+            return $this->controlling_dao->searchTransactionWithStatusByDonationTitle(NOT_CONFIRMED_TRANSACTION, $keyword);
         }
+
+        if ($typeTransaction == BELUM_UPLOAD) {
+            return $this->controlling_dao->searchTransactionWithStatusByDonationTitle(NOT_UPLOADED, $keyword);
+        }
+
         return $this->controlling_dao->searchTransactionWithStatusByDonationTitle(REJECTED_TRANSACTION, $keyword);
     }
 
@@ -623,40 +633,48 @@ class ControllingService
 
     public function acceptPetition($id)
     {
+        $petition = $this->petition_service->getDetailPetition($id);
         $this->controlling_dao->changeEventStatus($id, ACTIVE, PETITION);
+        $data['updated_at'] = Carbon::now('+7:00');
+        $data['deadline'] = Carbon::now('+7:00')->addMonth();
+        $data['signedTarget'] = SIGNED_TARGET_STACK_1;
+        $data['stack'] = 1;
+
+        $this->controlling_dao->acceptPetition($id, $data);
     }
 
-    public function rejectPetition($id, $reason)
+    public function rejectPetition($id)
     {
         $this->controlling_dao->changeEventStatus($id, REJECTED, PETITION);
-        $this->controlling_dao->changeReason($id, PETITION, $reason);
     }
 
-    public function closePetition($id, $reason)
+    public function closePetition($id)
     {
         $this->controlling_dao->changeEventStatus($id, CLOSED, PETITION);
-        $this->controlling_dao->changeReason($id, PETITION, $reason);
     }
 
 
 
     //todo: refactor
-    public function sendEmailPetition($id, $view, $subject)
+    public function sendEmail($id, $view, $subject, $type)
     {
-        $petition = $this->controlling_dao->getPetitionById($id);
-        $this->controlling_dao->sendEmail($petition, $view, $subject, PETITION);
-    }
-
-    public function sendEmailDonation($id, $view, $subject)
-    {
-        $donation = $this->controlling_dao->getDonationById($id);
-        $event = "donasi";
-        $this->controlling_dao->sendEmail($donation, $view, $subject, $event);
+        if ($type == REQ_CAMPAIGNER) {
+            $this->controlling_dao->sendEmailUser($id, $view, $subject);
+        } else if ($type == TRANSACTION) {
+            $trx = $this->controlling_dao->getTransactionById($id);
+            $user = $this->profile_service->findUser($trx->idParticipant);
+            $this->controlling_dao->sendEmailTrx($trx, $view, $subject, $user);
+        } else {
+            if ($type == PETITION) {
+                $event = $this->controlling_dao->getPetitionById($id);
+            } else if ($type == DONATION) {
+                $event = $this->controlling_dao->getDonationById($id);
+            }
+            $this->controlling_dao->sendEmail($event, $view, $subject, $type);
+        }
     }
 
     public function sendEmailTransaction($id, $view, $subject)
     {
-        $trx = $this->controlling_dao->getTransactionById($id);
-        $emailCampaigner = $this->controlling_dao->sendEmailTrx($trx, $view, $subject);
     }
 }

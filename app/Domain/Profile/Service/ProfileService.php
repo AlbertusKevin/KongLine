@@ -35,6 +35,11 @@ class ProfileService
         return $this->profile_dao->getAProfile(GUEST_ID);
     }
 
+    public function findUser($id)
+    {
+        return $this->profile_dao->getAProfile($id);
+    }
+
     // Memproses update profile
     public function updateProfile($request, $user)
     {
@@ -45,7 +50,7 @@ class ProfileService
             $pathProfile = HelperService::uploadImage($request->file('profile_picture'), FOLDER_IMAGE_PROFILE);
         }
         if ($request->file('zoom_picture')) {
-            $pathBackground = HelperService::uploadImage($request->file('zoom_picture'), FOLDER_IMAGE_COVER);
+            $pathBackground = HelperService::uploadImage($request->file('cover_picture'), FOLDER_IMAGE_COVER);
         }
         $this->profile_dao->updateProfile($request, $user->id, $pathProfile, $pathBackground);
     }
@@ -79,6 +84,12 @@ class ProfileService
         }
 
         return 'failed_password';
+    }
+
+    public function verifyProfile($request)
+    {
+        $user = $this->getAProfile();
+        return Hash::check($request->password, $user->password);
     }
 
     public function updateCountEventParticipatedByUser($idUser)

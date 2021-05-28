@@ -21,7 +21,7 @@ class AdminMiddleware
         $profile_service = new ProfileService();
         $user = $profile_service->getAProfile();
 
-        if ($user->role == 'admin') {
+        if ($user->role == ADMIN) {
             return $next($request);
         }
 

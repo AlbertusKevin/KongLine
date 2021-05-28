@@ -7,6 +7,7 @@ use App\Domain\Controlling\Service\ControllingService;
 use App\Domain\Donation\Service\DonationService;
 use App\Domain\Event\Service\EventService;
 use App\Domain\Petition\Service\PetitionService;
+use Illuminate\Support\Facades\Validator;
 
 class ControllingController extends Controller
 {
@@ -34,6 +35,7 @@ class ControllingController extends Controller
     //? ========================================
     public function getAllPetition()
     {
+        $this->petition_service->deadlinePetition();
         $listCategory = $this->event_service->getAllCategoriesEvent();
         $petitionList = $this->petition_service->getAllPetition();
         return view('admin.petition.listPetition', compact('listCategory', 'petitionList'));
@@ -47,38 +49,60 @@ class ControllingController extends Controller
         // kirim pemberitahuan kepada campaigner
         //todo: send email
         $view = "auth.eventConfirmEmail";
-        $message = "Event Disetujui";
-        $this->controlling_service->sendEmailPetition($id, $view, $message);
+        $message = "Event Disetujui.";
+        $this->controlling_service->sendEmail($id, $view, $message, PETITION);
 
         return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Event petisi telah berhasil dikonfirmasi.']);
     }
 
     public function rejectPetition(Request $request, $id)
     {
-        $reason = $request->rejectEvent;
+        $validator = Validator::make($request->all(), [
+            'rejectEvent' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            return redirect('/petition/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
+        };
 
         //ubah status dari 0 menjadi 5
-        $this->controlling_service->rejectPetition($id, $reason);
+        $this->controlling_service->rejectPetition($id);
 
         //todo: send email
         $view = "auth.eventRejectEmail";
-        $message = "Event Ditolak. " . $reason;
-        $this->controlling_service->sendEmailPetition($id, $view, $message);
+        $this->controlling_service->sendEmail($id, $view, $request->rejectEvent, PETITION);
 
         return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Penolakan Event petisi berhasil.']);
     }
 
     public function closePetition(Request $request, $id)
     {
-        $reason = $request->closeEvent;
+        $validator = Validator::make($request->all(), [
+            'closeEvent' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            return redirect('/petition/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
+        };
 
         //ubah status dari 0 menjadi 3
-        $this->controlling_service->closePetition($id, $reason);
+        $this->controlling_service->closePetition($id);
 
         //todo: send email
         $view = "auth.eventCloseEmail";
-        $message = "Event Ditutup. " . $reason;
-        $this->controlling_service->sendEmailPetition($id, $view, $message);
+        $this->controlling_service->sendEmail($id, $view, $request->closeEvent, PETITION);
 
         return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Penutupan Event petisi berhasil.']);
     }
@@ -88,6 +112,7 @@ class ControllingController extends Controller
     //? ========================================
     public function getListDonation()
     {
+        $this->donation_service->updateDeadlineStatusDonation();
         $listCategory = $this->event_service->getAllCategoriesEvent();
         $donationList = $this->donation_service->getAllDonation();
 
@@ -96,42 +121,65 @@ class ControllingController extends Controller
 
     public function acceptDonation($id)
     {
+
         //ubah status dari 0 menjadi 1
         $this->controlling_service->acceptDonation($id);
 
         //todo: send email
         $view = "auth.eventConfirmEmail";
         $message = "Event Disetujui.";
-        $this->controlling_service->sendEmailDonation($id, $view, $message);
+        $this->controlling_service->sendEmail($id, $view, $message, DONATION);
 
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Donasi telah berhasil dikonfirmasi']);
     }
 
     public function rejectDonation(Request $request, $id)
     {
-        $reason = $request->rejectEvent;
+        $validator = Validator::make($request->all(), [
+            'rejectEvent' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            return redirect('/donation/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
+        };
 
         //ubah status dari 0 menjadi 5
-        $this->controlling_service->rejectDonation($id, $reason);
+        $this->controlling_service->rejectDonation($id);
         //todo: send email
         $view = "auth.eventRejectEmail";
-        $message = "Event Ditolak. " . $reason;
-        $this->controlling_service->sendEmailDonation($id, $view, $message);
+        $this->controlling_service->sendEmail($id, $view, $request->rejectEvent, DONATION);
 
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penolakan donasi telah berhasil.']);
     }
 
     public function closeDonation(Request $request, $id)
     {
-        $reason = $request->closeEvent;
+        $validator = Validator::make($request->all(), [
+            'closeEvent' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            return redirect('/donation/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
+        };
 
         //ubah status dari 0 menjadi 3
-        $this->controlling_service->closeDonation($id, $reason);
+        $this->controlling_service->closeDonation($id);
 
         //todo: send email
         $view = "auth.eventCloseEmail";
-        $message = "Event Ditutup. " . $reason;
-        $this->controlling_service->sendEmailDonation($id, $view, $message);
+        $this->controlling_service->sendEmail($id, $view, $request->closeEvent, DONATION);
 
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penutupan event donasi telah berhasil.']);
     }
@@ -163,7 +211,6 @@ class ControllingController extends Controller
     public function getATransaction($id)
     {
         $transaction = $this->controlling_service->getAUserTransaction($id);
-        // dd($transaction);
         return view('admin.donation.detailTransaction', compact('transaction'));
     }
 
@@ -179,21 +226,32 @@ class ControllingController extends Controller
         // //todo: send email
         $view = "auth.trxConfirmEmail";
         $message = "Transaksi donasi Anda selesai diproses";
-        $this->controlling_service->sendEmailTransaction($id, $view, $message);
+        $this->controlling_service->sendEmail($id, $view, $message, TRANSACTION);
         return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Transaksi telah berhasil disetujui.']);
     }
 
     public function rejectTransaction(Request $request, $id)
     {
-        $reason = $request->rejectTransaction;
+        $validator = Validator::make($request->all(), [
+            'rejectTransaction' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            return redirect('/admin/donation/transaction/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
+        };
 
         //ubah status dari 0 menjadi 3
-        $this->controlling_service->rejectTransaction($id, $reason);
+        $this->controlling_service->rejectTransaction($id);
 
         //todo: send email
         $view = "auth.trxRejectEmail";
-        $message = "Transaksi donasi Anda ditolak. " . $reason;
-        $this->controlling_service->sendEmailTransaction($id, $view, $message);
+        $this->controlling_service->sendEmail($id, $view, $request->rejectTransaction, TRANSACTION);
         return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Penolakan transaksi telah selesai.']);
     }
 
@@ -228,12 +286,11 @@ class ControllingController extends Controller
         $countDonation = $events[0]->count();
         $countPetition = $events[1]->count();
         $countTotal = $countDonation + $countPetition;
-        return view('admin.userAdmin', compact('user', 'events', 'countTotal', 'eventMade'));
+        return view('admin.user.detailUser', compact('user', 'events', 'countTotal', 'eventMade'));
     }
 
     public function acceptUserToCampaigner($id)
     {
-
         $view = "auth.userAcceptEmail";
         $message = "Pengajuan Campaigner Diterima";
 
@@ -241,12 +298,24 @@ class ControllingController extends Controller
         return redirect("/admin/user/$id")->with(["type" => 'success', 'message' => 'User berhasil upgrade ke campaigner']);
     }
 
-    public function rejectUserToCampaigner($id)
+    public function rejectUserToCampaigner(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'rejectCampaigner' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+
+            return redirect('/admin/user/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
+        };
         $view = "auth.userRejectEmail";
-        $message = "Pengajuan Campaigner Ditolak";
-        $this->controlling_service->rejectUserToCampaigner($id, $view, $message);
-        return redirect("/admin/user/$id")->with(["type" => 'fail', 'message' => 'User ditolak upgrade ke campaigner']);
+        $this->controlling_service->rejectUserToCampaigner($id, $view, $request->rejectCampaigner);
+        return redirect("/admin/user/" . $id)->with(["type" => 'fail', 'message' => 'User ditolak upgrade ke campaigner']);
     }
 
     //! Request melalui ajax

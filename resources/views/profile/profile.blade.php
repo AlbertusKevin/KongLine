@@ -3,13 +3,16 @@
 @section('content')
     @include('layout.message')
     <div class="jumbotron text-center" style="background-image: url('{{ $user->backgroundPicture }}');">
-        <img src="{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
-        <h3 class="display-4">{{ $user->name }}</h3>
-        @if ($user->role == 'campaigner')
-            <h1><span class="badge rounded-pill bg-primary text-white">Campaigner</span></h1>
-        @endif
-        <a href="{{ $user->linkProfile }}" target="_blank" class="lead">{{ $user->linkProfile }}</a>
-        <p class="mt-5">Terima kasih telah menjadi anggota aktif dari komunitas kami. </p>
+        <div
+            style="width: 80%; padding: 75px 10px; margin-left: auto; margin-right: auto; background-color: rgba(212, 212, 212, 0.575); border-radius: 30px;">
+            <img src="{{ $user->photoProfile }}" alt="profile" class="profile-picture rounded-circle">
+            <h4 class="display-4">{{ $user->name }}</h4>
+            @if ($user->role == 'campaigner')
+                <h1><span class="badge rounded-pill bg-primary text-white">Campaigner</span></h1>
+            @endif
+            <a href="{{ $user->linkProfile }}" target="_blank" class="lead">{{ $user->linkProfile }}</a>
+            <p class="mt-3">Terima kasih telah menjadi anggota aktif dari komunitas kami. </p>
+        </div>
     </div>
 
     <div class="container">
@@ -97,18 +100,81 @@
                         value="{{ $user->phoneNumber }}">
                 </div>
             </div>
+
             <div class="form-row mt-2">
-                <label for="profile_picture">Profile Picture:</label>
-                <input type="file" class="form-control" name="profile_picture" id="profile_picture">
+                <label for="profile_picture">Gambar Profil:</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input choose-file" id="profile_picture" name="profile_picture">
+                    <label class="custom-file-label" for="profile_picture">pilih gambar</label>
+                </div>
+                <div class="form-group mb-2 mt-2 text-center">
+                    <img src="{{ $user->photoProfile }}" alt="" class="img-preview profile-preview">
+                </div>
             </div>
+
             <div class="form-row mt-2">
-                <label for="zoom_picture">Cover Picture:</label>
-                <input type="file" class="form-control" name="zoom_picture" id="zoom_picture">
+                <label for="cover_picture">Gambar Latar Belakang:</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input choose-file-cover" id="cover_picture" name="cover_picture">
+                    <label class="custom-file-label custom-file-label-cover" for="cover_picture">pilih gambar</label>
+                </div>
+                <div class="form-group mb-2 mt-2 text-center">
+                    <img src="{{ $user->backgroundPicture }}" alt="" class="img-preview-cover profile-preview">
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary mt-5">Simpan</button>
-            <a type="button" href="/delete" class="btn btn-danger mt-5">Hapus Akun</a>
+            <button type="button" class="btn btn-danger mt-5" data-toggle="modal" data-target="#hapus-akun">Hapus
+                Akun</button>
         </form>
+    </div>
+
+    <div class="modal fade" id="hapus-akun" tabindex="-1" aria-labelledby="hapus-akun-label" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <h6 class="mb-4" style="line-height: 1.7">Apakah anda Yakin ingin menghapus akun Anda?</h6>
+                    <button type="button" class="btn btn-warning mr-5" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hapus-akun-exec"
+                        data-dismiss="modal">Hapus</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="hapus-akun-exec" tabindex="-1" aria-labelledby="hapus-akun-exec-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hapus-akun-exec-label">Verifikasi Akun</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/delete/profile/verification" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label for="email" class="col-sm-3 col-form-label">Email</label>
+                            <div class="col-sm-8">
+                                <input type="text" readonly class="form-control-plaintext" name="email" id="email"
+                                    value="{{ $user->email }}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="password" class="col-sm-3 col-form-label">Password</label>
+                            <div class="col-sm-8">
+                                <input type="password" class="form-control" id="password" name="password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
 

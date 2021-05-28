@@ -94,7 +94,7 @@ class DonationDao
 
     public function confirmationPictureDonation($file, $id)
     {
-        Transaction::where('idDonation', $id)->update([
+        Transaction::where('id', $id)->update([
             'status' => NOT_CONFIRMED_TRANSACTION,
             'repaymentPicture' => $file,
             'updated_at' => Carbon::now('+7:00')
@@ -301,7 +301,7 @@ class DonationDao
     {
         Donation::create([
             'category' => $donation->getCategory(),
-            'deadline' => $donation->getDeadline(),
+            'duration_event' => $donation->getDuration(),
             'idCampaigner' => $donation->getIdCampaigner(),
             'photo' => $donation->getPhoto(),
             'purpose' => $donation->getPurpose(),
@@ -313,7 +313,8 @@ class DonationDao
             'donationTarget' => $donation->getDonationTarget(),
             'accountNumber' => $donation->getAccountNumber(),
             'bank' => $donation->getBank(),
-            'created_at' => $donation->getCreatedAt()
+            'created_at' => $donation->getCreatedAt(),
+            'updated_at' => $donation->getUpdatedAt()
         ]);
     }
 
@@ -321,7 +322,7 @@ class DonationDao
     {
         Donation::where('id', $id)->update([
             'category' => $donation->getCategory(),
-            'deadline' => $donation->getDeadline(),
+            'duration_event' => $donation->getDuration(),
             'idCampaigner' => $donation->getIdCampaigner(),
             'photo' => $donation->getPhoto(),
             'purpose' => $donation->getPurpose(),
@@ -333,7 +334,8 @@ class DonationDao
             'donationTarget' => $donation->getDonationTarget(),
             'accountNumber' => $donation->getAccountNumber(),
             'bank' => $donation->getBank(),
-            'created_at' => $donation->getCreatedAt()
+            'created_at' => $donation->getCreatedAt(),
+            'updated_at' => $donation->getUpdatedAt()
         ]);
     }
 

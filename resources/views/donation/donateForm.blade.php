@@ -61,12 +61,13 @@
                         <div class="modal-body p-4">
                             <h5 class="font-weight-bold">Isi Nominal Donasi&nbsp;<sup>*</sup></h5>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="nominal" name="nominal">
+                                <input type="text" class="form-control" id="nominal" name="nominal"
+                                    value="{{ old('nominal') }}">
                                 <small class="form-text text-muted">Donasi mulai dari Rp 10,000,-</small>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="annonymousDonatur"
-                                    name="annonymousDonatur">
+                                    name="annonymousDonatur" {{ old('annonymousDonatur') == 'on' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="annonymousDonatur">
                                     Donasi sebagai anonymus
                                 </label>
@@ -81,7 +82,8 @@
                         <div class="modal-body p-4">
                             <h5 class="font-weight-bold">Nomor Rekening<sup>*</sup></h5>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="rekeningUser" name="rekeningUser">
+                                <input type="text" class="form-control" id="rekeningUser" name="rekeningUser"
+                                    value="{{ old('rekeningUser') }}">
                                 <small class="form-text text-muted">Nomor rekening yang kamu
                                     gunakan</small>
                             </div>
@@ -95,11 +97,12 @@
                         <div class="modal-body p-4">
                             <h5 class="font-weight-bold">Tuliskan dukungan/doa</h5>
                             <div class="form-group">
-                                <textarea class="form-control" id="comment" rows="3" name="comment"></textarea>
+                                <textarea class="form-control" id="comment" rows="3"
+                                    name="comment">{{ old('comment') }}</textarea>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="annonymousComment"
-                                    name="annonymousComment">
+                                    name="annonymousComment" {{ old('annonymousComment') == 'on' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="annonymousComment">
                                     Donasi sebagai anonymus
                                 </label>

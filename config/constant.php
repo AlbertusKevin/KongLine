@@ -1,11 +1,21 @@
 <?php
 //constant data
 define("ACCOUNT", "1702272081");
-define("DEFAULT_PROFILE", "/images/profile/photo/default.png");
-define("DEFAULT_COVER_PROFILE", "/images/profile/background/default-cover-profile.png");
+define("DEFAULT_FILE_PROFILE_PICTURE", "default.png");
+define("DEFAULT_FILE_COVER_PICTURE", "default-cover-profile.png");
+define("DEFAULT_PROFILE", "/images/profile/photo/" . DEFAULT_FILE_PROFILE_PICTURE);
+define("DEFAULT_COVER_PROFILE", "/images/profile/background/" . DEFAULT_FILE_COVER_PICTURE);
 define("DEFAULT_FILE_PREVIEW", "/images/app/pictures/default-file.png");
 define("GUEST_ID", 1);
 define("MIN_DONATION", 10000);
+define("MAX_CHARACTER", 150);
+define("MAX_STACK", 6);
+define("SIGNED_TARGET_STACK_1", 100);
+define("SIGNED_TARGET_STACK_2", 500);
+define("SIGNED_TARGET_STACK_3", 1000);
+define("SIGNED_TARGET_STACK_4", 10000);
+define("SIGNED_TARGET_STACK_5", 50000);
+define("SIGNED_TARGET_STACK_6", 100000);
 
 define("FOLDER_IMAGE_PETITION", "images/petition/events/");
 define("FOLDER_IMAGE_PETITION_PROGRESS", "images/petition/update_news/");
@@ -23,6 +33,7 @@ define("CLOSED", 3);
 define("CANCELED", 4);
 define("REJECTED", 5);
 define("PROCEEDED", 6);
+define("TARGET_REACHED", 7);
 
 // Status User
 define("DELETED", 0);
@@ -39,10 +50,13 @@ define("CAMPAIGNER", "campaigner");
 //event
 define("PETITION", "petition");
 define("DONATION", "donation");
+define("TRANSACTION", "transaction");
+define("REQ_CAMPAIGNER", "request_camp");
 
 //petition type
 define("BERLANGSUNG", "berlangsung");
 define("MENANG", "menang");
+define("MENCAPAI_TARGET", "mencapai_target");
 define("SELESAI", "selesai");
 define("PARTISIPASI", "partisipasi");
 define("PETISI_SAYA", "petisi_saya");
@@ -73,6 +87,7 @@ define("PENGAJUAN", "pengajuan");
 define("SEMUA", "semua");
 
 //Transaction Type
+define("BELUM_UPLOAD", "belum_upload");
 define("KONFIRMASI", 'konfirmasi');
 define("GAGAL", 'gagal');
 

@@ -7,17 +7,18 @@ use App\Domain\Event\Model\Event;
 class Donation extends Event
 {
     // Attribute
-    private $assistedSubject, $donationCollected, $donationTarget, $totalDonatur, $bank, $accountNumber;
+    private $assistedSubject, $donationCollected, $donationTarget, $totalDonatur, $bank, $accountNumber, $duration_event;
 
-    public function __construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at, $donationCollected, $donationTarget, $totalDonatur, $assistedSubject, $bank, $accountNumber)
+    public function __construct($idCampaigner, $title, $photo, $category, $purpose, $status, $created_at, $updated_at, $donationCollected, $donationTarget, $totalDonatur, $assistedSubject, $bank, $accountNumber, $duration_event)
     {
-        parent::__construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at);
+        parent::__construct($idCampaigner, $title, $photo, $category, $purpose, $status, $created_at, $updated_at);
         $this->assistedSubject = $assistedSubject;
         $this->donationCollected = $donationCollected;
         $this->donationTarget = $donationTarget;
         $this->accountNumber = $accountNumber;
         $this->bank = $bank;
         $this->totalDonatur = $totalDonatur;
+        $this->duration_event = $duration_event;
     }
 
     public function setPhoto($img)
@@ -50,11 +51,6 @@ class Donation extends Event
         return parent::getPurpose();
     }
 
-    public function getDeadline()
-    {
-        return parent::getDeadline();
-    }
-
     public function getStatus()
     {
         return parent::getStatus();
@@ -63,6 +59,11 @@ class Donation extends Event
     public function getCreatedAt()
     {
         return parent::getCreatedAt();
+    }
+
+    public function getUpdatedAt()
+    {
+        return parent::getUpdatedAt();
     }
 
     public function getAssistedSubject()
@@ -92,5 +93,10 @@ class Donation extends Event
     public function getAccountNumber()
     {
         return $this->accountNumber;
+    }
+
+    public function getDuration()
+    {
+        return $this->duration_event;
     }
 }

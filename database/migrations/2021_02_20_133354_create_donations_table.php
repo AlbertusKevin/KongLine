@@ -16,7 +16,8 @@ class CreateDonationsTable extends Migration
         Schema::create('donation', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('category')->unsigned();
-            $table->timestamp('deadline');
+            $table->timestamp('deadline')->nullable();
+            $table->tinyInteger('duration_event')->default(0);
             $table->foreignId('idCampaigner');
             $table->string('photo');
             $table->longText('purpose');

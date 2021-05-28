@@ -77,11 +77,16 @@ class EventService
 
     public function checkValidDate($event, $typeEvent)
     {
-        $time = Carbon::now('+7:00')->format("Y-m-d");
+        $time = Carbon::now('+7:00');
 
         if (strtotime($event->deadline) - strtotime($time) <= 0) {
-            $this->event_dao->updateStatusEvent($event->id, FINISHED, $typeEvent);
+            $this->updateStatusEvent($event->id, FINISHED, $typeEvent);
         }
+    }
+
+    public function updateStatusEvent($id, $status, $typeEvent)
+    {
+        $this->event_dao->updateStatusEvent($id, $status, $typeEvent, Carbon::now('+7:00'));
     }
 
     // Memberi pesan terkait status event tertentu

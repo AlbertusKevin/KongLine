@@ -14,9 +14,21 @@ class HelperService
 
         return $name . "/";
     }
+
+    public static function deleteImage($img)
+    {
+        $nameFile = explode("/", $img);
+        $nameFile = end($nameFile);
+        $path = substr($img, 1);
+        if ($nameFile != DEFAULT_FILE_COVER_PICTURE && $nameFile != DEFAULT_FILE_COVER_PICTURE) {
+            unlink(public_path($path));
+        }
+    }
+
     // upload gambar
     public static function uploadImage($img, $folder)
     {
+        // dd($img);
         $pictName = $img->getClientOriginalName();
         //ambil ekstensi file
         $pictName = explode('.', $pictName);
@@ -38,5 +50,12 @@ class HelperService
         }
 
         return 'layout.app';
+    }
+
+    public static function makeNumber($number)
+    {
+        $number = explode(',', $number);
+        $number = join("", $number);
+        return (int)$number;
     }
 }

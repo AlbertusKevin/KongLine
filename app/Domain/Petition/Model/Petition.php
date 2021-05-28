@@ -9,10 +9,10 @@ class Petition extends Event
     //attribute
     private $signedCollected, $signedTarget, $targetPerson;
 
-    public function __construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at, $signedTarget, $signedCollected, $targetPerson)
+    public function __construct($idCampaigner, $title, $photo, $category, $purpose, $status, $created_at, $updated_at, $signedCollected, $targetPerson)
     {
-        parent::__construct($idCampaigner, $title, $photo, $category, $purpose, $deadline, $status, $created_at);
-        $this->signedTarget = $signedTarget;
+        parent::__construct($idCampaigner, $title, $photo, $category, $purpose, $status, $created_at, $updated_at);
+        $this->signedTarget = 0;
         $this->signedCollected = $signedCollected;
         $this->targetPerson = $targetPerson;
     }
@@ -47,11 +47,6 @@ class Petition extends Event
         return parent::getPurpose();
     }
 
-    public function getDeadline()
-    {
-        return parent::getDeadline();
-    }
-
     public function getStatus()
     {
         return parent::getStatus();
@@ -60,6 +55,11 @@ class Petition extends Event
     public function getCreatedAt()
     {
         return parent::getCreatedAt();
+    }
+
+    public function getUpdatedAt()
+    {
+        return parent::getUpdatedAt();
     }
 
     public function getSignedCollected()

@@ -84,16 +84,15 @@ class DonationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'purpose' => 'required|min:150',
+            'purpose' => 'required|min:300',
             'category' => 'required',
-            'donationTarget' => 'required|numeric',
-            'deadline' => 'required',
+            'donationTarget' => 'required',
+            'deadline' => 'required|numeric',
             'photo' => 'required|image',
             'assistedSubject' => 'required',
             'bank' => 'required',
             'accountNumber' => 'required|numeric',
             'nominal' => 'required',
-            'nominal.*' => 'numeric',
             'allocationFor' => 'required'
         ]);
 
@@ -107,6 +106,14 @@ class DonationController extends Controller
             return redirect('/donation/create')->with(['type' => "error", 'message' => $messageError])->withInput();
         };
 
+        // validasi total alokasi dana !> target donasi
+        $targetDonation = HelperService::makeNumber($request->donationTarget);
+        $allocations = $this->donation_service->validateTotalAllocation($request->nominal, $targetDonation);
+
+        if (count($allocations) == 0) {
+            return redirect('/donation/create')->with(['type' => "error", 'message' => "Jumlah alokasi dana harus sama dengan target donasi"])->withInput();
+        }
+
         $user = $this->profile_service->getAProfile();
 
         $donation = new Model\Donation(
@@ -115,22 +122,23 @@ class DonationController extends Controller
             $request->file('photo'),
             $request->category,
             $request->purpose,
-            $request->deadline,
             0,
             Carbon::now('+7:00'),
+            Carbon::now('+7:00'),
             0,
-            $request->donationTarget,
+            $targetDonation,
             0,
             $request->assistedSubject,
             $request->bank,
-            $request->accountNumber
+            $request->accountNumber,
+            $request->deadline,
         );
 
         $this->donation_service->storeDonationCreated($donation);
         $idDonation = $this->donation_service->getLastIdDonation()->id;
 
-        for ($i = 0; $i < count($request->nominal); $i++) {
-            $allocationDetail = new Model\DetailAllocation($idDonation, $request->allocationFor[$i], $request->nominal[$i]);
+        for ($i = 0; $i < count($allocations); $i++) {
+            $allocationDetail = new Model\DetailAllocation($idDonation, $request->allocationFor[$i], $allocations[$i]);
             $this->donation_service->storeDetailAllocation($allocationDetail);
         }
 
@@ -152,15 +160,15 @@ class DonationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'purpose' => 'required|min:150',
+            'purpose' => 'required|min:300',
             'category' => 'required',
-            'donationTarget' => 'required|numeric',
-            'deadline' => 'required',
+            'donationTarget' => 'required',
+            'deadline' => 'required|numeric',
             'assistedSubject' => 'required',
             'bank' => 'required',
             'accountNumber' => 'required|numeric',
             'nominal' => 'required',
-            'nominal.*' => 'numeric',
+            'photo' => 'nullable|image',
             'allocationFor' => 'required'
         ]);
 
@@ -173,6 +181,14 @@ class DonationController extends Controller
 
             return redirect('/donation/edit/' . $id)->with(['type' => "error", 'message' => $messageError])->withInput();
         };
+
+        // validasi total alokasi dana !> target donasi
+        $targetDonation = HelperService::makeNumber($request->donationTarget);
+        $allocations = $this->donation_service->validateTotalAllocation($request->nominal, $targetDonation);
+
+        if (count($allocations) == 0) {
+            return redirect('/donation/edit/' . $id)->with(['type' => "error", 'message' => "Jumlah alokasi dana harus sama dengan target donasi"])->withInput();
+        }
 
         $user = $this->profile_service->getAProfile();
         $oldDonation = $this->donation_service->getADonation($id);
@@ -191,23 +207,24 @@ class DonationController extends Controller
             $file,
             $request->category,
             $request->purpose,
-            $request->deadline,
             0,
             $oldDonation->created_at,
+            Carbon::now('+7:00'),
             0,
-            $request->donationTarget,
+            $targetDonation,
             0,
             $request->assistedSubject,
             $request->bank,
-            $request->accountNumber
+            $request->accountNumber,
+            $request->deadline
         );
         // update data donasi
-        $this->donation_service->updateEventDonation($donation, $id, $empty);
+        $this->donation_service->updateEventDonation($oldDonation, $donation, $id, $empty);
         // hapus detail allocation yang id-nya $id
         $this->donation_service->deleteAllocationDetail($id);
         // insert detail allocation yang baru
-        for ($i = 0; $i < count($request->nominal); $i++) {
-            $allocationDetail = new Model\DetailAllocation($id, $request->allocationFor[$i], $request->nominal[$i]);
+        for ($i = 0; $i < count($allocations); $i++) {
+            $allocationDetail = new Model\DetailAllocation($id, $request->allocationFor[$i], $allocations[$i]);
             $this->donation_service->storeDetailAllocation($allocationDetail);
         }
 
@@ -235,9 +252,10 @@ class DonationController extends Controller
 
         if ($nominal == "not_number") {
             return redirect('/donation/donate/' . $id)->withInput()->with(['type' => "error", 'message' => 'Input nominal harus berupa angka']);
-            if ($nominal == "below_min") {
-                return redirect('/donation/donate/' . $id)->withInput()->with(['type' => "error", 'message' => 'Donasi minimal ' . MIN_DONATION]);
-            }
+        }
+
+        if ($nominal == "below_min") {
+            return redirect('/donation/donate/' . $id)->withInput()->with(['type' => "error", 'message' => 'Donasi minimal ' . MIN_DONATION]);
         }
 
         if ($validator->fails()) {
@@ -284,7 +302,7 @@ class DonationController extends Controller
                 $messageError = $message;
             }
 
-            return redirect('/donation/confirm_donate/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
+            return redirect('/donation/confirm_donate/' . $id)->with(['type' => "error", 'message' => $messageError]);
         };
 
         $this->donation_service->confirmationPictureDonation($request->file('repaymentPicture'), $id);
@@ -318,7 +336,11 @@ class DonationController extends Controller
             return redirect('/donation/donate/edit/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
         };
 
+        $user = $this->profile_service->getAProfile();
+        $oldTransaction = $this->donation_service->getAUserTransaction($user->id, $id);
+
         if (!empty($request->file('repaymentPicture'))) {
+            HelperService::deleteImage($oldTransaction->repaymentPicture);
             $this->donation_service->confirmationPictureDonation($request->file('repaymentPicture'), $id);
         } else {
             $this->donation_service->updateTransactionDonation($id);

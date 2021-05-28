@@ -20,6 +20,8 @@
                         class="btn btn-light transaction-type rounded-pill ml-3">Konfirmasi</button>
                     <button href="/petition" type="button"
                         class="btn btn-light transaction-type rounded-pill ml-3">Gagal</button>
+                    <button href="/petition" type="button" class="btn btn-light transaction-type rounded-pill ml-3">Belum
+                        Upload</button>
                 </div>
             </div>
         </div>
@@ -39,7 +41,7 @@
                     <tbody id="transaction-list">
                         @foreach ($transactions as $transaction)
                             <tr>
-                                <td>{{ $transaction->created_at }}</td>
+                                <td>{{ date_format(date_create($transaction->created_at), 'Y/m/d') }}</td>
                                 <td>{{ $transaction->title }}</td>
                                 <td>{{ $transaction->name }}</td>
                                 <td>Rp. {{ number_format($transaction->nominal, 2, ',', '.') }}</td>
