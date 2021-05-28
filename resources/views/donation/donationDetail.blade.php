@@ -24,7 +24,7 @@
                                         @if ($user->role != ADMIN)
                                             @if (!$isParticipated)
                                                 <div class="col-md-6">
-                                                    @if ($user->role == GUEST || $user->role == ADMIN)
+                                                    @if ($user->role == GUEST)
                                                         <small class="badge badge-info">
                                                             Login sebagai peserta untuk ikut berdonasi
                                                         </small>
@@ -88,41 +88,54 @@
                                                 @endif
                                             </div>
                                         @endif
-                                    @endif
-                                    <div class="col-md-6">
-                                        <p>Jumlah Donatur: <b>{{ count($donation['participated']) }}</b> Donatur</p>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar"
-                                                style="width: {{ $donation['progress'] }}%"
-                                                aria-valuenow="{{ $donation['detail']->donationCollected }}"
-                                                aria-valuemin="0"
-                                                aria-valuemax="{{ $donation['detail']->donationTarget }}"></div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 text-left font-weight-bold">
-                                                Rp.
-                                                {{ number_format($donation['detail']->donationCollected, 2, ',', '.') }}
+
+                                        <div class="col-md-6">
+                                            <p>Jumlah Donatur: <b>{{ count($donation['participated']) }}</b> Donatur</p>
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar"
+                                                    style="width: {{ $donation['progress'] }}%"
+                                                    aria-valuenow="{{ $donation['detail']->donationCollected }}"
+                                                    aria-valuemin="0"
+                                                    aria-valuemax="{{ $donation['detail']->donationTarget }}"></div>
                                             </div>
-                                            <div class="col-md-6 text-right font-weight-bold">
-                                                Rp. {{ number_format($donation['detail']->donationTarget, 2, ',', '.') }}
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 text-left">
-                                                Terkumpul
-                                            </div>
-                                            <div class="col-md-6 text-right">
-                                                Menuju Target
-                                            </div>
-                                        </div>
-                                        @if ($user->role == ADMIN)
                                             <div class="row">
-                                                <p class="mt-2 ml-3">
-                                                    {{ ceil((strtotime($donation['detail']->deadline) - time()) / (60 * 60 * 24)) }}
-                                                    Hari Lagi!</p>
+                                                <div class="col-md-6 text-left font-weight-bold">
+                                                    Rp.
+                                                    {{ number_format($donation['detail']->donationCollected, 2, ',', '.') }}
+                                                </div>
+                                                <div class="col-md-6 text-right font-weight-bold">
+                                                    Rp.
+                                                    {{ number_format($donation['detail']->donationTarget, 2, ',', '.') }}
+                                                </div>
                                             </div>
-                                        @endif
-                                    </div>
+                                            <div class="row">
+                                                <div class="col-md-6 text-left">
+                                                    Terkumpul
+                                                </div>
+                                                <div class="col-md-6 text-right">
+                                                    Menuju Target
+                                                </div>
+                                            </div>
+                                            @if ($user->role == ADMIN)
+                                                @if ($donation['detail']->status == FINISHED)
+                                                    <form action="/admin/donation/proceed/{{ $donation['detail']->id }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('patch')
+                                                        <button type="submit" class="btn btn-success mt-2">Tandai
+                                                            Selesai</button>
+                                                    </form>
+                                                @endif
+                                            @endif
+                                            {{-- @if ($user->role == ADMIN)
+                                                <div class="row">
+                                                    <p class="mt-2 ml-3">
+                                                        {{ ceil((strtotime($donation['detail']->deadline) - time()) / (60 * 60 * 24)) }}
+                                                        Hari Lagi!</p>
+                                                </div>
+                                            @endif --}}
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

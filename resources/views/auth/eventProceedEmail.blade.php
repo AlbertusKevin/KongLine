@@ -21,10 +21,8 @@
                                     style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0; background-color: #187BCD; margin: 0; padding: 20px;"
                                     align="center" bgcolor="#71b6f9" valign="top">
                                     <a href="{{ url('/') }}"
-                                        style="font-size:32px;color:#fff;text-decoration:none;">Yuk Bisa Yuk</a> <br>
-                                    <span style="margin-top: 10px;display: block;"> Pengajuan Campaigner Tidak Disetujui
-                                        {{ $subheader }}
-                                    </span>
+                                        style="font-size:32px;color:#fff;text-decoration:none;"> Yuk Bisa Yuk</a> <br>
+                                    <span style="margin-top: 10px;display: block;"> Event Disetujui </span>
                                 </td>
                             </tr>
                             <tr
@@ -41,10 +39,6 @@
                                                     style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
                                                     valign="top">
                                                     {{ $email }}
-                                                    Maaf ! Pengajuan Campaigner {{ $user->name }} tidak dapat kami
-                                                    setujui dikarenakan <u>{{ $email }}</u>. Mohon cek ulang
-                                                    pengajuan
-                                                    Anda dan kirim kembali.
                                                 </td>
                                             </tr>
                                             <tr

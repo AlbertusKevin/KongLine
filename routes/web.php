@@ -163,18 +163,20 @@ Route::get('/admin/petition', [ControllingController::class, 'getAllPetition'])-
 Route::patch('/admin/petition/accept/{id}', [ControllingController::class, 'acceptPetition'])->middleware('admin');
 Route::patch('/admin/petition/reject/{id}', [ControllingController::class, 'rejectPetition'])->middleware('admin');
 Route::patch('/admin/petition/close/{id}', [ControllingController::class, 'closePetition'])->middleware('admin');
+Route::patch('/admin/petition/proceed/{id}', [ControllingController::class, 'proceedPetition'])->middleware('admin');
 
 //! Donation dan Transaction
 Route::get('/admin/donation', [ControllingController::class, 'getListDonation'])->middleware('admin');
 Route::get('/admin/donation/transaction', [ControllingController::class, 'getAllTransaction'])->middleware('admin');
 Route::get('/admin/donation/transaction/{idEvent}', [ControllingController::class, 'getATransaction'])->middleware('admin');
 
-Route::patch('/admin/donation/transaction/confirm/{id}', [ControllingController::class, 'confirmTransaction'])->middleware('admin');
-Route::patch('/admin/donation/transaction/reject/{id}', [ControllingController::class, 'rejectTransaction'])->middleware('admin');
+Route::patch('/admin/donation/transaction/confirm/{idTransaction}', [ControllingController::class, 'confirmTransaction'])->middleware('admin');
+Route::patch('/admin/donation/transaction/reject/{idTransaction}', [ControllingController::class, 'rejectTransaction'])->middleware('admin');
 
 Route::patch('/admin/donation/accept/{id}', [ControllingController::class, 'acceptDonation'])->middleware('admin');
 Route::patch('/admin/donation/reject/{id}', [ControllingController::class, 'rejectDonation'])->middleware('admin');
 Route::patch('/admin/donation/close/{id}', [ControllingController::class, 'closeDonation'])->middleware('admin');
+Route::patch('/admin/donation/proceed/{id}', [ControllingController::class, 'proceedDonation'])->middleware('admin');
 
 //* -------- ajax -----------
 Route::get('/admin/donation/sort', [ControllingController::class, 'adminSortDonation'])->middleware('admin');

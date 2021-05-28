@@ -16,6 +16,7 @@ define("SIGNED_TARGET_STACK_3", 1000);
 define("SIGNED_TARGET_STACK_4", 10000);
 define("SIGNED_TARGET_STACK_5", 50000);
 define("SIGNED_TARGET_STACK_6", 100000);
+define("EMAIL_VIEW", 'auth.email');
 
 define("FOLDER_IMAGE_PETITION", "images/petition/events/");
 define("FOLDER_IMAGE_PETITION_PROGRESS", "images/petition/update_news/");

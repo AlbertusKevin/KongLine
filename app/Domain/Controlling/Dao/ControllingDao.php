@@ -9,6 +9,7 @@ use App\Domain\Profile\Entity\User;
 use App\Domain\Donation\Entity\ParticipateDonation;
 use App\Domain\Petition\Entity\ParticipatePetition;
 use App\Domain\Donation\Entity\Transaction;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 class ControllingDao
@@ -299,10 +300,10 @@ class ControllingDao
     public function changeEventStatus($id, $status, $event)
     {
         if ($event == DONATION) {
-            Donation::where('id', $id)->update(['status' => $status]);
+            Donation::where('id', $id)->update(['status' => $status, 'updated_at' => Carbon::now('+7:00')]);
         }
 
-        Petition::where('id', $id)->update(['status' => $status]);
+        Petition::where('id', $id)->update(['status' => $status, 'updated_at' => Carbon::now('+7:00')]);
     }
 
     public function acceptDonation($id, $data)
@@ -590,27 +591,11 @@ class ControllingDao
         return Transaction::find($id);
     }
 
-    public function sendEmailTrx($trx, $view, $email, $user)
+    public function sendEmail($params)
     {
-        Mail::send($view, ['transaction' => $trx, 'email' => $email], function ($message) use ($user) {
-            $message->to($user->email);
-            $message->subject("Tindak Lanjut Transaksi");
-        });
-    }
-
-    public function sendEmail($event, $view, $email, $event_chosen)
-    {
-        Mail::send($view, ['event' => $event, 'event_chosen' => $event_chosen, 'email' => $email], function ($message) use ($event) {
-            $message->to($event->users->email);
-            $message->subject("Tindak Lanjut Event");
-        });
-    }
-
-    public function sendEmailUser($user, $view, $email)
-    {
-        Mail::send($view, ['user' => $user, 'email' => $email], function ($message) use ($user) {
-            $message->to($user->email);
-            $message->subject("Tindak Lanjut Campaigner");
+        Mail::send($params['view'], ['params' => $params], function ($message) use ($params) {
+            $message->to($params['email']);
+            $message->subject($params['subject']);
         });
     }
 }

@@ -193,19 +193,51 @@ class ControllingService
     }
 
 
-    public function acceptUserToCampaigner($id, $view, $subject)
+    public function acceptUserToCampaigner($id)
     {
+        $this->controlling_dao->acceptUserToCampaigner($id, ACTIVE, CAMPAIGNER);
+
+        // kirim email
         $user = $this->controlling_dao->getUserById($id);
-        $this->sendEmail($user, $view, $subject, REQ_CAMPAIGNER);
-        return $this->controlling_dao->acceptUserToCampaigner($id, ACTIVE, CAMPAIGNER);
+
+        $template = '
+        Selamat! Pengajuan Anda untuk menjadi campaigner berhasil. 
+        Kini Anda bisa membuat event Anda sendiri. 
+        Terimakasih telah bergabung menjadi agen perubahan dari Yuk Bisa Yuk.';
+
+        $params = [
+            'email' => $user->email,
+            'subject' => 'Penerimaan Campaigner Baru',
+            'subheader' => "Pengajuan Campaigner Diterima",
+            'message' => $template,
+            'view' => EMAIL_VIEW,
+        ];
+
+        $this->controlling_dao->sendEmail($params);
     }
 
-    public function rejectUserToCampaigner($id, $view, $message)
+    public function rejectUserToCampaigner($id, $reason)
     {
-        $user = $this->controlling_dao->getUserById($id);
-        $this->controlling_dao->sendEmailUser($user, $view, $message);
+        $this->controlling_dao->rejectUserToCampaigner($id, ACTIVE, PARTICIPANT);
 
-        return $this->controlling_dao->rejectUserToCampaigner($id, ACTIVE, PARTICIPANT);
+        // kirim email
+        $user = $this->controlling_dao->getUserById($id);
+
+        $template = '
+        Maaf! Pengajuan Anda untuk menjadi campaigner tidak berhasil dikarenakan $reason.
+        Silahkan untuk melakukan pengajuan ulang';
+
+        $data = ['$reason' => $reason];
+
+        $params = [
+            'email' => $user->email,
+            'subject' => 'Penerimaan Campaigner Baru',
+            'subheader' => "Pengajuan Campaigner Ditolak",
+            'message' => strtr($template, $data),
+            'view' => EMAIL_VIEW,
+        ];
+
+        $this->controlling_dao->sendEmail($params);
     }
     //? ========================================
     //! ~~~~~~~~~~~~~~~~ Donasi ~~~~~~~~~~~~~~~~
@@ -533,21 +565,121 @@ class ControllingService
     {
         $donation = $this->donation_service->getADonation($id);
 
+        // kirim email
         $data["updated_at"] = Carbon::now("+7:00");
         $data["deadline"] = Carbon::now("+7:00")->addWeeks($donation->duration_event);
 
         $this->controlling_dao->changeEventStatus($id, ACTIVE, DONATION);
         $this->controlling_dao->acceptDonation($id, $data);
+
+        // kirim email
+        $donation = $this->donation_service->getADonation($id);
+        $campaigner = $this->profile_service->findUser($donation->idCampaigner);
+
+        $template = 'Selamat! Event <b><i> $title </i></b> telah disetujui
+        oleh admin YukBisaYuk. Klik <a href="$link">
+        disini </a> untuk melihat Eventmu.';
+
+        $data = [
+            '$title' => $donation->title,
+            '$link' => url('/donation/' . $id)
+        ];
+
+        $params = [
+            'email' => $campaigner->email,
+            'subject' => 'Penerimaan Pengajuan Event',
+            'subheader' => "Penerimaan Pengajuan Event",
+            'message' => strtr($template, $data),
+            'view' => EMAIL_VIEW,
+        ];
+
+        $this->controlling_dao->sendEmail($params);
     }
 
-    public function rejectDonation($id)
+    public function proceedDonation($id)
+    {
+        $this->controlling_dao->changeEventStatus($id, PROCEEDED, DONATION);
+
+        // kirim email
+        $donation = $this->donation_service->getADonation($id);
+        $campaigner = $this->profile_service->findUser($donation->idCampaigner);
+
+        $template = 'Selamat! Admin telah memproses transfer donasi yang terkumpul sebesar Rp. $nominal kepada nomor rekening $account dari event dengan judul $title.';
+        $data = [
+            '$nominal' => number_format($donation->donationCollected, 2, ',', '.'),
+            '$title' => $donation->title,
+            '$account' => $campaigner->accountNumber
+        ];
+
+        $params = [
+            'email' => $campaigner->email,
+            'subject' => 'Tindak Lanjut Event',
+            'subheader' => "Transfer Donasi Terkumpul",
+            'message' => strtr($template, $data),
+            'view' => EMAIL_VIEW,
+        ];
+        $this->controlling_dao->sendEmail($params);
+    }
+
+    public function rejectDonation($id, $reason)
     {
         $this->controlling_dao->changeEventStatus($id, REJECTED, DONATION);
+
+        // kirim email
+        $donation = $this->donation_service->getADonation($id);
+        $campaigner = $this->profile_service->findUser($donation->idCampaigner);
+
+        $template = 'Maaf! Event <b><i> $title </b></i> tidak dapat
+        dipublikasikan oleh pihak YukBisaYuk dikarenakan
+        <u>$reason</u>.
+        Klik <a href="$link">
+        disini</a> untuk melihat eventmu';
+
+        $data = [
+            '$title' => $donation->title,
+            '$link' => url('/donation/' . $id),
+            '$reason' => $reason
+        ];
+
+        $params = [
+            'email' => $campaigner->email,
+            'subject' => 'Penolakan Pengajuan Event',
+            'subheader' => "Penolakan Pengajuan Event",
+            'message' => strtr($template, $data),
+            'view' => EMAIL_VIEW,
+        ];
+
+        $this->controlling_dao->sendEmail($params);
     }
 
-    public function closeDonation($id)
+    public function closeDonation($id, $reason)
     {
         $this->controlling_dao->changeEventStatus($id, CLOSED, DONATION);
+
+        // kirim email
+        $donation = $this->donation_service->getADonation($id);
+        $campaigner = $this->profile_service->findUser($donation->idCampaigner);
+
+        $template = 'Maaf! Event dengan judul <b><i> $title </b></i> ditutup oleh pihak YukBisaYuk dikarenakan
+        <u>$reason</u>.
+        Klik <a href="$link">
+        disini</a> untuk melihat eventmu';
+
+        $data = [
+            '$title' => $donation->title,
+            '$link' => url('/donation/' . $id),
+            '$reason' => $reason
+        ];
+
+        $params = [
+            'email' => $campaigner->email,
+            'subject' => 'Penolakan Pengajuan Event',
+            'subheader' => "Penolakan Pengajuan Event",
+            'message' => strtr($template, $data),
+            'view' => EMAIL_VIEW,
+        ];
+
+        $this->controlling_dao->sendEmail($params);
     }
 
     //? ========================================
@@ -572,14 +704,57 @@ class ControllingService
         $this->updateCalculationDonation($transaction);
     }
 
-    public function confirmTransaction($id)
+    public function confirmTransaction($transaction)
     {
-        $this->controlling_dao->updateStatusTransaction($id, CONFIRMED_TRANSACTION);
+        $this->controlling_dao->updateStatusTransaction($transaction->id, CONFIRMED_TRANSACTION);
+
+        // kirim email
+        $donation = $this->donation_service->getADonation($transaction->idDonation);
+        $participant = $this->profile_service->findUser($transaction->idParticipant);
+
+        $template = 'Transaksi donasi dengan nomor invoice $invoice terhadap event $title berhasil dilakukan. Terimakasih turut berpartisipasi menciptakan dunia yang lebih baik.';
+        $data = [
+            '$invoice' => $transaction->id,
+            '$title' => $donation->title
+        ];
+
+        $params = [
+            'email' => $participant->email,
+            'subject' => 'Konfirmasi Transaksi',
+            'subheader' => "<strong>Konfirmasi Transaksi</strong>",
+            'message' => strtr($template, $data),
+            'view' => EMAIL_VIEW,
+        ];
+
+        $this->controlling_dao->sendEmail($params);
     }
 
-    public function rejectTransaction($id)
+    public function rejectTransaction($id, $reason)
     {
+        $transaction = $this->getAUserTransaction($id);
+
         $this->controlling_dao->updateStatusTransaction($id, REJECTED_TRANSACTION);
+
+        // kirim email
+        $donation = $this->donation_service->getADonation($transaction->idDonation);
+        $participant = $this->profile_service->findUser($transaction->idParticipant);
+
+        $template = 'Transaksi donasi dengan nomor invoice $invoice terhadap event $title tidak berhasil dikarenakan $reason. Silahkan lakukan pengajuan ulang.';
+        $data = [
+            '$invoice' => $transaction->id,
+            '$title' => $donation->title,
+            '$reason' => $reason
+        ];
+
+        $params = [
+            'email' => $participant->email,
+            'subject' => 'Kegagalan Transaksi',
+            'subheader' => "<strong>Kegagalan Transaksi</strong>",
+            'message' => strtr($template, $data),
+            'view' => EMAIL_VIEW,
+        ];
+
+        $this->controlling_dao->sendEmail($params);
     }
 
     public function getAllTransaction()
@@ -634,47 +809,127 @@ class ControllingService
     public function acceptPetition($id)
     {
         $petition = $this->petition_service->getDetailPetition($id);
+        $campaigner = $this->profile_service->findUser($petition->idCampaigner);
+
         $this->controlling_dao->changeEventStatus($id, ACTIVE, PETITION);
-        $data['updated_at'] = Carbon::now('+7:00');
-        $data['deadline'] = Carbon::now('+7:00')->addMonth();
-        $data['signedTarget'] = SIGNED_TARGET_STACK_1;
-        $data['stack'] = 1;
+        $data = [
+            'updated_at' => Carbon::now('+7:00'),
+            'deadline' => Carbon::now('+7:00')->addMonth(),
+            'signedTarget' => SIGNED_TARGET_STACK_1,
+            'stack' => 1
+        ];
 
         $this->controlling_dao->acceptPetition($id, $data);
+
+        // kirim email
+        $template =
+            'Selamat! Event <b><i> $title </i></b> telah disetujui
+            oleh admin YukBisaYuk. Klik <a href="$link">
+            disini </a> untuk melihat Eventmu.';
+
+        $data = [
+            '$title' => $petition->title,
+            '$link' => url('/petition/' . $petition->id)
+        ];
+
+        $params = [
+            'email' => $campaigner->email,
+            'subject' => 'Penerimaan Pengajuan Event',
+            'subheader' => "Penerimaan Pengajuan Event",
+            'message' => strtr($template, $data),
+            'view' => EMAIL_VIEW,
+        ];
+
+        $this->controlling_dao->sendEmail($params);
     }
 
-    public function rejectPetition($id)
+    public function rejectPetition($id, $reason)
     {
         $this->controlling_dao->changeEventStatus($id, REJECTED, PETITION);
+
+        // kirim email
+        $petition = $this->petition_service->getDetailPetition($id);
+        $campaigner = $this->profile_service->findUser($petition->idCampaigner);
+
+        $template = 'Maaf! Event <b><i> $title </b></i> tidak dapat
+        dipublikasikan oleh pihak YukBisaYuk dikarenakan
+        <u>$reason</u>.
+        Klik <a href="$link">
+        disini</a> untuk melihat eventmu';
+
+        $data = [
+            '$title' => $petition->title,
+            '$link' => url('/petition/' . $id),
+            '$reason' => $reason
+        ];
+
+        $params = [
+            'email' => $campaigner->email,
+            'subject' => 'Penolakan Pengajuan Event',
+            'subheader' => "Penolakan Pengajuan Event",
+            'message' => strtr($template, $data),
+            'view' => EMAIL_VIEW,
+        ];
+
+        $this->controlling_dao->sendEmail($params);
     }
 
-    public function closePetition($id)
+    public function closePetition($id, $reason)
     {
         $this->controlling_dao->changeEventStatus($id, CLOSED, PETITION);
+
+        // kirim email
+        $petition = $this->petition_service->getDetailPetition($id);
+        $campaigner = $this->profile_service->findUser($petition->idCampaigner);
+
+        $template = 'Maaf! Event dengan judul <b><i> $title </b></i> ditutup oleh pihak YukBisaYuk dikarenakan
+        <u>$reason</u>.
+        Klik <a href="$link">
+        disini</a> untuk melihat eventmu';
+
+        $data = [
+            '$title' => $petition->title,
+            '$link' => url('/petition/' . $id),
+            '$reason' => $reason
+        ];
+
+        $params = [
+            'email' => $campaigner->email,
+            'subject' => 'Penutupan Event Aktif',
+            'subheader' => "Penutupan Event Aktif",
+            'message' => strtr($template, $data),
+            'view' => EMAIL_VIEW,
+        ];
+
+        $this->controlling_dao->sendEmail($params);
     }
 
-
-
-    //todo: refactor
-    public function sendEmail($id, $view, $subject, $type)
+    public function proceedPetition($id)
     {
-        if ($type == REQ_CAMPAIGNER) {
-            $this->controlling_dao->sendEmailUser($id, $view, $subject);
-        } else if ($type == TRANSACTION) {
-            $trx = $this->controlling_dao->getTransactionById($id);
-            $user = $this->profile_service->findUser($trx->idParticipant);
-            $this->controlling_dao->sendEmailTrx($trx, $view, $subject, $user);
-        } else {
-            if ($type == PETITION) {
-                $event = $this->controlling_dao->getPetitionById($id);
-            } else if ($type == DONATION) {
-                $event = $this->controlling_dao->getDonationById($id);
-            }
-            $this->controlling_dao->sendEmail($event, $view, $subject, $type);
-        }
-    }
+        $this->controlling_dao->changeEventStatus($id, PROCEEDED, PETITION);
 
-    public function sendEmailTransaction($id, $view, $subject)
-    {
+        // kirim email
+        $petition = $this->petition_service->getDetailPetition($id);
+        $campaigner = $this->profile_service->findUser($petition->idCampaigner);
+
+        $template = '
+        Selamat! petisi Anda dengan judul $title telah berhasil meraih kemenangan
+        dengan total tanda tangan terkumpul sebanyak $signedCollected. 
+        Terimakasih telah berpartisipas dalam perubahan dunia yang lebih baik';
+
+        $data = [
+            '$title' => $petition->title,
+            '$signedCollected' => $petition->signedCollected
+        ];
+
+        $params = [
+            'email' => $campaigner->email,
+            'subject' => 'Tindak Lanjut Event',
+            'subheader' => "Petisi Meraih Kemenangan",
+            'message' => strtr($template, $data),
+            'view' => EMAIL_VIEW,
+        ];
+
+        $this->controlling_dao->sendEmail($params);
     }
 }
