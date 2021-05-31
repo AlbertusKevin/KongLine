@@ -175,6 +175,10 @@ button.approve-event{
   object-fit:cover;
 }
 
+img.news-detail {
+  width: 500px;
+}
+
 img.profile-donatur {
   object-fit: cover;
   border-radius: 50%;

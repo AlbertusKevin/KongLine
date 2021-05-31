@@ -1,6 +1,6 @@
 @extends('layout.app')
 @section('title')
-    Edit Petition
+    Ubah Petisi
 @endsection
 
 @section('content')

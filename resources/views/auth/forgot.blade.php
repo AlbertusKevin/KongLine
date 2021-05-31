@@ -1,5 +1,7 @@
 @extends('layout.app')
-
+@section('title')
+    Lupa Password
+@endsection
 @section('content')
     @include('layout.message')
     <div class="container-fluid contain d-flex align-items-center justify-content-center h-100">

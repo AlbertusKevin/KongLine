@@ -1,5 +1,7 @@
 @extends('layout.app')
-
+@section('title')
+    Profile
+@endsection
 @section('content')
     @include('layout.message')
     <div class="jumbotron text-center" style="background-image: url('{{ $user->backgroundPicture }}');">

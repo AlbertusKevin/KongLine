@@ -1,7 +1,7 @@
 @extends($navbar)
 
 @section('title')
-    Petition List
+    Daftar Petisi
 @endsection
 
 @section('content')

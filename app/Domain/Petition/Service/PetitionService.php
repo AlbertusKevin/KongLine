@@ -578,9 +578,14 @@ class PetitionService
         $folder = HelperService::makeSlugify($folder);
         $folder = FOLDER_IMAGE_PETITION_PROGRESS . $folder;
 
-        $pathImage = HelperService::uploadImage($updateNews->getImage(), "petition/update_news");
+        $pathImage = HelperService::uploadImage($updateNews->getImage(), $folder);
         $updateNews->setImage($pathImage);
         $this->petition_dao->saveProgressPetition($updateNews);
+    }
+
+    public function getDetailNewsProgress($idNews)
+    {
+        return $this->petition_dao->getDetailNewsProgress($idNews);
     }
 
     //! Memproses tandatangan peserta pada petisi tertentu

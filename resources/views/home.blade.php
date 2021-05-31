@@ -1,5 +1,7 @@
 @extends('layout.app')
-
+@section('title')
+    Yuk-Bisa-Yuk
+@endsection
 @section('content')
     @include('layout.message')
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">

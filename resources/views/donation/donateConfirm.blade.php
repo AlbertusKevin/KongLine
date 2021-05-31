@@ -1,6 +1,6 @@
 @extends('layout.app')
 @section('title')
-    Form Konfirmasi
+    Konfirmasi Donasi
 @endsection
 
 @section('content')

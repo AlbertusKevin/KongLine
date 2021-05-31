@@ -576,9 +576,9 @@ class ControllingService
         $donation = $this->donation_service->getADonation($id);
         $campaigner = $this->profile_service->findUser($donation->idCampaigner);
 
-        $template = 'Selamat! Event <b><i> $title </i></b> telah disetujui
-        oleh admin YukBisaYuk. Klik <a href="$link">
-        disini </a> untuk melihat Eventmu.';
+        $template = 'Selamat! Event $title telah disetujui
+        oleh admin YukBisaYuk. Klik $link
+        link untuk melihat Eventmu.';
 
         $data = [
             '$title' => $donation->title,

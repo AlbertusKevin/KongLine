@@ -698,9 +698,8 @@ $("#nominal").on("keyup", function () {
     $(this).val(input);
 });
 
-$("#purpose").on("keyup", function () {
+const validateLength = (text) => {
     let element = $("#valid-length");
-    let text = $(this).val();
 
     if (text.length <= 300) {
         element.removeClass("text-muted");
@@ -711,6 +710,35 @@ $("#purpose").on("keyup", function () {
         element.addClass("text-muted");
         element.html("Panjang karakter Mencapai ketentuan minimum!");
     }
+};
+
+$("#purpose").on("keyup", function () {
+    const text = $(this).val();
+    validateLength(text);
+});
+
+$("#content").on("keyup", function () {
+    const text = $(this).val();
+    validateLength(text);
+});
+
+$("button.btn-info.news-detail").on("click", function () {
+    const idNews = $(this).data("id");
+    const idPetition = window.location.href.split("/")[5];
+    console.log($("#detailNewsImg").attr("src"));
+    $.ajax({
+        url: `/petition/progress/${idPetition}/${idNews}`,
+        dataType: "json",
+        success: (news) => {
+            $("#detailNewsTitle").html(news.title);
+            $("#detailNewsContent").html(news.content);
+            $("#detailNewsImg").attr("src", news.image);
+            if (news.link != "" || news.link != null) {
+                $("#detailNewsLink").attr("href", news.link);
+                $("#detailNewsLink").html(news.link);
+            }
+        },
+    });
 });
 
 $("#search-donation").on("keyup", function () {

@@ -79,17 +79,19 @@ Route::get('/petition/sort', [PetitionController::class, 'sortPetition']);
 Route::get('/petition', [PetitionController::class, 'getActivePetition']);
 Route::get('/petition/create', [PetitionController::class, 'getViewCreatePetition'])->middleware('campaigner');
 Route::post('/petition/create', [PetitionController::class, 'saveDataEventPetition'])->middleware('campaigner');
-Route::get('/petition/{id}', [PetitionController::class, 'getDetailPetition']);
+Route::get('/petition/{idPetition}', [PetitionController::class, 'getDetailPetition']);
 
-Route::get('/petition/{id}', [PetitionController::class, 'getDetailPetition']);
+Route::get('/petition/{idPetition}', [PetitionController::class, 'getDetailPetition']);
 
-Route::get('/petition/edit/{id}', [PetitionController::class, 'getViewEditPetition'])->middleware('campaigner');
-Route::put('/petition/{id}', [PetitionController::class, 'updatePetition'])->middleware('campaigner');
+Route::get('/petition/edit/{idPetition}', [PetitionController::class, 'getViewEditPetition'])->middleware('campaigner');
+Route::put('/petition/{idPetition}', [PetitionController::class, 'updatePetition'])->middleware('campaigner');
 
-Route::get('/petition/comments/{id}', [PetitionController::class, 'getCommentsCertainPetition']);
+Route::get('/petition/comments/{idPetition}', [PetitionController::class, 'getCommentsCertainPetition']);
 
-Route::get('/petition/progress/{id}', [PetitionController::class, 'getProgressCertainPetition']);
-Route::post('/petition/progress/{id}', [PetitionController::class, 'saveProgressPetition'])->middleware('campaigner');
+Route::get('/petition/progress/{idPetition}', [PetitionController::class, 'getProgressCertainPetition']);
+Route::post('/petition/progress/{idPetition}', [PetitionController::class, 'saveProgressPetition'])->middleware('campaigner');
+
+Route::get('/petition/progress/{idPetition}/{idNews}', [PetitionController::class, 'getDetailNewsProgress']);
 
 Route::post('/petition/{id}', [PetitionController::class, 'signedThePetition'])->middleware('user');
 

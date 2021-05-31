@@ -1,7 +1,7 @@
 @extends($navbar)
 
 @section('title')
-    Petition's Comments
+    Komentar Petisi
 @endsection
 
 @section('content')

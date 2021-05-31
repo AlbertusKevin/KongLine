@@ -1,7 +1,7 @@
 @extends($navbar)
 
 @section('title')
-    Detail Donation
+    Rincian Event Donasi
 @endsection
 @section('content')
     @include('layout.message')

@@ -70,6 +70,11 @@ class PetitionDao
         ]);
     }
 
+    public function getDetailNewsProgress($idNews)
+    {
+        return UpdateNews::where('id', $idNews)->first();
+    }
+
     //! Menyimpan data event petisi yang dibuat oleh campaigner
     public function saveDataEventPetition($petition)
     {

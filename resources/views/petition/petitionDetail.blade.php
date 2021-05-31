@@ -1,7 +1,7 @@
 @extends($navbar)
 
 @section('title')
-    Petition Detail
+    Rincian Petisi
 @endsection
 @section('content')
     @include('layout.message')
