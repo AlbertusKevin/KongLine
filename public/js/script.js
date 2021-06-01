@@ -725,7 +725,7 @@ $("#content").on("keyup", function () {
 $("button.btn-info.news-detail").on("click", function () {
     const idNews = $(this).data("id");
     const idPetition = window.location.href.split("/")[5];
-    console.log($("#detailNewsImg").attr("src"));
+
     $.ajax({
         url: `/petition/progress/${idPetition}/${idNews}`,
         dataType: "json",
@@ -733,9 +733,58 @@ $("button.btn-info.news-detail").on("click", function () {
             $("#detailNewsTitle").html(news.title);
             $("#detailNewsContent").html(news.content);
             $("#detailNewsImg").attr("src", news.image);
+            $("#id-news").val(idNews);
             if (news.link != "" || news.link != null) {
                 $("#detailNewsLink").attr("href", news.link);
                 $("#detailNewsLink").html(news.link);
+            }
+        },
+    });
+});
+
+$("#create-news").on("click", function () {
+    $("#title").val("");
+    $("#content").html("");
+    $("#link").val("");
+    $(".img-preview").attr(
+        "src",
+        `${baseURL}/images/app/pictures/default-file.png`
+    );
+});
+
+$("#modal-form-edit").on("click", function () {
+    const idNews = $("#id-news").val();
+    const idPetition = window.location.href.split("/")[5];
+
+    $.ajax({
+        url: `/petition/progress/${idPetition}/${idNews}`,
+        dataType: "json",
+        success: (news) => {
+            $(".edit-title").val(news.title);
+            $(".edit-content").html(news.content);
+            $(".img-preview").attr("src", news.image);
+
+            let http = "";
+            let https = "";
+            if (news.link != "" && news.link != null) {
+                if (news.link.split("://")[0] == "https") {
+                    https = "selected";
+                } else {
+                    http = "selected";
+                }
+
+                $(".edit-protocol").html(
+                    /*html */
+                    `<option value="https://" ${https} {!! old('protocol') == 'https://' ? 'selected' : '' !!}>https://</option>
+                <option value="http://" ${http} {!! old('protocol') == 'http://' ? 'selected' : '' !!}>http://</option>`
+                );
+
+                $(".edit-link").val(news.link.split("://")[1]);
+                console.log($("form#editNews"));
+                $("form#editNews").attr(
+                    "action",
+                    `/petition/progress/${idPetition}/${idNews}`
+                );
             }
         },
     });

@@ -106,7 +106,8 @@ class PetitionController extends Controller
             return redirect('/petition/progress/' . $idEvent)->withInput()->with(['type' => "error", 'message' => $messageError]);
         };
 
-        $updateNews = new Model\UpdateNews($idEvent, $request->title, $request->content, $request->protocol . $request->link, $request->file('image'), Carbon::now('+7:00'));
+        $link = (is_null($request->link) ? null : $request->protocol . $request->link);
+        $updateNews = new Model\UpdateNews($idEvent, $request->title, $request->content, $link, $request->file('image'), Carbon::now('+7:00'));
         $this->petition_service->saveProgressPetition($updateNews);
 
         return redirect('/petition/progress/' . $idEvent)->with(['type' => "success", 'message' => 'Perkembangan terbaru dari petisi ini berhasil ditambahkan!']);
@@ -124,6 +125,31 @@ class PetitionController extends Controller
     public function getDetailNewsProgress($idEvent, $idNews)
     {
         return $this->petition_service->getDetailNewsProgress($idNews);
+    }
+
+    public function updateProgressPetition(Request $request, $idEvent, $idNews)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'content' => 'required|min:300',
+            'image' => 'image',
+            'link' => 'nullable',
+            'protocol' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+            // Alert::error('Gagal Menyimpan Perubahan', [$messageError]);
+            return redirect('/petition/progress/' . $idEvent)->withInput()->with(['type' => "error", 'message' => $messageError]);
+        };
+
+        $isFileNull = is_null($request->file('image'));
+        $this->petition_service->updateProgressPetition($request, $idEvent, $idNews, $isFileNull);
+
+        return redirect('/petition/progress/' . $idEvent)->with(['type' => "success", 'message' => "Berita perkembangan petisi berhasil diperbarui!"]);
     }
 
 

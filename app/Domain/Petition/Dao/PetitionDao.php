@@ -70,6 +70,19 @@ class PetitionDao
         ]);
     }
 
+    public function updateProgressPetition($data)
+    {
+        dd($data);
+        UpdateNews::where('id', $data['idNews'])->update([
+            'idPetition' => $data['idPetition'],
+            'image' => $data['image'],
+            'title' => $data['title'],
+            'content' => $data['content'],
+            'link' => $data['link'],
+            'created_at' => $data['updated_at']
+        ]);
+    }
+
     public function getDetailNewsProgress($idNews)
     {
         return UpdateNews::where('id', $idNews)->first();

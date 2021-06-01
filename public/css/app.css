@@ -165,6 +165,12 @@ button.approve-event{
   -webkit-box-orient: vertical;
 }
 
+p.detail-news {
+  text-indent: 50px;
+  text-align: justify;
+  line-height: 1.7;
+}
+
 .image-detail-petition {
   width: 100%;
 }
@@ -178,6 +184,11 @@ button.approve-event{
 img.news-detail {
   width: 500px;
 }
+
+#formEditNews{
+  overflow: scroll;
+}
+
 
 img.profile-donatur {
   object-fit: cover;

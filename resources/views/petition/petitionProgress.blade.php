@@ -78,8 +78,8 @@
             <div class="col-md-3 text-center" style="margin-top: 100px">
                 <h6 class="font-weight-bold">Sudah ada Perkembangan?</h6>
                 <p class="ml-2">Tetap perbarui informasi dari perjuangan petisi ini</p>
-                <button type="button" class="btn btn-primary ml-2" data-toggle="modal"
-                    data-target="#formCreateProgress">Buat
+                <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#formCreateProgress"
+                    id="create-news">Buat
                     Perkembangan</button>
             </div>
         @endif
@@ -87,154 +87,7 @@
     </div>
     </div>
 
-    <div class="modal fade" id="formCreateProgress" tabindex="-1" aria-labelledby="formCreateProgressLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formCreateProgressLabel">Buat Perkembangan Petisimu</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="/petition/progress/{{ $petition->id }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="form-group row">
-                            <label for="title" class="col-sm-3 offset-md-1 col-form-label">Judul</label>
-                            <div class="col-sm-7">
-                                <input type="text" class="form-control" id="title" name="title"
-                                    value="{{ old('title') }}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="content" class="col-sm-3 offset-md-1 col-form-label">Isi Berita</label>
-                            <div class="col-sm-7">
-                                <textarea class="form-control" id="content" name="content" rows="10"
-                                    placeholder="ketikkan berita terbaru">{{ old('content') }}</textarea>
-                                <small class="text-muted" id="valid-length">Minimal 300 karakter</small>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="image" class="col-sm-3 offset-md-1 col-form-label">Gambar</label>
-                            <div class="col-sm-7">
-                                <input type="file" class="form-control" id="image" name="image">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <label for="link" class="col-sm-3 offset-md-1 col-form-label">Tautan</label>
-                            <div class="form-group col-md-2">
-                                <select id="protocol" name="protocol" class="form-control">
-                                    <option value="https://" {{ old('protocol') == 'https://' ? 'selected' : '' }}>
-                                        https://
-                                    </option>
-                                    <option value="http://" {{ old('protocol') == 'http://' ? 'selected' : '' }}>http://
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="form-group-row col-md-5">
-                                <input type="text" class="form-control" id="link" name="link" value="{{ old('link') }}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Batalkan</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="formEditProgress" tabindex="-1" aria-labelledby="formEditProgressLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formEditProgressLabel">Edit Petisi<span></span></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="/petition/progress/{{ $petition->id }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="form-group row">
-                            <label for="title" class="col-sm-3 offset-md-1 col-form-label">Judul</label>
-                            <div class="col-sm-7">
-                                <input type="text" class="form-control" id="title" name="title"
-                                    value="{{ old('title') }}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="content" class="col-sm-3 offset-md-1 col-form-label">Isi Berita</label>
-                            <div class="col-sm-7">
-                                <textarea class="form-control" id="content" name="content" rows="10"
-                                    placeholder="ketikkan berita terbaru">{{ old('content') }}</textarea>
-                                <small class="text-muted" id="valid-length">Minimal 300 karakter</small>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="image" class="col-sm-3 offset-md-1 col-form-label">Gambar</label>
-                            <div class="col-sm-7">
-                                <input type="file" class="form-control" id="image" name="image">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <label for="link" class="col-sm-3 offset-md-1 col-form-label">Tautan</label>
-                            <div class="form-group col-md-2">
-                                <select id="protocol" name="protocol" class="form-control">
-                                    <option value="https://" {{ old('protocol') == 'https://' ? 'selected' : '' }}>
-                                        https://
-                                    </option>
-                                    <option value="http://" {{ old('protocol') == 'http://' ? 'selected' : '' }}>http://
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="form-group-row col-md-5">
-                                <input type="text" class="form-control" id="link" name="link" value="{{ old('link') }}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Batalkan</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="detailNews" tabindex="-1" aria-labelledby="detailNewsLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="detailNewsTitle">Title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="overflow: auto;">
-                    <div class="row">
-                        <div class="col">
-                            <img id="detailNewsImg" src="" alt="News Image" class="news-detail mb-3">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <p id="detailNewsContent">Content</p>
-                            <a class="modal-title" id="detailNewsLink" href="">Link</a>
-                        </div>
-
-                    </div>
-                </div>
-                @if ($user->id == $petition->idCampaigner)
-                    <div class="modal-footer">
-                        <a type="button" class="btn btn-danger" data-dismiss="modal">hapus</a>
-                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                            data-target="#formEditNews">ubah</button>
-                    </div>
-                @endif
-            </div>
-        </div>
-    </div>
+    @include('petition.progress.progressDetail')
+    @include('petition.progress.progressEditForm')
+    @include('petition.progress.progressCreateForm')
 @endsection
