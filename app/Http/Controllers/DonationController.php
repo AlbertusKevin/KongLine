@@ -54,6 +54,18 @@ class DonationController extends Controller
         // cek apakah user ini pernah berpartisipasi di event ini
         $isParticipated = $this->event_service->checkParticipated($id, $user->id, DONATION);
         $userTransactionStatus = $this->donation_service->checkAnUserTransactionStatus($user->id, $donation['detail']->id);
+        $messageTransaction = "";
+
+        if ($userTransactionStatus == NOT_CONFIRMED_TRANSACTION) {
+            $messageTransaction = "<p>Konfirmasi Pembayaran Sedang diproses.</p> <small><a href=/donation/donate/edit/{$donation['detail']->id}>Klik untuk ubah data transaksi.</a></small>";
+        } elseif ($userTransactionStatus == CONFIRMED_TRANSACTION) {
+            $messageTransaction = "<p>Terima kasih telah berdonasi.</p>";
+        } elseif ($userTransactionStatus == NOT_UPLOADED) {
+            $messageTransaction = "<p>Upload konfirmasi Anda</p><small><a href=/donation/confirm_donate/{$donation['detail']->id}>konfirmasi pembayaran</a></small>";
+        } else {
+            $messageTransaction = "<p>Konfirmasi Pembayaran Anda ditolak.</p><small><a href=/donation/donate/edit/{$donation['detail']->id}>Klik untuk ubah data transaksi.</a></small>";
+        }
+
         $message = $this->event_service->messageOfEvent($donation['detail']->status);
         $navbar = HelperService::getNavbar();
 
@@ -63,7 +75,7 @@ class DonationController extends Controller
                 'donation',
                 'user',
                 'isParticipated',
-                'userTransactionStatus',
+                'messageTransaction',
                 'message',
                 'navbar'
             )
