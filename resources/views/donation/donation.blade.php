@@ -1,5 +1,7 @@
 @extends($navbar)
-
+@section('title')
+    Daftar Donasi
+@endsection
 @section('content')
     @include('layout.message')
     {{-- Untuk search dan sort --}}

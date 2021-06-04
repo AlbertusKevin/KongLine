@@ -1,6 +1,6 @@
 @extends('layout.app')
 @section('title')
-    Form Donate
+    Form Donasi
 @endsection
 @section('content')
     @include('layout.message')

@@ -698,9 +698,8 @@ $("#nominal").on("keyup", function () {
     $(this).val(input);
 });
 
-$("#purpose").on("keyup", function () {
+const validateLength = (text) => {
     let element = $("#valid-length");
-    let text = $(this).val();
 
     if (text.length <= 300) {
         element.removeClass("text-muted");
@@ -711,6 +710,91 @@ $("#purpose").on("keyup", function () {
         element.addClass("text-muted");
         element.html("Panjang karakter Mencapai ketentuan minimum!");
     }
+};
+
+$("#purpose").on("keyup", function () {
+    const text = $(this).val();
+    validateLength(text);
+});
+
+$("#content").on("keyup", function () {
+    const text = $(this).val();
+    validateLength(text);
+});
+
+$("button.btn-info.news-detail").on("click", function () {
+    const idNews = $(this).data("id");
+    const idPetition = window.location.href.split("/")[5];
+    $("#id-news").val(idNews);
+    $("#delete-news").attr(
+        "action",
+        `/petition/progress/${idPetition}/${idNews}`
+    );
+    $.ajax({
+        url: `/petition/progress/${idPetition}/${idNews}`,
+        dataType: "json",
+        success: (news) => {
+            $("#detailNewsTitle").html(news.title);
+            $("#detailNewsContent").html(news.content);
+            $("#detailNewsImg").attr("src", news.image);
+            $("#id-news").val(idNews);
+            if (news.link != "" || news.link != null) {
+                $("#detailNewsLink").attr("href", news.link);
+                $("#detailNewsLink").html(news.link);
+            }
+        },
+    });
+});
+
+$("#create-news").on("click", function () {
+    $("#title").val("");
+    $("#content").html("");
+    $("#link").val("");
+    $(".img-preview").attr(
+        "src",
+        `${baseURL}/images/app/pictures/default-file.png`
+    );
+});
+
+$("#modal-form-edit").on("click", function () {
+    const idNews = $("#id-news").val();
+    const idPetition = window.location.href.split("/")[5];
+    console.log($(".editNews"));
+    $(".editNews").attr("action", `/petition/progress/${idPetition}/${idNews}`);
+
+    $.ajax({
+        url: `/petition/progress/${idPetition}/${idNews}`,
+        dataType: "json",
+        success: (news) => {
+            //ubah title
+            $(".edit-title").val(news.title);
+            //ubah content
+            $(".edit-content").html(news.content);
+            // ubah gambar
+            $(".img-preview").attr("src", news.image);
+
+            // ubah value protocol pada form edit
+            let http = "";
+            let https = "";
+            if (news.link != "" && news.link != null) {
+                if (news.link.split("://")[0] == "https") {
+                    https = "selected";
+                } else {
+                    http = "selected";
+                }
+
+                $(".edit-protocol").html(
+                    /*html */
+                    `<option value="https://" ${https} {!! old('protocol') == 'https://' ? 'selected' : '' !!}>https://</option>
+                    <option value="http://" ${http} {!! old('protocol') == 'http://' ? 'selected' : '' !!}>http://</option>`
+                );
+
+                $(".edit-link").val(news.link.split("://")[1]);
+            } else {
+                $(".edit-link").val("");
+            }
+        },
+    });
 });
 
 $("#search-donation").on("keyup", function () {

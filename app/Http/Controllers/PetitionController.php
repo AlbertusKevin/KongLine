@@ -32,7 +32,6 @@ class PetitionController extends Controller
         $listCategory = $this->event_service->getAllCategoriesEvent();
         $petitionList = $this->petition_service->getActivePetition();
         $navbar = HelperService::getNavbar();
-
         return view('petition.petition', compact('petitionList', 'user', 'listCategory', 'navbar'));
     }
 
@@ -93,8 +92,9 @@ class PetitionController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'content' => 'required|min:300',
-            'image' => 'image',
-            'link' => 'active_url|nullable'
+            'image' => 'required|image',
+            'link' => 'nullable',
+            'protocol' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -103,10 +103,11 @@ class PetitionController extends Controller
                 $messageError = $message;
             }
             // Alert::error('Gagal Menyimpan Perubahan', [$messageError]);
-            return redirect('/petition/progress/' . $idEvent)->with(['type' => "error", 'message' => $messageError]);
+            return redirect('/petition/progress/' . $idEvent)->withInput()->with(['type' => "error", 'message' => $messageError]);
         };
 
-        $updateNews = new Model\UpdateNews($idEvent, $request->title, $request->content, $request->link, $request->file('image'), Carbon::now()->format('Y-m-d'));
+        $link = (is_null($request->link) ? null : $request->protocol . $request->link);
+        $updateNews = new Model\UpdateNews($idEvent, $request->title, $request->content, $link, $request->file('image'), Carbon::now('+7:00'));
         $this->petition_service->saveProgressPetition($updateNews);
 
         return redirect('/petition/progress/' . $idEvent)->with(['type' => "success", 'message' => 'Perkembangan terbaru dari petisi ini berhasil ditambahkan!']);
@@ -119,6 +120,42 @@ class PetitionController extends Controller
         $this->petition_service->signedThePetition($request, $idEvent, $user);
 
         return redirect("/petition/" . $idEvent)->with(['type' => "success", 'message' => 'Berhasil Menandatangai petisi ini. Terimakasih ikut berpartisipasi!']);
+    }
+
+    public function getDetailNewsProgress($idEvent, $idNews)
+    {
+        return $this->petition_service->getDetailNewsProgress($idNews);
+    }
+
+    public function updateProgressPetition(Request $request, $idEvent, $idNews)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'content' => 'required|min:300',
+            'image' => 'image',
+            'link' => 'nullable',
+            'protocol' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $messageError = [];
+            foreach ($validator->errors()->all() as $message) {
+                $messageError = $message;
+            }
+            // Alert::error('Gagal Menyimpan Perubahan', [$messageError]);
+            return redirect('/petition/progress/' . $idEvent)->withInput()->with(['type' => "error", 'message' => $messageError]);
+        };
+
+        $isFileNull = is_null($request->file('image'));
+        $this->petition_service->updateProgressPetition($request, $idEvent, $idNews, $isFileNull);
+
+        return redirect('/petition/progress/' . $idEvent)->with(['type' => "success", 'message' => "Berita perkembangan petisi berhasil diperbarui!"]);
+    }
+
+    public function deleteProgressPetition($idEvent, $idNews)
+    {
+        $this->petition_service->deleteProgressPetition($idNews);
+        return redirect('/petition/progress/' . $idEvent)->with(['type' => "success", 'message' => "Berita perkembangan petisi berhasil dihapus!"]);
     }
 
     //! Create event petisi

@@ -1,6 +1,6 @@
 @extends('layout.app')
 @section('title')
-    Edit Donation
+    Edit Event Donasi
 @endsection
 
 @section('content')

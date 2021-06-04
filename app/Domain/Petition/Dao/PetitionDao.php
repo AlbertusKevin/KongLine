@@ -5,7 +5,6 @@ namespace App\Domain\Petition\Dao;
 use App\Domain\Petition\Entity\ParticipatePetition;
 use App\Domain\Petition\Entity\Petition;
 use App\Domain\Petition\Entity\UpdateNews;
-use Carbon\Carbon;
 
 class PetitionDao
 {
@@ -54,7 +53,7 @@ class PetitionDao
     //! Menampilkan berita perkembangan yang ada pada petisi tertentu berdasarkan ID
     public function getProgressCertainPetition($id)
     {
-        return UpdateNews::where('idPetition', $id)->get();
+        return UpdateNews::where('idPetition', $id)->where('deleted', '!=', 1)->get();
     }
 
     //! Menyimpan data berita perkembangan yang dibuat oleh campaigner
@@ -68,6 +67,31 @@ class PetitionDao
             'link' => $updateNews->getLink(),
             'created_at' => $updateNews->getCreatedAt()
         ]);
+    }
+
+    public function updateProgressPetition($data)
+    {
+        UpdateNews::where('id', $data['idNews'])->update([
+            'idPetition' => $data['idPetition'],
+            'image' => $data['image'],
+            'title' => $data['title'],
+            'content' => $data['content'],
+            'link' => $data['link'],
+            'updated_at' => $data['updated_at']
+        ]);
+    }
+
+    public function deleteProgressPetition($idNews, $updated_at)
+    {
+        UpdateNews::where('id', $idNews)->update([
+            'updated_at' => $updated_at,
+            'deleted' => 1
+        ]);
+    }
+
+    public function getDetailNewsProgress($idNews)
+    {
+        return UpdateNews::where('id', $idNews)->first();
     }
 
     //! Menyimpan data event petisi yang dibuat oleh campaigner

@@ -45,13 +45,6 @@ class ControllingController extends Controller
     {
         //ubah status event petisi
         $this->controlling_service->acceptPetition($id);
-
-        // kirim pemberitahuan kepada campaigner
-        //todo: send email
-        $view = "auth.eventConfirmEmail";
-        $message = "Event Disetujui.";
-        $this->controlling_service->sendEmail($id, $view, $message, PETITION);
-
         return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Event petisi telah berhasil dikonfirmasi.']);
     }
 
@@ -72,12 +65,7 @@ class ControllingController extends Controller
         };
 
         //ubah status dari 0 menjadi 5
-        $this->controlling_service->rejectPetition($id);
-
-        //todo: send email
-        $view = "auth.eventRejectEmail";
-        $this->controlling_service->sendEmail($id, $view, $request->rejectEvent, PETITION);
-
+        $this->controlling_service->rejectPetition($id, $request->rejectEvent);
         return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Penolakan Event petisi berhasil.']);
     }
 
@@ -98,13 +86,15 @@ class ControllingController extends Controller
         };
 
         //ubah status dari 0 menjadi 3
-        $this->controlling_service->closePetition($id);
-
-        //todo: send email
-        $view = "auth.eventCloseEmail";
-        $this->controlling_service->sendEmail($id, $view, $request->closeEvent, PETITION);
-
+        $this->controlling_service->closePetition($id, $request->closeEvent);
         return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Penutupan Event petisi berhasil.']);
+    }
+
+    public function proceedPetition($id)
+    {
+        //ubah status dari 2 menjadi 6
+        $this->controlling_service->proceedPetition($id);
+        return redirect("/admin/petition")->with(["type" => 'success', 'message' => 'Petisi telah berhasil ditindaklanjuti.']);
     }
 
     //? ========================================
@@ -121,16 +111,16 @@ class ControllingController extends Controller
 
     public function acceptDonation($id)
     {
-
         //ubah status dari 0 menjadi 1
         $this->controlling_service->acceptDonation($id);
-
-        //todo: send email
-        $view = "auth.eventConfirmEmail";
-        $message = "Event Disetujui.";
-        $this->controlling_service->sendEmail($id, $view, $message, DONATION);
-
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Donasi telah berhasil dikonfirmasi']);
+    }
+
+    public function proceedDonation($id)
+    {
+        //ubah status dari 2 menjadi 6
+        $this->controlling_service->proceedDonation($id);
+        return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Donasi telah berhasil ditindaklanjuti']);
     }
 
     public function rejectDonation(Request $request, $id)
@@ -150,11 +140,7 @@ class ControllingController extends Controller
         };
 
         //ubah status dari 0 menjadi 5
-        $this->controlling_service->rejectDonation($id);
-        //todo: send email
-        $view = "auth.eventRejectEmail";
-        $this->controlling_service->sendEmail($id, $view, $request->rejectEvent, DONATION);
-
+        $this->controlling_service->rejectDonation($id, $request->rejectEvent);
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penolakan donasi telah berhasil.']);
     }
 
@@ -175,12 +161,7 @@ class ControllingController extends Controller
         };
 
         //ubah status dari 0 menjadi 3
-        $this->controlling_service->closeDonation($id);
-
-        //todo: send email
-        $view = "auth.eventCloseEmail";
-        $this->controlling_service->sendEmail($id, $view, $request->closeEvent, DONATION);
-
+        $this->controlling_service->closeDonation($id, $request->closeEvent);
         return redirect("/admin/donation")->with(["type" => 'success', 'message' => 'Penutupan event donasi telah berhasil.']);
     }
 
@@ -220,13 +201,9 @@ class ControllingController extends Controller
         $transaction = $this->controlling_service->getAUserTransaction($id);
 
         //ubah status dari 0 menjadi 1, ubah data perhitungan
-        $this->controlling_service->confirmTransaction($id);
+        $this->controlling_service->confirmTransaction($transaction);
         $this->controlling_service->updateCalculationAfterConfirmDonate($transaction);
 
-        // //todo: send email
-        $view = "auth.trxConfirmEmail";
-        $message = "Transaksi donasi Anda selesai diproses";
-        $this->controlling_service->sendEmail($id, $view, $message, TRANSACTION);
         return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Transaksi telah berhasil disetujui.']);
     }
 
@@ -247,11 +224,7 @@ class ControllingController extends Controller
         };
 
         //ubah status dari 0 menjadi 3
-        $this->controlling_service->rejectTransaction($id);
-
-        //todo: send email
-        $view = "auth.trxRejectEmail";
-        $this->controlling_service->sendEmail($id, $view, $request->rejectTransaction, TRANSACTION);
+        $this->controlling_service->rejectTransaction($id, $request->rejectTransaction);
         return redirect("/admin/donation/transaction")->with(["type" => 'success', 'message' => 'Penolakan transaksi telah selesai.']);
     }
 
@@ -291,10 +264,7 @@ class ControllingController extends Controller
 
     public function acceptUserToCampaigner($id)
     {
-        $view = "auth.userAcceptEmail";
-        $message = "Pengajuan Campaigner Diterima";
-
-        $this->controlling_service->acceptUserToCampaigner($id, $view, $message);
+        $this->controlling_service->acceptUserToCampaigner($id);
         return redirect("/admin/user/$id")->with(["type" => 'success', 'message' => 'User berhasil upgrade ke campaigner']);
     }
 
@@ -313,8 +283,8 @@ class ControllingController extends Controller
 
             return redirect('/admin/user/' . $id)->withInput()->with(['type' => "error", 'message' => $messageError]);
         };
-        $view = "auth.userRejectEmail";
-        $this->controlling_service->rejectUserToCampaigner($id, $view, $request->rejectCampaigner);
+
+        $this->controlling_service->rejectUserToCampaigner($id, $request->rejectCampaigner);
         return redirect("/admin/user/" . $id)->with(["type" => 'fail', 'message' => 'User ditolak upgrade ke campaigner']);
     }
 

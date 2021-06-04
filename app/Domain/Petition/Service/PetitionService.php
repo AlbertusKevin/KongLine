@@ -574,13 +574,51 @@ class PetitionService
     //! Menyimpan perkembangan berita terbaru yang diinput oleh pengguna pada petisi tertentu
     public function saveProgressPetition($updateNews)
     {
-        $folder = $this->getDetailPetition(5)->title;
+        $folder = $this->getDetailPetition($updateNews->getIdPetition())->title;
         $folder = HelperService::makeSlugify($folder);
         $folder = FOLDER_IMAGE_PETITION_PROGRESS . $folder;
 
-        $pathImage = HelperService::uploadImage($updateNews->getImage(), "petition/update_news");
+        $pathImage = HelperService::uploadImage($updateNews->getImage(), $folder);
         $updateNews->setImage($pathImage);
         $this->petition_dao->saveProgressPetition($updateNews);
+    }
+
+    public function updateProgressPetition($request, $idEvent, $idNews, $isFileNull)
+    {
+        $oldNews = $this->petition_dao->getDetailNewsProgress($idNews);
+
+        if (!$isFileNull) {
+            HelperService::deleteImage($oldNews->image);
+            $folder = $this->getDetailPetition($idEvent)->title;
+            $folder = HelperService::makeSlugify($folder);
+            $pathImage = HelperService::uploadImage(
+                $request->file('image'),
+                FOLDER_IMAGE_PETITION_PROGRESS . $folder
+            );
+        } else {
+            $pathImage = $oldNews->image;
+        }
+
+        $data = [
+            'idNews' => $idNews,
+            'title' => $request->title,
+            'idPetition' => $idEvent,
+            'image' => $pathImage,
+            'content' => $request->content,
+            'link' => (is_null($request->link) ? null : $request->protocol . $request->link),
+            'updated_at' => Carbon::now('+7:00')
+        ];
+        $this->petition_dao->updateProgressPetition($data);
+    }
+
+    public function deleteProgressPetition($idNews)
+    {
+        $this->petition_dao->deleteProgressPetition($idNews, Carbon::now("+7:00"));
+    }
+
+    public function getDetailNewsProgress($idNews)
+    {
+        return $this->petition_dao->getDetailNewsProgress($idNews);
     }
 
     //! Memproses tandatangan peserta pada petisi tertentu

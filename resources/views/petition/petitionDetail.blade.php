@@ -1,7 +1,7 @@
 @extends($navbar)
 
 @section('title')
-    Petition Detail
+    Rincian Petisi
 @endsection
 @section('content')
     @include('layout.message')
@@ -133,6 +133,13 @@
                                 @csrf
                                 @method('patch')
                                 <button type="submit" class="btn btn-primary approve-event mt-3">Setujui Event</button>
+                            </form>
+                        @endif
+                        @if ($petition->status == TARGET_REACHED)
+                            <form action="/admin/petition/proceed/{{ $petition->id }}" method="POST">
+                                @csrf
+                                @method('patch')
+                                <button type="submit" class="btn btn-success mt-5">Tandai Selesai</button>
                             </form>
                         @endif
                     @endif

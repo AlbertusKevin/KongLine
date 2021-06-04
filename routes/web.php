@@ -79,15 +79,22 @@ Route::get('/petition/sort', [PetitionController::class, 'sortPetition']);
 Route::get('/petition', [PetitionController::class, 'getActivePetition']);
 Route::get('/petition/create', [PetitionController::class, 'getViewCreatePetition'])->middleware('campaigner');
 Route::post('/petition/create', [PetitionController::class, 'saveDataEventPetition'])->middleware('campaigner');
-Route::get('/petition/{id}', [PetitionController::class, 'getDetailPetition']);
+Route::get('/petition/{idPetition}', [PetitionController::class, 'getDetailPetition']);
 
-Route::get('/petition/edit/{id}', [PetitionController::class, 'getViewEditPetition'])->middleware('campaigner');
-Route::put('/petition/{id}', [PetitionController::class, 'updatePetition'])->middleware('campaigner');
+Route::get('/petition/{idPetition}', [PetitionController::class, 'getDetailPetition']);
 
-Route::get('/petition/comments/{id}', [PetitionController::class, 'getCommentsCertainPetition']);
+Route::get('/petition/edit/{idPetition}', [PetitionController::class, 'getViewEditPetition'])->middleware('campaigner');
+Route::put('/petition/{idPetition}', [PetitionController::class, 'updatePetition'])->middleware('campaigner');
 
-Route::get('/petition/progress/{id}', [PetitionController::class, 'getProgressCertainPetition']);
-Route::post('/petition/progress/{id}', [PetitionController::class, 'saveProgressPetition'])->middleware('campaigner');
+Route::get('/petition/comments/{idPetition}', [PetitionController::class, 'getCommentsCertainPetition']);
+
+Route::get('/petition/progress/{idPetition}', [PetitionController::class, 'getProgressCertainPetition']);
+
+Route::post('/petition/progress/{idPetition}', [PetitionController::class, 'saveProgressPetition'])->middleware('campaigner');
+
+Route::get('/petition/progress/{idPetition}/{idNews}', [PetitionController::class, 'getDetailNewsProgress']);
+Route::put('/petition/progress/{idPetition}/{idNews}', [PetitionController::class, 'updateProgressPetition'])->middleware('campaigner');
+Route::patch('/petition/progress/{idPetition}/{idNews}', [PetitionController::class, 'deleteProgressPetition'])->middleware('campaigner');
 
 Route::post('/petition/{id}', [PetitionController::class, 'signedThePetition'])->middleware('user');
 
@@ -161,18 +168,20 @@ Route::get('/admin/petition', [ControllingController::class, 'getAllPetition'])-
 Route::patch('/admin/petition/accept/{id}', [ControllingController::class, 'acceptPetition'])->middleware('admin');
 Route::patch('/admin/petition/reject/{id}', [ControllingController::class, 'rejectPetition'])->middleware('admin');
 Route::patch('/admin/petition/close/{id}', [ControllingController::class, 'closePetition'])->middleware('admin');
+Route::patch('/admin/petition/proceed/{id}', [ControllingController::class, 'proceedPetition'])->middleware('admin');
 
 //! Donation dan Transaction
 Route::get('/admin/donation', [ControllingController::class, 'getListDonation'])->middleware('admin');
 Route::get('/admin/donation/transaction', [ControllingController::class, 'getAllTransaction'])->middleware('admin');
 Route::get('/admin/donation/transaction/{idEvent}', [ControllingController::class, 'getATransaction'])->middleware('admin');
 
-Route::patch('/admin/donation/transaction/confirm/{id}', [ControllingController::class, 'confirmTransaction'])->middleware('admin');
-Route::patch('/admin/donation/transaction/reject/{id}', [ControllingController::class, 'rejectTransaction'])->middleware('admin');
+Route::patch('/admin/donation/transaction/confirm/{idTransaction}', [ControllingController::class, 'confirmTransaction'])->middleware('admin');
+Route::patch('/admin/donation/transaction/reject/{idTransaction}', [ControllingController::class, 'rejectTransaction'])->middleware('admin');
 
 Route::patch('/admin/donation/accept/{id}', [ControllingController::class, 'acceptDonation'])->middleware('admin');
 Route::patch('/admin/donation/reject/{id}', [ControllingController::class, 'rejectDonation'])->middleware('admin');
 Route::patch('/admin/donation/close/{id}', [ControllingController::class, 'closeDonation'])->middleware('admin');
+Route::patch('/admin/donation/proceed/{id}', [ControllingController::class, 'proceedDonation'])->middleware('admin');
 
 //* -------- ajax -----------
 Route::get('/admin/donation/sort', [ControllingController::class, 'adminSortDonation'])->middleware('admin');

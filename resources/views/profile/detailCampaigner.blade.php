@@ -1,5 +1,7 @@
 @extends('layout.app')
-
+@section('title')
+    Data Campaigner
+@endsection
 @section('content')
     @include('layout.message')
     <div class="container">

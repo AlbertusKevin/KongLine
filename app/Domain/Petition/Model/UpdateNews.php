@@ -16,6 +16,11 @@ class UpdateNews
         $this->created_at = $created_at;
     }
 
+    public function setIdNews($idNews)
+    {
+        $this->id = $idNews;
+    }
+
     public function setImage($image)
     {
         $this->image = $image;

@@ -1,6 +1,6 @@
 @extends('layout.app')
 @section('title')
-    New Donation
+    Buat Donasi
 @endsection
 
 @section('content')
