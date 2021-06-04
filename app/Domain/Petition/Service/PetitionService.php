@@ -586,12 +586,14 @@ class PetitionService
     public function updateProgressPetition($request, $idEvent, $idNews, $isFileNull)
     {
         $oldNews = $this->petition_dao->getDetailNewsProgress($idNews);
-        dd($isFileNull);
+
         if (!$isFileNull) {
             HelperService::deleteImage($oldNews->image);
+            $folder = $this->getDetailPetition($idEvent)->title;
+            $folder = HelperService::makeSlugify($folder);
             $pathImage = HelperService::uploadImage(
                 $request->file('image'),
-                FOLDER_IMAGE_PETITION_PROGRESS
+                FOLDER_IMAGE_PETITION_PROGRESS . $folder
             );
         } else {
             $pathImage = $oldNews->image;
@@ -607,6 +609,11 @@ class PetitionService
             'updated_at' => Carbon::now('+7:00')
         ];
         $this->petition_dao->updateProgressPetition($data);
+    }
+
+    public function deleteProgressPetition($idNews)
+    {
+        $this->petition_dao->deleteProgressPetition($idNews, Carbon::now("+7:00"));
     }
 
     public function getDetailNewsProgress($idNews)

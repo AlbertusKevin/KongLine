@@ -91,8 +91,10 @@ Route::get('/petition/comments/{idPetition}', [PetitionController::class, 'getCo
 Route::get('/petition/progress/{idPetition}', [PetitionController::class, 'getProgressCertainPetition']);
 
 Route::post('/petition/progress/{idPetition}', [PetitionController::class, 'saveProgressPetition'])->middleware('campaigner');
+
 Route::get('/petition/progress/{idPetition}/{idNews}', [PetitionController::class, 'getDetailNewsProgress']);
 Route::put('/petition/progress/{idPetition}/{idNews}', [PetitionController::class, 'updateProgressPetition'])->middleware('campaigner');
+Route::patch('/petition/progress/{idPetition}/{idNews}', [PetitionController::class, 'deleteProgressPetition'])->middleware('campaigner');
 
 Route::post('/petition/{id}', [PetitionController::class, 'signedThePetition'])->middleware('user');
 

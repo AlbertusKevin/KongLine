@@ -725,7 +725,11 @@ $("#content").on("keyup", function () {
 $("button.btn-info.news-detail").on("click", function () {
     const idNews = $(this).data("id");
     const idPetition = window.location.href.split("/")[5];
-
+    $("#id-news").val(idNews);
+    $("#delete-news").attr(
+        "action",
+        `/petition/progress/${idPetition}/${idNews}`
+    );
     $.ajax({
         url: `/petition/progress/${idPetition}/${idNews}`,
         dataType: "json",
@@ -755,15 +759,21 @@ $("#create-news").on("click", function () {
 $("#modal-form-edit").on("click", function () {
     const idNews = $("#id-news").val();
     const idPetition = window.location.href.split("/")[5];
+    console.log($(".editNews"));
+    $(".editNews").attr("action", `/petition/progress/${idPetition}/${idNews}`);
 
     $.ajax({
         url: `/petition/progress/${idPetition}/${idNews}`,
         dataType: "json",
         success: (news) => {
+            //ubah title
             $(".edit-title").val(news.title);
+            //ubah content
             $(".edit-content").html(news.content);
+            // ubah gambar
             $(".img-preview").attr("src", news.image);
 
+            // ubah value protocol pada form edit
             let http = "";
             let https = "";
             if (news.link != "" && news.link != null) {
@@ -776,15 +786,12 @@ $("#modal-form-edit").on("click", function () {
                 $(".edit-protocol").html(
                     /*html */
                     `<option value="https://" ${https} {!! old('protocol') == 'https://' ? 'selected' : '' !!}>https://</option>
-                <option value="http://" ${http} {!! old('protocol') == 'http://' ? 'selected' : '' !!}>http://</option>`
+                    <option value="http://" ${http} {!! old('protocol') == 'http://' ? 'selected' : '' !!}>http://</option>`
                 );
 
                 $(".edit-link").val(news.link.split("://")[1]);
-                console.log($("form#editNews"));
-                $("form#editNews").attr(
-                    "action",
-                    `/petition/progress/${idPetition}/${idNews}`
-                );
+            } else {
+                $(".edit-link").val("");
             }
         },
     });

@@ -152,6 +152,11 @@ class PetitionController extends Controller
         return redirect('/petition/progress/' . $idEvent)->with(['type' => "success", 'message' => "Berita perkembangan petisi berhasil diperbarui!"]);
     }
 
+    public function deleteProgressPetition($idEvent, $idNews)
+    {
+        $this->petition_service->deleteProgressPetition($idNews);
+        return redirect('/petition/progress/' . $idEvent)->with(['type' => "success", 'message' => "Berita perkembangan petisi berhasil dihapus!"]);
+    }
 
     //! Create event petisi
     public function getViewCreatePetition()

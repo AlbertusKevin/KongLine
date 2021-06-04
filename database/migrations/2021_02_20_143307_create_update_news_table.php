@@ -20,6 +20,7 @@ class CreateUpdateNewsTable extends Migration
             $table->string('title');
             $table->longText('content');
             $table->string('link')->nullable();
+            $table->boolean('deleted')->default(false);
             $table->timestamps();
         });
 
